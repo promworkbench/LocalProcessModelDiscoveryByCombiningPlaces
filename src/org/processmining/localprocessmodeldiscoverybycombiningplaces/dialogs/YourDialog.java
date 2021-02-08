@@ -1,7 +1,4 @@
-package org.processmining.newpackageivy.dialogs;
-
-import info.clearthought.layout.TableLayout;
-import info.clearthought.layout.TableLayoutConstants;
+package org.processmining.localprocessmodeldiscoverybycombiningplaces.dialogs;
 
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
@@ -21,13 +18,16 @@ import javax.swing.event.ListSelectionListener;
 
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.framework.util.ui.widgets.ProMList;
-import org.processmining.newpackageivy.models.YourFirstInput;
-import org.processmining.newpackageivy.models.YourSecondInput;
-import org.processmining.newpackageivy.parameters.YourParameters;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.models.YourFirstInput;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.models.YourSecondInput;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.parameters.YourParameters;
 
 import com.fluxicon.slickerbox.components.NiceSlider;
 import com.fluxicon.slickerbox.components.NiceSlider.Orientation;
 import com.fluxicon.slickerbox.factory.SlickerFactory;
+
+import info.clearthought.layout.TableLayout;
+import info.clearthought.layout.TableLayoutConstants;
 
 public class YourDialog extends JPanel {
 

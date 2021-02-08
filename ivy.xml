@@ -1,5 +1,5 @@
 <ivy-module version="2.0">
-    <info organisation="prom" module="NewPackageIvy" revision="latest">
+    <info organisation="prom" module="LocalProcessModelDiscoveryByCombiningPlaces" revision="latest">
     	<description>
     		Version VERSION
     	</description>
