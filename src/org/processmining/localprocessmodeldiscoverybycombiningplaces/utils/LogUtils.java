@@ -37,6 +37,7 @@ public class LogUtils {
     public static Collection<String> getActivitiesFromLog(XLog log) {
         XLogInfo info = XLogInfoFactory.createLogInfo(log);
         return info
+//        getEventClasses(new XEventAndClassifier(new XEventNameClassifier(), new XEventLifeTransClassifier()))
                 .getEventClasses(new XEventNameClassifier())
                 .getClasses().stream()
                 .map(XEventClass::getId)

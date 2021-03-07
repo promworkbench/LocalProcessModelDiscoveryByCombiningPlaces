@@ -114,12 +114,12 @@ public class LPMDiscoveryWizardStep extends ProMPropertiesPanel implements ProMW
 
         minPlacesSlider = SlickerFactory.instance()
                 .createNiceIntegerSlider("",
-                        1, 5, 2, NiceSlider.Orientation.HORIZONTAL);
+                        2, 5, 3, NiceSlider.Orientation.HORIZONTAL);
         addProperty("Min Places", minPlacesSlider);
 
         maxPlacesSlider = SlickerFactory.instance()
                 .createNiceIntegerSlider("",
-                        1, 5, 5, NiceSlider.Orientation.HORIZONTAL);
+                        3, 10, 7, NiceSlider.Orientation.HORIZONTAL);
         addProperty("Max Places", maxPlacesSlider);
 
         minPlacesSlider.addChangeListener(e -> {
@@ -134,12 +134,12 @@ public class LPMDiscoveryWizardStep extends ProMPropertiesPanel implements ProMW
 
         minTransitionsSlider = SlickerFactory.instance()
                 .createNiceIntegerSlider("",
-                        1, 10, 3, NiceSlider.Orientation.HORIZONTAL);
+                        3, 10, 3, NiceSlider.Orientation.HORIZONTAL);
         addProperty("Min Transitions", minTransitionsSlider);
 
         maxTransitionsSlider = SlickerFactory.instance()
                 .createNiceIntegerSlider("",
-                        1, 10, 6, NiceSlider.Orientation.HORIZONTAL);
+                        5, 15, 10, NiceSlider.Orientation.HORIZONTAL);
         addProperty("Max Transitions", maxTransitionsSlider);
 
         minTransitionsSlider.addChangeListener(e -> {

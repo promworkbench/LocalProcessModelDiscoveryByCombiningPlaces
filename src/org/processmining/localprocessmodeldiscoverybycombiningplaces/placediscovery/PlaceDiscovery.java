@@ -1,7 +1,6 @@
 package org.processmining.localprocessmodeldiscoverybycombiningplaces.placediscovery;
 
 import org.deckfour.xes.model.XLog;
-import org.processmining.localprocessmodeldiscoverybycombiningplaces.Main;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.placediscovery.algorithms.PlaceDiscoveryAlgorithm;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.placediscovery.algorithms.PlaceDiscoveryAlgorithmFactory;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.placediscovery.parameters.PlaceDiscoveryParameters;
@@ -25,7 +24,6 @@ public class PlaceDiscovery {
         if (result.getLog() == null)
             result.setLog(log);
         int filteredPlacesCount = result.getPlaces().size();
-        Main.getAnalyzer().addPlacesDiscovered(allPlacesCount, filteredPlacesCount);
         return result;
     }
 }

@@ -13,6 +13,7 @@ public class IntegerMappedLog extends AbstractEvaluationLog {
     private Map<String, Integer> labelMap;
     private Map<Integer, String> reverseLabelMap;
     private int labelMapInd;
+    private Set<Integer> invisible;
 
     // To every trace variant we have given an id
     private Map<Integer, List<Integer>> traceVariantIdsMap;
@@ -50,6 +51,7 @@ public class IntegerMappedLog extends AbstractEvaluationLog {
 
     @Override
     protected void makeLog() {
+        invisible = new HashSet<>();
         labelMap = new HashMap<>();
         reverseLabelMap = new HashMap<>();
         this.traceVariants = new HashMap<>();
@@ -81,13 +83,18 @@ public class IntegerMappedLog extends AbstractEvaluationLog {
             this.traceVariantIdsMap.put(++traceVariantId, traceVariant);
     }
 
-    public void addTransitionsInLabelMap(Set<String> transitionLabels) {
+    public void addInvisibleTransitionsInLabelMap(Set<String> transitionLabels) {
         for (String label : transitionLabels) {
             if (this.labelMap.containsKey(label))
                 continue;
             this.labelMap.put(label, this.labelMapInd);
             this.reverseLabelMap.put(this.labelMapInd, label);
+            this.invisible.add(this.labelMapInd);
             this.labelMapInd++;
         }
+    }
+
+    public Set<Integer> getInvisible() {
+        return this.invisible;
     }
 }

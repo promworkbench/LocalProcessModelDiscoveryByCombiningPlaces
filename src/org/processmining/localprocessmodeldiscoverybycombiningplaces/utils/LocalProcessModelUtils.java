@@ -126,8 +126,10 @@ public class LocalProcessModelUtils {
         for (Place p : lpm.getPlaces())
             net.addPlace(p.getId());
 
-        for (Transition t : lpm.getTransitions())
-            net.addTransition(t.getLabel());
+        for (Transition t : lpm.getTransitions()) {
+            org.processmining.models.graphbased.directed.petrinet.elements.Transition netTransition = net.addTransition(t.getLabel());
+            netTransition.setInvisible(t.isInvisible());
+        }
 
         Map<String, org.processmining.models.graphbased.directed.petrinet.elements.Place>
                 placeMap = new HashMap<>();

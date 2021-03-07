@@ -10,12 +10,14 @@ import java.util.Set;
 public class PlaceChooserParameters {
 
     private int placeLimit;
-    private final Set<String> chosenActivities;
+    private int averagePlaceDegree;
+    private Set<String> chosenActivities;
     private int followRelationsLimit;
     private double coveredPassagesThreshold;
 
     public PlaceChooserParameters(XLog log) {
         this.placeLimit = 50;
+        this.averagePlaceDegree = Integer.MAX_VALUE;
         this.chosenActivities = new HashSet<>(LogUtils.getActivitiesFromLog(log));
         this.coveredPassagesThreshold = 0.3;
     }
@@ -33,7 +35,7 @@ public class PlaceChooserParameters {
     }
 
     public void setChosenActivities(Collection<String> chosenActivities) {
-        this.chosenActivities.addAll(chosenActivities);
+        this.chosenActivities = new HashSet<>(chosenActivities);
     }
 
     public int getFollowRelationsLimit() {
@@ -50,5 +52,13 @@ public class PlaceChooserParameters {
 
     public void setCoveredPassagesThreshold(double coveredPassagesThreshold) {
         this.coveredPassagesThreshold = coveredPassagesThreshold;
+    }
+
+    public int getAveragePlaceDegree() {
+        return averagePlaceDegree;
+    }
+
+    public void setAveragePlaceDegree(int averagePlaceDegree) {
+        this.averagePlaceDegree = averagePlaceDegree;
     }
 }

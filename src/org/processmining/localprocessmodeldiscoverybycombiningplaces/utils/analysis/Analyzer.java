@@ -23,11 +23,15 @@ public class Analyzer {
     private final boolean placeDiscoveryIncluded;
     private final Map<String, ExecutionAnalysisEntry> timers;
     private PlaceDiscoveryAlgorithmId placeDiscoveryAlgorithmId;
-    private Pair<Integer, Integer> discoveredPlaces; // (count, count after filtering)
+    private final PlaceStatistics placeStatistics;
     private final LogStatistics logStatistics;
     private final FPGrowthStatistics fpGrowthStatistics;
+    private int discoveredPlaces; // (count, count after filtering)
     private int countPlacesUsed;
     private int lpmDiscovered;
+    private double placesAverageOutDegree;
+    private int proximity;
+    private int allLpmDiscovered;
 
     public Analyzer(XLog log, boolean placeDiscoveryIncluded) {
         this.id = UUID.randomUUID();
@@ -37,13 +41,14 @@ public class Analyzer {
 
         this.placeDiscoveryIncluded = placeDiscoveryIncluded;
         this.placeDiscoveryAlgorithmId = PlaceDiscoveryAlgorithmId.ESTMiner;
+        this.placeStatistics = new PlaceStatistics(this.id);
 
         this.totalExecution = new SingleExecutionAnalysis();
         this.lpmDiscoveryExecution = new SingleExecutionAnalysis();
 
         this.timers = new HashMap<>();
         this.discoveredLPM = new HashMap<>();
-        this.discoveredPlaces = new Pair<>(0, 0);
+        this.discoveredPlaces = 0;
     }
 
     public FPGrowthStatistics getFpGrowthStatistics() {
@@ -58,8 +63,8 @@ public class Analyzer {
         this.lpmDiscovered = lpmDiscovered;
     }
 
-    public void addPlacesDiscovered(int count, int countAfterFilter) {
-        this.discoveredPlaces = new Pair<>(count, countAfterFilter);
+    public void addPlacesDiscovered(int count) {
+        this.discoveredPlaces = count;
     }
 
     public void addLPMsDiscovered(int numPlaces, int count) {
@@ -77,9 +82,7 @@ public class Analyzer {
     }
 
     public void setPlaceDiscoveryAlgorithmId(PlaceDiscoveryAlgorithmId algorithmId) {
-//        if (!placeDiscoveryIncluded)
-//            throw new UnsupportedOperationException("Place discovery is not included in this execution");
-//        this.placeDiscoveryAlgorithmId = algorithmId;
+        this.placeDiscoveryAlgorithmId = algorithmId;
     }
 
     public void startExecution(String name) {
@@ -99,6 +102,7 @@ public class Analyzer {
         writeGeneral(filename + "-general", rewrite);
         logStatistics.write(filename + "-log-statistics", rewrite);
         fpGrowthStatistics.write(filename + "-fp-growth-statistics", rewrite);
+        placeStatistics.write(filename + "-place-statistics", rewrite);
     }
 
     private void writeExecutions(String filename, boolean rewrite) {
@@ -123,37 +127,40 @@ public class Analyzer {
             if (rewrite)
                 pw.println("ID\tLog Name\tTotal Execution Time\tLPM Discovery Execution Time\t" +
                         "Place Discovery Included\tPlace Discovery Algorithm ID\t" +
-                        "Count Places Used\tPlaces discovered\tPlaces discovered - filtered\t" +
-                        "LPM discovered\t" +
-                        "LPMs with 1 place\tLPMs with 1 place - filtered\tLPMs with 2 places\tLPMs with 2 places - filtered\t" +
-                        "LPMs with 3 places\tLPMs with 3 places - filtered\tLPMs with 4 places\tLPMs with 4 places - filtered\t" +
-                        "LPMs with 5 places\tLPMs with 5 places - filtered\tTotal Count of LPMs\tTotal Count of LPMs - filtered");
+                        "Count Places Used\tPlaces discovered\t" +
+                        "Places Average Out Degree\t" +
+                        "LPM discovered\tAll LPM Discovered\tProximity");
 
-            int totalLPMs = this.discoveredLPM.values().stream().mapToInt(Pair::getKey).sum();
-            int totalLPMsFiltered = this.discoveredLPM.values().stream().mapToInt(Pair::getValue).sum();
             pw.println(String.join("\t", String.valueOf(this.id), this.name,
                     String.valueOf(this.totalExecution.getDuration()),
                     String.valueOf(this.lpmDiscoveryExecution.getDuration()),
                     String.valueOf(this.placeDiscoveryIncluded),
                     String.valueOf(this.placeDiscoveryAlgorithmId),
                     String.valueOf(this.countPlacesUsed),
-                    String.valueOf(this.discoveredPlaces.getKey()),
-                    String.valueOf(this.discoveredPlaces.getValue()),
+                    String.valueOf(this.discoveredPlaces),
+                    String.valueOf(this.placesAverageOutDegree),
                     String.valueOf(this.lpmDiscovered),
-                    String.valueOf(this.discoveredLPM.getOrDefault(1, new Pair<>(-1, -1)).getKey()),
-                    String.valueOf(this.discoveredLPM.getOrDefault(1, new Pair<>(-1, -1)).getValue()),
-                    String.valueOf(this.discoveredLPM.getOrDefault(2, new Pair<>(-1, -1)).getKey()),
-                    String.valueOf(this.discoveredLPM.getOrDefault(2, new Pair<>(-1, -1)).getValue()),
-                    String.valueOf(this.discoveredLPM.getOrDefault(3, new Pair<>(-1, -1)).getKey()),
-                    String.valueOf(this.discoveredLPM.getOrDefault(3, new Pair<>(-1, -1)).getValue()),
-                    String.valueOf(this.discoveredLPM.getOrDefault(4, new Pair<>(-1, -1)).getKey()),
-                    String.valueOf(this.discoveredLPM.getOrDefault(4, new Pair<>(-1, -1)).getValue()),
-                    String.valueOf(this.discoveredLPM.getOrDefault(5, new Pair<>(-1, -1)).getKey()),
-                    String.valueOf(this.discoveredLPM.getOrDefault(5, new Pair<>(-1, -1)).getValue()),
-                    String.valueOf(totalLPMs), String.valueOf(totalLPMsFiltered)));
+                    String.valueOf(this.allLpmDiscovered),
+                    String.valueOf(this.proximity)));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public void setPlacesAverageOutDegree(double averageNodeOutDegree) {
+        this.placesAverageOutDegree = averageNodeOutDegree;
+    }
+
+    public void setProximity(int proximity) {
+        this.proximity = proximity;
+    }
+
+    public PlaceStatistics getPlaceStatistics() {
+        return placeStatistics;
+    }
+
+    public void setAllLpmDiscovered(int size) {
+        this.allLpmDiscovered = size;
     }
 }
 

@@ -2,17 +2,19 @@ package org.processmining.localprocessmodeldiscoverybycombiningplaces.model.fpgr
 
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.evaluation.results.concrete.WindowsEvaluationResult;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.evaluation.results.helpers.WindowTotalCounter;
-import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.filtration.LPMFiltrationController;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.filtration.LPMFiltrationAndEvaluationController;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.CanBeInterrupted;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.LocalProcessModel;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.Place;
 
 import java.util.*;
 
-public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode> {
+public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode> implements CanBeInterrupted {
 
     private final Map<Place, Integer> priorityMap; // place mapped into priority value
     private final Map<String, Integer> labelMap; // label mapped into integer id
     private final int maxDependencyLength;
+    private boolean stop;
 
     public MainFPGrowthLPMTree(Map<Place, Integer> priorityMap, Map<String, Integer> labelMap, int maxDependencyLength) {
         this.priorityMap = priorityMap;
@@ -51,12 +53,15 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         return sorted;
     }
 
-    public Set<LocalProcessModel> getLPMs(LPMFiltrationController filtrationController, int count) {
+    public Set<LocalProcessModel> getLPMs(LPMFiltrationAndEvaluationController filtrationController, int count) {
         Set<LocalProcessModel> lpms = new HashSet<>();
 
         Queue<MainFPGrowthLPMTreeNode> queue = new LinkedList<>();
         queue.add(root);
         while (!queue.isEmpty()) {
+            if (stop && lpms.size() >= count) {
+                return lpms;
+            }
             MainFPGrowthLPMTreeNode node = queue.poll();
             if (node != root && node.getWindowsEvaluationResult() != null) {
                 LocalProcessModel lpm = node.getLPM();
@@ -81,5 +86,10 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
 
     public int getHeight() {
         return root.getHeight();
+    }
+
+    @Override
+    public void interrupt() {
+        this.stop = true;
     }
 }

@@ -30,7 +30,7 @@ public class EvaluationResultAggregateOperation {
         double sum = 0;
         for (SimpleEvaluationResult result : results) {
             int weight = weights.getOrDefault(result.getId(), 1);
-            sum += weight * result.getResult();
+            sum += weight * result.getNormalizedResult();
             total += weight;
         }
         return sum / total;
@@ -45,6 +45,23 @@ public class EvaluationResultAggregateOperation {
      */
     public EvaluationResultAggregateOperation addWeight(LPMEvaluationResultId id, int weight) {
         weights.put(id, weight);
+        return this;
+    }
+
+    /**
+     * Nullifying all weights except for one
+     *
+     * @param chosenId: the id of the evaluation result we want to use
+     * @return the updated object so we can stream multiple calls
+     */
+    public EvaluationResultAggregateOperation useOnlyOne(LPMEvaluationResultId chosenId) {
+        for (LPMEvaluationResultId id : LPMEvaluationResultId.values()) {
+            if (id.equals(chosenId)) {
+                weights.put(id, 1);
+            } else {
+                weights.put(id, 0);
+            }
+        }
         return this;
     }
 }

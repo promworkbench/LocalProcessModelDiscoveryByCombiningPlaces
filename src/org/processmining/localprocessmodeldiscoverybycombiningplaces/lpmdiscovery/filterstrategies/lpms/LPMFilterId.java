@@ -2,6 +2,6 @@ package org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscove
 
 public enum LPMFilterId {
     AbovePassageCoverageThresholdLPMFilter,
-    AboveTransitionOverlappingThresholdLPMFilter,
+//    AboveTransitionOverlappingThresholdLPMFilter,
     AbovePassageRepetitionThresholdLPMFilter
 }

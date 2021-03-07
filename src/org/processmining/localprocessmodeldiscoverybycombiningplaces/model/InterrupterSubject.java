@@ -16,6 +16,7 @@ public class InterrupterSubject {
     }
 
     public void notifyInterruption() {
+        System.out.println("INTERRUPTED");
         for (CanBeInterrupted observer : observers)
             observer.interrupt();
     }

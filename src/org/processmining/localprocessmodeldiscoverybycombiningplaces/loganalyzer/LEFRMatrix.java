@@ -51,10 +51,10 @@ public class LEFRMatrix {
         return lefr[row][col];
     }
 
-    public int get(String row, String col) {
-        if (!nameIndexMap.containsKey(row) || !nameIndexMap.containsKey(col))
+    public int get(String rowName, String colName) {
+        if (!nameIndexMap.containsKey(rowName) || !nameIndexMap.containsKey(colName))
             return 0;
-        return get(nameIndexMap.get(row), nameIndexMap.get(col));
+        return get(nameIndexMap.get(rowName), nameIndexMap.get(colName));
     }
 
     public void calculateMatrix() {

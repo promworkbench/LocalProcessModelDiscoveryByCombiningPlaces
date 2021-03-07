@@ -3,10 +3,12 @@ package org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscove
 import org.deckfour.xes.model.XLog;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.Main;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.combination.guards.CombinationGuard;
-import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.filtration.LPMFiltrationController;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.filtration.LPMFiltrationAndEvaluationController;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.fpgrowth.FPGrowthLPMDiscoveryTreeBuilderFirstEdition;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.fpgrowth.FPGrowthPlaceFollowGraphBuilder;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.LocalProcessModel;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.Place;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.fpgrowth.FPGrowthPlaceFollowGraph;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.fpgrowth.MainFPGrowthLPMTree;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.utils.LocalProcessModelUtils;
 
@@ -16,7 +18,7 @@ import java.util.Set;
 public class LPMCombinationController {
 
     private final LPMCombinationParameters parameters;
-    private LPMFiltrationController lpmFiltrationController;
+    private LPMFiltrationAndEvaluationController lpmFiltrationAndEvaluationController;
     private int currentNumPlaces;
     private CombinationGuard guard;
 
@@ -25,7 +27,8 @@ public class LPMCombinationController {
         this.currentNumPlaces = 1;
         this.guard = (lpm, place) -> true;
 
-        this.lpmFiltrationController = new LPMFiltrationController();
+        this.lpmFiltrationAndEvaluationController = new LPMFiltrationAndEvaluationController();
+        Main.getAnalyzer().setProximity(parameters.getLpmProximity());
     }
 
     public void setCombinationGuard(CombinationGuard guard) {
@@ -38,7 +41,7 @@ public class LPMCombinationController {
 
         Set<LocalProcessModel> finalSet = new HashSet<>();
 
-        lpms = this.lpmFiltrationController.filterLPMs(lpms);
+        lpms = this.lpmFiltrationAndEvaluationController.filterLPMs(lpms);
         Main.getAnalyzer().addLPMsFiltered(1, lpms.size());
 
         if (this.parameters.getMinNumPlaces() <= 1)
@@ -53,7 +56,7 @@ public class LPMCombinationController {
         System.out.println("In combine " + this.currentNumPlaces + ": " + lpms.size());
 
         if (this.currentNumPlaces >= this.parameters.getMaxNumPlaces()) {
-            return this.lpmFiltrationController.filterFinals(finalSet);
+            return this.lpmFiltrationAndEvaluationController.filterFinals(finalSet);
         }
 
         Set<LocalProcessModel> resSet = new HashSet<>();
@@ -72,7 +75,7 @@ public class LPMCombinationController {
                         continue;
 
                     if (!resSet.contains(intermediateLPM) &&
-                            this.lpmFiltrationController.shouldKeepLPM(intermediateLPM))
+                            this.lpmFiltrationAndEvaluationController.shouldKeepLPM(intermediateLPM))
                         resSet.add(intermediateLPM);
                     else
                         discardedHashCodes.add(intermediateLPM.hashCode());
@@ -91,11 +94,12 @@ public class LPMCombinationController {
 
     public Set<LocalProcessModel> combineUsingFPGrowth(Set<Place> places, XLog log, int localDistance, int count) {
         // Build the place graph (we can use it to order the places)
-//        FPGrowthPlaceFollowGraphBuilder graphBuilder = new FPGrowthPlaceFollowGraphBuilder(
-//                log,
-//                new HashSet<>(places),
-//                localDistance);
-//        FPGrowthPlaceFollowGraph graph = graphBuilder.buildGraph();
+        FPGrowthPlaceFollowGraphBuilder graphBuilder = new FPGrowthPlaceFollowGraphBuilder(
+                log,
+                new HashSet<>(places),
+                localDistance);
+        FPGrowthPlaceFollowGraph graph = graphBuilder.buildGraph();
+        Main.getAnalyzer().setPlacesAverageOutDegree(graph.getAverageNodeOutDegree());
 
 //        FPGrowthLPMDiscoveryTreeBuilderSecondEdition treeBuilder = new FPGrowthLPMDiscoveryTreeBuilderSecondEdition(
 //        FPGrowthLPMDiscoveryTreeBuilder treeBuilder = new FPGrowthLPMDiscoveryTreeBuilder(
@@ -104,9 +108,10 @@ public class LPMCombinationController {
         Main.getInterrupterSubject().addObserver(treeBuilder);
         System.out.println("========Building tree========");
         MainFPGrowthLPMTree tree = treeBuilder.buildTree();
+        Main.getInterrupterSubject().addObserver(tree);
         System.out.println("========End building tree========");
 
-        return tree.getLPMs(lpmFiltrationController, count);
+        return tree.getLPMs(lpmFiltrationAndEvaluationController, count);
     }
 
     private LocalProcessModel postProcessLPM(LocalProcessModel lpm) {
@@ -119,7 +124,7 @@ public class LPMCombinationController {
         return lpm;
     }
 
-    public void setFiltrationController(LPMFiltrationController lpmFiltrationController) {
-        this.lpmFiltrationController = lpmFiltrationController;
+    public void setFiltrationController(LPMFiltrationAndEvaluationController lpmFiltrationAndEvaluationController) {
+        this.lpmFiltrationAndEvaluationController = lpmFiltrationAndEvaluationController;
     }
 }

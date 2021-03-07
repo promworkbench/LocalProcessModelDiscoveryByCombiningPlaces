@@ -4,8 +4,8 @@ public class LogAnalyzerParameters {
 
     private int distanceLimit;
 
-    public LogAnalyzerParameters() {
-        this.distanceLimit = 7;
+    public LogAnalyzerParameters(int distanceLimit) {
+        this.distanceLimit = distanceLimit;
     }
 
     public int getDistanceLimit() {

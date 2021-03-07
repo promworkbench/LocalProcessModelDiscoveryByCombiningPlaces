@@ -9,7 +9,7 @@ import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.Local
 
 import java.util.*;
 
-public class LPMFiltrationController {
+public class LPMFiltrationAndEvaluationController {
 
     private final Map<String, LPMFilter> filterMap;
     private final List<LPMFilter> finalFilters;
@@ -18,7 +18,7 @@ public class LPMFiltrationController {
     private List<LPMFilter> afterEvalFilters;
     private LPMEvaluatorFactory evaluatorFactory;
 
-    public LPMFiltrationController() {
+    public LPMFiltrationAndEvaluationController() {
         this.filterMap = new HashMap<>();
         this.beforeEvalFilters = new ArrayList<>();
         this.afterEvalFilters = new ArrayList<>();

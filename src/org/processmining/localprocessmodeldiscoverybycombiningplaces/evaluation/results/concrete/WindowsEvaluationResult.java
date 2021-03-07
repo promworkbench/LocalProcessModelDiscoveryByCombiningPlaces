@@ -21,14 +21,15 @@ public class WindowsEvaluationResult extends GroupedEvaluationResult {
         this.addResult(passageCoverageEvaluationResult);
         fittingWindowsEvaluationResult = new FittingWindowsEvaluationResult(lpm, windowSize);
         this.addResult(fittingWindowsEvaluationResult);
-        transitionCoverageEvaluationResult = new TransitionCoverageEvaluationResult(lpm);
+        transitionCoverageEvaluationResult = new TransitionCoverageEvaluationResult(lpm, labelMap);
+        transitionCoverageEvaluationResult.setTransitionsCount(lpm.getVisibleTransitions().size());
         this.addResult(transitionCoverageEvaluationResult);
     }
 
     public void updatePositive(int windowMultiplicity, List<Integer> window, List<Integer> firingSequence) {
         boolean successful = firingSequence != null;
         if (successful) {
-            this.transitionCoverageEvaluationResult.updateTransitionCoverageCountMap(window, windowMultiplicity);
+            this.transitionCoverageEvaluationResult.updateTransitionCoverageCountMap(firingSequence, window, windowMultiplicity);
             passageCoverageEvaluationResult.updatePassageCoverage(firingSequence);
             fittingWindowsEvaluationResult.updateCount(windowMultiplicity);
         } else { // if the replay was successful
@@ -41,7 +42,7 @@ public class WindowsEvaluationResult extends GroupedEvaluationResult {
         if (successful) { // if the replay was successful
             passageCoverageEvaluationResult.updatePassageCoverage(window);
             fittingWindowsEvaluationResult.updateCount(windowMultiplicity);
-            transitionCoverageEvaluationResult.updateTransitionCoverageCountMap(window, windowMultiplicity);
+            transitionCoverageEvaluationResult.updateTransitionCoverageCountMap(firingSequence, window, windowMultiplicity);
         }
         fittingWindowsEvaluationResult.updateTotal(windowMultiplicity);
         transitionCoverageEvaluationResult.updateTotal(window, windowMultiplicity);
@@ -49,6 +50,6 @@ public class WindowsEvaluationResult extends GroupedEvaluationResult {
 
     public void setTotal(WindowTotalCounter counter) {
         fittingWindowsEvaluationResult.setTotal(counter.getWindowCount());
-        transitionCoverageEvaluationResult.setTransitionTotalCounts(counter.getTransitionCount());
+//        transitionCoverageEvaluationResult.setTransitionTotalCounts(counter.getTransitionCount());
     }
 }

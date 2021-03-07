@@ -13,6 +13,7 @@ import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.Trans
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.fpgrowth.MainFPGrowthLPMTree;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.fpgrowth.WindowLPMTree;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.fpgrowth.WindowLPMTreeNode;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.replayer.Replayer;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.utils.LocalProcessModelUtils;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.utils.PlaceUtils;
 
@@ -26,20 +27,21 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
     private final Set<Place> places;
     LPMCombinationParameters parameters;
     private boolean stop;
+    private WindowLog windowLog;
 
     public FPGrowthLPMDiscoveryTreeBuilderFirstEdition(XLog log, Set<Place> places, LPMCombinationParameters parameters) {
         this.log = log;
         this.places = places;
         this.parameters = parameters;
         this.stop = false;
+        windowLog = new WindowLog(this.log); // create the integer mapped log
     }
 
     public MainFPGrowthLPMTree buildTree() {
-        WindowLog windowLog = new WindowLog(this.log); // create the integer mapped log
         Set<Transition> transitions = PlaceUtils.getAllTransitions(this.places); // get all transitions
 
         // add invisible transitions to the label map
-        windowLog.addTransitionsInLabelMap(transitions
+        windowLog.addInvisibleTransitionsInLabelMap(transitions
                 .stream()
                 .map(Transition::getLabel)
                 .collect(Collectors.toSet()));
@@ -91,14 +93,22 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
                             new Pair<>(window.get(i), event), new HashSet<>());
 
                     Main.getAnalyzer().getFpGrowthStatistics().placesAddedInLocalTree(
-                            placesForAddition.size() + paths.size() * 2);
+                            placesForAddition.size() + paths.size());
 //                    localTree.add(window.get(i), placesForAddition, paths, windowLog.getLabelMap(), i);
                     localTree.add(window.get(i), eventPos - window.size() + 1 + i,
                             event, eventPos,
                             placesForAddition, paths, windowLog.getLabelMap());
                 }
-//                localTree.tryAddNullChildren(event, window.size() - 1);
+                localTree.tryAddNullChildren(event, window.size() - 1);
                 addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog);
+            }
+            if (window.size() < this.parameters.getLpmProximity()) {
+                for (int i = 0; i < this.parameters.getLpmProximity() - window.size(); ++i) {
+                    eventPos++;
+                    localTree.refreshPosition(eventPos);
+                    windowTotalCounter.update(window, traceCount);
+                    addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog);
+                }
             }
             while (window.size() > 1) {
                 eventPos++;
@@ -120,24 +130,30 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
                                         int windowCount, LinkedList<Integer> window, WindowLog windowLog) {
         // get the null children
         Map<LocalProcessModel, List<Integer>> lpms =
-                getLPMsAndFiringSequences(windowLog.getReverseLabelMap(), localTree);
-        Main.getAnalyzer().getFpGrowthStatistics().lpmsAddedInMainTree(lpms.size());
+                getLPMsAndFiringSequences(windowLog.getReverseLabelMap(), localTree, window);
 
         // give the lpm and the window count to the main tree so it can update itself
+        int countAdded = 0;
         for (Map.Entry<LocalProcessModel, List<Integer>> lpmEntry : lpms.entrySet()) {
-            if (stop)
+            if (stop) {
+                Main.getAnalyzer().getFpGrowthStatistics().lpmsAddedInMainTree(lpms.size());
                 return;
+            }
             LocalProcessModel lpm = lpmEntry.getKey();
             if (lpm.getPlaces().size() >= this.parameters.getMinNumPlaces() &&
                     lpm.getPlaces().size() <= this.parameters.getMaxNumPlaces() &&
                     lpm.getTransitions().size() >= this.parameters.getMinNumTransitions() &&
-                    lpm.getTransitions().size() <= this.parameters.getMaxNumTransitions())
+                    lpm.getTransitions().size() <= this.parameters.getMaxNumTransitions()) {
                 mainTree.addOrUpdate(lpm, windowCount, window, lpmEntry.getValue());
+                countAdded++;
+            }
         }
+        Main.getAnalyzer().getFpGrowthStatistics().lpmsAddedInMainTree(lpms.size());
     }
 
     private Map<LocalProcessModel, List<Integer>> getLPMsAndFiringSequences(Map<Integer, String> reversedLabelMap,
-                                                                            WindowLPMTree localTree) {
+                                                                            WindowLPMTree localTree,
+                                                                            List<Integer> window) {
         Set<WindowLPMTreeNode> nullNodes = localTree.getNullNodes();
         Map<LocalProcessModel, List<Integer>> lpmFiringSequenceMap = nullNodes // get the unique lpms
                 .stream()
@@ -146,11 +162,11 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
                                 .convertReplayableToLPM(n.getLpm(), reversedLabelMap),
                         n -> n.getLpm().getFiringSequence(),
                         (n1, n2) -> n1)); // TODO: update how the firing sequences are added
-        addBranchCombinations(lpmFiringSequenceMap);
+        addBranchCombinations(lpmFiringSequenceMap, new ArrayList<>(window));
         return lpmFiringSequenceMap;
     }
 
-    private void addBranchCombinations(Map<LocalProcessModel, List<Integer>> lpmFiringSequenceMap) {
+    private void addBranchCombinations(Map<LocalProcessModel, List<Integer>> lpmFiringSequenceMap, List<Integer> window) {
         // TODO: We combine only by two LPMs, but more can be done
         List<LocalProcessModel> lpms = new ArrayList<>(lpmFiringSequenceMap.keySet());
         for (int i = 0; i < lpms.size(); ++i) {
@@ -160,12 +176,78 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
 
                 List<Integer> fsi = lpmFiringSequenceMap.get(lpms.get(i));
                 List<Integer> fsj = lpmFiringSequenceMap.get(lpms.get(j));
-                if (!fsi.get(0).equals(fsj.get(0)) && !fsi.get(fsi.size() - 1).equals(fsj.get(fsj.size() - 1)))
+                if (/*!fsi.get(0).equals(fsj.get(0)) || !fsi.get(fsi.size() - 1).equals(fsj.get(fsj.size() - 1))
+                        || */isSublist(fsi, fsj) || isSublist(fsj, fsi) || fsi.stream().noneMatch(fsj::contains))
                     continue;
 
                 LocalProcessModel lpm = LocalProcessModelUtils.join(lpms.get(i), lpms.get(j));
-                if (!lpmFiringSequenceMap.containsKey(lpm))
-                    lpmFiringSequenceMap.put(lpm, fsi);
+                if (!lpmFiringSequenceMap.containsKey(lpm)) {
+                    List<Integer> sequence = joinFiringSequences(fsi, fsj, window);
+                    Replayer replayer = new Replayer(lpm, windowLog.getLabelMap());
+                    if (replayer.canReplay(sequence))
+                        lpmFiringSequenceMap.put(lpm, sequence);
+                }
+            }
+        }
+    }
+
+    private boolean isSublist(List<Integer> list, List<Integer> sublist) {
+        int i = 0;
+        int j = 0;
+
+        while (i < list.size() && j < sublist.size()) {
+            if (list.get(i).equals(sublist.get(j))) {
+                i++;
+                j++;
+            } else {
+                i++;
+            }
+        }
+        return j == sublist.size();
+    }
+
+    private List<Integer> joinFiringSequences(List<Integer> one, List<Integer> two, List<Integer> superSequence) {
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        List<Integer> result = new ArrayList<>();
+        while (true) {
+            while (i < one.size() && windowLog.getInvisible().contains(one.get(i))) {
+                result.add(one.get(i));
+                i++;
+            }
+            while (j < two.size() && windowLog.getInvisible().contains(two.get(j))) {
+                result.add(two.get(j));
+                j++;
+            }
+            if (i >= one.size() && j >= two.size())
+                return result;
+            if (i >= one.size()) {
+                result.addAll(two.subList(j, two.size()));
+                return result;
+            }
+            if (j >= two.size()) {
+                result.addAll(one.subList(i, one.size()));
+                return result;
+            }
+            if (k >= superSequence.size()) {
+                return result;
+            }
+            if (one.get(i).equals(two.get(j)) && one.get(i).equals(superSequence.get(k))) {
+                result.add(one.get(i));
+                i++;
+                j++;
+                k++;
+            } else if (one.get(i).equals(superSequence.get(k)) && !two.get(j).equals(superSequence.get(k))) {
+                result.add(one.get(i));
+                i++;
+                k++;
+            } else if (!one.get(i).equals(superSequence.get(k)) && two.get(j).equals(superSequence.get(k))) {
+                result.add(two.get(j));
+                j++;
+                k++;
+            } else {
+                k++;
             }
         }
     }

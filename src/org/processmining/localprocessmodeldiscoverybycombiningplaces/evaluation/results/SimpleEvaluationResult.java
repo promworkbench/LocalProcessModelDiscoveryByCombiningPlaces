@@ -14,6 +14,8 @@ public abstract class SimpleEvaluationResult extends AbstractEvaluationResult {
 
     public abstract double getResult();
 
+    public abstract double getNormalizedResult();
+
     @Override
     public SimpleEvaluationResult clone() throws CloneNotSupportedException {
         return (SimpleEvaluationResult) super.clone();

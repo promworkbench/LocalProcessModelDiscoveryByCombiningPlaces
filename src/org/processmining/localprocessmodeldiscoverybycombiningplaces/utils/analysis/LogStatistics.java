@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 public class LogStatistics {
 
     private final UUID executionId;
-    private final XLog log;
 
     private int traceVariantsCount;
     private int activitiesCount;
@@ -26,11 +25,10 @@ public class LogStatistics {
 
     public LogStatistics(UUID executionId, XLog log) {
         this.executionId = executionId;
-        this.log = log;
-        this.initialize();
+        this.initialize(log);
     }
 
-    private void initialize() {
+    private void initialize(XLog log) {
         List<Integer> sizes = log.stream().map(List::size).collect(Collectors.toList());
         this.traceVariantsCount = log.size();
         this.traceVariantsMaxSize = Collections.max(sizes);

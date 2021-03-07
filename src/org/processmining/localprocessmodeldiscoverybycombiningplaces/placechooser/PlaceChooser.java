@@ -3,17 +3,20 @@ package org.processmining.localprocessmodeldiscoverybycombiningplaces.placechoos
 import com.google.common.collect.Sets;
 import javafx.util.Pair;
 import org.deckfour.xes.model.XLog;
-import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.filterstrategies.places.DuplicatePlaceFilter;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.Main;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.loganalyzer.LEFRMatrix;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.filterstrategies.places.EmptyIOTransitionSetPlaceFilter;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.filterstrategies.places.PlaceFilter;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.filterstrategies.places.SelfLoopPlaceFilter;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.fpgrowth.FPGrowthPlaceFollowGraphBuilder;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.Place;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.Transition;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.fpgrowth.FPGrowthPlaceFollowGraph;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.fpgrowth.FPGrowthPlaceFollowGraphNode;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.utils.LogUtils;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.utils.PlaceUtils;
 
 import java.util.*;
-import java.util.function.ToDoubleFunction;
 import java.util.stream.Collectors;
 
 public class PlaceChooser {
@@ -21,19 +24,21 @@ public class PlaceChooser {
     private final PlaceChooserParameters parameters;
     private Set<Place> places;
     private final XLog log;
+    private final LEFRMatrix lefr;
 
     private List<Place> rankedPlaces;
 
-    public PlaceChooser(PlaceChooserParameters parameters, Set<Place> places, XLog log) {
+    public PlaceChooser(PlaceChooserParameters parameters, Set<Place> places, XLog log, LEFRMatrix lefr) {
         this.parameters = parameters;
         this.places = new HashSet<>(places);
         this.log = log;
+        this.lefr = lefr;
         postProcess();
         filter();
     }
 
     private void postProcess() {
-        System.out.println("==========Post-process Places==========");
+        System.out.println("Place count before post-process: " + this.places.size());
         postProcessByIncludedActivities();
         postProcessByPassageUsage();
         System.out.println("Place count: " + this.places.size());
@@ -166,7 +171,6 @@ public class PlaceChooser {
 
     private void filterWithFilters() {
         // TODO: Replace this method with more complicated and flexible filtering structure
-        System.out.println(places.size());
         PlaceFilter filter;
 
 //        filter = new NonExistingPathsPlaceFilter();
@@ -176,32 +180,57 @@ public class PlaceChooser {
         // Remove places that don't have any input or output transitions (for now)
         filter = new EmptyIOTransitionSetPlaceFilter();
         places.retainAll(filter.filter(places));
+        System.out.println("After EmptyIO: " + places.size());
 
 //        //Keep only base places. Places whose paths are fully covered by other places should be discarded.
 //        filter = new PathCoveragePlaceFilter();
 //        places = filter.filter(places);
 
         // Remove places that have the same input and output transitions
-        filter = new DuplicatePlaceFilter();
-        places.retainAll(filter.filter(places));
+//        filter = new DuplicatePlaceFilter();
+//        places.retainAll(filter.filter(places));
+//        System.out.println("After Duplicate: " + places.size());
 
         filter = new SelfLoopPlaceFilter();
         places.retainAll(filter.filter(places));
+        System.out.println("After SelfLoop: " + places.size());
+
+        Main.getAnalyzer().addPlacesDiscovered(places.size());
     }
 
     private void rankPlaces() {
         System.out.println("========Ranking places========");
-        Map<Place, Double> placeRankMap = new HashMap<>();
+        Map<Place, Double> placeTransitionRankMap = new HashMap<>();
         int allPossibleTransitionsCount = parameters.getChosenActivities().size() * 2;
         places.forEach(place -> {
             int countTransitions = place.getInputTransitions().size() + place.getOutputTransitions().size();
             double transitionValue = countTransitions * 1.0 / allPossibleTransitionsCount;
-            placeRankMap.put(place, transitionValue);
+            placeTransitionRankMap.put(place, transitionValue);
+        });
+
+        Map<Place, Double> placePassageRankMap = new HashMap<>();
+        places.forEach(place -> {
+            int passageCountSum = 0;
+            int passageCounter = 0;
+            for (Transition inTr : place.getInputTransitions()) {
+                if (inTr.isInvisible())
+                    continue;
+                for (Transition outTr : place.getOutputTransitions()) {
+                    if (outTr.isInvisible())
+                        continue;
+                    passageCountSum += lefr.get(inTr.getLabel(), outTr.getLabel());
+                    passageCounter++;
+                }
+            }
+            placePassageRankMap.put(place, passageCountSum * 1.0 / passageCounter);
         });
 
         rankedPlaces = new ArrayList<>(places);
         rankedPlaces.sort(Comparator
-                .comparingDouble((ToDoubleFunction<Place>) placeRankMap::get)
+//                .<Place>comparingDouble(placePassageRankMap::get)
+                .<Place>comparingDouble(placeTransitionRankMap::get)
+                .thenComparing(placePassageRankMap::get)
+//                .thenComparing(placeTransitionRankMap::get)
                 .thenComparing(Place::getShortString));
         System.out.println("========Ranking places ended========");
     }
@@ -213,6 +242,18 @@ public class PlaceChooser {
     public Set<Place> choose(int count) {
         if (rankedPlaces == null)
             rankPlaces();
-        return new HashSet<>(rankedPlaces.subList(0, Math.min(count, rankedPlaces.size())));
+
+        Set<Place> resSet = new HashSet<>(rankedPlaces.subList(0, Math.min(count, rankedPlaces.size())));
+        Main.getAnalyzer().getPlaceStatistics().initializePlaceStatistics(resSet);
+        return resSet;
+    }
+
+    public Set<Place> choose(int count, int degree) {
+        FPGrowthPlaceFollowGraphBuilder graphBuilder = new FPGrowthPlaceFollowGraphBuilder(
+                log,
+                new HashSet<>(places),
+                parameters.getFollowRelationsLimit());
+        FPGrowthPlaceFollowGraph graph = graphBuilder.buildGraph();
+        return graph.getNodesForDegree(count, degree).stream().map(FPGrowthPlaceFollowGraphNode::getPlace).collect(Collectors.toSet());
     }
 }

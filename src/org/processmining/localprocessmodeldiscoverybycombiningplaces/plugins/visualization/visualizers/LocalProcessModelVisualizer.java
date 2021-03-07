@@ -1,10 +1,12 @@
 package org.processmining.localprocessmodeldiscoverybycombiningplaces.plugins.visualization.visualizers;
 
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
+import org.processmining.acceptingpetrinetclassicalreductor.plugins.ReduceUsingMurataRulesPlugin;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.Visualizer;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.Main;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.LocalProcessModel;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.plugins.visualization.components.ComponentFactory;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.utils.LocalProcessModelUtils;
@@ -21,6 +23,8 @@ public class LocalProcessModelVisualizer {
         if (lpm == null)
             throw new IllegalArgumentException("The local process model to be visualized should not be null: " + lpm);
         AcceptingPetriNet net = LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
+        ReduceUsingMurataRulesPlugin reductorPlugin = new ReduceUsingMurataRulesPlugin();
+        net = reductorPlugin.runDefault(Main.getContext(), net);
 
         JComponent component = new JPanel();
         component.setLayout(new BoxLayout(component, BoxLayout.X_AXIS));

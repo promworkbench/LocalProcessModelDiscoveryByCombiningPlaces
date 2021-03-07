@@ -220,6 +220,10 @@ public class ReplayableLocalProcessModel {
         return invisibleEnabled;
     }
 
+    public boolean hasInputConstraint(Integer transition) {
+        return !this.inputConstraints.get(transition).isEmpty();
+    }
+
     public boolean hasFired() {
         return this.hasFired;
     }
@@ -245,7 +249,7 @@ class Constraint {
 
     Constraint(int numTokens) {
         this.numTokens = numTokens;
-        this.maxTokens = Integer.MAX_VALUE;
+        this.maxTokens = 1;
     }
 
     public Constraint(Constraint constraint) {

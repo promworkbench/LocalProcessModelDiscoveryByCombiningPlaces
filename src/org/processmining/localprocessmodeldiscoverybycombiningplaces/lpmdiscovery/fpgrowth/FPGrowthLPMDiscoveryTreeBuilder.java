@@ -43,7 +43,7 @@ public class FPGrowthLPMDiscoveryTreeBuilder implements CanBeInterrupted {
         Set<Transition> transitions = PlaceUtils.getAllTransitions(this.places); // get all transitions
 
         // add invisible transitions to the label map
-        windowLog.addTransitionsInLabelMap(transitions
+        windowLog.addInvisibleTransitionsInLabelMap(transitions
                 .stream()
                 .map(Transition::getLabel)
                 .collect(Collectors.toSet()));

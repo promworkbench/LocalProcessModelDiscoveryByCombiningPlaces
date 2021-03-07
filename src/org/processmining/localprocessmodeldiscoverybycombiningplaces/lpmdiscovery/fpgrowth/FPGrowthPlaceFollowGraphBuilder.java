@@ -65,9 +65,26 @@ public class FPGrowthPlaceFollowGraphBuilder {
                         .map(e -> new AbstractMap.SimpleEntry<>(e.getKey(), e.getValue() - 1))
                         .collect(Collectors.toCollection(LinkedList::new));
 
-                // add new places
-                for (Place p : candidatePlaces)
-                    queue.add(new AbstractMap.SimpleEntry<>(p, this.maxDependencyLength));
+                // add new places together with places that these places are connected via silent transition
+                for (Place p : candidatePlaces) {
+                    queue.add(new AbstractMap.SimpleEntry<>(p, this.maxDependencyLength)); // add place
+
+                    // find all output transitions of the place that are silent
+                    Set<Transition> silentOutputTransitions = p.getSilentTransitions(false);
+
+                    // iterate the silent transitions
+                    for (Transition silent : silentOutputTransitions) {
+                        // find candidate places that can be added for the silent transition
+                        Set<Place> candidatePlacesViaSilent = inTransitionPlacesMap.getOrDefault(
+                                silent.getLabel(), new HashSet<>());
+                        // iterate the candidate places via silent transitions
+                        for (Place pViaSilent : candidatePlacesViaSilent) {
+                            graph.addEdge(p, pViaSilent, this.maxDependencyLength * count); // add edge
+
+                            queue.add(new AbstractMap.SimpleEntry<>(pViaSilent, this.maxDependencyLength)); // add place
+                        }
+                    }
+                }
 
             }
         }

@@ -3,10 +3,10 @@ package org.processmining.localprocessmodeldiscoverybycombiningplaces.model.seri
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.utils.GeneralUtils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 public class SerializableList<T extends Serializable> extends SerializableCollection<T> {
 
@@ -72,6 +72,15 @@ public class SerializableList<T extends Serializable> extends SerializableCollec
             this.elements = new ArrayList<>(this.elements.subList(0, Math.min(count, this.elements.size())));
         else
             throw new IllegalStateException("The list must be sorted first");
+    }
+
+    public void edit(Consumer<T> editFunction) {
+        this.elements.forEach(editFunction::accept);
+    }
+
+    public T highestScoringElement(Function<T, Double> scoringFunction) {
+        Optional<T> element = this.elements.stream().max(Comparator.comparingDouble(scoringFunction::apply));
+        return element.orElse(null);
     }
 
     public SerializableSet<T> getSet() {

@@ -20,10 +20,10 @@ public class LPMFilterParameters {
 
         this.setDefaultFilterStrategies();
 
-        this.abovePassageCoverageThreshold = 0.001;
-        this.aboveWindowsEvaluationThreshold = 0.001;
-        this.aboveTransitionOverlappingThreshold = 0.001;
-        this.abovePassageRepetitionThreshold = 0.2;
+        this.abovePassageCoverageThreshold = 0;
+        this.aboveWindowsEvaluationThreshold = 0;
+        this.aboveTransitionOverlappingThreshold = 0;
+        this.abovePassageRepetitionThreshold = 0;
     }
 
     private void setDefaultFilterStrategies() {

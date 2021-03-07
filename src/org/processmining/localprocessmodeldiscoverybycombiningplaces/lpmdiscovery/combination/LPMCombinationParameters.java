@@ -9,10 +9,10 @@ public class LPMCombinationParameters {
     private int maxNumTransitions;
 
     public LPMCombinationParameters() {
-        this.minNumPlaces = 2;
-        this.maxNumPlaces = 4;
+        this.minNumPlaces = 3;
+        this.maxNumPlaces = 7;
         this.minNumTransitions = 3;
-        this.maxNumTransitions = 6;
+        this.maxNumTransitions = 10;
         this.lpmProximity = 7;
     }
 

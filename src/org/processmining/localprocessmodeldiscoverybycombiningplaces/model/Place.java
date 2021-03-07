@@ -163,4 +163,9 @@ public class Place implements Serializable, TextDescribable {
     public void setFinal(boolean aFinal) {
         isFinal = aFinal;
     }
+
+    public Set<Transition> getSilentTransitions(boolean isInput) {
+        return isInput ? this.getInputTransitions().stream().filter(Transition::isInvisible).collect(Collectors.toSet()) :
+                this.getOutputTransitions().stream().filter(Transition::isInvisible).collect(Collectors.toSet());
+    }
 }

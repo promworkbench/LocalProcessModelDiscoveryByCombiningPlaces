@@ -48,17 +48,21 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
                 new String[]{
                         "LPM Index",
                         "LPM Short Name",
-                        "Transition Overlapping Score",
+//                        "Transition Overlapping Score",
+                        "Transition Coverage Score",
                         "Fitting Window Score",
                         "Passage Coverage Score",
+                        "Passage Repetition Score",
                         "Aggregate Result"
                 },
                 (ind, lpm) -> new Object[]{
                         ind + 1,
                         lpm.getShortString(),
-                        df.format(getResultOrDefault(lpm, LPMEvaluationResultId.TransitionOverlappingEvaluationResult)),
+//                        df.format(getResultOrDefault(lpm, LPMEvaluationResultId.TransitionOverlappingEvaluationResult)),
+                        df.format(getResultOrDefault(lpm, LPMEvaluationResultId.TransitionCoverageEvaluationResult)),
                         df.format(getResultOrDefault(lpm, LPMEvaluationResultId.FittingWindowsEvaluationResult)),
                         df.format(getResultOrDefault(lpm, LPMEvaluationResultId.PassageCoverageEvaluationResult)),
+                        df.format(getResultOrDefault(lpm, LPMEvaluationResultId.PassageRepetitionEvaluationResult)),
                         df.format(lpm.getAdditionalInfo().getEvaluationResult()
                                 .getResult(new EvaluationResultAggregateOperation()))
                 });

@@ -1,5 +1,6 @@
 package org.processmining.localprocessmodeldiscoverybycombiningplaces.model.fpgrowth;
 
+import javafx.util.Pair;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.Place;
 import org.processmining.models.graphbased.directed.*;
 
@@ -61,6 +62,10 @@ public class FPGrowthPlaceFollowGraph extends AbstractDirectedGraph<FPGrowthPlac
 
     public String getEdgeId(Place source, Place target) {
         return this.getNodeId(source) + "-" + this.getNodeId(target);
+    }
+
+    private boolean hasEdge(FPGrowthPlaceFollowGraphNode source, FPGrowthPlaceFollowGraphNode target) {
+        return this.idEdgeMap.containsKey(this.getEdgeId(source, target));
     }
 
     public String getEdgeId(FPGrowthPlaceFollowGraphNode source, FPGrowthPlaceFollowGraphNode target) {
@@ -196,6 +201,20 @@ public class FPGrowthPlaceFollowGraph extends AbstractDirectedGraph<FPGrowthPlac
         return new HashSet<>(this.idEdgeMap.values());
     }
 
+    public double getAverageNodeOutDegree() {
+        int totalOutDegree = 0;
+        for (FPGrowthPlaceFollowGraphNode source : this.getNodes()) {
+            int outDegree = 0;
+            for (FPGrowthPlaceFollowGraphNode target : this.getNodes()) {
+                if (this.hasEdge(source, target)) {
+                    outDegree++;
+                }
+            }
+            totalOutDegree += outDegree;
+        }
+        return totalOutDegree * 1.0 / this.nodeIdNodeMap.size();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -210,5 +229,20 @@ public class FPGrowthPlaceFollowGraph extends AbstractDirectedGraph<FPGrowthPlac
     @Override
     public int hashCode() {
         return Objects.hash(super.hashCode(), placeNodeIdMap, nodeIdNodeMap, idEdgeMap);
+    }
+
+    public Set<FPGrowthPlaceFollowGraphNode> getNodesForDegree(int count, int degree) {
+        List<Pair<FPGrowthPlaceFollowGraphNode, Integer>> degreeList = new ArrayList<>();
+        for (FPGrowthPlaceFollowGraphNode source : this.getNodes()) {
+            int outDegree = 0;
+            for (FPGrowthPlaceFollowGraphNode target : this.getNodes()) {
+                if (this.hasEdge(source, target)) {
+                    outDegree++;
+                }
+            }
+            degreeList.add(new Pair<>(source, outDegree));
+        }
+        degreeList.sort(Comparator.comparingInt(p -> Math.abs(p.getValue() - degree)));
+        return degreeList.subList(0, count).stream().map(Pair::getKey).collect(Collectors.toSet());
     }
 }

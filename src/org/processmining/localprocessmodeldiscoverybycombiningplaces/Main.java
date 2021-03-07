@@ -3,7 +3,9 @@ package org.processmining.localprocessmodeldiscoverybycombiningplaces;
 import org.deckfour.xes.model.XLog;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.evaluation.lpmevaluators.LPMEvaluatorFactory;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.evaluation.results.LPMEvaluationResultId;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.evaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.evaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.loganalyzer.LEFRMatrix;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.loganalyzer.LogAnalyzer;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.loganalyzer.LogAnalyzerParameters;
@@ -15,7 +17,7 @@ import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscover
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.filterstrategies.LPMFilterParameters;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.filterstrategies.lpms.LPMFilter;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.filterstrategies.lpms.LPMFilterId;
-import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.filtration.LPMFiltrationController;
+import org.processmining.localprocessmodeldiscoverybycombiningplaces.lpmdiscovery.filtration.LPMFiltrationAndEvaluationController;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.InterrupterSubject;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.LocalProcessModel;
 import org.processmining.localprocessmodeldiscoverybycombiningplaces.model.Place;
@@ -59,7 +61,7 @@ public class Main {
     }
 
     public static LPMResult run(XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
-        setUpAnalyzer(log, false);
+        setUpAnalyzer(log, true);
         LPMResult lpmResult;
 
         Analyzer.totalExecution.start();
@@ -81,6 +83,7 @@ public class Main {
         } finally {
             Analyzer.totalExecution.stop();
             Analyzer.write("analysis", false);
+            Analyzer = null;
         }
 
         return lpmResult;
@@ -97,6 +100,7 @@ public class Main {
         } finally {
             Analyzer.totalExecution.stop();
             Analyzer.write("analysis", false);
+            Analyzer = null;
         }
 
         return lpmResult;
@@ -118,71 +122,88 @@ public class Main {
         // places = PlaceDiscovery.filterPlaces(places);
 
         Analyzer.lpmDiscoveryExecution.start();
+        LPMResult result = new LPMResult();
+        try {
+            // analyze log
+            LogAnalyzer logAnalyzer = new LogAnalyzer(log, new LogAnalyzerParameters(parameters.getLpmCombinationParameters().getLpmProximity()));
+            logAnalyzer.calculateLEFRMatrix();
+            LEFRMatrix lefrMatrix = logAnalyzer.getLEFRMatrix();
+            Main.getContext().getProvidedObjectManager()
+                    .createProvidedObject("LEFR - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
+                                    + log.getAttributes().get("concept:name"), lefrMatrix, LEFRMatrix.class,
+                            Main.getContext());
+            ProvidedObjectHelper.setFavorite(Main.getContext(), lefrMatrix);
 
-        // analyze log
-        LogAnalyzer logAnalyzer = new LogAnalyzer(log, new LogAnalyzerParameters());
-        logAnalyzer.calculateLEFRMatrix();
-        LEFRMatrix lefrMatrix = logAnalyzer.getLEFRMatrix();
-        Main.getContext().getProvidedObjectManager()
-                .createProvidedObject("LEFR - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
-                                + log.getAttributes().get("concept:name"), lefrMatrix, LEFRMatrix.class,
-                        Main.getContext());
-        ProvidedObjectHelper.setFavorite(Main.getContext(), lefrMatrix);
+            // choose places
+            parameters.getPlaceChooserParameters()
+                    .setFollowRelationsLimit(parameters.getLpmCombinationParameters().getLpmProximity());
+            PlaceChooser placeChooser = new PlaceChooser(parameters.getPlaceChooserParameters(), places, log, lefrMatrix);
+            places = placeChooser.choose();
 
-        // choose places
-        parameters.getPlaceChooserParameters()
-                .setFollowRelationsLimit(parameters.getLpmCombinationParameters().getLpmProximity());
-        PlaceChooser placeChooser = new PlaceChooser(parameters.getPlaceChooserParameters(), places, log);
-        places = placeChooser.choose();
+            // export chosen places
+            PlaceSet placeSet = new PlaceSet(places);
+            placeSet.writePassageUsage(logAnalyzer.getLEFRMatrix());
+            Main.getContext().getProvidedObjectManager()
+                    .createProvidedObject("Chosen Place Set - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
+                            + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());
+            ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
 
-        // export chosen places
-        PlaceSet placeSet = new PlaceSet(places);
-        placeSet.writePassageUsage(logAnalyzer.getLEFRMatrix());
-        Main.getContext().getProvidedObjectManager()
-                .createProvidedObject("Chosen Place Set - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
-                        + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());
-        ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
+            // setup the combination controller
+            LPMCombinationController controller = new LPMCombinationController(parameters.getLpmCombinationParameters());
 
-        // setup the combination controller
-        LPMCombinationController controller = new LPMCombinationController(parameters.getLpmCombinationParameters());
+            // set guard
+            controller.setCombinationGuard(new AndCombinationGuard(
+                    new SameActivityCombinationGuard(), new NotContainingCoveringPlacesCombinationGuard()));
 
-        // set guard
-        controller.setCombinationGuard(new AndCombinationGuard(
-                new SameActivityCombinationGuard(), new NotContainingCoveringPlacesCombinationGuard()));
+            // setup filtration controller
+            LPMFiltrationAndEvaluationController filtrationController = new LPMFiltrationAndEvaluationController();
+            // set evaluator
+            LPMEvaluatorFactory evaluatorFactory = new LPMEvaluatorFactory();
+            filtrationController.setEvaluatorFactory(evaluatorFactory);
 
-        // setup filtration controller
-        LPMFiltrationController filtrationController = new LPMFiltrationController();
-        // set evaluator
-        LPMEvaluatorFactory evaluatorFactory = new LPMEvaluatorFactory();
-        filtrationController.setEvaluatorFactory(evaluatorFactory);
-
-        // set filters
-        LPMFilterParameters filterParameters = parameters.getLpmFilterParameters();
-        LPMFilterFactory filterFactory = new LPMFilterFactory(filterParameters);
-        for (LPMFilterId filterId : filterParameters.getLPMFilterIds()) {
-            LPMFilter filter = filterFactory.getLPMFilter(filterId);
-            filtrationController.addLPMFilter(filter, filter.needsEvaluation());
-        }
-        controller.setFiltrationController(filtrationController);
+            // set filters
+            LPMFilterParameters filterParameters = parameters.getLpmFilterParameters();
+            LPMFilterFactory filterFactory = new LPMFilterFactory(filterParameters);
+            for (LPMFilterId filterId : filterParameters.getLPMFilterIds()) {
+                LPMFilter filter = filterFactory.getLPMFilter(filterId);
+                filtrationController.addLPMFilter(filter, filter.needsEvaluation());
+            }
+            controller.setFiltrationController(filtrationController);
 //        controller.addFinalLPMFilter(new SubLPMFilter());
 
 //        Set<LocalProcessModel> finalLpms = controller.combine(places);
 
-        Analyzer.setCountPlacesUsed(places.size());
-        LPMResult result = new LPMResult();
+            Analyzer.setCountPlacesUsed(places.size());
 
-        result.addAll(controller.combineUsingFPGrowth(places, log,
-                parameters.getLpmCombinationParameters().getLpmProximity(), parameters.getLpmCount()));
+            result.addAll(controller.combineUsingFPGrowth(places, log,
+                    parameters.getLpmCombinationParameters().getLpmProximity(), parameters.getLpmCount()));
 
+            Analyzer.setAllLpmDiscovered(result.size());
+            if (result.size() > 0) {
+                // normalize the fitting windows score
+                double max = result.highestScoringElement((LocalProcessModel lpm) -> lpm.getAdditionalInfo()
+                        .getEvaluationResult().getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult).getResult())
+                        .getAdditionalInfo().getEvaluationResult()
+                        .getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult).getResult();
+                result.edit(lpm -> ((FittingWindowsEvaluationResult) lpm.getAdditionalInfo()
+                        .getEvaluationResult()
+                        .getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult))
+                        .normalizeResult(max, 0));
 
-        EvaluationResultAggregateOperation aggregateOperation = new EvaluationResultAggregateOperation();
-        result.sort((LocalProcessModel lpm1, LocalProcessModel lpm2) ->
-                lpm1.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation)
-                        < lpm2.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation));
-        result.keep(parameters.getLpmCount());
-        Analyzer.setLpmDiscovered(result.size());
+                EvaluationResultAggregateOperation aggregateOperation = new EvaluationResultAggregateOperation();
+                result.sort((LocalProcessModel lpm1, LocalProcessModel lpm2) ->
+                        lpm1.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation)
+                                < lpm2.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation));
+                result.keep(parameters.getLpmCount());
+            }
+        } finally {
+            Analyzer.setLpmDiscovered(result.size());
 
-        Analyzer.lpmDiscoveryExecution.stop();
+            Analyzer.lpmDiscoveryExecution.stop();
+
+            timer.cancel();
+        }
+
         return result;
     }
 }

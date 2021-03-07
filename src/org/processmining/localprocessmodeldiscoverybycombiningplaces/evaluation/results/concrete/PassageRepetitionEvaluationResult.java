@@ -39,4 +39,9 @@ public class PassageRepetitionEvaluationResult extends SimpleEvaluationResult {
             calculateResult();
         return this.result;
     }
+
+    @Override
+    public double getNormalizedResult() {
+        return this.getResult();
+    }
 }

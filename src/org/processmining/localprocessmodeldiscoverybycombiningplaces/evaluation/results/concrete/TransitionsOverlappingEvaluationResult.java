@@ -26,4 +26,9 @@ public class TransitionsOverlappingEvaluationResult extends SimpleEvaluationResu
     public double getResult() {
         return overlappingScore;
     }
+
+    @Override
+    public double getNormalizedResult() {
+        return this.getResult();
+    }
 }

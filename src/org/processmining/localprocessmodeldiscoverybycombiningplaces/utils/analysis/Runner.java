@@ -25,22 +25,88 @@ import java.util.Scanner;
 
 
 public class Runner {
+
+    static Map<String, Pair<String, String>> logIntoInputMap;
+
     public static void main(String[] args) {
         try {
-            findLocalProcessModelsForOneLog();
+//            String[] filenames = {"/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/ArtificialBig/artificial1-est.xes",
+//                    "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/Choice2variants7activities/choice-2-variants-7-activities.xes",
+//                    "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/Road_Traffic_Fine_Management_Process/Road_Traffic_Fine_Management_Process-est.xes",
+//                    "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/bpi2019/log_IEEE.xes",
+//                    "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/bpi2012/financial_log.xes",
+//                    "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/chapter_8/Chapter_8/repairExample.xes",
+//                    "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/chapter_8/Chapter_8/reviewing.xes",
+//                    "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/chapter_8/Chapter_8/repairExampleSample2.xes",
+//                    "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/chapter_8/Chapter_8/teleclaims.xes"
+//            };
+//            for (String filename : filenames) {
+//                analyzeLog(filename);
+//            }
+            initializeLogMap();
+//            Runtime r = Runtime.getRuntime();
+//            System.out.println("Max Memory: " + r.totalMemory());
+//            System.out.println("Total Memory: " + r.totalMemory());
+//            System.out.println("Free Memory: " + r.freeMemory());
+//
+//            Scanner scn = new Scanner(System.in);
+//            while (true) {
+//                findLocalProcessModelsForOneLog(scn);
+//
+//                System.out.println("Max Memory: " + r.totalMemory());
+//                System.out.println("Total Memory: " + r.totalMemory());
+//                System.out.println("Free Memory: " + r.freeMemory());
+//                r.gc();
+//                System.out.println("Total Memory: " + r.totalMemory());
+//                System.out.println("Free Memory: " + r.freeMemory());
+//            }
+            run(logIntoInputMap);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static void findLocalProcessModelsForOneLog() {
-        Scanner scn = new Scanner(System.in);
+    private static void initializeLogMap() {
+        logIntoInputMap = new HashMap<>();
+//        logIntoInputMap.put(
+//                "Artificial Big",
+//                new Pair<>(
+//                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/ArtificialBig/artificial1-est.xes",
+//                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/ArtificialBig/artificial1.promspl"));
+        logIntoInputMap.put(
+                "Artificial Small",
+                new Pair<>(
+                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/Choice2variants7activities/choice-2-variants-7-activities.xes",
+                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/Choice2variants7activities/places-est.promspl"));
+//        logIntoInputMap.put(
+//                "HP2017 filtered",
+//                new Pair<>(
+//                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/hp2017/HP2017_filtered-est.xes",
+//                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/hp2017/hp2017-est-miner.promspl"));
+//        logIntoInputMap.put(
+//                "Road Traffic Fine Management Process",
+//                new Pair<>(
+//                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/Road_Traffic_Fine_Management_Process/Road_Traffic_Fine_Management_Process-est.xes",
+//                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/Road_Traffic_Fine_Management_Process/road-traffic-fine-management-est-miner.promspl"));
+//        logIntoInputMap.put(
+//                "BPI2019",
+//                new Pair<>(
+//                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/bpi2019/log_IEEE.xes",
+//                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/bpi2019/places-limit5.promspl"));
+//        logIntoInputMap.put(
+//                "BPI2012",
+//                new Pair<>(
+//                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/bpi2012/financial_log.xes",
+//                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/bpi2012/places-until4transitions-bpi2012.promspl"));
+    }
+
+    private static void findLocalProcessModelsForOneLog(Scanner scn) {
         Pair<String, String> logFiles = choosingLog(scn);
         PlaceDiscoveryAlgorithmId placeDiscoveryAlgorithm = choosePlaceDiscoveryAlgorithm(scn);
         System.out.println("Enter place limit:");
         int placeLimit = scn.nextInt();
 
-        runAlgorithm(logFiles, placeDiscoveryAlgorithm, placeLimit);
+        runAlgorithm(logFiles, placeDiscoveryAlgorithm, placeLimit, 7);
     }
 
     /**
@@ -65,38 +131,6 @@ public class Runner {
      * @return: the names of the files where the log and a set of places generated from eST Miner are stored
      */
     private static Pair<String, String> choosingLog(Scanner scn) {
-        Map<String, Pair<String, String>> logIntoInputMap = new HashMap<>();
-        logIntoInputMap.put(
-                "Artificial Big",
-                new Pair<>(
-                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/ArtificialBig/artificial1-est.xes",
-                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/ArtificialBig/artificial1.promspl"));
-        logIntoInputMap.put(
-                "Artificial Small",
-                new Pair<>(
-                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/Choice2variants7activities/choice-2-variants-7-activities.xes",
-                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/Choice2variants7activities/places-est.promspl"));
-        logIntoInputMap.put(
-                "HP2017 filtered",
-                new Pair<>(
-                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/hp2017/HP2017_filtered-est.xes",
-                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/hp2017/hp2017-est-miner.promspl"));
-        logIntoInputMap.put(
-                "Road Traffic Fine Management Process",
-                new Pair<>(
-                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/Road_Traffic_Fine_Management_Process/Road_Traffic_Fine_Management_Process-est.xes",
-                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/Road_Traffic_Fine_Management_Process/road-traffic-fine-management-est-miner.promspl"));
-        logIntoInputMap.put(
-                "BPI2019",
-                new Pair<>(
-                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/bpi2019/log_IEEE.xes",
-                        null));
-        logIntoInputMap.put(
-                "BPI2012",
-                new Pair<>(
-                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/bpi2012/financial_log.xes",
-                        "/home/vikipeeva/Viki/Learning/Masters/Thesis/logs/bpi2012/places-until4transitions-bpi2012.promspl"));
-
         int ind = 1;
         Map<Integer, String> indexNameMap = new HashMap<>();
         for (Map.Entry<String, ?> entry : logIntoInputMap.entrySet()) {
@@ -105,6 +139,7 @@ public class Runner {
         }
 
         while (true) {
+            System.out.println("In While True");
             printChoices(indexNameMap);
             int choice = scn.nextInt();
             if (choice == 0)
@@ -124,38 +159,51 @@ public class Runner {
         }
     }
 
-    private static void run(Map<String, String> logFilePlacesFileMap) {
-        CLIPluginContext context = new CLIPluginContext(new CLIContext(), "TestContext");
-        for (Map.Entry<String, String> entry : logFilePlacesFileMap.entrySet()) {
-            String logPath = entry.getKey();
-            String placesPath = entry.getValue();
-            try {
-                XLog log = LogUtils.readLogFromFile(logPath);
-                PlaceSet places = null;
-                if (placesPath != null)
-                    places = PlaceUtils.getPlaceSetFromInputStream(new FileInputStream(new File(placesPath)));
+    private static void run(Map<String, Pair<String, String>> logFilePlacesFileMap) {
+//        CLIPluginContext context = new CLIPluginContext(new CLIContext(), "TestContext");
+        for (Pair<String, String> entry : logFilePlacesFileMap.values()) {
+//            String logPath = entry.getKey();
+//            String placesPath = entry.getValue();
+//            try {
+//                XLog log = LogUtils.readLogFromFile(logPath);
+//                PlaceSet places = null;
+//                if (placesPath != null)
+//                    places = PlaceUtils.getPlaceSetFromInputStream(new FileInputStream(new File(placesPath)));
 
-                for (Integer placeLimit : new Integer[]{50, 100, 250}) {//, 500, 1000, 2500, 5000}) {
-                    System.out.println("Log: " + logPath + "\nPlace Limit: " + placeLimit);
-                    PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
-                    parameters.setTimeLimit(180000);
-                    parameters.getPlaceChooserParameters().setPlaceLimit(placeLimit);
-                    try {
-                        if (places == null)
-                            PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, parameters);
-                        else
-                            PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, places, parameters);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            for (Integer placeLimit : new Integer[]{50, 75, 100, 150, 200}) {//, 500, 1000, 2500, 5000}) {
+                for (Integer proximity : new Integer[]{5, 7, 12}) {
+//                    for (PlaceDiscoveryAlgorithmId algorithmId : PlaceDiscoveryAlgorithmId.values()) {
+                    runAlgorithm(entry, PlaceDiscoveryAlgorithmId.ESTMiner, placeLimit, proximity);
+
+                    Runtime r = Runtime.getRuntime();
+                    System.out.println("Max Memory: " + r.totalMemory());
+                    System.out.println("Total Memory: " + r.totalMemory());
+                    System.out.println("Free Memory: " + r.freeMemory());
+                    r.gc();
+                    System.out.println("Total Memory: " + r.totalMemory());
+                    System.out.println("Free Memory: " + r.freeMemory());
+//                    }
                 }
-            } catch (Exception e) {
-                e.printStackTrace();
+//                    System.out.println("Log: " + logPath + "\nPlace Limit: " + placeLimit);
+//                    PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
+//                    parameters.setTimeLimit(90000);
+//                    parameters.getPlaceChooserParameters().setPlaceLimit(placeLimit);
+//                    try {
+//                        if (places == null)
+//                            PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, parameters);
+//                        else
+//                            PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, places, parameters);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
             }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
         }
     }
 
-    public static void runAlgorithm(Pair<String, String> input, PlaceDiscoveryAlgorithmId pdAlgId, int placeLimit) {
+    public static void runAlgorithm(Pair<String, String> input, PlaceDiscoveryAlgorithmId pdAlgId, int placeLimit, int proximity) {
         CLIPluginContext context = new CLIPluginContext(new CLIContext(), "TestContext");
         String logPath = input.getKey();
         String placesPath = input.getValue();
@@ -165,11 +213,16 @@ public class Runner {
             if (placesPath != null)
                 places = PlaceUtils.getPlaceSetFromInputStream(new FileInputStream(new File(placesPath)));
 
-            System.out.println("Log: " + logPath + "\nPlace Limit: " + placeLimit);
+            System.out.println("Log: " + logPath + "\nAlgorithm: " + pdAlgId + "\nPlace Limit: " + placeLimit + "\nProximity: " + proximity);
             PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
-            parameters.getLpmCombinationParameters().setLpmProximity(7);
+            parameters.getLpmCombinationParameters().setLpmProximity(proximity);
+            parameters.getLpmCombinationParameters().setMinNumPlaces(0);
+            parameters.getLpmCombinationParameters().setMaxNumPlaces(Integer.MAX_VALUE);
+            parameters.getLpmCombinationParameters().setMinNumTransitions(0);
+            parameters.getLpmCombinationParameters().setMaxNumTransitions(Integer.MAX_VALUE);
             parameters.setTimeLimit(600000);
             parameters.getPlaceChooserParameters().setPlaceLimit(placeLimit);
+//            parameters.getPlaceChooserParameters().setAveragePlaceDegree(10);
             parameters.setLpmCount(Integer.MAX_VALUE);
             try {
                 if (places == null || !pdAlgId.equals(PlaceDiscoveryAlgorithmId.ESTMiner)) {
@@ -177,7 +230,7 @@ public class Runner {
                     PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, parameters);
                 } else
                     PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, places, parameters);
-            } catch (Exception e) {
+            } catch (Throwable e) {
                 e.printStackTrace();
             }
         } catch (Exception e) {
@@ -197,15 +250,21 @@ public class Runner {
             throw new IllegalArgumentException("There is no " + pdAlgId + " algorithm for Place Discovery");
 
         parameters.setPlaceDiscoveryParameters(placeDiscoveryParameters);
+        parameters.setPlaceDiscoveryAlgorithmId(pdAlgId);
     }
 
-    private static void analyzeLog() throws Exception {
-        Scanner scn = new Scanner(System.in);
-        Pair<String, String> logFiles = choosingLog(scn);
-        XLog log = LogUtils.readLogFromFile(logFiles.getKey());
-        LogAnalyzerParameters parameters = new LogAnalyzerParameters();
-        parameters.setDistanceLimit(7);
+    private static void analyzeLog(String filename) throws Exception {
+//        Scanner scn = new Scanner(System.in);
+//        Pair<String, String> logFiles = choosingLog(scn);
+        XLog log = LogUtils.readLogFromFile(filename);
+        LogAnalyzerParameters parameters = new LogAnalyzerParameters(7);
         LogAnalyzer logAnalyzer = new LogAnalyzer(log, parameters);
-        logAnalyzer.allVsDistinctWindowCount();
+        System.out.println(filename);
+        System.out.println("trace variants count: " + logAnalyzer.traceVariantCount());
+        System.out.println("trace variants total events: " + logAnalyzer.traceVariantTotalEvents());
+        System.out.println("activity count: " + logAnalyzer.getActivityCount());
+        System.out.println();
+
+//        logAnalyzer.allVsDistinctWindowCount();
     }
 }

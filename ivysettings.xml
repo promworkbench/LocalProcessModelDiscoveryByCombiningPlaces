@@ -1,5 +1,5 @@
 <ivysettings>
-    <settings defaultResolver="default" />   
+    <settings defaultResolver="default"/>
     <resolvers>
         <url name="prom" checkmodified="true">
             <ivy pattern="https://svn.win.tue.nl/repos/[organisation]/Releases/Packages/[module]/[revision]/ivy.xml" />

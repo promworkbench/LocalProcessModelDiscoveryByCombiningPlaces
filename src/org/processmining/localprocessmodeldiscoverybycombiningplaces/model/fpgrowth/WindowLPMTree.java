@@ -13,7 +13,7 @@ public class WindowLPMTree implements CanBeInterrupted {
     private boolean stop;
 
     public WindowLPMTree(int windowSize) {
-        this.root = new WindowLPMTreeNode(0, windowSize, new ReplayableLocalProcessModel());
+        this.root = new WindowLPMTreeNode(0, windowSize, new ReplayableLocalProcessModel(), -1, -1);
     }
 
     public void add(int inEvent, int inPos, int outEvent, int outPos,
@@ -30,12 +30,24 @@ public class WindowLPMTree implements CanBeInterrupted {
         }
     }
 
+    public void tryAddNullChildren(int event, int position) {
+        Set<WindowLPMTreeNode> nodes = getNodesThatCanFire(event, position);
+        for (WindowLPMTreeNode node : nodes) {
+            if (stop)
+                return;
+            if (node.getNullChild() == null)
+                node.tryAddNullChild(event);
+        }
+    }
+
     private Set<WindowLPMTreeNode> getNodesThatCanFire(int inEvent, int inPos) {
         Set<WindowLPMTreeNode> res = new HashSet<>();
 
         Queue<WindowLPMTreeNode> queue = new LinkedList<>();
         queue.add(root);
         while (!queue.isEmpty()) {
+            if (stop)
+                return res;
             WindowLPMTreeNode node = queue.poll();
             res.addAll(node.getChildren(inEvent, inPos));
             queue.addAll(node.getChildren(inPos));
@@ -46,9 +58,11 @@ public class WindowLPMTree implements CanBeInterrupted {
     public Set<WindowLPMTreeNode> getNullNodes() {
         Set<WindowLPMTreeNode> res = new HashSet<>();
 
-        Queue<WindowLPMTreeNode> queue = new LinkedList<>();
-        queue.add(root);
+        Queue<WindowLPMTreeNode> queue = new LinkedList<>(root.getChildren());
         while (!queue.isEmpty()) {
+            if (stop) {
+                return res;
+            }
             WindowLPMTreeNode node = queue.poll();
             if (node.getNullChild() != null)
                 res.add(node.getNullChild());

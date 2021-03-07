@@ -16,6 +16,8 @@ public class FittingWindowsEvaluationResult extends SimpleEvaluationResult {
 
     private int coveredWindowsHash;
 
+    private double normalizedResult;
+
 
     public FittingWindowsEvaluationResult(LocalProcessModel lpm, int windowSize) {
         super(lpm);
@@ -63,9 +65,18 @@ public class FittingWindowsEvaluationResult extends SimpleEvaluationResult {
         return this.count * 1.0 / this.total;
     }
 
+    public void normalizeResult(double max, double min) {
+        this.normalizedResult = (this.getResult() - min) / (max - min);
+    }
+
     @Override
     public double getResult() {
         return getFittingWindowsScore();
+    }
+
+    @Override
+    public double getNormalizedResult() {
+        return normalizedResult;
     }
 
     @Override

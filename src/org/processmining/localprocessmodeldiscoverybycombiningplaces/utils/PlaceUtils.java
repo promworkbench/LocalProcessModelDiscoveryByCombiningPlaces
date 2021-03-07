@@ -186,6 +186,8 @@ public class PlaceUtils {
                         .stream().filter(Transition::isInvisible).collect(Collectors.toSet())).size() > 0) {
                     for (Transition trIn : first.getInputTransitions()) {
                         for (Transition trOut : second.getOutputTransitions()) {
+                            if (trIn.getLabel().equals(trOut.getLabel()))
+                                continue;
                             int mappedIn = labelMap.get(trIn.getLabel());
                             int mappedOut = labelMap.get(trOut.getLabel());
                             Pair<Integer, Integer> pair = new Pair<>(mappedIn, mappedOut);
@@ -230,11 +232,7 @@ public class PlaceUtils {
     }
 
     public static void filterTransitionsInPlace(Place place, Set<String> acceptedTransitionLabels) {
-        Set<Transition> transitions = Sets.union(place.getInputTransitions(), place.getOutputTransitions());
-        Set<String> transitionLabels = Sets.union(place.getInputTransitions(), place.getOutputTransitions())
-                .stream()
-                .map(Transition::getLabel)
-                .collect(Collectors.toSet());
+        Set<Transition> transitions = new HashSet<>(Sets.union(place.getInputTransitions(), place.getOutputTransitions()));
         transitions.forEach(t -> {
             if (!t.isInvisible() && !acceptedTransitionLabels.contains(t.getLabel()))
                 place.removeTransitions(t.getLabel());

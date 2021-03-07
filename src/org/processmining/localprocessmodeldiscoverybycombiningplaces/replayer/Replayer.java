@@ -13,27 +13,25 @@ public class Replayer {
 
     private final LocalProcessModel lpm;
     private final Map<String, Integer> labelMapping;
-    private final ReplayerType type;
 
-    public Replayer(LocalProcessModel lpm, Map<String, Integer> labelMapping, ReplayerType type) {
+    public Replayer(LocalProcessModel lpm, Map<String, Integer> labelMapping) {
         this.sequenceCanBeReplayedMap = new HashMap<>();
         this.lpm = lpm;
         this.labelMapping = labelMapping;
-        this.type = type;
     }
 
-    public boolean canReplay(LinkedList<Integer> sequence) {
+    public boolean canReplay(LinkedList<Integer> sequence, ReplayerType type) {
         Boolean canReplay = this.sequenceCanBeReplayedMap.getOrDefault(sequence, null);
         if (canReplay != null)
             return canReplay;
 
-        if (this.type == ReplayerType.PREFIX)
+        if (type == ReplayerType.PREFIX)
             canReplay = canReplayPrefix(sequence);
 
-        if (this.type == ReplayerType.SUFFIX)
+        if (type == ReplayerType.SUFFIX)
             canReplay = canReplaySuffix(sequence);
 
-        if (this.type == ReplayerType.BOTH)
+        if (type == ReplayerType.BOTH)
             canReplay = canReplayPrefix(sequence) || canReplaySuffix(sequence);
 
         this.sequenceCanBeReplayedMap.put(sequence, canReplay);
@@ -57,15 +55,15 @@ public class Replayer {
      * @param sequence: the sequence that is replayed
      * @return a sequence of transitions that have been fired
      */
-    public List<Integer> replay(LinkedList<Integer> sequence) {
+    public List<Integer> replay(LinkedList<Integer> sequence, ReplayerType type) {
         List<Integer> replayedSequence = null;
-        if (this.type == ReplayerType.PREFIX)
+        if (type == ReplayerType.PREFIX)
             replayedSequence = replayPrefix(sequence);
 
-        if (this.type == ReplayerType.SUFFIX)
+        if (type == ReplayerType.SUFFIX)
             replayedSequence = replaySuffix(sequence);
 
-        if (this.type == ReplayerType.BOTH) {
+        if (type == ReplayerType.BOTH) {
             replayedSequence = replayPrefix(sequence);
             if (replayedSequence == null)
                 replayedSequence = replaySuffix(sequence);
@@ -132,6 +130,21 @@ public class Replayer {
 
         }
         return null;
+    }
+
+    public boolean canReplay(List<Integer> sequence) {
+        return canReplay(sequence, LocalProcessModelUtils
+                .convertToReplayable(this.lpm, this.labelMapping));
+    }
+
+    public boolean canReplay(List<Integer> sequence, ReplayableLocalProcessModel rlpm) {
+        for (Integer event : sequence) {
+            if (rlpm.canFire(event))
+                rlpm.fire(event);
+            else
+                return false;
+        }
+        return rlpm.isEmptyMarking();
     }
 
     public enum ReplayerType {

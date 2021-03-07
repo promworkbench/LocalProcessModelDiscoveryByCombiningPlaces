@@ -40,7 +40,7 @@ public class WindowsLPMEvaluator extends AbstractLPMEvaluator<WindowsEvaluationR
                 .collect(Collectors.toSet());
 
         // setup replayer
-        Replayer replayer = new Replayer(lpm, this.evaluationLog.getLabelMap(), Replayer.ReplayerType.BOTH);
+        Replayer replayer = new Replayer(lpm, this.evaluationLog.getLabelMap());
 
         // iterate through all trace variants
         for (Integer traceVariantId : this.evaluationLog.getTraceVariantIds()) {
@@ -57,7 +57,7 @@ public class WindowsLPMEvaluator extends AbstractLPMEvaluator<WindowsEvaluationR
                 // project the window on the set of labels created from the transitions in the lpm
                 LinkedList<Integer> projection = project(window, mappedLpmTransitions);
                 // try to replay the projection on the local process model
-                List<Integer> firingSequence = replayer.replay(projection);
+                List<Integer> firingSequence = replayer.replay(projection, Replayer.ReplayerType.BOTH);
 
                 result.updateAfterWindow(windowMultiplicity, projection, firingSequence);
             }
@@ -66,7 +66,7 @@ public class WindowsLPMEvaluator extends AbstractLPMEvaluator<WindowsEvaluationR
     }
 
     private void addInvisibleTransitionsFromLPM(LocalProcessModel lpm) {
-        this.evaluationLog.addTransitionsInLabelMap(lpm.getTransitions()
+        this.evaluationLog.addInvisibleTransitionsInLabelMap(lpm.getTransitions()
                 .stream()
                 .map(Transition::getLabel)
                 .collect(Collectors.toSet()));
