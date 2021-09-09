@@ -10,7 +10,7 @@
 	<property name="version" value="${major_minor}.${env.BUILD_NUMBER}" />
 	<property name="project" value="LocalProcessModelDiscoveryByCombiningPlaces" />
 
-	<property name="author" value="Viki Peeva, Lisa Mannel" />
+	<property name="author" value="Viki Peeva" />
 	<property name="organization" value="RWTH Aachen" />
 	<property name="description" value="LocalProcessModelDiscoveryByCombiningPlaces" />
 	<!-- See https://svn.win.tue.nl/trac/prom/browser/Packages/ProM-Contexts/Trunk/src/org/processmining/contexts/uitopia/packagemanager/PMPackageView.java for a list of known licenses. -->
