@@ -168,24 +168,37 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
 
     private void addBranchCombinations(Map<LocalProcessModel, List<Integer>> lpmFiringSequenceMap, List<Integer> window) {
         // TODO: We combine only by two LPMs, but more can be done
+        if (parameters.getConcurrencyCardinality() == 1)
+            return;
         List<LocalProcessModel> lpms = new ArrayList<>(lpmFiringSequenceMap.keySet());
         for (int i = 0; i < lpms.size(); ++i) {
-            for (int j = i + 1; j < lpms.size(); ++j) {
-                if (stop)
-                    return;
+            if (stop)
+                return;
+            addBranchCombinations(lpms.get(i), lpms, i + 1, lpmFiringSequenceMap, window, 2);
+        }
+    }
 
-                List<Integer> fsi = lpmFiringSequenceMap.get(lpms.get(i));
-                List<Integer> fsj = lpmFiringSequenceMap.get(lpms.get(j));
-                if (/*!fsi.get(0).equals(fsj.get(0)) || !fsi.get(fsi.size() - 1).equals(fsj.get(fsj.size() - 1))
-                        || */isSublist(fsi, fsj) || isSublist(fsj, fsi) || fsi.stream().noneMatch(fsj::contains))
-                    continue;
+    private void addBranchCombinations(LocalProcessModel lpm, List<LocalProcessModel> lpms, int from,
+                                       Map<LocalProcessModel, List<Integer>> lpmFiringSequenceMap,
+                                       List<Integer> window, int currIteration) {
+        List<Integer> fs = lpmFiringSequenceMap.get(lpm);
+        for (int i = from; i < lpms.size(); ++i) {
+            if (stop)
+                return;
 
-                LocalProcessModel lpm = LocalProcessModelUtils.join(lpms.get(i), lpms.get(j));
-                if (!lpmFiringSequenceMap.containsKey(lpm)) {
-                    List<Integer> sequence = joinFiringSequences(fsi, fsj, window);
-                    Replayer replayer = new Replayer(lpm, windowLog.getLabelMap());
-                    if (replayer.canReplay(sequence))
-                        lpmFiringSequenceMap.put(lpm, sequence);
+            List<Integer> fsi = lpmFiringSequenceMap.get(lpms.get(i));
+            if (fsi.stream().noneMatch(fs::contains)) {
+                continue;
+            }
+            LocalProcessModel resLpm = LocalProcessModelUtils.join(lpms.get(i), lpm);
+            if (!lpmFiringSequenceMap.containsKey(resLpm)) {
+                List<Integer> sequence = joinFiringSequences(fsi, fs, window);
+                Replayer replayer = new Replayer(resLpm, windowLog.getLabelMap());
+                if (replayer.canReplay(sequence)) {
+                    lpmFiringSequenceMap.put(resLpm, sequence);
+                    if (currIteration < this.parameters.getConcurrencyCardinality()) {
+                        addBranchCombinations(resLpm, lpms, i+1, lpmFiringSequenceMap, window, currIteration + 1);
+                    }
                 }
             }
         }

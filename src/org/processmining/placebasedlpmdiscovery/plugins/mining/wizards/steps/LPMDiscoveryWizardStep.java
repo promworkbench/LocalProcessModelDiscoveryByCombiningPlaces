@@ -31,7 +31,9 @@ public class LPMDiscoveryWizardStep extends ProMPropertiesPanel implements ProMW
     private final NiceIntegerSlider minTransitionsSlider;
     private final NiceIntegerSlider maxTransitionsSlider;
 
-//    private final ProMComboCheckBox filteringComponent;
+    private final NiceIntegerSlider concurrencyCardinality;
+
+    //    private final ProMComboCheckBox filteringComponent;
     private final ProMComboCheckBox activitiesComponent;
 
     public LPMDiscoveryWizardStep(XLog log) {
@@ -114,12 +116,12 @@ public class LPMDiscoveryWizardStep extends ProMPropertiesPanel implements ProMW
 
         minPlacesSlider = SlickerFactory.instance()
                 .createNiceIntegerSlider("",
-                        2, 5, 3, NiceSlider.Orientation.HORIZONTAL);
+                        2, 5, 2, NiceSlider.Orientation.HORIZONTAL);
         addProperty("Min Places", minPlacesSlider);
 
         maxPlacesSlider = SlickerFactory.instance()
                 .createNiceIntegerSlider("",
-                        3, 10, 7, NiceSlider.Orientation.HORIZONTAL);
+                        3, 10, 5, NiceSlider.Orientation.HORIZONTAL);
         addProperty("Max Places", maxPlacesSlider);
 
         minPlacesSlider.addChangeListener(e -> {
@@ -157,6 +159,10 @@ public class LPMDiscoveryWizardStep extends ProMPropertiesPanel implements ProMW
                         5, 20, 7, NiceSlider.Orientation.HORIZONTAL);
         addProperty("Proximity Size", proximitySlider);
 
+        concurrencyCardinality = SlickerFactory.instance()
+                .createNiceIntegerSlider("", 1, 5, 1, NiceSlider.Orientation.HORIZONTAL);
+        addProperty("Concurrency Cardinality", concurrencyCardinality);
+
 //        filteringComponent = new ProMComboCheckBox(LPMFilterId.values(), true);
 //        addProperty("Filtering Strategies", filteringComponent);
 
@@ -179,6 +185,7 @@ public class LPMDiscoveryWizardStep extends ProMPropertiesPanel implements ProMW
         placeBasedLPMDiscoveryParameters.getLpmCombinationParameters().setMinNumTransitions(minTransitionsSlider.getValue());
         placeBasedLPMDiscoveryParameters.getLpmCombinationParameters().setMaxNumTransitions(maxTransitionsSlider.getValue());
         placeBasedLPMDiscoveryParameters.getLpmCombinationParameters().setLpmProximity(proximitySlider.getValue());
+        placeBasedLPMDiscoveryParameters.getLpmCombinationParameters().setConcurrencyCardinality(concurrencyCardinality.getValue());
         return placeBasedLPMDiscoveryParameters;
     }
 
@@ -199,7 +206,7 @@ public class LPMDiscoveryWizardStep extends ProMPropertiesPanel implements ProMW
         this.minTransitionsSlider.setValue(model.getLpmCombinationParameters().getMinNumTransitions());
         this.maxTransitionsSlider.setValue(model.getLpmCombinationParameters().getMaxNumTransitions());
         this.proximitySlider.setValue(model.getLpmCombinationParameters().getLpmProximity());
-
+        this.concurrencyCardinality.setValue(model.getLpmCombinationParameters().getConcurrencyCardinality());
         return this;
     }
 

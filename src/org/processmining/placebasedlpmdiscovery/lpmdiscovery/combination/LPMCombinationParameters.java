@@ -7,6 +7,7 @@ public class LPMCombinationParameters {
     private int lpmProximity;
     private int minNumTransitions;
     private int maxNumTransitions;
+    private int concurrencyCardinality;
 
     public LPMCombinationParameters() {
         this.minNumPlaces = 3;
@@ -14,6 +15,7 @@ public class LPMCombinationParameters {
         this.minNumTransitions = 3;
         this.maxNumTransitions = 10;
         this.lpmProximity = 7;
+        this.concurrencyCardinality = 2;
     }
 
     public void setMinNumPlaces(int minNumPlaces) {
@@ -54,5 +56,13 @@ public class LPMCombinationParameters {
 
     public void setMaxNumTransitions(int maxNumTransitions) {
         this.maxNumTransitions = maxNumTransitions;
+    }
+
+    public int getConcurrencyCardinality() {
+        return concurrencyCardinality;
+    }
+
+    public void setConcurrencyCardinality(int concurrencyCardinality) {
+        this.concurrencyCardinality = concurrencyCardinality;
     }
 }
