@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="0bcbcf38-135f-400c-b885-348d1df7283b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/data/statistics/analysis-fp-growth-statistics.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistics/analysis-fp-growth-statistics.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/statistics/analysis-general.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistics/analysis-general.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/statistics/analysis-log-statistics.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistics/analysis-log-statistics.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/statistics/analysis-place-statistics.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistics/analysis-place-statistics.csv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/evaluation/results/concrete/PassageRepetitionEvaluationResult.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/evaluation/results/concrete/PassageRepetitionEvaluationResult.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/LPMDiscoveryProMVersion" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
+  </component>
+  <component name="ProjectId" id="1xtWPVL1TgsT3lhKhYbgWHwA5P7" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/ivysettings.xml" />
+    <property name="settings.editor.selected.configurable" value="IvyIDEA.ProjectSettings" />
+  </component>
+  <component name="RunManager">
+    <configuration name="ProM" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="org.processmining.contexts.uitopia.UI" />
+      <module name="ProM-version" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="SvnConfiguration" cleanupOnStartRun="true">
+    <configuration>C:\Users\peeva\AppData\Roaming\Subversion</configuration>
+    <supportedVersion>125</supportedVersion>
+  </component>
+  <component name="SvnFileUrlMappingImpl">
+    <option name="myMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Users\peeva\My\LocalProcessModelDiscovery\code\ProM-version" />
+          <option name="myCopyRoot" value="C:\Users\peeva\My\LocalProcessModelDiscovery\code\ProM-version" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Users\peeva\My\LocalProcessModelDiscovery\code\ProM-version" />
+          <option name="myCopyRoot" value="C:\Users\peeva\My\LocalProcessModelDiscovery\code\ProM-version\.settings" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Users\peeva\My\LocalProcessModelDiscovery\code\ProM-version" />
+          <option name="myCopyRoot" value="C:\Users\peeva\My\LocalProcessModelDiscovery\code\ProM-version\tests\libs-external" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+    <option name="myMoreRealMappingRoots">
+      <list>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Users\peeva\My\LocalProcessModelDiscovery\code\ProM-version" />
+          <option name="myCopyRoot" value="C:\Users\peeva\My\LocalProcessModelDiscovery\code\ProM-version" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Users\peeva\My\LocalProcessModelDiscovery\code\ProM-version" />
+          <option name="myCopyRoot" value="C:\Users\peeva\My\LocalProcessModelDiscovery\code\ProM-version\.settings" />
+        </SvnCopyRootSimple>
+        <SvnCopyRootSimple>
+          <option name="myVcsRoot" value="C:\Users\peeva\My\LocalProcessModelDiscovery\code\ProM-version" />
+          <option name="myCopyRoot" value="C:\Users\peeva\My\LocalProcessModelDiscovery\code\ProM-version\tests\libs-external" />
+        </SvnCopyRootSimple>
+      </list>
+    </option>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="0bcbcf38-135f-400c-b885-348d1df7283b" name="Default Changelist" comment="" />
+      <created>1631174848673</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1631174848673</updated>
+    </task>
+    <task id="LOCAL-00001" summary="author update">
+      <created>1631176365861</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1631176365861</updated>
+    </task>
+    <task id="LOCAL-00002" summary="possibility to choose concurrency cardinality">
+      <created>1631180347500</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1631180347500</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="author update" />
+    <MESSAGE value="possibility to choose concurrency cardinality" />
+    <option name="LAST_COMMIT_MESSAGE" value="possibility to choose concurrency cardinality" />
+  </component>
+</project>
