@@ -12,6 +12,7 @@ public class FittingWindowsEvaluationResult extends SimpleEvaluationResult {
 
     private final int windowSize;
     private int count; // number of fitting windows
+    private double weightedCount; // longer matching have larger weight
     private int total; // total number of windows in the log
 
     private int coveredWindowsHash;
@@ -51,6 +52,10 @@ public class FittingWindowsEvaluationResult extends SimpleEvaluationResult {
         this.count += count;
     }
 
+    public void updateWeightedCount(double weightedCount) {
+        this.weightedCount += weightedCount;
+    }
+
     public void updateTotal(int count) {
         this.total += count;
     }
@@ -65,13 +70,19 @@ public class FittingWindowsEvaluationResult extends SimpleEvaluationResult {
         return this.count * 1.0 / this.total;
     }
 
+    private double getWeightedFittingWindowsScore() {
+        if (this.total == 0)
+            return -1;
+        return this.weightedCount / this.total;
+    }
+
     public void normalizeResult(double max, double min) {
         this.normalizedResult = (this.getResult() - min) / (max - min);
     }
 
     @Override
     public double getResult() {
-        return getFittingWindowsScore();
+        return getWeightedFittingWindowsScore();
     }
 
     @Override

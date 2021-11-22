@@ -32,6 +32,7 @@ public class WindowsEvaluationResult extends GroupedEvaluationResult {
             this.transitionCoverageEvaluationResult.updateTransitionCoverageCountMap(firingSequence, window, windowMultiplicity);
             passageCoverageEvaluationResult.updatePassageCoverage(firingSequence);
             fittingWindowsEvaluationResult.updateCount(windowMultiplicity);
+            fittingWindowsEvaluationResult.updateWeightedCount(1.0 * firingSequence.size() * windowMultiplicity / window.size());
         } else { // if the replay was successful
             throw new UnsupportedOperationException("This should be called only when a window is successful");
         }
@@ -42,6 +43,7 @@ public class WindowsEvaluationResult extends GroupedEvaluationResult {
         if (successful) { // if the replay was successful
             passageCoverageEvaluationResult.updatePassageCoverage(window);
             fittingWindowsEvaluationResult.updateCount(windowMultiplicity);
+            fittingWindowsEvaluationResult.updateWeightedCount(1.0 * firingSequence.size() * windowMultiplicity / window.size());
             transitionCoverageEvaluationResult.updateTransitionCoverageCountMap(firingSequence, window, windowMultiplicity);
         }
         fittingWindowsEvaluationResult.updateTotal(windowMultiplicity);
