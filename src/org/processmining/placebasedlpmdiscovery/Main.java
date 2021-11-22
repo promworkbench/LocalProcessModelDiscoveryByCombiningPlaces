@@ -27,6 +27,7 @@ import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.utils.ProjectProperties;
 import org.processmining.plugins.utils.ProvidedObjectHelper;
 import org.processmining.placebasedlpmdiscovery.utils.analysis.Analyzer;
 
@@ -42,6 +43,7 @@ public class Main {
 
     public static void setUp(PluginContext context) {
         Main.Context = context;
+        ProjectProperties.initialize();
     }
 
     private static void setUpAnalyzer(XLog log, boolean placeDiscoveryIncluded) {
@@ -82,7 +84,7 @@ public class Main {
             lpmResult = Main.discover(result.getPlaces(), result.getLog(), parameters);
         } finally {
             Analyzer.totalExecution.stop();
-            Analyzer.write("analysis", false);
+            Analyzer.write();
             Analyzer = null;
         }
 
@@ -99,7 +101,7 @@ public class Main {
             lpmResult = Main.discover(places, log, parameters);
         } finally {
             Analyzer.totalExecution.stop();
-            Analyzer.write("analysis", false);
+            Analyzer.write();
             Analyzer = null;
         }
 

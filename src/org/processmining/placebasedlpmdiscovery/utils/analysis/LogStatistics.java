@@ -42,7 +42,7 @@ public class LogStatistics {
     }
 
     public void write(String filename, boolean rewrite) {
-        File file = new File("data/statistics/" + filename + ".csv");
+        File file = new File(filename + ".csv");
         try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, !rewrite))) {
             if (rewrite)
                 pw.println("ID\tTrace Variant (tv) Count\tActivities Count\ttv Sum\t" +

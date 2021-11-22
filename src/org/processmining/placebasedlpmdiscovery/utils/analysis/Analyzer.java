@@ -3,18 +3,25 @@ package org.processmining.placebasedlpmdiscovery.utils.analysis;
 import javafx.util.Pair;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryAlgorithmId;
+import org.processmining.placebasedlpmdiscovery.utils.ProjectProperties;
 
+import javax.xml.crypto.Data;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.time.Instant;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class Analyzer {
 
+    private static final int VERSION = 1;
+
     private final UUID id;
+    private String writeDestination = "data/statistics/";
 
     public SingleExecutionAnalysis totalExecution;
     public SingleExecutionAnalysis lpmDiscoveryExecution;
@@ -97,16 +104,27 @@ public class Analyzer {
         timers.put(name, entry);
     }
 
-    public void write(String filename, boolean rewrite) {
-        writeExecutions(filename + "-executions", rewrite);
-        writeGeneral(filename + "-general", rewrite);
-        logStatistics.write(filename + "-log-statistics", rewrite);
-        fpGrowthStatistics.write(filename + "-fp-growth-statistics", rewrite);
-        placeStatistics.write(filename + "-place-statistics", rewrite);
+    public void changeWriteDestination(String writeDestination) {
+        this.writeDestination = writeDestination;
+    }
+
+    public void write() {
+        boolean rewrite = false;
+        if (ProjectProperties.ANALYSIS_WRITE_VERSION_VALUE != VERSION) {
+            ProjectProperties.updateIntegerProperty(ProjectProperties.ANALYSIS_WRITE_VERSION_KEY, VERSION);
+            rewrite = true;
+        }
+        String suffix = "-v" + VERSION;
+
+        writeExecutions(writeDestination + "analysis-executions" + suffix, rewrite);
+        writeGeneral(writeDestination + "analysis-general" + suffix, rewrite);
+        logStatistics.write(writeDestination + "analysis-log-statistics" + suffix, rewrite);
+        fpGrowthStatistics.write(writeDestination + "analysis-fp-growth-statistics" + suffix, rewrite);
+        placeStatistics.write(writeDestination + "analysis-place-statistics" + suffix, rewrite);
     }
 
     private void writeExecutions(String filename, boolean rewrite) {
-        File file = new File("data/statistics/" + filename + ".csv");
+        File file = new File(filename + ".csv");
         try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, !rewrite))) {
             if (rewrite)
                 pw.println("Run ID\tMethod Name\tTotal Duration\tAverage Duration\tMinimum Duration\tMax Duration\tNumber of Executions");
@@ -122,14 +140,14 @@ public class Analyzer {
     }
 
     private void writeGeneral(String filename, boolean rewrite) {
-        File file = new File("data/statistics/" + filename + ".csv");
+        File file = new File(filename + ".csv");
         try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, !rewrite))) {
             if (rewrite)
                 pw.println("ID\tLog Name\tTotal Execution Time\tLPM Discovery Execution Time\t" +
                         "Place Discovery Included\tPlace Discovery Algorithm ID\t" +
                         "Count Places Used\tPlaces discovered\t" +
                         "Places Average Out Degree\t" +
-                        "LPM discovered\tAll LPM Discovered\tProximity");
+                        "LPM discovered\tAll LPM Discovered\tProximity\tTimestamp");
 
             pw.println(String.join("\t", String.valueOf(this.id), this.name,
                     String.valueOf(this.totalExecution.getDuration()),
@@ -141,7 +159,8 @@ public class Analyzer {
                     String.valueOf(this.placesAverageOutDegree),
                     String.valueOf(this.lpmDiscovered),
                     String.valueOf(this.allLpmDiscovered),
-                    String.valueOf(this.proximity)));
+                    String.valueOf(this.proximity),
+                    String.valueOf(Date.from(Instant.now()))));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
