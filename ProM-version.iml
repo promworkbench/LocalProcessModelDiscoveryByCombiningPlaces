@@ -79,7 +79,7 @@
           <root url="jar://$USER_HOME$/.ivy2/cache/org.freehep/freehep-graphicsio-swf/jars/freehep-graphicsio-swf-2.4.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/com.toedter/jcalendar/jars/jcalendar-1.4.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/prom/Log/jars/Log-latest.jar!/" />
-          <root url="jar://$USER_HOME$/.ivy2/cache/prom-libs/OpenXES/jars/OpenXES-20181205.jar!/" />
+          <root url="jar://$USER_HOME$/.ivy2/cache/prom-libs/OpenXES/jars/OpenXES-20211004.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/prom/ApacheUtils/jars/ApacheUtils-latest.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/com.univocity/univocity-parsers/jars/univocity-parsers-2.2.2.jar!/" />
           <root url="jar://$USER_HOME$/.ivy2/cache/org.xerial/sqlite-jdbc/jars/sqlite-jdbc-3.15.1.jar!/" />

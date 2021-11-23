@@ -14,9 +14,6 @@ import java.util.Objects;
 
 public class PlaceBasedLPMDiscoveryParameters {
 
-    // log
-    private final XLog log;
-
     // place discovery parameters
     private PlaceDiscoveryAlgorithmId placeDiscoveryAlgorithmId;
     private boolean useDefaultPlaceDiscoveryParameters;
@@ -36,7 +33,6 @@ public class PlaceBasedLPMDiscoveryParameters {
     private long timeLimit;
 
     public PlaceBasedLPMDiscoveryParameters(XLog log) {
-        this.log = log;
         this.placeDiscoveryAlgorithmId = PlaceDiscoveryAlgorithmId.ESTMiner;
         this.placeDiscoveryParameters = new EstMinerPlaceDiscoveryParameters();
         this.placeChooserParameters = new PlaceChooserParameters(log);
@@ -44,10 +40,6 @@ public class PlaceBasedLPMDiscoveryParameters {
         this.lpmFilterParameters = new LPMFilterParameters();
         this.lpmCount = 100;
         this.timeLimit = 600000;
-    }
-
-    public XLog getLog() {
-        return log;
     }
 
     public PlaceDiscoveryAlgorithmId getPlaceDiscoveryAlgorithmId() {
@@ -87,8 +79,7 @@ public class PlaceBasedLPMDiscoveryParameters {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlaceBasedLPMDiscoveryParameters that = (PlaceBasedLPMDiscoveryParameters) o;
-        return log.equals(that.log) &&
-                placeDiscoveryAlgorithmId == that.placeDiscoveryAlgorithmId &&
+        return placeDiscoveryAlgorithmId == that.placeDiscoveryAlgorithmId &&
                 placeDiscoveryParameters.equals(that.placeDiscoveryParameters) &&
                 lpmCombinationParameters.equals(that.lpmCombinationParameters) &&
                 lpmFilterParameters.equals(that.lpmFilterParameters);
@@ -96,7 +87,7 @@ public class PlaceBasedLPMDiscoveryParameters {
 
     @Override
     public int hashCode() {
-        return Objects.hash(log, placeDiscoveryAlgorithmId, placeDiscoveryParameters,
+        return Objects.hash(placeDiscoveryAlgorithmId, placeDiscoveryParameters,
                 lpmCombinationParameters, lpmFilterParameters);
     }
 

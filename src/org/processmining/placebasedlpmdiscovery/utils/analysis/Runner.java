@@ -45,9 +45,11 @@ public class Runner {
 
             // create the event log -- set of places map
             List<Map.Entry<String, String>> logMap = getLogMap(eventLogsAndPlacesPath);
+            // create the parameter setup
+            ParameterSetup parameterSetup = ParameterSetup.getInstanceFromFile(parameterPath);
 
             // run the algorithm for all event logs
-            runAlgorithmForDifferentSettingsAndEventLogs(logMap);
+            runAlgorithmForDifferentSettingsAndEventLogs(logMap, parameterSetup);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,6 +88,31 @@ public class Runner {
                         runAlgorithmForSpecificSettings(entry, algorithmId, placeLimit, proximity);
                     }
                 }
+            }
+        }
+    }
+
+    private static void runAlgorithmForDifferentSettingsAndEventLogs(List<Map.Entry<String, String>> logFilePlacesFilePairs, ParameterSetup parameterSetup) {
+        for (Map.Entry<String, String> entry : logFilePlacesFilePairs) {
+            try {
+                XLog log = LogUtils.readLogFromFile(entry.getKey());
+                PlaceSet places = null;
+                if (!Strings.isBlank(entry.getValue()))
+                    places = PlaceUtils.getPlaceSetFromInputStream(new FileInputStream(entry.getValue()));
+
+                ParameterPrioritiser parameterPrioritiser = new ParameterPrioritiser(parameterSetup, log);
+                PlaceBasedLPMDiscoveryParameters parameters = parameterPrioritiser.next();
+                while (parameters != null) {
+                    CLIPluginContext context = new CLIPluginContext(new CLIContext(), "TestContext");
+                    if (places == null || !parameters.getPlaceDiscoveryAlgorithmId().equals(PlaceDiscoveryAlgorithmId.ESTMiner)) {
+                        PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, parameters);
+                    } else {
+                        PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, places, parameters);
+                    }
+                    parameters = parameterPrioritiser.next();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }
