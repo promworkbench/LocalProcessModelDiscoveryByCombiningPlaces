@@ -1,9 +1,9 @@
 package org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.factories;
 
 import org.processmining.contexts.uitopia.UIPluginContext;
-import org.processmining.placebasedlpmdiscovery.evaluation.results.LPMEvaluationResultId;
-import org.processmining.placebasedlpmdiscovery.evaluation.results.SimpleEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.evaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.PluginVisualizerTable;

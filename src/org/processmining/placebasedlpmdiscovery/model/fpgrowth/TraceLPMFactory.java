@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
-import org.processmining.placebasedlpmdiscovery.evaluation.ReplayableLocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;

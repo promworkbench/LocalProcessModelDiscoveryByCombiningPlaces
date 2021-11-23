@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
-import org.processmining.placebasedlpmdiscovery.evaluation.results.concrete.WindowsEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.evaluation.results.helpers.WindowTotalCounter;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.WindowsEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationAndEvaluationController;
 import org.processmining.placebasedlpmdiscovery.model.CanBeInterrupted;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;

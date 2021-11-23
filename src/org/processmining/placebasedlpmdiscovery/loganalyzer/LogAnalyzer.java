@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.loganalyzer;
 
 import org.deckfour.xes.model.XLog;
-import org.processmining.placebasedlpmdiscovery.evaluation.logs.WindowLog;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 import org.processmining.placebasedlpmdiscovery.utils.analysis.LogStatistics;
 

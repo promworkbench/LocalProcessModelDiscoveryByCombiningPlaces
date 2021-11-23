@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms;
 
-import org.processmining.placebasedlpmdiscovery.evaluation.lpmevaluators.LPMEvaluatorId;
-import org.processmining.placebasedlpmdiscovery.evaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
 public class AbovePassageRepetitionThresholdLPMFilter extends NeedsEvaluationLPMFilter {

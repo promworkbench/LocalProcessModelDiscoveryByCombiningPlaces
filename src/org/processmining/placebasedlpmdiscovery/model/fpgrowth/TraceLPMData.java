@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
-import org.processmining.placebasedlpmdiscovery.evaluation.ReplayableLocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
 
 import java.util.Optional;
 

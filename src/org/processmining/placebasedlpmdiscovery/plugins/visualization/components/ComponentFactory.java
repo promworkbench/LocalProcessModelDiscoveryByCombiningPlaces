@@ -1,10 +1,10 @@
 package org.processmining.placebasedlpmdiscovery.plugins.visualization.components;
 
-import org.processmining.placebasedlpmdiscovery.evaluation.results.AbstractEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.evaluation.results.GroupedEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.evaluation.results.SimpleEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.evaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
-import org.processmining.placebasedlpmdiscovery.evaluation.results.concrete.PassageCoverageEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.AbstractEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.GroupedEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageCoverageEvaluationResult;
 
 import javax.swing.*;
 import java.text.DecimalFormat;

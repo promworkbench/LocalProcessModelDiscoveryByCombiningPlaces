@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth;
 
 import org.deckfour.xes.model.XLog;
-import org.processmining.placebasedlpmdiscovery.evaluation.logs.WindowLog;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.FPGrowthPlaceFollowGraph;

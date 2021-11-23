@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.model.serializable.grouped;
 
-import org.processmining.placebasedlpmdiscovery.evaluation.results.concrete.FittingWindowsEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 

@@ -2,10 +2,10 @@ package org.processmining.placebasedlpmdiscovery;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.framework.plugin.PluginContext;
-import org.processmining.placebasedlpmdiscovery.evaluation.lpmevaluators.LPMEvaluatorFactory;
-import org.processmining.placebasedlpmdiscovery.evaluation.results.LPMEvaluationResultId;
-import org.processmining.placebasedlpmdiscovery.evaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
-import org.processmining.placebasedlpmdiscovery.evaluation.results.concrete.FittingWindowsEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorFactory;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.loganalyzer.LogAnalyzer;
 import org.processmining.placebasedlpmdiscovery.loganalyzer.LogAnalyzerParameters;

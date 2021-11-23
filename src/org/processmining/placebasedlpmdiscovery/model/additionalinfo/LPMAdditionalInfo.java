@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.model.additionalinfo;
 
-import org.processmining.placebasedlpmdiscovery.evaluation.results.GroupedEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.GroupedEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
 import java.io.Serializable;

@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.replayer;
 
 import javafx.util.Pair;
-import org.processmining.placebasedlpmdiscovery.evaluation.ReplayableLocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 
