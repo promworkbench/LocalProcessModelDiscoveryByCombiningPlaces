@@ -128,7 +128,6 @@ public class Main {
         try {
             // analyze log
             LogAnalyzer logAnalyzer = new LogAnalyzer(log, new LogAnalyzerParameters(parameters.getLpmCombinationParameters().getLpmProximity()));
-            logAnalyzer.calculateLEFRMatrix();
             LEFRMatrix lefrMatrix = logAnalyzer.getLEFRMatrix();
             Main.getContext().getProvidedObjectManager()
                     .createProvidedObject("LEFR - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "

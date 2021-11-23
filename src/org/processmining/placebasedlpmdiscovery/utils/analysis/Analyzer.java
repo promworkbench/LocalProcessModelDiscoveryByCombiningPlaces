@@ -19,6 +19,7 @@ import java.util.UUID;
 public class Analyzer {
 
     private static final int VERSION = 1;
+    public static final String STATISTICS_FOLDER = "../statistics/";
 
     private final UUID id;
     private String writeDestination = "data/statistics/";
@@ -31,7 +32,6 @@ public class Analyzer {
     private final Map<String, ExecutionAnalysisEntry> timers;
     private PlaceDiscoveryAlgorithmId placeDiscoveryAlgorithmId;
     private final PlaceStatistics placeStatistics;
-    private final LogStatistics logStatistics;
     private final FPGrowthStatistics fpGrowthStatistics;
     private int discoveredPlaces; // (count, count after filtering)
     private int countPlacesUsed;
@@ -43,7 +43,6 @@ public class Analyzer {
     public Analyzer(XLog log, boolean placeDiscoveryIncluded) {
         this.id = UUID.randomUUID();
         this.name = String.valueOf(log.getAttributes().get("concept:name"));
-        this.logStatistics = new LogStatistics(this.id, log);
         this.fpGrowthStatistics = new FPGrowthStatistics(this.id);
 
         this.placeDiscoveryIncluded = placeDiscoveryIncluded;
@@ -118,7 +117,6 @@ public class Analyzer {
 
         writeExecutions(writeDestination + "analysis-executions" + suffix, rewrite);
         writeGeneral(writeDestination + "analysis-general" + suffix, rewrite);
-        logStatistics.write(writeDestination + "analysis-log-statistics" + suffix, rewrite);
         fpGrowthStatistics.write(writeDestination + "analysis-fp-growth-statistics" + suffix, rewrite);
         placeStatistics.write(writeDestination + "analysis-place-statistics" + suffix, rewrite);
     }

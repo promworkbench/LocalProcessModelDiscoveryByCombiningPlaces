@@ -24,19 +24,14 @@ public class LEFRMatrix {
     public LEFRMatrix(XLog log, int limit) {
         this.log = log;
         this.limit = limit;
-        initializeNameIndexMap();
+        this.calculateMatrix();
     }
 
-    public Map<String, Integer> initializeNameIndexMap() {
+    public void initializeNameIndexMap() {
         nameIndexMap = new HashMap<>();
         AtomicInteger ind = new AtomicInteger(0);
         Collection<String> activities = LogUtils.getActivitiesFromLog(log);
         activities.forEach(a -> nameIndexMap.put(a, ind.getAndIncrement()));
-        return nameIndexMap;
-    }
-
-    public int[][] getLefr() {
-        return lefr;
     }
 
     public int getRowSize() {
@@ -58,6 +53,7 @@ public class LEFRMatrix {
     }
 
     public void calculateMatrix() {
+        this.initializeNameIndexMap();
         lefr = new int[nameIndexMap.size()][nameIndexMap.size()];
         for (XTrace trace : log) {
             List<String> events = trace
@@ -72,11 +68,9 @@ public class LEFRMatrix {
         }
     }
 
-    public int getLEFRValue(String firstName, String secondName) {
-        return lefr[nameIndexMap.get(firstName)][nameIndexMap.get(secondName)];
-    }
-
     public Map<String, Integer> getNameIndexMap() {
+        if (nameIndexMap == null)
+            initializeNameIndexMap();
         return nameIndexMap;
     }
 }
