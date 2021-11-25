@@ -20,7 +20,7 @@ import java.io.*;
 public class PlaceSetExportPlugin {
 
     @PluginVariant(variantLabel = "Export set of places into a file", requiredParameterLabels = {0, 1})
-    public void export(PluginContext context, PlaceSet placeSet, File file) {
+    public static void export(PluginContext context, PlaceSet placeSet, File file) {
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file));
             oos.writeObject(placeSet);

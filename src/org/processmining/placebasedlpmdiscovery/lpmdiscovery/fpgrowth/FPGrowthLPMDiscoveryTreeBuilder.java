@@ -75,7 +75,7 @@ public class FPGrowthLPMDiscoveryTreeBuilder implements CanBeInterrupted {
             for (int event : traceVariant) {
                 if (stop) {
                     mainTree.updateAllTotalCount(windowTotalCounter);
-                    Main.getAnalyzer().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
+                    Main.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
                     return mainTree;
                 }
 
@@ -93,7 +93,7 @@ public class FPGrowthLPMDiscoveryTreeBuilder implements CanBeInterrupted {
                     Set<List<Place>> paths = inoutViaSilentPlaceMap.getOrDefault(
                             new Pair<>(window.get(i), event), new HashSet<>());
 
-                    Main.getAnalyzer().getFpGrowthStatistics().placesAddedInLocalTree(
+                    Main.getAnalyzer().getStatistics().getFpGrowthStatistics().placesAddedInLocalTree(
                             placesForAddition.size() + paths.size() * 2);
                     localTree.add(window.get(i), placesForAddition, paths, windowLog.getLabelMap(), i);
                 }
@@ -107,11 +107,11 @@ public class FPGrowthLPMDiscoveryTreeBuilder implements CanBeInterrupted {
                 windowTotalCounter.update(window, traceCount);
                 addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog);
             }
-            Main.getAnalyzer().getFpGrowthStatistics().traceVariantPassed();
+            Main.getAnalyzer().getStatistics().getFpGrowthStatistics().traceVariantPassed();
         }
 
         mainTree.updateAllTotalCount(windowTotalCounter);
-        Main.getAnalyzer().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
+        Main.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
         return mainTree;
     }
 
@@ -120,7 +120,7 @@ public class FPGrowthLPMDiscoveryTreeBuilder implements CanBeInterrupted {
         // get the null children
         Map<LocalProcessModel, List<Integer>> lpms =
                 getLPMsAndFiringSequences(windowLog.getReverseLabelMap(), localTree);
-        Main.getAnalyzer().getFpGrowthStatistics().lpmsAddedInMainTree(lpms.size());
+        Main.getAnalyzer().getStatistics().getFpGrowthStatistics().lpmsAddedInMainTree(lpms.size());
 
         // give the lpm and the window count to the main tree so it can update itself
         for (Map.Entry<LocalProcessModel, List<Integer>> lpmEntry : lpms.entrySet()) {

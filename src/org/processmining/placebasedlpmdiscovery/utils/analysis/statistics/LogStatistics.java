@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.utils.analysis;
+package org.processmining.placebasedlpmdiscovery.utils.analysis.statistics;
 
 import org.apache.logging.log4j.util.Strings;
 
@@ -8,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.UUID;
 
-public class LogStatistics {
+public class LogStatistics implements IStatistics {
 
     private final UUID executionId;
 
@@ -28,8 +28,9 @@ public class LogStatistics {
         this.executionId = executionId;
     }
 
+    @Override
     public void write(String filename, boolean rewrite) {
-        File file = new File(Analyzer.STATISTICS_FOLDER + filename + ".csv");
+        File file = new File(filename + ".csv");
         try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, !rewrite))) {
             if (rewrite)
                 pw.println("ID\tEvent Log Name\tTrace Variant (tv) Count\tActivities Count\ttv Sum\ttv Average Size" +
@@ -75,7 +76,8 @@ public class LogStatistics {
     public void setLogName(String logName) {
         if (Strings.isBlank(logName)) {
             this.logName = UUID.randomUUID().toString();
+        } else {
+            this.logName = logName;
         }
-        this.logName = logName;
     }
 }

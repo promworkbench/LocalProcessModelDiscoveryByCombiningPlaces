@@ -74,9 +74,11 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
             for (int event : traceVariant) {
                 if (stop) {
                     mainTree.updateAllTotalCount(windowTotalCounter);
-                    Main.getAnalyzer().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
+                    Main.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
                     return mainTree;
                 }
+
+                Main.getAnalyzer().startWindow();
 
                 eventPos++;
                 if (window.size() >= this.parameters.getLpmProximity()) {
@@ -92,7 +94,7 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
                     Set<List<Place>> paths = inoutViaSilentPlaceMap.getOrDefault(
                             new Pair<>(window.get(i), event), new HashSet<>());
 
-                    Main.getAnalyzer().getFpGrowthStatistics().placesAddedInLocalTree(
+                    Main.getAnalyzer().getStatistics().getFpGrowthStatistics().placesAddedInLocalTree(
                             placesForAddition.size() + paths.size());
 //                    localTree.add(window.get(i), placesForAddition, paths, windowLog.getLabelMap(), i);
                     localTree.add(window.get(i), eventPos - window.size() + 1 + i,
@@ -100,6 +102,7 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
                             placesForAddition, paths, windowLog.getLabelMap());
                 }
                 localTree.tryAddNullChildren(event, window.size() - 1);
+                Main.getAnalyzer().stopWindow();
                 addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog);
             }
             if (window.size() < this.parameters.getLpmProximity()) {
@@ -118,11 +121,11 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
                 windowTotalCounter.update(window, traceCount);
                 addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog);
             }
-            Main.getAnalyzer().getFpGrowthStatistics().traceVariantPassed();
+            Main.getAnalyzer().getStatistics().getFpGrowthStatistics().traceVariantPassed();
         }
 
         mainTree.updateAllTotalCount(windowTotalCounter);
-        Main.getAnalyzer().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
+        Main.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
         return mainTree;
     }
 
@@ -136,7 +139,7 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
         int countAdded = 0;
         for (Map.Entry<LocalProcessModel, List<Integer>> lpmEntry : lpms.entrySet()) {
             if (stop) {
-                Main.getAnalyzer().getFpGrowthStatistics().lpmsAddedInMainTree(lpms.size());
+                Main.getAnalyzer().getStatistics().getFpGrowthStatistics().lpmsAddedInMainTree(lpms.size());
                 return;
             }
             LocalProcessModel lpm = lpmEntry.getKey();
@@ -148,7 +151,7 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
                 countAdded++;
             }
         }
-        Main.getAnalyzer().getFpGrowthStatistics().lpmsAddedInMainTree(lpms.size());
+        Main.getAnalyzer().getStatistics().getFpGrowthStatistics().lpmsAddedInMainTree(lpms.size());
     }
 
     private Map<LocalProcessModel, List<Integer>> getLPMsAndFiringSequences(Map<Integer, String> reversedLabelMap,

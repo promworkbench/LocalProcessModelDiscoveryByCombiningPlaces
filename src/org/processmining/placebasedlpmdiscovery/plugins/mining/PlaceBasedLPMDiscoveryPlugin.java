@@ -22,6 +22,7 @@ import org.processmining.models.connections.petrinets.behavioral.FinalMarkingCon
 import org.processmining.models.connections.petrinets.behavioral.InitialMarkingConnection;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.semantics.petrinet.Marking;
+import org.processmining.placebasedlpmdiscovery.utils.analysis.Analyzer;
 
 import java.util.HashMap;
 import java.util.List;
@@ -184,17 +185,17 @@ public class PlaceBasedLPMDiscoveryPlugin {
 			variantLabel = "Local Process Models Discovery Based on Set of Places given Log",
 			requiredParameterLabels = {0, 3}
 	)
-	public static LPMResult mineLPMs(PluginContext context, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
+	public static Object[] mineLPMs(PluginContext context, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
 		Main.setUp(context);
-		return Main.run(log, parameters);
+		return new Object[] {Main.run(log, parameters), Main.getAnalyzer().getStatistics()};
 	}
 
 	@PluginVariant(
 			variantLabel = "Local Process Models Discovery Based on Set of Places given Places (faster)",
 			requiredParameterLabels = {0, 1, 3}
 	)
-	public static LPMResult mineLPMs(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
+	public static Object[] mineLPMs(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
 		Main.setUp(context);
-		return Main.run(placeSet.getElements(), log, parameters);
+		return new Object[] {Main.run(placeSet.getElements(), log, parameters), Main.getAnalyzer().getStatistics()};
 	}
 }

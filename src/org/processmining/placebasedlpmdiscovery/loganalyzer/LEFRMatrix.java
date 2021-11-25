@@ -73,4 +73,8 @@ public class LEFRMatrix {
             initializeNameIndexMap();
         return nameIndexMap;
     }
+
+    public int getLimit() {
+        return limit;
+    }
 }

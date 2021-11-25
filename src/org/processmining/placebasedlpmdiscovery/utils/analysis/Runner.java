@@ -5,17 +5,14 @@ import org.deckfour.xes.model.XLog;
 import org.processmining.contexts.cli.CLIContext;
 import org.processmining.contexts.cli.CLIPluginContext;
 import org.processmining.placebasedlpmdiscovery.loganalyzer.LogAnalyzer;
-import org.processmining.placebasedlpmdiscovery.loganalyzer.LogAnalyzerParameters;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryAlgorithmId;
-import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.EstMinerPlaceDiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.HeuristicMinerPlaceDiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.InductiveMinerPlaceDiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.PlaceDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryPlugin;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
+import org.processmining.placebasedlpmdiscovery.utils.ProjectProperties;
+import org.processmining.placebasedlpmdiscovery.utils.analysis.statistics.Statistics;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -34,6 +31,7 @@ public class Runner {
             // event logs folder
             System.out.println("Enter the absolute path to the folder where the event logs are stored:");
             String eventLogsAndPlacesPath = scn.nextLine();
+            ProjectProperties.updateProperty(ProjectProperties.PLACE_WRITE_DESTINATION_KEY, eventLogsAndPlacesPath);
 
             // parameter setup file
             System.out.println("Enter the absolute path to the file where the parameter setup is given:");
@@ -80,18 +78,6 @@ public class Runner {
                 .collect(Collectors.toList());
     }
 
-    private static void runAlgorithmForDifferentSettingsAndEventLogs(List<Map.Entry<String, String>> logFilePlacesFilePairs) {
-        for (Map.Entry<String, String> entry : logFilePlacesFilePairs) {
-            for (Integer placeLimit : new Integer[]{50, 75, 100, 150, 200}) {//, 500, 1000, 2500, 5000}) {
-                for (Integer proximity : new Integer[]{5, 7, 12}) {
-                    for (PlaceDiscoveryAlgorithmId algorithmId : PlaceDiscoveryAlgorithmId.values()) {
-                        runAlgorithmForSpecificSettings(entry, algorithmId, placeLimit, proximity);
-                    }
-                }
-            }
-        }
-    }
-
     private static void runAlgorithmForDifferentSettingsAndEventLogs(List<Map.Entry<String, String>> logFilePlacesFilePairs, ParameterSetup parameterSetup) {
         for (Map.Entry<String, String> entry : logFilePlacesFilePairs) {
             try {
@@ -102,79 +88,102 @@ public class Runner {
 
                 ParameterPrioritiser parameterPrioritiser = new ParameterPrioritiser(parameterSetup, log);
                 PlaceBasedLPMDiscoveryParameters parameters = parameterPrioritiser.next();
+                boolean interruptedForWindow = false;
                 while (parameters != null) {
                     CLIPluginContext context = new CLIPluginContext(new CLIContext(), "TestContext");
+                    Object[] res;
                     if (places == null || !parameters.getPlaceDiscoveryAlgorithmId().equals(PlaceDiscoveryAlgorithmId.ESTMiner)) {
-                        PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, parameters);
+                        res = PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, parameters);
                     } else {
-                        PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, places, parameters);
+                        res = PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, places, parameters);
                     }
-                    parameters = parameterPrioritiser.next();
+                    /* depending on whether the algorithm finished it is decided with which parameters should run next
+                     since there is a monotonicity property for the parameters */
+                    Statistics statistics = (Statistics) res[1];
+                    if (statistics.getGeneralStatistics().isInterrupted() && interruptedForWindow) {
+                        parameters = null;
+                    } else if (statistics.getGeneralStatistics().isInterrupted()) {
+                        interruptedForWindow = true;
+                        parameters = parameterPrioritiser.nextPlaceLimit();
+                    } else {
+                        parameters = parameterPrioritiser.next();
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
+//    private static void runAlgorithmForDifferentSettingsAndEventLogs(List<Map.Entry<String, String>> logFilePlacesFilePairs) {
+//        for (Map.Entry<String, String> entry : logFilePlacesFilePairs) {
+//            for (Integer placeLimit : new Integer[]{50, 75, 100, 150, 200}) {//, 500, 1000, 2500, 5000}) {
+//                for (Integer proximity : new Integer[]{5, 7, 12}) {
+//                    for (PlaceDiscoveryAlgorithmId algorithmId : PlaceDiscoveryAlgorithmId.values()) {
+//                        runAlgorithmForSpecificSettings(entry, algorithmId, placeLimit, proximity);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
-    public static void runAlgorithmForSpecificSettings(Map.Entry<String, String> input, PlaceDiscoveryAlgorithmId pdAlgId, int placeLimit, int proximity) {
-        String logPath = input.getKey();
-        String placesPath = input.getValue();
-        try {
-            runAlgorithmForSpecificSettings(pdAlgId, placeLimit, proximity, logPath, placesPath);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void runAlgorithmForSpecificSettings(Map.Entry<String, String> input, PlaceDiscoveryAlgorithmId pdAlgId, int placeLimit, int proximity) {
+//        String logPath = input.getKey();
+//        String placesPath = input.getValue();
+//        try {
+//            runAlgorithmForSpecificSettings(pdAlgId, placeLimit, proximity, logPath, placesPath);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    public static void runAlgorithmForSpecificSettings(PlaceDiscoveryAlgorithmId pdAlgId, int placeLimit, int proximity, String logPath, String placesPath) throws Exception {
-        XLog log = LogUtils.readLogFromFile(logPath);
-        PlaceSet places = null;
-        if (!Strings.isBlank(placesPath))
-            places = PlaceUtils.getPlaceSetFromInputStream(new FileInputStream(placesPath));
+//    public static void runAlgorithmForSpecificSettings(PlaceDiscoveryAlgorithmId pdAlgId, int placeLimit, int proximity, String logPath, String placesPath) throws Exception {
+//        XLog log = LogUtils.readLogFromFile(logPath);
+//        PlaceSet places = null;
+//        if (!Strings.isBlank(placesPath))
+//            places = PlaceUtils.getPlaceSetFromInputStream(new FileInputStream(placesPath));
+//
+//        System.out.println("Log: " + logPath + "\nAlgorithm: " + pdAlgId + "\nPlace Limit: " + placeLimit + "\nProximity: " + proximity);
+//        runAlgorithmForSpecificSettings(pdAlgId, placeLimit, proximity, log, places);
+//    }
 
-        System.out.println("Log: " + logPath + "\nAlgorithm: " + pdAlgId + "\nPlace Limit: " + placeLimit + "\nProximity: " + proximity);
-        runAlgorithmForSpecificSettings(pdAlgId, placeLimit, proximity, log, places);
-    }
+//    public static void runAlgorithmForSpecificSettings(PlaceDiscoveryAlgorithmId pdAlgId, int placeLimit, int proximity, XLog log, PlaceSet places) {
+//        CLIPluginContext context = new CLIPluginContext(new CLIContext(), "TestContext");
+//
+//        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
+//        parameters.getLpmCombinationParameters().setLpmProximity(proximity);
+//        parameters.getLpmCombinationParameters().setMinNumPlaces(0);
+//        parameters.getLpmCombinationParameters().setMaxNumPlaces(Integer.MAX_VALUE);
+//        parameters.getLpmCombinationParameters().setMinNumTransitions(0);
+//        parameters.getLpmCombinationParameters().setMaxNumTransitions(Integer.MAX_VALUE);
+//        parameters.setTimeLimit(600000);
+//        parameters.getPlaceChooserParameters().setPlaceLimit(placeLimit);
+//        parameters.setLpmCount(Integer.MAX_VALUE);
+//        try {
+//            if (places == null || !pdAlgId.equals(PlaceDiscoveryAlgorithmId.ESTMiner)) {
+//                setPlaceDiscoveryAlgorithm(parameters, pdAlgId);
+//                PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, parameters);
+//            } else {
+//                PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, places, parameters);
+//            }
+//        } catch (Throwable e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    public static void runAlgorithmForSpecificSettings(PlaceDiscoveryAlgorithmId pdAlgId, int placeLimit, int proximity, XLog log, PlaceSet places) {
-        CLIPluginContext context = new CLIPluginContext(new CLIContext(), "TestContext");
-
-        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
-        parameters.getLpmCombinationParameters().setLpmProximity(proximity);
-        parameters.getLpmCombinationParameters().setMinNumPlaces(0);
-        parameters.getLpmCombinationParameters().setMaxNumPlaces(Integer.MAX_VALUE);
-        parameters.getLpmCombinationParameters().setMinNumTransitions(0);
-        parameters.getLpmCombinationParameters().setMaxNumTransitions(Integer.MAX_VALUE);
-        parameters.setTimeLimit(600000);
-        parameters.getPlaceChooserParameters().setPlaceLimit(placeLimit);
-        parameters.setLpmCount(Integer.MAX_VALUE);
-        try {
-            if (places == null || !pdAlgId.equals(PlaceDiscoveryAlgorithmId.ESTMiner)) {
-                setPlaceDiscoveryAlgorithm(parameters, pdAlgId);
-                PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, parameters);
-            } else {
-                PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, places, parameters);
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
-    }
-
-    private static void setPlaceDiscoveryAlgorithm(PlaceBasedLPMDiscoveryParameters parameters, PlaceDiscoveryAlgorithmId pdAlgId) {
-        PlaceDiscoveryParameters placeDiscoveryParameters;
-        if (pdAlgId == PlaceDiscoveryAlgorithmId.ESTMiner)
-            placeDiscoveryParameters = new EstMinerPlaceDiscoveryParameters();
-        else if (pdAlgId == PlaceDiscoveryAlgorithmId.InductiveMiner)
-            placeDiscoveryParameters = new InductiveMinerPlaceDiscoveryParameters();
-        else if (pdAlgId == PlaceDiscoveryAlgorithmId.HeuristicMiner)
-            placeDiscoveryParameters = new HeuristicMinerPlaceDiscoveryParameters();
-        else
-            throw new IllegalArgumentException("There is no " + pdAlgId + " algorithm for Place Discovery");
-
-        parameters.setPlaceDiscoveryParameters(placeDiscoveryParameters);
-        parameters.setPlaceDiscoveryAlgorithmId(pdAlgId);
-    }
+//    private static void setPlaceDiscoveryAlgorithm(PlaceBasedLPMDiscoveryParameters parameters, PlaceDiscoveryAlgorithmId pdAlgId) {
+//        PlaceDiscoveryParameters placeDiscoveryParameters;
+//        if (pdAlgId == PlaceDiscoveryAlgorithmId.ESTMiner)
+//            placeDiscoveryParameters = new EstMinerPlaceDiscoveryParameters();
+//        else if (pdAlgId == PlaceDiscoveryAlgorithmId.InductiveMiner)
+//            placeDiscoveryParameters = new InductiveMinerPlaceDiscoveryParameters();
+//        else if (pdAlgId == PlaceDiscoveryAlgorithmId.HeuristicMiner)
+//            placeDiscoveryParameters = new HeuristicMinerPlaceDiscoveryParameters();
+//        else
+//            throw new IllegalArgumentException("There is no " + pdAlgId + " algorithm for Place Discovery");
+//
+//        parameters.setPlaceDiscoveryParameters(placeDiscoveryParameters);
+//        parameters.setPlaceDiscoveryAlgorithmId(pdAlgId);
+//    }
 
     private static void analyzeLogs(String folderName) throws Exception {
         List<Path> xesFilePaths = getAllXesFilesInFolder(folderName);
@@ -193,8 +202,8 @@ public class Runner {
     }
 
     private static void analyzeLog(XLog eventLog, int localDistance) {
-        LogAnalyzerParameters parameters = new LogAnalyzerParameters(localDistance);
-        LogAnalyzer logAnalyzer = new LogAnalyzer(eventLog, parameters);
+        LogAnalyzer logAnalyzer = new LogAnalyzer(eventLog);
+        logAnalyzer.analyze(localDistance);
         logAnalyzer.getLogStatistics().write("analysis-log-statistics", false);
     }
 }

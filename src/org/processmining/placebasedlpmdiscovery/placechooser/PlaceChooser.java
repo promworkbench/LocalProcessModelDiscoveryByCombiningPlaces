@@ -194,8 +194,6 @@ public class PlaceChooser {
         filter = new SelfLoopPlaceFilter();
         places.retainAll(filter.filter(places));
         System.out.println("After SelfLoop: " + places.size());
-
-        Main.getAnalyzer().addPlacesDiscovered(places.size());
     }
 
     private void rankPlaces() {
@@ -244,7 +242,7 @@ public class PlaceChooser {
             rankPlaces();
 
         Set<Place> resSet = new HashSet<>(rankedPlaces.subList(0, Math.min(count, rankedPlaces.size())));
-        Main.getAnalyzer().getPlaceStatistics().initializePlaceStatistics(resSet);
+        Main.getAnalyzer().getStatistics().getPlaceStatistics().initializePlaceStatistics(resSet);
         return resSet;
     }
 

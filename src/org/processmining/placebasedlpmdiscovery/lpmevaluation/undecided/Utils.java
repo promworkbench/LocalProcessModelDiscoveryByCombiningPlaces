@@ -15,36 +15,36 @@ import java.util.Set;
 
 public class Utils {
 
-    /**
-     * Persist into files the result from eST Miner for each of the logs in the input directory
-     *
-     * @param inDirPath:  path to the directory where the log files are
-     * @param outDirPath: path to the directory where the results from the eST miner should be saved
-     */
-    public static void persistInputDataUsingESTMiner(String inDirPath, String outDirPath) throws Exception {
-        File inDir = new File(inDirPath);
-        for (File xesFile : Objects.requireNonNull(inDir.listFiles())) {
-            if (!xesFile.getName().endsWith(".xes"))
-                continue;
-            XLog log = LogUtils.readLogFromFile(xesFile.getPath());
-            PlaceDiscoveryResult result = PlaceDiscovery.discover(log, new EstMinerPlaceDiscoveryParameters());
-            PlaceSet set = new PlaceSet(result.getPlaces());
-
-            File outFile = new File(outDirPath + "/" +
-                    xesFile.getName().substring(0, xesFile.getName().lastIndexOf('.')) + ".promspl");
-            try (FileOutputStream fos = new FileOutputStream(outFile);
-                 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-                oos.writeObject(set);
-            }
-
-            outFile = new File(outDirPath + "/" +
-                    xesFile.getName().substring(0, xesFile.getName().lastIndexOf('.')) + "-modified.xes");
-            try (FileOutputStream fos = new FileOutputStream(outFile);
-                 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
-                oos.writeObject(log);
-            }
-        }
-    }
+//    /**
+//     * Persist into files the result from eST Miner for each of the logs in the input directory
+//     *
+//     * @param inDirPath:  path to the directory where the log files are
+//     * @param outDirPath: path to the directory where the results from the eST miner should be saved
+//     */
+//    public static void persistInputDataUsingESTMiner(String inDirPath, String outDirPath) throws Exception {
+//        File inDir = new File(inDirPath);
+//        for (File xesFile : Objects.requireNonNull(inDir.listFiles())) {
+//            if (!xesFile.getName().endsWith(".xes"))
+//                continue;
+//            XLog log = LogUtils.readLogFromFile(xesFile.getPath());
+//            PlaceDiscoveryResult result = PlaceDiscovery.discover(log, new EstMinerPlaceDiscoveryParameters());
+//            PlaceSet set = new PlaceSet(result.getPlaces());
+//
+//            File outFile = new File(outDirPath + "/" +
+//                    xesFile.getName().substring(0, xesFile.getName().lastIndexOf('.')) + ".promspl");
+//            try (FileOutputStream fos = new FileOutputStream(outFile);
+//                 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+//                oos.writeObject(set);
+//            }
+//
+//            outFile = new File(outDirPath + "/" +
+//                    xesFile.getName().substring(0, xesFile.getName().lastIndexOf('.')) + "-modified.xes");
+//            try (FileOutputStream fos = new FileOutputStream(outFile);
+//                 ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+//                oos.writeObject(log);
+//            }
+//        }
+//    }
 
     private static void writePlaceSet(Set<Place> placeSet, File outFile) {
         try (FileOutputStream fos = new FileOutputStream(outFile);

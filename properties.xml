@@ -3,4 +3,5 @@
   SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
    <entry key="analysis-write-version">1</entry>
+   <entry key="place-write-destination"></entry>
 </properties>

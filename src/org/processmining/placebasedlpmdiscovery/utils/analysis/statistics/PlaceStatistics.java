@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.utils.analysis;
+package org.processmining.placebasedlpmdiscovery.utils.analysis.statistics;
 
 import org.processmining.placebasedlpmdiscovery.model.Place;
 
@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.util.Set;
 import java.util.UUID;
 
-public class PlaceStatistics {
+public class PlaceStatistics implements IStatistics {
 
     private final UUID executionId;
 
@@ -29,6 +29,7 @@ public class PlaceStatistics {
         this.countPlaces = places.size();
     }
 
+    @Override
     public void write(String filename, boolean rewrite) {
         File file = new File(filename + ".csv");
         try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, !rewrite))) {
