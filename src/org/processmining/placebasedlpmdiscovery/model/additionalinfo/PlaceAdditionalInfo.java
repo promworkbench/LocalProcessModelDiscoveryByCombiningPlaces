@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.model.additionalinfo;
 
-import org.processmining.placebasedlpmdiscovery.loganalyzer.LEFRMatrix;
+import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 

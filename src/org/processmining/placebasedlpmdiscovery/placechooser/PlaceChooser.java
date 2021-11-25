@@ -4,7 +4,7 @@ import com.google.common.collect.Sets;
 import javafx.util.Pair;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.Main;
-import org.processmining.placebasedlpmdiscovery.loganalyzer.LEFRMatrix;
+import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.places.EmptyIOTransitionSetPlaceFilter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.places.PlaceFilter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.places.SelfLoopPlaceFilter;

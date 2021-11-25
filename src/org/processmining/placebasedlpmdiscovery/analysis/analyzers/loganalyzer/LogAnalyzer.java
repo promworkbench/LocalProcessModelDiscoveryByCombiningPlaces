@@ -1,10 +1,9 @@
-package org.processmining.placebasedlpmdiscovery.loganalyzer;
+package org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
-import org.processmining.placebasedlpmdiscovery.utils.analysis.statistics.LogStatistics;
-import org.ujmp.core.booleanmatrix.calculation.Le;
+import org.processmining.placebasedlpmdiscovery.analysis.statistics.LogStatistics;
 
 import java.util.List;
 import java.util.Map;

@@ -22,7 +22,6 @@ import org.processmining.models.connections.petrinets.behavioral.FinalMarkingCon
 import org.processmining.models.connections.petrinets.behavioral.InitialMarkingConnection;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.semantics.petrinet.Marking;
-import org.processmining.placebasedlpmdiscovery.utils.analysis.Analyzer;
 
 import java.util.HashMap;
 import java.util.List;

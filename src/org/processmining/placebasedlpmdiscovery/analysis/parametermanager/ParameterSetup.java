@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.utils.analysis;
+package org.processmining.placebasedlpmdiscovery.analysis.parametermanager;
 
 import com.google.gson.Gson;
 

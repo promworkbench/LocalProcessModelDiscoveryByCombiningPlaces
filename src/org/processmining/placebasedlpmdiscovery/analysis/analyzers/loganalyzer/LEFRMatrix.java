@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.loganalyzer;
+package org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer;
 
 import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.model.XAttributeLiteral;

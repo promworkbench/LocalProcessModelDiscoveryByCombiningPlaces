@@ -1,10 +1,12 @@
-package org.processmining.placebasedlpmdiscovery.utils.analysis;
+package org.processmining.placebasedlpmdiscovery.analysis;
 
 import org.apache.logging.log4j.util.Strings;
 import org.deckfour.xes.model.XLog;
 import org.processmining.contexts.cli.CLIContext;
 import org.processmining.contexts.cli.CLIPluginContext;
-import org.processmining.placebasedlpmdiscovery.loganalyzer.LogAnalyzer;
+import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LogAnalyzer;
+import org.processmining.placebasedlpmdiscovery.analysis.parametermanager.ParameterPrioritiser;
+import org.processmining.placebasedlpmdiscovery.analysis.parametermanager.ParameterSetup;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryAlgorithmId;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
@@ -12,7 +14,7 @@ import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDisc
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 import org.processmining.placebasedlpmdiscovery.utils.ProjectProperties;
-import org.processmining.placebasedlpmdiscovery.utils.analysis.statistics.Statistics;
+import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
 
 import java.io.FileInputStream;
 import java.io.IOException;

@@ -6,8 +6,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPME
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.loganalyzer.LEFRMatrix;
-import org.processmining.placebasedlpmdiscovery.loganalyzer.LogAnalyzer;
+import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationController;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.complex.AndCombinationGuard;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.simple.NotContainingCoveringPlacesCombinationGuard;
@@ -26,9 +25,8 @@ import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.utils.ProjectProperties;
 import org.processmining.plugins.utils.ProvidedObjectHelper;
-import org.processmining.placebasedlpmdiscovery.utils.analysis.Analyzer;
+import org.processmining.placebasedlpmdiscovery.analysis.analyzers.Analyzer;
 
 import java.util.Set;
 import java.util.Timer;

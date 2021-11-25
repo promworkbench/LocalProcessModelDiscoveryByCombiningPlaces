@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.utils.analysis.statistics;
+package org.processmining.placebasedlpmdiscovery.analysis.statistics;
 
 import org.apache.logging.log4j.util.Strings;
 

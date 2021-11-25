@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.utils.analysis.statistics;
+package org.processmining.placebasedlpmdiscovery.analysis.statistics;
 
 import java.io.File;
 import java.io.FileNotFoundException;

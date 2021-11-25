@@ -1,8 +1,9 @@
-package org.processmining.placebasedlpmdiscovery.utils.analysis;
+package org.processmining.placebasedlpmdiscovery.analysis;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+import org.processmining.placebasedlpmdiscovery.analysis.parametermanager.ParameterSetup;
 
 import java.util.Arrays;
 

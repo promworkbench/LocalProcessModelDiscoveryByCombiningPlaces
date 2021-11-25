@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.utils.analysis;
+package org.processmining.placebasedlpmdiscovery.analysis.analyzers;
 
 import java.time.Duration;
 import java.time.Instant;
