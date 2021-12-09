@@ -26,8 +26,6 @@ public class PlaceDiscovery {
         PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
         PlaceDiscoveryAlgorithm<? extends PlaceDiscoveryParameters, ?> algorithm = parameters.getAlgorithm(factory);
         PlaceDiscoveryResult result = algorithm.getPlaces(log);
-        PlaceSetExportPlugin.export(Main.getContext(), new PlaceSet(result.getPlaces()),
-                new File(ProjectProperties.getProperty(ProjectProperties.PLACE_WRITE_DESTINATION_KEY)));
         if (result.getLog() == null)
             result.setLog(log);
         return result;

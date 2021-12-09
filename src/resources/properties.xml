@@ -2,7 +2,7 @@
 <!DOCTYPE properties
   SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-   <entry key="place-write-destination">C:\Users\peeva\My\LocalProcessModelDiscovery\event_logs\event_logs_experimental</entry>
-   <entry key="store-places">false</entry>
    <entry key="analysis-write-version">1</entry>
+   <entry key="place-write-destination">data/temporary/places.promspl</entry>
+   <entry key="store-places">false</entry>
 </properties>

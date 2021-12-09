@@ -186,7 +186,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
 	)
 	public static Object[] mineLPMs(PluginContext context, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
 		Main.setUp(context);
-		return new Object[] {Main.run(log, parameters), Main.getAnalyzer().getStatistics()};
+		return new Object[] {Main.run(log, parameters), Main.getAnalyzer().getStatistics(), Main.placeSet};
 	}
 
 	@PluginVariant(

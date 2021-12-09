@@ -9,6 +9,7 @@ import org.processmining.placebasedlpmdiscovery.analysis.parametermanager.Parame
 import org.processmining.placebasedlpmdiscovery.analysis.parametermanager.ParameterSetup;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryAlgorithmId;
+import org.processmining.placebasedlpmdiscovery.plugins.exports.PlaceSetExportPlugin;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryPlugin;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
@@ -16,6 +17,7 @@ import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 import org.processmining.placebasedlpmdiscovery.utils.ProjectProperties;
 import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -96,6 +98,7 @@ public class Runner {
                     Object[] res;
                     if (places == null || !parameters.getPlaceDiscoveryAlgorithmId().equals(PlaceDiscoveryAlgorithmId.ESTMiner)) {
                         res = PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, parameters);
+                        PlaceSetExportPlugin.export(context, (PlaceSet) res[2], new File(entry.getKey().substring(0, entry.getKey().lastIndexOf(".xes")) + ".promspl"));
                     } else {
                         res = PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, places, parameters);
                     }

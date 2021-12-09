@@ -8,14 +8,14 @@ import java.util.Properties;
 public class ProjectProperties {
 
     public static final String ANALYSIS_WRITE_VERSION_KEY = "analysis-write-version";
-    public static final String PLACE_WRITE_DESTINATION_KEY = "analysis-write-version";
+    public static final String PLACE_WRITE_DESTINATION_KEY = "place-write-destination";
 
     private static Properties properties;
 
     private static void initialize() {
         // load properties
         properties = new Properties();
-        try(FileInputStream fileInputStream = new FileInputStream("properties.xml")){
+        try(FileInputStream fileInputStream = new FileInputStream("src/resources/properties.xml")){
             properties.loadFromXML(fileInputStream);
         } catch(IOException e){
             e.printStackTrace();

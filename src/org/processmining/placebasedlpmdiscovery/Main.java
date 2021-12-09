@@ -34,6 +34,7 @@ import java.util.TimerTask;
 
 public class Main {
 
+    public static PlaceSet placeSet;
     private static PluginContext Context;
     private static Analyzer Analyzer;
     private static InterrupterSubject interrupterSubject;
@@ -72,6 +73,7 @@ public class Main {
 
             // Add the places as a provided object
             PlaceSet placeSet = new PlaceSet(result.getPlaces());
+            Main.placeSet = placeSet;
             Main.getContext().getProvidedObjectManager()
                     .createProvidedObject("Place Set - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
                             + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());

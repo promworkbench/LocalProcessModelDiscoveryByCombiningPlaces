@@ -28,7 +28,7 @@ public class EstMinerPlaceDiscoveryAlgorithm extends PlaceDiscoveryAlgorithm<
             AcceptingPetriNet acceptingPetriNet = new AcceptingPetriNetImpl(
                     (Petrinet) modelAndLog[0], (Marking) modelAndLog[1], (Marking) modelAndLog[2]);
             result.setPlaces(this.converter.convert(acceptingPetriNet));
-            result.setLog((XLog) modelAndLog[3]);
+            result.setLog(log);
         } catch (Exception e) {
             e.printStackTrace();
         }
