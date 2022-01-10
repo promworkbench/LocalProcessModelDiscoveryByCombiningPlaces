@@ -5,4 +5,5 @@
    <entry key="analysis-write-version">1</entry>
    <entry key="place-write-destination">data/temporary/places.promspl</entry>
    <entry key="store-places">false</entry>
+   <entry key="statistics-write-destination">data/statistics/</entry>
 </properties>

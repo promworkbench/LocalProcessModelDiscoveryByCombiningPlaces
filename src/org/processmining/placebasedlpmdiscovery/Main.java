@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.framework.plugin.PluginContext;
+import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorFactory;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
@@ -34,7 +35,6 @@ import java.util.TimerTask;
 
 public class Main {
 
-    public static PlaceSet placeSet;
     private static PluginContext Context;
     private static Analyzer Analyzer;
     private static InterrupterSubject interrupterSubject;
@@ -59,9 +59,11 @@ public class Main {
         return interrupterSubject;
     }
 
-    public static LPMResult run(XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
+    public static Object[] run(XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
         setUpAnalyzer(log);
         LPMResult lpmResult;
+        Statistics statistics;
+        PlaceSet placeSet;
 
         Analyzer.totalExecution.start();
 
@@ -72,38 +74,42 @@ public class Main {
             Analyzer.getStatistics().getParameterStatistics().setPlaceDiscoveryIncluded(true);
 
             // Add the places as a provided object
-            PlaceSet placeSet = new PlaceSet(result.getPlaces());
-            Main.placeSet = placeSet;
+            placeSet = new PlaceSet(result.getPlaces());
             Main.getContext().getProvidedObjectManager()
                     .createProvidedObject("Place Set - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
                             + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());
             ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
 
             lpmResult = Main.discover(result.getPlaces(), result.getLog(), parameters);
+            statistics = Analyzer.getStatistics();
         } finally {
             Analyzer.totalExecution.stop();
             Analyzer.write();
             Analyzer = null;
         }
 
-        return lpmResult;
+        return new Object[] {lpmResult, statistics, placeSet};
     }
 
-    public static LPMResult run(Set<Place> places, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
+    public static Object[] run(Set<Place> places, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
         setUpAnalyzer(log);
         LPMResult lpmResult;
+        Statistics statistics;
+        PlaceSet placeSet;
 
         Analyzer.totalExecution.start();
 
         try {
             lpmResult = Main.discover(places, log, parameters);
+            statistics = Analyzer.getStatistics();
+            placeSet = new PlaceSet(places);
         } finally {
             Analyzer.totalExecution.stop();
             Analyzer.write();
             Analyzer = null;
         }
 
-        return lpmResult;
+        return new Object[] {lpmResult, statistics, placeSet};
     }
 
     public static LPMResult discover(Set<Place> places, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
@@ -116,6 +122,7 @@ public class Main {
                     public void run() {
                         interrupterSubject.notifyInterruption();
                         Analyzer.getStatistics().getGeneralStatistics().setInterrupted(true);
+                        System.out.println("INTERRUPTED");
                     }
                 }, parameters.getTimeLimit()
         );

@@ -9,28 +9,39 @@ public class ProjectProperties {
 
     public static final String ANALYSIS_WRITE_VERSION_KEY = "analysis-write-version";
     public static final String PLACE_WRITE_DESTINATION_KEY = "place-write-destination";
+    public static final String STATISTICS_WRITE_DESTINATION_KEY = "statistics-write-destination";
 
     private static Properties properties;
 
-    private static void initialize() {
+    private static ProjectProperties instance;
+
+    public static ProjectProperties getInstance() {
+        return getInstance("src/resources/properties.xml");
+    }
+
+    public static ProjectProperties getInstance(String filename) {
+        if (instance != null) {
+            return instance;
+        }
+        instance = new ProjectProperties(filename);
+        return instance;
+    }
+
+    private ProjectProperties(String filename) {
         // load properties
         properties = new Properties();
-        try(FileInputStream fileInputStream = new FileInputStream("src/resources/properties.xml")){
+        try(FileInputStream fileInputStream = new FileInputStream(filename)){
             properties.loadFromXML(fileInputStream);
         } catch(IOException e){
             e.printStackTrace();
         }
     }
 
-    public static void updateIntegerProperty(String key, Integer value) {
+    public void updateIntegerProperty(String key, Integer value) {
         updateProperty(key, String.valueOf(value));
     }
 
-    public static void updateProperty(String key, String value) {
-        if (properties == null) {
-            initialize();
-        }
-
+    public void updateProperty(String key, String value) {
         properties.setProperty(key, value);
         try(FileOutputStream fileOutputStream = new FileOutputStream("properties.xml")){
             properties.storeToXML(fileOutputStream,null);
@@ -39,15 +50,11 @@ public class ProjectProperties {
         }
     }
 
-    public static String getProperty(String key) {
-        if (properties == null) {
-            initialize();
-        }
-
+    public String getProperty(String key) {
         return properties.getProperty(key);
     }
 
-    public static Integer getIntProperty(String key) {
+    public Integer getIntProperty(String key) {
         String value = getProperty(key);
         return Integer.parseInt(value);
     }

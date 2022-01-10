@@ -13,7 +13,6 @@ public class Analyzer {
     public static final int VERSION = 1;
 
     private final UUID id;
-    private String writeDestination = "data/statistics/";
 
     // analyzers
     public LogAnalyzer logAnalyzer;
@@ -35,17 +34,14 @@ public class Analyzer {
         this.lpmDiscoveryExecution = new SingleExecutionAnalysis();
     }
 
-    public void changeWriteDestination(String writeDestination) {
-        this.writeDestination = writeDestination;
-    }
-
     public void write() {
         boolean rewrite = false;
-        if (ProjectProperties.getIntProperty(ProjectProperties.ANALYSIS_WRITE_VERSION_KEY) != VERSION) {
-            ProjectProperties.updateIntegerProperty(ProjectProperties.ANALYSIS_WRITE_VERSION_KEY, VERSION);
+        if (ProjectProperties.getInstance().getIntProperty(ProjectProperties.ANALYSIS_WRITE_VERSION_KEY) != VERSION) {
+            ProjectProperties.getInstance().updateIntegerProperty(ProjectProperties.ANALYSIS_WRITE_VERSION_KEY, VERSION);
             rewrite = true;
         }
-        this.getStatistics().write(writeDestination, rewrite);
+        this.getStatistics().write(ProjectProperties.getInstance().getProperty(ProjectProperties.STATISTICS_WRITE_DESTINATION_KEY),
+                rewrite);
     }
 
     public void setStatisticsForParameters(PlaceBasedLPMDiscoveryParameters parameters) {

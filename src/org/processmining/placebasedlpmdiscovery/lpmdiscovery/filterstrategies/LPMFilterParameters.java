@@ -71,4 +71,15 @@ public class LPMFilterParameters {
     public void setAbovePassageRepetitionThreshold(double belowPassageRepetitionThreshold) {
         this.abovePassageRepetitionThreshold = belowPassageRepetitionThreshold;
     }
+
+    @Override
+    public String toString() {
+        return "LPMFilterParameters{" +
+                "LPMFilterIds=" + LPMFilterIds +
+                ", aboveTransitionOverlappingThreshold=" + aboveTransitionOverlappingThreshold +
+                ", abovePassageCoverageThreshold=" + abovePassageCoverageThreshold +
+                ", aboveWindowsEvaluationThreshold=" + aboveWindowsEvaluationThreshold +
+                ", abovePassageRepetitionThreshold=" + abovePassageRepetitionThreshold +
+                '}';
+    }
 }

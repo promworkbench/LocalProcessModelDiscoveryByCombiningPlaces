@@ -13,12 +13,14 @@ public class ParameterPrioritiser {
     private final XLog eventLog;
     private int currentPlaceLimitIndex;
     private int currentProximityIndex;
+    private int maxPlaces;
 
     public ParameterPrioritiser(ParameterSetup parameterSetup, XLog eventLog) {
         this.parameterSetup = parameterSetup;
         this.eventLog = eventLog;
         this.currentPlaceLimitIndex = 0;
         this.currentProximityIndex = 0;
+        this.maxPlaces = -1;
     }
 
     public PlaceBasedLPMDiscoveryParameters next() {
@@ -27,6 +29,9 @@ public class ParameterPrioritiser {
 
     public PlaceBasedLPMDiscoveryParameters nextPlaceLimit() {
         this.currentProximityIndex = 0;
+        // if in the last iteration we limited the number of places to more than what is available we are done
+        if (maxPlaces != -1 && parameterSetup.getPlaceLimit().get(this.currentPlaceLimitIndex) >= maxPlaces)
+            return null;
         this.currentPlaceLimitIndex++;
         if (this.currentPlaceLimitIndex < this.parameterSetup.getPlaceLimit().size())
             return create();
@@ -53,5 +58,9 @@ public class ParameterPrioritiser {
         this.currentProximityIndex++;
 
         return parameters;
+    }
+
+    public void setMaxPlaces(int size) {
+        this.maxPlaces = size;
     }
 }

@@ -61,4 +61,15 @@ public class PlaceChooserParameters {
     public void setAveragePlaceDegree(int averagePlaceDegree) {
         this.averagePlaceDegree = averagePlaceDegree;
     }
+
+    @Override
+    public String toString() {
+        return "PlaceChooserParameters{" +
+                "placeLimit=" + placeLimit +
+                ", averagePlaceDegree=" + averagePlaceDegree +
+                ", chosenActivities=" + chosenActivities +
+                ", followRelationsLimit=" + followRelationsLimit +
+                ", coveredPassagesThreshold=" + coveredPassagesThreshold +
+                '}';
+    }
 }

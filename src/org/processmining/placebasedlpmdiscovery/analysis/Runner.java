@@ -33,17 +33,17 @@ public class Runner {
             Scanner scn = new Scanner(System.in);
 
             // event logs folder
+            System.out.println("Enter the absolute path to the property file:");
+            String propertyFilePath = scn.nextLine();
+
+            // event logs folder
             System.out.println("Enter the absolute path to the folder where the event logs are stored:");
             String eventLogsAndPlacesPath = scn.nextLine();
-            ProjectProperties.updateProperty(ProjectProperties.PLACE_WRITE_DESTINATION_KEY, eventLogsAndPlacesPath);
+            ProjectProperties.getInstance(propertyFilePath).updateProperty(ProjectProperties.PLACE_WRITE_DESTINATION_KEY, eventLogsAndPlacesPath);
 
             // parameter setup file
             System.out.println("Enter the absolute path to the file where the parameter setup is given:");
             String parameterPath = scn.nextLine();
-
-            // folder where the statistics should be outputted
-            System.out.println("Enter the absolute path to the folder where the statistics should be outputted:");
-            String statisticsPath = scn.nextLine();
 
             // create the event log -- set of places map
             List<Map.Entry<String, String>> logMap = getLogMap(eventLogsAndPlacesPath);
@@ -94,13 +94,16 @@ public class Runner {
                 PlaceBasedLPMDiscoveryParameters parameters = parameterPrioritiser.next();
                 boolean interruptedForWindow = false;
                 while (parameters != null) {
+                    System.out.println(parameters);
                     CLIPluginContext context = new CLIPluginContext(new CLIContext(), "TestContext");
                     Object[] res;
                     if (places == null || !parameters.getPlaceDiscoveryAlgorithmId().equals(PlaceDiscoveryAlgorithmId.ESTMiner)) {
                         res = PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, parameters);
-                        PlaceSetExportPlugin.export(context, (PlaceSet) res[2], new File(entry.getKey().substring(0, entry.getKey().lastIndexOf(".xes")) + ".promspl"));
+                        places = (PlaceSet) res[2];
+                        PlaceSetExportPlugin.export(context, places, new File(entry.getKey().substring(0, entry.getKey().lastIndexOf(".xes")) + ".promspl"));
                     } else {
                         res = PlaceBasedLPMDiscoveryPlugin.mineLPMs(context, log, places, parameters);
+                        parameterPrioritiser.setMaxPlaces(places.size());
                     }
                     /* depending on whether the algorithm finished it is decided with which parameters should run next
                      since there is a monotonicity property for the parameters */

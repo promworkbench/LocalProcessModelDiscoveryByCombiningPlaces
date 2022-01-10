@@ -119,4 +119,17 @@ public class PlaceBasedLPMDiscoveryParameters {
     public PlaceChooserParameters getPlaceChooserParameters() {
         return placeChooserParameters;
     }
+
+    @Override
+    public String toString() {
+        return "PlaceBasedLPMDiscoveryParameters{" +
+                "placeDiscoveryAlgorithmId=" + placeDiscoveryAlgorithmId +
+                ", useDefaultPlaceDiscoveryParameters=" + useDefaultPlaceDiscoveryParameters +
+                ", placeChooserParameters=" + placeChooserParameters +
+                ", lpmCombinationParameters=" + lpmCombinationParameters +
+                ", lpmFilterParameters=" + lpmFilterParameters +
+                ", lpmCount=" + lpmCount +
+                ", timeLimit=" + timeLimit +
+                '}';
+    }
 }

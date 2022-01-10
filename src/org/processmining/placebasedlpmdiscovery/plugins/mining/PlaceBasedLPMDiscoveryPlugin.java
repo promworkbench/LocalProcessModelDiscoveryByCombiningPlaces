@@ -67,7 +67,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
 		if (parameters == null)
 			return null;
 
-		return Main.run(log, parameters);
+		return (LPMResult) Main.run(log, parameters)[0];
 	}
 
 	@UITopiaVariant(
@@ -95,9 +95,10 @@ public class PlaceBasedLPMDiscoveryPlugin {
 		if (parameters == null)
 			return null;
 
-		return Main.run(getPlacesFromPetriNet(context, petrinet), log, parameters);
+		return (LPMResult) Main.run(getPlacesFromPetriNet(context, petrinet), log, parameters)[0];
 	}
 
+	// TODO: What is this doing here???
 	private static Set<Place> getPlacesFromPetriNet(PluginContext context, Petrinet petrinet) {
 		Marking initialMarking = null;
 		List<Marking> finalMarkings = null;
@@ -142,14 +143,14 @@ public class PlaceBasedLPMDiscoveryPlugin {
 		if (parameters == null)
 			return null;
 
-		return Main.run(placeSet.getElements(), log, parameters);
+		return (LPMResult) Main.run(placeSet.getElements(), log, parameters)[0];
 	}
 
 	@PluginVariant(
 			variantLabel = "Local Process Models Discovery Based on Set of Places given Log",
 			requiredParameterLabels = {0}
 	)
-	public static LPMResult mineLPMs(PluginContext context, XLog log) {
+	public static Object[] mineLPMs(PluginContext context, XLog log) {
 		Main.setUp(context);
 
 		PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
@@ -160,7 +161,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
 			variantLabel = "Local Process Models Discovery Based on Set of Places given Places (faster)",
 			requiredParameterLabels = {0, 1}
 	)
-	public static LPMResult mineLPMs(PluginContext context, XLog log, PlaceSet placeSet) {
+	public static Object[] mineLPMs(PluginContext context, XLog log, PlaceSet placeSet) {
 		Main.setUp(context);
 
 		PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
@@ -172,7 +173,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
 			variantLabel = "Local Process Models Discovery Based on Set of Places given Petri Net (faster)",
 			requiredParameterLabels = {0, 2}
 	)
-	public static LPMResult mineLPMs(PluginContext context, XLog log, Petrinet petrinet) {
+	public static Object[] mineLPMs(PluginContext context, XLog log, Petrinet petrinet) {
 		Main.setUp(context);
 
 		PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
@@ -186,7 +187,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
 	)
 	public static Object[] mineLPMs(PluginContext context, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
 		Main.setUp(context);
-		return new Object[] {Main.run(log, parameters), Main.getAnalyzer().getStatistics(), Main.placeSet};
+		return Main.run(log, parameters);
 	}
 
 	@PluginVariant(
@@ -195,6 +196,6 @@ public class PlaceBasedLPMDiscoveryPlugin {
 	)
 	public static Object[] mineLPMs(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
 		Main.setUp(context);
-		return new Object[] {Main.run(placeSet.getElements(), log, parameters), Main.getAnalyzer().getStatistics()};
+		return Main.run(placeSet.getElements(), log, parameters);
 	}
 }
