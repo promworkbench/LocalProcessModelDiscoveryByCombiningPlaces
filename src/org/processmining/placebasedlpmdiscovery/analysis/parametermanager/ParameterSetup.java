@@ -9,6 +9,7 @@ import java.util.Objects;
 public class ParameterSetup {
     private List<Integer> placeLimit;
     private List<Integer> proximity;
+    private List<Integer> cardinality;
     private Long timeLimit;
     private int minPlaces;
     private int maxPlaces;
@@ -87,6 +88,10 @@ public class ParameterSetup {
 
     public List<Integer> getProximity() {
         return proximity;
+    }
+
+    public List<Integer> getCardinality() {
+        return cardinality;
     }
 
     public Long getTimeLimit() {

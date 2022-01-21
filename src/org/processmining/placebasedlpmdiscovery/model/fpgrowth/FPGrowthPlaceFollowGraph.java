@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
-import javafx.util.Pair;
+import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.models.graphbased.directed.*;
 

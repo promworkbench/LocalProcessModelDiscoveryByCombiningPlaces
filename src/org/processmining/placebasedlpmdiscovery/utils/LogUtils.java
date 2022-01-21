@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.utils;
 
-import javafx.util.Pair;
+import org.apache.commons.math3.util.Pair;
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventNameClassifier;
 import org.deckfour.xes.extension.std.XConceptExtension;

@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth;
 
 import com.google.common.collect.Lists;
-import javafx.util.Pair;
+import org.apache.commons.math3.util.Pair;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;

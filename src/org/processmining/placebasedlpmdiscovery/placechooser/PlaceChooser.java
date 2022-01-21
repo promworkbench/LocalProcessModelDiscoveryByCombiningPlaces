@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.placechooser;
 
 import com.google.common.collect.Sets;
-import javafx.util.Pair;
+import org.apache.commons.math3.util.Pair;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
@@ -227,9 +227,10 @@ public class PlaceChooser {
         rankedPlaces.sort(Comparator
 //                .<Place>comparingDouble(placePassageRankMap::get)
                 .<Place>comparingDouble(placeTransitionRankMap::get)
-                .thenComparing(placePassageRankMap::get)
+//                .thenComparing(placePassageRankMap::get)
 //                .thenComparing(placeTransitionRankMap::get)
                 .thenComparing(Place::getShortString));
+        Collections.reverse(rankedPlaces);
         System.out.println("========Ranking places ended========");
     }
 

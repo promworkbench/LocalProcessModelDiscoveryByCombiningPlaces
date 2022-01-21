@@ -201,9 +201,9 @@ public class Main {
                         .normalizeResult(max, 0));
 
                 EvaluationResultAggregateOperation aggregateOperation = new EvaluationResultAggregateOperation();
-                result.sort((LocalProcessModel lpm1, LocalProcessModel lpm2) ->
-                        lpm1.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation)
-                                < lpm2.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation));
+                result.sort((LocalProcessModel lpm1, LocalProcessModel lpm2) -> Double.compare(
+                        lpm1.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation),
+                        lpm2.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation)));
                 result.keep(parameters.getLpmCount());
             }
         } finally {

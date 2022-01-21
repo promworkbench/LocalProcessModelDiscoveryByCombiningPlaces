@@ -17,6 +17,7 @@ public class GeneralStatistics implements IStatistics {
     private String eventLogName;
     private int countPlacesUsed;
     private int proximity;
+    private int concurrencyCardinality;
     private int lpmDiscovered;
     private int lpmReturned;
     private boolean interrupted;
@@ -33,7 +34,7 @@ public class GeneralStatistics implements IStatistics {
         try (PrintWriter pw = new PrintWriter(new FileOutputStream(file, !rewrite))) {
             if (rewrite)
                 pw.println("ID\tLog Name\tTotal Execution Time\tLPM Discovery Execution Time\t" +
-                        "Interrupted\tCount Places Used\tProximity\tLPM discovered\tLPM returned\tTimestamp");
+                        "Interrupted\tCount Places Used\tProximity\tConcurrency cardinality\tLPM discovered\tLPM returned\tTimestamp");
 
             pw.println(String.join("\t", String.valueOf(this.executionId), this.eventLogName,
                     String.valueOf(this.totalDuration),
@@ -41,6 +42,7 @@ public class GeneralStatistics implements IStatistics {
                     String.valueOf(this.interrupted),
                     String.valueOf(this.countPlacesUsed),
                     String.valueOf(this.proximity),
+                    String.valueOf(this.concurrencyCardinality),
                     String.valueOf(this.lpmDiscovered),
                     String.valueOf(this.lpmReturned),
                     String.valueOf(Date.from(Instant.now()))));
@@ -63,6 +65,10 @@ public class GeneralStatistics implements IStatistics {
 
     public void setProximity(int proximity) {
         this.proximity = proximity;
+    }
+
+    public void setConcurrencyCardinality(int concurrencyCardinality) {
+        this.concurrencyCardinality = concurrencyCardinality;
     }
 
     public void setLpmDiscovered(int lpmDiscovered) {

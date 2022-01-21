@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.analysis;
 
-import org.apache.logging.log4j.util.Strings;
+import com.google.common.base.Strings;
 import org.deckfour.xes.model.XLog;
 import org.processmining.contexts.cli.CLIContext;
 import org.processmining.contexts.cli.CLIPluginContext;
@@ -87,7 +87,7 @@ public class Runner {
             try {
                 XLog log = LogUtils.readLogFromFile(entry.getKey());
                 PlaceSet places = null;
-                if (!Strings.isBlank(entry.getValue()))
+                if (!Strings.isNullOrEmpty(entry.getValue()))
                     places = PlaceUtils.getPlaceSetFromInputStream(new FileInputStream(entry.getValue()));
 
                 ParameterPrioritiser parameterPrioritiser = new ParameterPrioritiser(parameterSetup, log);

@@ -2,13 +2,11 @@ package org.processmining.placebasedlpmdiscovery.utils;
 
 
 import com.google.common.collect.Sets;
-import javafx.util.Pair;
-import org.processmining.placebasedlpmdiscovery.Main;
+import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.Passage;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
-import org.processmining.placebasedlpmdiscovery.plugins.exports.PlaceSetExportPlugin;
 
 import java.io.*;
 import java.util.*;

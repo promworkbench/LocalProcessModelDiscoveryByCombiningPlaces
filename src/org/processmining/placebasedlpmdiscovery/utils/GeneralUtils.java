@@ -9,6 +9,11 @@ public class GeneralUtils {
         if (begin < end) {
             int partitionIndex = partition(list, begin, end, swapElementsFunction);
 
+//            if (end == partitionIndex - 1 || begin == partitionIndex + 1) {
+//                System.out.println("repeating");
+//                System.out.println(list);
+//            }
+
             quickSort(list, begin, partitionIndex - 1, swapElementsFunction);
             quickSort(list, partitionIndex + 1, end, swapElementsFunction);
         }

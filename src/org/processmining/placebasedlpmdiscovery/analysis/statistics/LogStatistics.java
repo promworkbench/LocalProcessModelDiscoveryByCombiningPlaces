@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.analysis.statistics;
 
-import org.apache.logging.log4j.util.Strings;
+import com.google.common.base.Strings;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -69,12 +69,12 @@ public class LogStatistics implements IStatistics {
         this.activitiesCount = activitiesCount;
     }
 
-    public void setWindowSize(int windowSize) {
+    public void setWindowSize(int wcdindowSize) {
         this.windowSize = windowSize;
     }
 
     public void setLogName(String logName) {
-        if (Strings.isBlank(logName)) {
+        if (Strings.isNullOrEmpty(logName)) {
             this.logName = UUID.randomUUID().toString();
         } else {
             this.logName = logName;

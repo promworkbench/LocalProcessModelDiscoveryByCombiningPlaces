@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public class Analyzer {
 
-    public static final int VERSION = 1;
+    public static final int VERSION = 2;
 
     private final UUID id;
 
@@ -50,6 +50,7 @@ public class Analyzer {
         this.getStatistics().getParameterStatistics().setPlaceDiscoveryAlgorithmId(parameters.getPlaceDiscoveryAlgorithmId());
 
         this.getStatistics().getGeneralStatistics().setProximity(parameters.getLpmCombinationParameters().getLpmProximity());
+        this.getStatistics().getGeneralStatistics().setConcurrencyCardinality(parameters.getLpmCombinationParameters().getConcurrencyCardinality());
     }
 
     public void logCountPlacesUsed(int count) {
