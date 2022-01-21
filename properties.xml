@@ -2,8 +2,8 @@
 <!DOCTYPE properties
   SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
-   <entry key="place-write-destination">C:\Users\peeva\Downloads\try</entry>
-   <entry key="statistics-write-destination">C:\Users\peeva\Downloads\try</entry>
+   <entry key="place-write-destination">data/temporary/places.promspl</entry>
+   <entry key="statistics-write-destination">data/statistics/</entry>
    <entry key="store-places">false</entry>
-   <entry key="analysis-write-version">1</entry>
+   <entry key="analysis-write-version">2</entry>
 </properties>
