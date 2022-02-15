@@ -1,0 +1,2 @@
+ID	Log Name	Total Execution Time	LPM Discovery Execution Time	Interrupted	Count Places Used	Proximity	Concurrency cardinality	LPM discovered	LPM returned	Timestamp
+8d2f7670-6419-47f9-ac68-26dcfd9dd491	long-term-dependency	PT0S	PT0.651S	false	50	7	3	0	0	Fri Jan 21 08:51:30 CET 2022

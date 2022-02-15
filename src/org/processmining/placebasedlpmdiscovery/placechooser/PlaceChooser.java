@@ -230,7 +230,6 @@ public class PlaceChooser {
 //                .thenComparing(placePassageRankMap::get)
 //                .thenComparing(placeTransitionRankMap::get)
                 .thenComparing(Place::getShortString));
-        Collections.reverse(rankedPlaces);
         System.out.println("========Ranking places ended========");
     }
 
