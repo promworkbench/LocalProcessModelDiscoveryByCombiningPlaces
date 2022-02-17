@@ -4,18 +4,17 @@ import org.deckfour.xes.model.XLog;
 import org.processmining.framework.util.ui.wizard.ProMWizardStep;
 import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.EstMinerPlaceDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
-import org.processmining.v7.postproc_after_tc.MyMinerWizardStep;
-//import org.processmining.v8.eSTMinerGIT.UI;
+import org.processmining.v8.eSTMinerGIT.UI;
 
 import javax.swing.*;
 
 public class ESTMinerWizardStep implements ProMWizardStep<PlaceBasedLPMDiscoveryParameters> {
 
-    private MyMinerWizardStep wrappedStep;
+    private UI wrappedStep;
     private EstMinerPlaceDiscoveryParameters parameters;
 
     public ESTMinerWizardStep(XLog log) {
-        this.wrappedStep = new MyMinerWizardStep(log);
+        this.wrappedStep = new UI(log);
         this.parameters = new EstMinerPlaceDiscoveryParameters();
 //        this.parameters.getWrappedParameters().setRemoveImps(false);
     }

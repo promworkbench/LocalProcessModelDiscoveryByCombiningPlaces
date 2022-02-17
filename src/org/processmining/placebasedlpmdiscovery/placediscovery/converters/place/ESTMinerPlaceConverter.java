@@ -3,11 +3,8 @@ package org.processmining.placebasedlpmdiscovery.placediscovery.converters.place
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.utils.TransitionUtils;
-import org.processmining.v7.postproc_after_tc.MyPlace;
-import org.processmining.v7.postproc_after_tc.MyProcessModel;
-
-//import org.processmining.v8.eSTMinerGIT.MyPlace;
-//import org.processmining.v8.eSTMinerGIT.MyProcessModel;
+import org.processmining.v8.eSTMinerGIT.MyPlace;
+import org.processmining.v8.eSTMinerGIT.MyProcessModel;
 
 import java.util.*;
 
