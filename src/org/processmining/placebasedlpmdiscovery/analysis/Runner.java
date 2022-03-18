@@ -1,7 +1,13 @@
 package org.processmining.placebasedlpmdiscovery.analysis;
 
 import com.google.common.base.Strings;
+import org.deckfour.xes.factory.XFactory;
+import org.deckfour.xes.info.XAttributeInfo;
+import org.deckfour.xes.info.XLogInfo;
+import org.deckfour.xes.info.XLogInfoFactory;
+import org.deckfour.xes.info.XTimeBounds;
 import org.deckfour.xes.model.XLog;
+import org.deckfour.xes.model.XTrace;
 import org.processmining.contexts.cli.CLIContext;
 import org.processmining.contexts.cli.CLIPluginContext;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LogAnalyzer;
@@ -24,12 +30,48 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Runner {
 
     public static void main(String[] args) {
+//        runningOnMultipleEventLogs();
+        try {
+            logAttributeExtraction();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void logAttributeExtraction() throws Exception {
+        Scanner scn = new Scanner(System.in);
+        String fileName = scn.nextLine();
+        XLog log = LogUtils.readLogFromFile(fileName);
+
+        XLogInfo logInfo = XLogInfoFactory.createLogInfo(log);
+        XAttributeInfo traceAttributeInfo = logInfo.getTraceAttributeInfo();
+        XAttributeInfo eventAttributeInfo = logInfo.getEventAttributeInfo();
+        System.out.println(eventAttributeInfo.getAttributeKeys());
+        XTimeBounds logTimeBounds = logInfo.getLogTimeBoundaries();
+        System.out.println(logTimeBounds.toString());
+
+        eventAttributeInfo.getFrequency()
+
+        List<Long> traceDurations = log
+                .stream()
+                .map(logInfo::getTraceTimeBoundaries).map(tb -> Duration
+                        .between(tb.getStartDate().toInstant(), tb.getEndDate().toInstant()).toDays())
+                .collect(Collectors.toList());
+        System.out.println(traceDurations);
+        System.out.println("Min trace duration: " + (traceDurations.stream().min(Long::compare).get()));
+        System.out.println("Max trace duration: " + traceDurations.stream().max(Long::compare).get());
+        System.out.println("Avg trace duration: " + traceDurations.stream().mapToInt(Long::intValue).sum() * 1.0 / traceDurations.size());
+    }
+
+    private static void runningOnMultipleEventLogs() {
         try {
             Scanner scn = new Scanner(System.in);
 
