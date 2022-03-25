@@ -6,6 +6,8 @@ import org.deckfour.xes.info.XAttributeInfo;
 import org.deckfour.xes.info.XLogInfo;
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.info.XTimeBounds;
+import org.deckfour.xes.model.XAttribute;
+import org.deckfour.xes.model.XAttributeMap;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.contexts.cli.CLIContext;
@@ -50,25 +52,19 @@ public class Runner {
         Scanner scn = new Scanner(System.in);
         String fileName = scn.nextLine();
         XLog log = LogUtils.readLogFromFile(fileName);
-
         XLogInfo logInfo = XLogInfoFactory.createLogInfo(log);
-        XAttributeInfo traceAttributeInfo = logInfo.getTraceAttributeInfo();
+
         XAttributeInfo eventAttributeInfo = logInfo.getEventAttributeInfo();
-        System.out.println(eventAttributeInfo.getAttributeKeys());
-        XTimeBounds logTimeBounds = logInfo.getLogTimeBoundaries();
-        System.out.println(logTimeBounds.toString());
+        Collection<XAttribute> eventAttributes = eventAttributeInfo.getAttributes();
+        for (XAttribute attr : eventAttributes) {
+            System.out.println(attr.getKey());
+            XAttributeMap attrMap = attr.getAttributes();
 
-        eventAttributeInfo.getFrequency()
-
-        List<Long> traceDurations = log
-                .stream()
-                .map(logInfo::getTraceTimeBoundaries).map(tb -> Duration
-                        .between(tb.getStartDate().toInstant(), tb.getEndDate().toInstant()).toDays())
-                .collect(Collectors.toList());
-        System.out.println(traceDurations);
-        System.out.println("Min trace duration: " + (traceDurations.stream().min(Long::compare).get()));
-        System.out.println("Max trace duration: " + traceDurations.stream().max(Long::compare).get());
-        System.out.println("Avg trace duration: " + traceDurations.stream().mapToInt(Long::intValue).sum() * 1.0 / traceDurations.size());
+            System.out.println(attr.getClass());
+            for (Map.Entry<String,?> subAttr : attrMap.entrySet()) {
+                System.out.print(subAttr.getKey() + " - ");
+            }
+        }
     }
 
     private static void runningOnMultipleEventLogs() {
