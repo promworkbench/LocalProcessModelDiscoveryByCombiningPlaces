@@ -1,10 +1,10 @@
-package org.processmining.placebasedlpmdiscovery.placechooser.placefilterpredicates;
+package org.processmining.placebasedlpmdiscovery.placechooser.placepredicates;
 
 import org.processmining.placebasedlpmdiscovery.model.Place;
 
 import java.util.function.Predicate;
 
-public interface PlaceFilterPredicate extends Predicate<Place> {
+public interface PlacePredicate extends Predicate<Place> {
 
     /**
      * Returns whether a certain predicate is satisfied for a given place

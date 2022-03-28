@@ -7,6 +7,40 @@
       <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/plugins/visualization/controllers" afterDir="true" />
       <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/plugins/visualization/controllers/InteractiveLPMsDiscoveryController.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/plugins/visualization/visualizers/InteractiveLPMsDiscoveryVisualizer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/exporting" afterDir="true" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/exporting/AbstractExporter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/exporting/AbstractImporter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/exporting/Exportable.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/exporting/Exporter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/exporting/Importer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/exporting/JsonExporter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/exporting/JsonImporter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/MainPlaceChooser.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/PlaceChooserBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/PlaceChooserDirector.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/PlaceChooserImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placepredicates" afterDir="true" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placepredicates/AndPredicate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placepredicates/EmptyIOTransitionSetPlacePredicate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placepredicates/OrPredicate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placepredicates/PlacePredicate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placepredicates/PlacePredicateConfig.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placepredicates/PlacePredicateFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placepredicates/PlacePredicateType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placepredicates/SelfLoopPlacePredicate.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placerankconverters" afterDir="true" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placerankconverters/PlaceRankConverter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placerankconverters/RankedPlace.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placerankconverters/RankedPlaceComparator.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placerankconverters/TotalPassageCoveragePlaceRankConverter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placerankconverters/TransitionCountPlaceRankConverter.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placetransformers" afterDir="true" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placetransformers/IncludedActivitiesPlaceTransformer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placetransformers/PassageUsagePlaceTransformer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placetransformers/PlaceTransformer.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/placechooser/placetransformers/PlaceTransformerFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/plugins/exports/PlaceSetJsonExportPlugin.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/plugins/imports/PlaceSetJsonImportPlugin.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/statistics/analysis-fp-growth-statistics.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistics/analysis-fp-growth-statistics.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/statistics/analysis-general.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistics/analysis-general.csv" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/statistics/analysis-log-statistics.csv" beforeDir="false" afterPath="$PROJECT_DIR$/data/statistics/analysis-log-statistics.csv" afterDir="false" />
@@ -164,7 +198,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Interface" />
         <option value="Class" />
+        <option value="Enum" />
       </list>
     </option>
   </component>
@@ -198,6 +234,11 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/ivysettings.xml" />
     <property name="settings.editor.selected.configurable" value="IvyIDEA.ProjectSettings" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="org.processmining.placebasedlpmdiscovery.placechooser.placepredicates" />
+    </key>
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">

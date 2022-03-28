@@ -1,8 +1,14 @@
 package org.processmining.placebasedlpmdiscovery.model;
 
 import com.google.common.collect.Sets;
+import com.google.gson.Gson;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.PlaceAdditionalInfo;
+import org.processmining.placebasedlpmdiscovery.model.exporting.Exportable;
+import org.processmining.placebasedlpmdiscovery.model.exporting.Exporter;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;
@@ -13,7 +19,7 @@ import java.util.stream.Collectors;
 /***
  * The place class is used to represent the logic for a place in a PetriNet.
  */
-public class Place implements Serializable, TextDescribable {
+public class Place implements Serializable, Exportable<Place>, TextDescribable {
 
     private static final long serialVersionUID = -8990623494892563264L;
 
@@ -34,7 +40,7 @@ public class Place implements Serializable, TextDescribable {
         this.inputTransitions = new HashSet<>();
         this.outputTransitions = new HashSet<>();
         this.numTokens = 0;
-        this.additionalInfo = new PlaceAdditionalInfo(this);
+        this.additionalInfo = new PlaceAdditionalInfo();
         this.isFinal = false;
     }
 
@@ -167,5 +173,10 @@ public class Place implements Serializable, TextDescribable {
     public Set<Transition> getSilentTransitions(boolean isInput) {
         return isInput ? this.getInputTransitions().stream().filter(Transition::isInvisible).collect(Collectors.toSet()) :
                 this.getOutputTransitions().stream().filter(Transition::isInvisible).collect(Collectors.toSet());
+    }
+
+    @Override
+    public void export(Exporter<Place> exporter) { //TODO: Does it make sense to have this here?
+        exporter.export(this);
     }
 }

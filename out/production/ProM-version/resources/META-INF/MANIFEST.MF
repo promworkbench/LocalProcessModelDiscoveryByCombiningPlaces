@@ -1,0 +1,65 @@
+Manifest-Version: 1.0
+Main-Class: org.processmining.placebasedlpmdiscovery.analysis.Runner
+Class-Path: jetty-6.1.14.jar asm-analysis-5.0.1.jar asm-commons-5.0.1.ja
+ r commons-lang3-3.3.2.jar slf4j-api-1.7.5.jar asm-util-5.0.1.jar servle
+ t-api-2.5-6.1.14.jar asm-5.0.1.jar logback-classic-1.0.13.jar asm-tree-
+ 5.0.1.jar logback-core-1.0.13.jar oro-2.0.8.jar jetty-util-6.1.14.jar h
+ amcrest-core-1.3.jar jaxen-1.1.4.jar junit-4.11.jar cobertura-2.1.1.jar
+  junit-4.8.1.jar cobertura.jar cobertura-2.0.3.jar mockito-all-1.9.5.ja
+ r ProM-Plugins-latest.jar ProM-Contexts-latest.jar guava-16.0.1.jar jun
+ it-4.12.jar bsh-2.0b4.jar Spex-1.1.jar Uitopia-0.6-20190913.jar UITopia
+ Resources-0.6-20190913.jar ProM-Framework-latest.jar commons-compress-1
+ .13.jar commons-logging-1.1.3.jar jgraph-5.13.0.4.jar google-analytics-
+ java-1.1.2.jar httpclient-4.5.3.jar httpcore-4.4.6.jar log4j-api-2.8.1.
+ jar log4j-core-2.8.1.jar log4j-slf4j-impl-2.8.1.jar jargs-latest.jar Ta
+ bleLayout-20050920.jar slf4j-api-1.7.25.jar slickerbox-1.0rc1.jar ProM-
+ Models-latest.jar BasicUtils-latest.jar javacsv-2.1.jar javailp-1.2a.ja
+ r jbpt-0.2.429.jar jgrapht-jdk1.6.jar jmathplot-unknown.jar trove4j-3.0
+ .3.jar prefuse-core-1.0.0.jar ujmp-complete-0.2.5.jar jcommon-1.0.24.ja
+ r jfreechart-1.0.19.jar jung-algorithms-2.0.jar jung-api-2.0.jar jung-g
+ raph-impl-2.0.jar jung-io-2.0.jar jung-visualization-2.0.jar colt-1.2.0
+ .jar FilterableSortableTablePanel-latest.jar flanagan-0.9alpha.jar jas-
+ plotter-2.2.jar jlfgr-1_0.jar openide-lookup-1.9-patched-1.0.jar xstrea
+ m-1.4.9.jar jython-standalone-2.7.0.jar Widgets-latest.jar japura-1.12.
+ 3.jar freehep-io-2.2.2.jar freehep-graphicsio-2.4.jar freehep-graphics2
+ d-2.4.jar freehep-graphicsbase-2.4.jar freehep-graphicsio-emf-2.4.jar f
+ reehep-graphicsio-tests-2.4.jar freehep-graphicsio-java-2.4.jar freehep
+ -graphicsio-pdf-2.4.jar freehep-graphicsio-ps-2.4.jar freehep-graphicsi
+ o-svg-2.4.jar freehep-graphicsio-swf-2.4.jar jcalendar-1.4.jar Log-late
+ st.jar OpenXES-20211004.jar ApacheUtils-latest.jar univocity-parsers-2.
+ 2.2.jar sqlite-jdbc-3.15.1.jar cqengine-2.7.1.jar concurrent-trees-2.6.
+ 0.jar kryo-3.0.3.jar reflectasm-1.10.1.jar asm-5.0.3.jar minlog-1.3.0.j
+ ar kryo-serializers-0.37.jar protobuf-java-2.6.1.jar antlr4-runtime-4.5
+ .jar fastutil-7.1.0.jar joda-time-2.9.4.jar lz4-1.3.jar mapdb-2.0-beta1
+ 3.jar compress-lzf-1.0.3.jar java-merge-sort-1.0.0.jar juniversalcharde
+ t-1.0.3.jar commons-beanutils-1.8.3.jar commons-cli-1.3.1.jar commons-c
+ ollections-3.2.1.jar commons-digester-2.1.jar commons-io-2.4.jar exp4j-
+ 0.3.8.jar uncommons-maths-1.2.3.jar log4j-1.2.16.jar ant-1.9.4.jar comm
+ ons-lang3-3.4.jar reflections-0.9.10.jar jackson-databind-2.8.1.jar jac
+ kson-annotations-2.8.0.jar jackson-core-2.8.1.jar opencsv-2.4-patched.j
+ ar axis-1.4.jar collections-generic-4.01.jar commons-math3-3.6.1.jar jd
+ om-legacy-1.1.3.jar simmetrics-latest.jar xpp3-1.1.4c.jar batik-anim-1.
+ 9.1.jar batik-awt-util-1.9.1.jar batik-bridge-1.9.1.jar batik-codec-1.9
+ .1.jar batik-css-1.9.1.jar batik-dom-1.9.1.jar batik-ext-1.9.1.jar bati
+ k-extension-1.9.1.jar batik-gui-util-1.9.1.jar batik-gvt-1.9.1.jar bati
+ k-parser-1.9.1.jar batik-rasterizer-1.9.1.jar batik-script-1.9.1.jar ba
+ tik-svg-dom-1.9.1.jar batik-svggen-1.9.1.jar batik-swing-1.9.1.jar bati
+ k-transcoder-1.9.1.jar batik-util-1.9.1.jar batik-xml-1.9.1.jar fop-2.2
+ .jar Saxon-latest.jar saxon-9he.jar rhino-1.7.7.jar PetriNets-latest.ja
+ r TransitionSystems-latest.jar Animation-latest.jar OSService-latest.ja
+ r EfficientSTMiner-latest.jar AcceptingPetriNet-latest.jar LogAbstracti
+ ons-latest.jar InductiveMiner-latest.jar rsyntaxtextarea-2.5.8.jar Indu
+ ctiveMinerDeprecated-latest.jar ProcessTree-latest.jar LpSolve-latest.j
+ ar Properties-latest.jar YAWL-latest.jar YAWLEditor-2.3.5.wo.jgraph.jar
+  Performance-latest.jar PNetReplayer-latest.jar EfficientStorage-latest
+ .jar gurobi-6.5.jar LogDialog-latest.jar InteractiveVisualization-lates
+ t.jar Sat4j-latest.jar GraphViz-latest.jar itextpdf-5.5.11.jar KitFox-l
+ atest.jar Murata-latest.jar LPEngine-latest.jar HeuristicsMiner-latest.
+ jar Flex-latest.jar AcceptingPetriNetRedundantPlacesReductor-latest.jar
+  AcceptingPetriNetClassicalReductor-latest.jar powermock-module-junit4-
+ 2.0.4.jar powermock-module-junit4-common-2.0.4.jar powermock-reflect-2.
+ 0.4.jar objenesis-3.0.1.jar byte-buddy-1.9.10.jar byte-buddy-agent-1.9.
+ 10.jar powermock-core-2.0.4.jar javassist-3.25.0-GA.jar hamcrest-core-1
+ .3.jar powermock-api-mockito2-2.0.4.jar powermock-api-support-2.0.4.jar
+  mockito-core-2.28.2.jar gson-2.8.9.jar
+

@@ -1,8 +1,8 @@
-package org.processmining.placebasedlpmdiscovery.placechooser.placefilterpredicates;
+package org.processmining.placebasedlpmdiscovery.placechooser.placepredicates;
 
 import org.processmining.placebasedlpmdiscovery.model.Place;
 
-public class EmptyIOTransitionSetPlaceFilterPredicate implements PlaceFilterPredicate {
+public class EmptyIOTransitionSetPlacePredicate implements PlacePredicate {
 
     /**
      * Checks for empty input or output transition set

@@ -22,8 +22,8 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
+import org.processmining.placebasedlpmdiscovery.placechooser.MainPlaceChooser;
 import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
-import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooserImpl;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
@@ -148,8 +148,8 @@ public class Main {
             // choose places
             parameters.getPlaceChooserParameters()
                     .setFollowRelationsLimit(parameters.getLpmCombinationParameters().getLpmProximity());
-            PlaceChooser placeChooser = new PlaceChooserImpl(parameters.getPlaceChooserParameters(), places, log, lefrMatrix);
-            places = placeChooser.choose();
+            PlaceChooser placeChooser = new MainPlaceChooser(log, parameters.getPlaceChooserParameters(), lefrMatrix);
+            places = placeChooser.choose(places, parameters.getPlaceChooserParameters().getPlaceLimit());
 
             // export chosen places
             PlaceSet placeSet = new PlaceSet(places);

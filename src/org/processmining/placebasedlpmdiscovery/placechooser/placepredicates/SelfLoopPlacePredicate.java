@@ -1,9 +1,9 @@
-package org.processmining.placebasedlpmdiscovery.placechooser.placefilterpredicates;
+package org.processmining.placebasedlpmdiscovery.placechooser.placepredicates;
 
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 
-public class SelfLoopPlaceFilterPredicate implements PlaceFilterPredicate {
+public class SelfLoopPlacePredicate implements PlacePredicate {
 
     /**
      * Checks if all input or output transitions are self-loops

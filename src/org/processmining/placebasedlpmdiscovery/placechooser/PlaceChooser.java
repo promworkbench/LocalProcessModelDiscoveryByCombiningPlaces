@@ -6,5 +6,5 @@ import java.util.Set;
 
 public interface PlaceChooser {
 
-    Set<Place> choose();
+    Set<Place> choose(Set<Place> places, int count);
 }
