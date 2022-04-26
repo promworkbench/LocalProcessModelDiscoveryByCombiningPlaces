@@ -17,16 +17,25 @@ public class PlaceBasedLPMDiscoveryWizard extends MapWizard<PlaceBasedLPMDiscove
     public static final String PD_HEURISTIC_MINER = "PlaceDiscoveryHeuristicMinerParameters";
     public static final String LPM_DISCOVERY = "LPMDiscoveryParameters";
     public static final String EVALUATION = "EvaluationParameters";
+    public static final String LPM_CONTEXT = "ContextParameters";
 
     private final boolean discoverPlaces;
+    private final boolean withContext;
 
-    public PlaceBasedLPMDiscoveryWizard(Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryParameters>> steps, boolean discoverPlaces) {
+    public PlaceBasedLPMDiscoveryWizard(Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryParameters>> steps, boolean discoverPlaces, boolean withContext) {
         super(steps);
         this.discoverPlaces = discoverPlaces;
+        this.withContext = withContext;
+    }
+
+    public PlaceBasedLPMDiscoveryWizard(Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryParameters>> steps, boolean discoverPlaces) {
+        this(steps, discoverPlaces, false);
     }
 
     @Override
     public Collection<String> getFinalKeys(MapModel<PlaceBasedLPMDiscoveryParameters, String> mapModel) {
+        if (withContext)
+            return Collections.singletonList(PlaceBasedLPMDiscoveryWizard.LPM_CONTEXT);
         return Collections.singletonList(PlaceBasedLPMDiscoveryWizard.LPM_DISCOVERY);
     }
 
@@ -34,6 +43,8 @@ public class PlaceBasedLPMDiscoveryWizard extends MapWizard<PlaceBasedLPMDiscove
     public String getInitialKey(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters) {
         if (discoverPlaces)
             return PlaceBasedLPMDiscoveryWizard.INITIAL_KEY;
+        else if (withContext)
+            return PlaceBasedLPMDiscoveryWizard.LPM_CONTEXT;
         return PlaceBasedLPMDiscoveryWizard.LPM_DISCOVERY;
     }
 
@@ -50,6 +61,8 @@ public class PlaceBasedLPMDiscoveryWizard extends MapWizard<PlaceBasedLPMDiscove
                 return PD_INDUCTIVE_MINER;
             if (mapModel.getModel().getPlaceDiscoveryAlgorithmId() == PlaceDiscoveryAlgorithmId.HeuristicMiner)
                 return PD_HEURISTIC_MINER;
+        } else if (withContext && mapModel.getCurrent().equals(LPM_DISCOVERY)) {
+            return LPM_CONTEXT;
         }
         return LPM_DISCOVERY;
     }

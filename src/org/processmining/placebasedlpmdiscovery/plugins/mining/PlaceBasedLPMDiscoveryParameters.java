@@ -9,7 +9,10 @@ import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.EstMin
 import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.HeuristicMinerPlaceDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.InductiveMinerPlaceDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.PlaceDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummary;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class PlaceBasedLPMDiscoveryParameters {
@@ -32,6 +35,9 @@ public class PlaceBasedLPMDiscoveryParameters {
     // limit
     private long timeLimit;
 
+    // event attribute summary
+    private final Map<String, EventAttributeSummary<?,?>> eventAttributeSummary;
+
     public PlaceBasedLPMDiscoveryParameters(XLog log) {
         this.placeDiscoveryAlgorithmId = PlaceDiscoveryAlgorithmId.ESTMiner;
         this.placeDiscoveryParameters = new EstMinerPlaceDiscoveryParameters();
@@ -40,6 +46,7 @@ public class PlaceBasedLPMDiscoveryParameters {
         this.lpmFilterParameters = new LPMFilterParameters();
         this.lpmCount = 100;
         this.timeLimit = 600000;
+        this.eventAttributeSummary = new HashMap<>();
     }
 
     public PlaceDiscoveryAlgorithmId getPlaceDiscoveryAlgorithmId() {
@@ -118,6 +125,10 @@ public class PlaceBasedLPMDiscoveryParameters {
 
     public PlaceChooserParameters getPlaceChooserParameters() {
         return placeChooserParameters;
+    }
+
+    public Map<String, EventAttributeSummary<?,?>> getEventAttributeSummary() {
+        return eventAttributeSummary;
     }
 
     @Override

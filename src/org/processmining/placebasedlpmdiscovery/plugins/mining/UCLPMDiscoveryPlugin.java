@@ -27,10 +27,10 @@ public class UCLPMDiscoveryPlugin {
             affiliation = "RWTH - PADS",
             author = "Viki Peeva",
             email = "peeva@pads.rwth-aachen.de",
-            uiLabel = "Utility Local Process Models Discovery Based on Set of Place Nets given Event Log"
+            uiLabel = "Context Local Process Models Discovery Based on Set of Place Nets given Event Log"
     )
     @PluginVariant(
-            variantLabel = "Utility Local Process Models Discovery Based on Set of Place Nets given Event Log",
+            variantLabel = "Context Local Process Models Discovery Based on Set of Place Nets given Event Log",
             requiredParameterLabels = {0}
     )
     public static LPMResult mineLPMs(UIPluginContext context, XLog log) {
@@ -40,13 +40,13 @@ public class UCLPMDiscoveryPlugin {
 
         // show wizard
         Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryParameters>> stepMap = new HashMap<>();
-        stepMap.put(PlaceBasedLPMDiscoveryWizard.INITIAL_KEY, new PlaceDiscoveryAlgorithmChoiceWizardStep());
-        stepMap.put(PlaceBasedLPMDiscoveryWizard.PD_EST_MINER, new ESTMinerWizardStep(log));
-        stepMap.put(PlaceBasedLPMDiscoveryWizard.PD_INDUCTIVE_MINER, new InductiveMinerWizardStep(log));
-        stepMap.put(PlaceBasedLPMDiscoveryWizard.PD_HEURISTIC_MINER, new HeuristicMinerWizardStep(log));
-        stepMap.put(PlaceBasedLPMDiscoveryWizard.LPM_DISCOVERY, new LPMDiscoveryWizardStep(log));
-//		stepMap.put(PlaceBasedLPMDiscoveryWizard.EVALUATION, new EvaluationWizardStep());
-        PlaceBasedLPMDiscoveryWizard wizard = new PlaceBasedLPMDiscoveryWizard(stepMap, true);
+//        stepMap.put(PlaceBasedLPMDiscoveryWizard.INITIAL_KEY, new PlaceDiscoveryAlgorithmChoiceWizardStep());
+//        stepMap.put(PlaceBasedLPMDiscoveryWizard.PD_EST_MINER, new ESTMinerWizardStep(log));
+//        stepMap.put(PlaceBasedLPMDiscoveryWizard.PD_INDUCTIVE_MINER, new InductiveMinerWizardStep(log));
+//        stepMap.put(PlaceBasedLPMDiscoveryWizard.PD_HEURISTIC_MINER, new HeuristicMinerWizardStep(log));
+//        stepMap.put(PlaceBasedLPMDiscoveryWizard.LPM_DISCOVERY, new LPMDiscoveryWizardStep(log));
+        stepMap.put(PlaceBasedLPMDiscoveryWizard.LPM_CONTEXT, new LPMContextWizardStep(log));
+        PlaceBasedLPMDiscoveryWizard wizard = new PlaceBasedLPMDiscoveryWizard(stepMap, false, true);
         parameters = ProMWizardDisplay.show(context, wizard, parameters);
 
         if (parameters == null)

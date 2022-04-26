@@ -6,10 +6,7 @@ import org.deckfour.xes.info.XAttributeInfo;
 import org.deckfour.xes.info.XLogInfo;
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.info.XTimeBounds;
-import org.deckfour.xes.model.XAttribute;
-import org.deckfour.xes.model.XAttributeMap;
-import org.deckfour.xes.model.XLog;
-import org.deckfour.xes.model.XTrace;
+import org.deckfour.xes.model.*;
 import org.processmining.contexts.cli.CLIContext;
 import org.processmining.contexts.cli.CLIPluginContext;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LogAnalyzer;
@@ -21,6 +18,7 @@ import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryAlg
 import org.processmining.placebasedlpmdiscovery.plugins.exports.PlaceSetExportPlugin;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryPlugin;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummaryController;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 import org.processmining.placebasedlpmdiscovery.utils.ProjectProperties;
@@ -51,20 +49,9 @@ public class Runner {
     private static void logAttributeExtraction() throws Exception {
         Scanner scn = new Scanner(System.in);
         String fileName = scn.nextLine();
+
         XLog log = LogUtils.readLogFromFile(fileName);
-        XLogInfo logInfo = XLogInfoFactory.createLogInfo(log);
-
-        XAttributeInfo eventAttributeInfo = logInfo.getEventAttributeInfo();
-        Collection<XAttribute> eventAttributes = eventAttributeInfo.getAttributes();
-        for (XAttribute attr : eventAttributes) {
-            System.out.println(attr.getKey());
-            XAttributeMap attrMap = attr.getAttributes();
-
-            System.out.println(attr.getClass());
-            for (Map.Entry<String,?> subAttr : attrMap.entrySet()) {
-                System.out.print(subAttr.getKey() + " - ");
-            }
-        }
+        EventAttributeSummaryController attributeSummaryController = new EventAttributeSummaryController(log);
     }
 
     private static void runningOnMultipleEventLogs() {
