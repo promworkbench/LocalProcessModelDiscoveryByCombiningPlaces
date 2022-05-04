@@ -4,13 +4,10 @@ import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationAndEvaluationController;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth.FPGrowthLPMDiscoveryTreeBuilderFirstEdition;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth.FPGrowthPlaceFollowGraphBuilder;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth.LPMTreeBuilder;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
-import org.processmining.placebasedlpmdiscovery.model.fpgrowth.FPGrowthPlaceFollowGraph;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTree;
-import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -45,7 +42,7 @@ public class LPMCombinationController {
 
 //        FPGrowthLPMDiscoveryTreeBuilderSecondEdition treeBuilder = new FPGrowthLPMDiscoveryTreeBuilderSecondEdition(
 //        FPGrowthLPMDiscoveryTreeBuilder treeBuilder = new FPGrowthLPMDiscoveryTreeBuilder(
-        FPGrowthLPMDiscoveryTreeBuilderFirstEdition treeBuilder = new FPGrowthLPMDiscoveryTreeBuilderFirstEdition(
+        LPMTreeBuilder treeBuilder = new LPMTreeBuilder(
                 log, new HashSet<>(places), this.parameters);
         Main.getInterrupterSubject().addObserver(treeBuilder);
         System.out.println("========Building tree========");

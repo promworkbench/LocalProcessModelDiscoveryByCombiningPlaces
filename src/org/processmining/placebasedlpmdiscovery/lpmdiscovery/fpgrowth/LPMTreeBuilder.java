@@ -21,7 +21,7 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterrupted {
+public class LPMTreeBuilder implements CanBeInterrupted {
 
     private final XLog log;
     private final Set<Place> places;
@@ -29,7 +29,7 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
     private boolean stop;
     private WindowLog windowLog;
 
-    public FPGrowthLPMDiscoveryTreeBuilderFirstEdition(XLog log, Set<Place> places, LPMCombinationParameters parameters) {
+    public LPMTreeBuilder(XLog log, Set<Place> places, LPMCombinationParameters parameters) {
         this.log = log;
         this.places = places;
         this.parameters = parameters;
