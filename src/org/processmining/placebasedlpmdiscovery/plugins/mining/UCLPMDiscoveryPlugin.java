@@ -47,7 +47,7 @@ public class UCLPMDiscoveryPlugin {
         stepMap.put(PlaceBasedLPMDiscoveryWizard.PD_HEURISTIC_MINER, new HeuristicMinerWizardStep(log));
         stepMap.put(PlaceBasedLPMDiscoveryWizard.LPM_DISCOVERY, new LPMDiscoveryWizardStep(log));
         stepMap.put(PlaceBasedLPMDiscoveryWizard.LPM_CONTEXT, new LPMContextWizardStep(log));
-        PlaceBasedLPMDiscoveryWizard wizard = new PlaceBasedLPMDiscoveryWizard(stepMap, false, true);
+        PlaceBasedLPMDiscoveryWizard wizard = new PlaceBasedLPMDiscoveryWizard(stepMap, true, true);
         parameters = ProMWizardDisplay.show(context, wizard, parameters);
 
         if (parameters == null)

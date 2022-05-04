@@ -43,8 +43,6 @@ public class PlaceBasedLPMDiscoveryWizard extends MapWizard<PlaceBasedLPMDiscove
     public String getInitialKey(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters) {
         if (discoverPlaces)
             return PlaceBasedLPMDiscoveryWizard.INITIAL_KEY;
-        else if (withContext)
-            return PlaceBasedLPMDiscoveryWizard.LPM_CONTEXT;
         return PlaceBasedLPMDiscoveryWizard.LPM_DISCOVERY;
     }
 
