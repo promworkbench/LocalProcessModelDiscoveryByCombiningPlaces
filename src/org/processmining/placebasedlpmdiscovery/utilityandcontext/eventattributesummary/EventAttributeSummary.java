@@ -43,4 +43,6 @@ public abstract class EventAttributeSummary<T, C extends XAttributeImpl> {
     protected abstract T extractAttributeValue(XAttribute attribute);
 
     public abstract void summarize();
+
+    public abstract boolean acceptValue(XAttribute attribute);
 }

@@ -1,10 +1,12 @@
 package org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary;
 
+import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.impl.XAttributeImpl;
 
 import java.text.ParseException;
+import java.util.Comparator;
 
-public abstract class RangeEventAttributeSummary<T, C extends XAttributeImpl> extends EventAttributeSummary<T, C> {
+public abstract class RangeEventAttributeSummary<T extends Comparable<T>, C extends XAttributeImpl> extends EventAttributeSummary<T, C> {
 
     private T minValue;
     private T maxValue;
@@ -35,5 +37,11 @@ public abstract class RangeEventAttributeSummary<T, C extends XAttributeImpl> ex
 
     public T getMaxValue() {
         return maxValue;
+    }
+
+    @Override
+    public boolean acceptValue(XAttribute attribute) {
+        T attributeValue = this.extractAttributeValue(attribute);
+        return minValue.compareTo(attributeValue) < 1 && maxValue.compareTo(attributeValue) > -1;
     }
 }
