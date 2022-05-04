@@ -45,7 +45,7 @@ public class FPGrowthPlaceFollowGraphBuilder {
             for (Integer event : traceVariant) { // iterate through the events in the trace variant
                 // iterate through all places that have an input transition with a label as the event activity
                 Set<Place> candidatePlaces = inTransitionPlacesMap.getOrDefault(
-                        windowLog.getReverseLabelMap().get(event), new HashSet<>());
+                        windowLog.getMapping().getReverseLabelMap().get(event), new HashSet<>());
                 for (Place p : candidatePlaces) {
                     // iterate through all places in the queue
                     for (Map.Entry<Place, Integer> queueEntry : queue) {
@@ -53,7 +53,7 @@ public class FPGrowthPlaceFollowGraphBuilder {
                         Integer weight = queueEntry.getValue();
 
                         // if the event is output transition in the queue place add the edge
-                        if (outTransitionPlacesMap.get(windowLog.getReverseLabelMap().get(event)).contains(queuePlace))
+                        if (outTransitionPlacesMap.get(windowLog.getMapping().getReverseLabelMap().get(event)).contains(queuePlace))
                             graph.addEdge(queuePlace, p, weight * count);
                     }
                 }

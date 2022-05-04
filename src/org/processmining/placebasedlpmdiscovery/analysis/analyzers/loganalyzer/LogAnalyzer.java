@@ -35,7 +35,7 @@ public class LogAnalyzer {
         logStatistics.setDistinctWindowsCount(res.size());
         logStatistics.setTraceVariantsCount(windowLog.getTraceVariantIds().size());
         logStatistics.setTraceVariantsTotalEvents(this.traceVariantTotalEvents());
-        logStatistics.setActivitiesCount(windowLog.getLabelMap().size());
+        logStatistics.setActivitiesCount(windowLog.getMapping().getLabelMap().size());
     }
 
     private int traceVariantTotalEvents() {

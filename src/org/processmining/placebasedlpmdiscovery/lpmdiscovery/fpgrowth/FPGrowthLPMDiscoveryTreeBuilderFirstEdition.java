@@ -41,22 +41,22 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
         Set<Transition> transitions = PlaceUtils.getAllTransitions(this.places); // get all transitions
 
         // add invisible transitions to the label map
-        windowLog.addInvisibleTransitionsInLabelMap(transitions
+        windowLog.getMapping().addInvisibleTransitionsInLabelMap(transitions
                 .stream()
                 .map(Transition::getLabel)
                 .collect(Collectors.toSet()));
 
         MainFPGrowthLPMTree mainTree = new MainFPGrowthLPMTree(getPlacePriorityMap(),
-                windowLog.getLabelMap(), this.parameters.getLpmProximity());
+                windowLog.getMapping().getLabelMap(), this.parameters.getLpmProximity());
 
         // map transitions to places that have it as input
 //        Set<String> transitionLabels = transitions.stream().map(Transition::getLabel).collect(Collectors.toSet());
 //        Map<Integer, Set<Place>> inTransitionPlacesMap = PlaceUtils.getTransitionPlaceSetMapping(
 //                transitionLabels, this.places, true, windowLog.getLabelMap(), true);
         Map<Pair<Integer, Integer>, Set<Place>> inoutTransitionPlacesMap = PlaceUtils
-                .getInoutTransitionPlaceSetMapping(this.places, windowLog.getLabelMap());
+                .getInoutTransitionPlaceSetMapping(this.places, windowLog.getMapping().getLabelMap());
         Map<Pair<Integer, Integer>, Set<List<Place>>> inoutViaSilentPlaceMap = PlaceUtils
-                .getInoutTransitionPlaceSetMappingViaSilent(this.places, windowLog.getLabelMap());
+                .getInoutTransitionPlaceSetMappingViaSilent(this.places, windowLog.getMapping().getLabelMap());
 
         WindowTotalCounter windowTotalCounter = new WindowTotalCounter();
 
@@ -99,7 +99,7 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
 //                    localTree.add(window.get(i), placesForAddition, paths, windowLog.getLabelMap(), i);
                     localTree.add(window.get(i), eventPos - window.size() + 1 + i,
                             event, eventPos,
-                            placesForAddition, paths, windowLog.getLabelMap());
+                            placesForAddition, paths, windowLog.getMapping().getLabelMap());
                 }
                 localTree.tryAddNullChildren(event, window.size() - 1);
                 Main.getAnalyzer().stopWindow();
@@ -133,7 +133,7 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
                                         int windowCount, LinkedList<Integer> window, WindowLog windowLog) {
         // get the null children
         Map<LocalProcessModel, List<Integer>> lpms =
-                getLPMsAndFiringSequences(windowLog.getReverseLabelMap(), localTree, window);
+                getLPMsAndFiringSequences(windowLog.getMapping().getReverseLabelMap(), localTree, window);
 
         // give the lpm and the window count to the main tree so it can update itself
         int countAdded = 0;
@@ -196,7 +196,7 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
             LocalProcessModel resLpm = LocalProcessModelUtils.join(lpms.get(i), lpm);
             if (!lpmFiringSequenceMap.containsKey(resLpm)) {
                 List<Integer> sequence = joinFiringSequences(fsi, fs, window);
-                Replayer replayer = new Replayer(resLpm, windowLog.getLabelMap());
+                Replayer replayer = new Replayer(resLpm, windowLog.getMapping().getLabelMap());
                 if (replayer.canReplay(sequence)) {
                     lpmFiringSequenceMap.put(resLpm, sequence);
                     if (currIteration < this.parameters.getConcurrencyCardinality()) {
@@ -228,11 +228,11 @@ public class FPGrowthLPMDiscoveryTreeBuilderFirstEdition implements CanBeInterru
         int k = 0;
         List<Integer> result = new ArrayList<>();
         while (true) {
-            while (i < one.size() && windowLog.getInvisible().contains(one.get(i))) {
+            while (i < one.size() && windowLog.getMapping().getInvisible().contains(one.get(i))) {
                 result.add(one.get(i));
                 i++;
             }
-            while (j < two.size() && windowLog.getInvisible().contains(two.get(j))) {
+            while (j < two.size() && windowLog.getMapping().getInvisible().contains(two.get(j))) {
                 result.add(two.get(j));
                 j++;
             }
