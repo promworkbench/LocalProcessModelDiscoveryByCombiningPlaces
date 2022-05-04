@@ -2,11 +2,11 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
 
 import org.deckfour.xes.model.XLog;
 
-public abstract class AbstractEvaluationLog {
+public abstract class AbstractEnhancedLog {
 
     protected XLog originalLog;
 
-    public AbstractEvaluationLog(XLog log) {
+    public AbstractEnhancedLog(XLog log) {
         this.originalLog = log;
         this.makeLog();
     }

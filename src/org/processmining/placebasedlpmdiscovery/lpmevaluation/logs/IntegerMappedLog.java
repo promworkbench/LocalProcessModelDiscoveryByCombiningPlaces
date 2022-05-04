@@ -8,7 +8,7 @@ import org.deckfour.xes.model.XTrace;
 
 import java.util.*;
 
-public class IntegerMappedLog extends AbstractEvaluationLog {
+public class IntegerMappedLog extends AbstractEnhancedLog {
 
     private Map<String, Integer> labelMap;
     private Map<Integer, String> reverseLabelMap;
