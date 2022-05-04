@@ -6,13 +6,13 @@ import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
-import org.processmining.placebasedlpmdiscovery.model.CanBeInterrupted;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTree;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.WindowLPMTree;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.WindowLPMTreeNode;
+import org.processmining.placebasedlpmdiscovery.model.interruptible.Interruptible;
 import org.processmining.placebasedlpmdiscovery.replayer.Replayer;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
@@ -21,12 +21,11 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class LPMTreeBuilder implements CanBeInterrupted {
+public class LPMTreeBuilder extends Interruptible {
 
     private final XLog log;
     private final Set<Place> places;
     LPMCombinationParameters parameters;
-    private boolean stop;
     private WindowLog windowLog;
 
     public LPMTreeBuilder(XLog log, Set<Place> places, LPMCombinationParameters parameters) {
@@ -274,11 +273,5 @@ public class LPMTreeBuilder implements CanBeInterrupted {
         return this.places
                 .stream()
                 .collect(Collectors.toMap(p -> p, p -> counter.getAndIncrement()));
-    }
-
-
-    @Override
-    public void interrupt() {
-        this.stop = true;
     }
 }

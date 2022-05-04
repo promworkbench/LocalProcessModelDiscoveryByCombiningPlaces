@@ -17,7 +17,7 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LP
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilterId;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationAndEvaluationController;
-import org.processmining.placebasedlpmdiscovery.model.InterrupterSubject;
+import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterSubject;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;

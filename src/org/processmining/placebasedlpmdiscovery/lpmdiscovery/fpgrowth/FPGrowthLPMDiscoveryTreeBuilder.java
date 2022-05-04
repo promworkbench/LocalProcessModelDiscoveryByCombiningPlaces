@@ -5,7 +5,7 @@
 //import org.processmining.placebasedlpmdiscovery.Main;
 //import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;
 //import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
-//import org.processmining.placebasedlpmdiscovery.model.CanBeInterrupted;
+//import org.processmining.placebasedlpmdiscovery.model.interruptable.CanBeInterrupted;
 //import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 //import org.processmining.placebasedlpmdiscovery.model.Place;
 //import org.processmining.placebasedlpmdiscovery.model.Transition;
