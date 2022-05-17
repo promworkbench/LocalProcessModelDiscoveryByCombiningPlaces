@@ -160,7 +160,7 @@ public class Main {
 //            ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
 
             // setup the combination controller
-            LPMCombinationController controller = new LPMCombinationController(parameters.getLpmCombinationParameters());
+            LPMCombinationController controller = new LPMCombinationController(parameters);
 
             // set guard
             controller.setCombinationGuard(new AndCombinationGuard(

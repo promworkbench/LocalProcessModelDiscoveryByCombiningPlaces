@@ -1,15 +1,15 @@
-package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
+package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced;
 
 import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
-import prefuse.activity.Activity;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.extra.AbstractActivityMapping;
 
 import java.util.*;
 
-public abstract class AbstractRemappedActivitiesLog<T> extends AbstractEnhancedLog implements RemappedActivitiesLog{
+public abstract class AbstractRemappedActivitiesLog<T> extends AbstractEnhancedLog implements RemappedActivitiesLog<T>{
 
     // The mapping from the original activities in the event log to the integer labels
     protected AbstractActivityMapping<T> mapping;

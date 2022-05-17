@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
+package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.extra;
 
 import java.util.*;
 

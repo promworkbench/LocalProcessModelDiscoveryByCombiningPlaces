@@ -3,17 +3,19 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth;
 import org.apache.commons.math3.util.Pair;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.Main;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.ContextWindowLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
+import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTree;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.WindowLPMTree;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.WindowLPMTreeNode;
-import org.processmining.placebasedlpmdiscovery.model.interruptible.Interruptible;
 import org.processmining.placebasedlpmdiscovery.replayer.Replayer;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummary;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 
@@ -21,19 +23,20 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-public class LPMTreeBuilder extends Interruptible {
+public class ContextLPMTreeBuilder implements CanBeInterrupted {
 
     private final XLog log;
     private final Set<Place> places;
     LPMCombinationParameters parameters;
-    private WindowLog windowLog;
+    private boolean stop;
+    private ContextWindowLog windowLog;
 
-    public LPMTreeBuilder(XLog log, Set<Place> places, LPMCombinationParameters parameters) {
+    public ContextLPMTreeBuilder(XLog log, Set<Place> places, LPMCombinationParameters parameters, Map<String, EventAttributeSummary<?,?>> context) {
         this.log = log;
         this.places = places;
         this.parameters = parameters;
-//        this.stop = false;
-        windowLog = new WindowLog(this.log); // create the integer mapped log
+        this.stop = false;
+        windowLog = new ContextWindowLog(this.log, context); // create the integer mapped log
     }
 
     public MainFPGrowthLPMTree buildTree() {
@@ -61,8 +64,9 @@ public class LPMTreeBuilder extends Interruptible {
 
         // iterate through all traces
         for (Integer traceVariantId : windowLog.getTraceVariantIds()) {
+            List<Integer> traceVariantContext = windowLog.getTraceVariantContext(traceVariantId);
             List<Integer> traceVariant = windowLog.getTraceVariant(traceVariantId);
-            int traceCount = windowLog.getTraceVariantCount(traceVariant);
+            int traceCount = windowLog.getTraceVariantCount(traceVariantContext);
 
             // iterate through all windows in the trace
             LinkedList<Integer> window = new LinkedList<>();
@@ -77,9 +81,12 @@ public class LPMTreeBuilder extends Interruptible {
                     return mainTree;
                 }
 
+                eventPos++;
+                if (!windowLog.isUsable(traceVariantId, eventPos - 1))
+                    continue;
+
                 Main.getAnalyzer().startWindow();
 
-                eventPos++;
                 if (window.size() >= this.parameters.getLpmProximity()) {
                     window.removeFirst();
                     localTree.refreshPosition(eventPos);
@@ -88,6 +95,9 @@ public class LPMTreeBuilder extends Interruptible {
                 windowTotalCounter.update(window, traceCount);
 
                 for (int i = 0; i < window.size() - 1; ++i) {
+                    if (!windowLog.isUsable(traceVariantId, eventPos - window.size() + 1 + i))
+                        continue;
+
                     Set<Place> placesForAddition = inoutTransitionPlacesMap.getOrDefault(
                             new Pair<>(window.get(i), event), new HashSet<>());
                     Set<List<Place>> paths = inoutViaSilentPlaceMap.getOrDefault(
@@ -129,7 +139,7 @@ public class LPMTreeBuilder extends Interruptible {
     }
 
     private void addLocalTreeToMainTree(WindowLPMTree localTree, MainFPGrowthLPMTree mainTree,
-                                        int windowCount, LinkedList<Integer> window, WindowLog windowLog) {
+                                        int windowCount, LinkedList<Integer> window, ContextWindowLog windowLog) {
         // get the null children
         Map<LocalProcessModel, List<Integer>> lpms =
                 getLPMsAndFiringSequences(windowLog.getMapping().getReverseLabelMap(), localTree, window);
@@ -273,5 +283,11 @@ public class LPMTreeBuilder extends Interruptible {
         return this.places
                 .stream()
                 .collect(Collectors.toMap(p -> p, p -> counter.getAndIncrement()));
+    }
+
+
+    @Override
+    public void interrupt() {
+        this.stop = true;
     }
 }

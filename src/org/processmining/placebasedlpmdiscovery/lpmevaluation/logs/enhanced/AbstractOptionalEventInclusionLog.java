@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
+package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced;
 
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;

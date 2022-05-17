@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
+package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.extra;
 
 public class IntegerActivityMapping extends AbstractActivityMapping<Integer> {
 
