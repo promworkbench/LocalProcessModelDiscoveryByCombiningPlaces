@@ -177,8 +177,9 @@ public class PlaceBasedLPMDiscoveryPlugin {
 		Main.setUp(context);
 
 		PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
+		PlaceSet places = new PlaceSet(getPlacesFromPetriNet(context, petrinet));
 
-		return Main.run(getPlacesFromPetriNet(context, petrinet), log, parameters);
+		return run(context, log, places, parameters);
 	}
 
 	@PluginVariant(
@@ -186,8 +187,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
 			requiredParameterLabels = {0, 3}
 	)
 	public static Object[] mineLPMs(PluginContext context, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
-		Main.setUp(context);
-		return Main.run(log, parameters);
+		return run(context, log, parameters);
 	}
 
 	@PluginVariant(
@@ -195,7 +195,18 @@ public class PlaceBasedLPMDiscoveryPlugin {
 			requiredParameterLabels = {0, 1, 3}
 	)
 	public static Object[] mineLPMs(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
+		return run(context, log, placeSet, parameters);
+	}
+
+	private static Object[] run(PluginContext context, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
+		Main.setUp(context);
+		return Main.run(log, parameters);
+	}
+
+	private static Object[] run(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
 		Main.setUp(context);
 		return Main.run(placeSet.getElements(), log, parameters);
 	}
+
+
 }
