@@ -23,11 +23,9 @@ public class PlaceDiscovery {
      * @return set of places
      */
     public static PlaceDiscoveryResult discover(XLog log, PlaceDiscoveryParameters parameters) {
-        PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
+        PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory(); // TODO: Why not using the factory directly?
         PlaceDiscoveryAlgorithm<? extends PlaceDiscoveryParameters, ?> algorithm = parameters.getAlgorithm(factory);
-        PlaceDiscoveryResult result = algorithm.getPlaces(log);
-        if (result.getLog() == null)
-            result.setLog(log);
-        return result;
+        PlaceDiscoveryResult places = algorithm.getPlaces(log);
+        return places;
     }
 }
