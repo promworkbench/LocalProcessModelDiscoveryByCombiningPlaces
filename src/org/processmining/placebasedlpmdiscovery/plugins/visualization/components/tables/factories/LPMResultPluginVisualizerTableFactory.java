@@ -1,22 +1,13 @@
 package org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.factories;
 
-import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
-import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.PluginVisualizerTable;
-import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.PluginVisualizerTableColumnModel;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.PluginVisualizerTableModel;
-import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.TableListener;
-import org.processmining.placebasedlpmdiscovery.plugins.visualization.visualizers.LocalProcessModelVisualizer;
 
-import javax.swing.*;
-import javax.swing.table.TableRowSorter;
-import java.awt.*;
 import java.text.DecimalFormat;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,21 +22,20 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
         return -1;
     }
 
-    public PluginVisualizerTable<LocalProcessModel> getPluginVisualizerTable(SerializableCollection<LocalProcessModel> result,
-                                                                             TableListener<LocalProcessModel> listener,
-                                                                             UIPluginContext context) {
-        // create map of (index, LPM)
-        Iterator<LocalProcessModel> lpmIterator = result.getElements().iterator();
-        Map<Integer, LocalProcessModel> lpmIndexMap = IntStream
-                .range(0, result.size())
+    @Override
+    protected Map<Integer, LocalProcessModel> getIndexObjectMap(SerializableCollection<LocalProcessModel> elements) {
+        Iterator<LocalProcessModel> lpmIterator = elements.getElements().iterator();
+        return IntStream
+                .range(0, elements.size())
                 .boxed()
                 .collect(Collectors.toMap(i -> i, i -> lpmIterator.next()));
+    }
 
-        PluginVisualizerTable<LocalProcessModel> table = new PluginVisualizerTable<>(lpmIndexMap); // create table
-        // create table model
+    @Override
+    protected PluginVisualizerTableModel<LocalProcessModel> createTableModel(Map<Integer, LocalProcessModel> indexObjectMap) {
         DecimalFormat df = new DecimalFormat("#.###");
-        PluginVisualizerTableModel<LocalProcessModel> tableModel = new PluginVisualizerTableModel<>(
-                lpmIndexMap,
+        return new PluginVisualizerTableModel<>(
+                indexObjectMap,
                 new String[]{
                         "LPM Index",
                         "LPM Short Name",
@@ -67,36 +57,5 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
                         df.format(lpm.getAdditionalInfo().getEvaluationResult()
                                 .getResult(new EvaluationResultAggregateOperation()))
                 });
-        table.setModel(tableModel); // set the table model
-        table.setColumnModel(new PluginVisualizerTableColumnModel()); // set the column model
-        table.createDefaultColumnsFromModel(); // create the columns from the model
-        ((PluginVisualizerTableColumnModel) table.getColumnModel()).keepOnlyFirstColumn(); // in the beginning show only the first column
-        // create sorter for the columns
-        table.setRowSorter(new TableRowSorter<PluginVisualizerTableModel<LocalProcessModel>>(
-                //(PluginVisualizerTableModel<LocalProcessModel>) table.getModel()) {
-                tableModel) {
-            @Override
-            public Comparator<?> getComparator(int column) {
-                if (column == 0)
-                    return Comparator.comparingInt(o -> Integer.parseInt((String) o));
-                else if (column > 1)
-                    return Comparator.comparingDouble(o -> Double.parseDouble((String) o));
-                return super.getComparator(column);
-            }
-        });
-        table.setAutoCreateColumnsFromModel(true); // auto create the columns from the model
-        table.setFillsViewportHeight(true); // make the table fill all available height
-        // set the row selection to single row
-        table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        // add selection listener
-        table.getSelectionModel().addListSelectionListener(listSelectionEvent -> {
-            if (listSelectionEvent.getValueIsAdjusting()) // if the value is adjusting
-                return; // don't do anything
-
-            listener.newSelection(lpmIndexMap.get(table.convertRowIndexToModel(table.getSelectedRow())));
-        });
-        // select the first row in the beginning
-        table.changeSelection(0, 0, false, false);
-        return table;
     }
 }
