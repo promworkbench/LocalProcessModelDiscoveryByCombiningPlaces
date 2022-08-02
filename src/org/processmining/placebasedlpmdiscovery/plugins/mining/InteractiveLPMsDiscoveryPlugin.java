@@ -50,6 +50,6 @@ public class InteractiveLPMsDiscoveryPlugin {
             return null;
         }
 
-        return new InteractiveLPMsDiscovery(parameters);
+        return new InteractiveLPMsDiscovery(context, parameters, log);
     }
 }

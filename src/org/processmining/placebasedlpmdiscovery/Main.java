@@ -80,7 +80,7 @@ public class Main {
                             + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());
             ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
 
-            lpmResult = Main.discover(result.getPlaces(), result.getLog(), parameters);
+            lpmResult = Main.discover(result.getPlaces(), log, parameters);
             statistics = Analyzer.getStatistics();
         } finally {
             Analyzer.totalExecution.stop();
