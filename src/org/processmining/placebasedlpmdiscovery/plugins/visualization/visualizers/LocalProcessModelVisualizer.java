@@ -24,12 +24,17 @@ public class LocalProcessModelVisualizer {
             throw new IllegalArgumentException("The local process model to be visualized should not be null: " + lpm);
         AcceptingPetriNet net = LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
         ReduceUsingMurataRulesPlugin reductorPlugin = new ReduceUsingMurataRulesPlugin();
-        net = reductorPlugin.runDefault(Main.getContext(), net);
+        net = reductorPlugin.runDefault(context, net);
 
         JComponent component = new JPanel();
         component.setLayout(new BoxLayout(component, BoxLayout.X_AXIS));
         component.add((new CustomAcceptingPetriNetVisualizer()).visualize(context, net));
-        component.add(ComponentFactory.getComplexEvaluationResultComponent(lpm.getAdditionalInfo().getEvaluationResult()));
+
+        JComponent evalComponent = new JPanel();
+        evalComponent.setLayout(new BoxLayout(evalComponent, BoxLayout.Y_AXIS));
+        evalComponent.add(ComponentFactory.getComplexEvaluationResultComponent(lpm.getAdditionalInfo().getEvaluationResult()));
+        evalComponent.add(new JLabel("Histogram"));
+        component.add(evalComponent);
         return component;
     }
 }

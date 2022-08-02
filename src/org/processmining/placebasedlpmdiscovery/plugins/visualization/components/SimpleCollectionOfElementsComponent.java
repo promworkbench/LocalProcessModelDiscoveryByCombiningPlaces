@@ -19,7 +19,7 @@ import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.io.Serializable;
 
-public class TableAndVisualizerForCollectionOfElementsComponent<T extends TextDescribable & Serializable>
+public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Serializable>
         extends JComponent implements TableListener<T> {
 
     private final UIPluginContext context;
@@ -29,9 +29,9 @@ public class TableAndVisualizerForCollectionOfElementsComponent<T extends TextDe
     private JComponent visualizerComponent;
     private JComponent tableContainer;
 
-    public TableAndVisualizerForCollectionOfElementsComponent(UIPluginContext context,
-                                                              SerializableCollection<T> result,
-                                                              AbstractPluginVisualizerTableFactory<T> tableFactory) {
+    public SimpleCollectionOfElementsComponent(UIPluginContext context,
+                                               SerializableCollection<T> result,
+                                               AbstractPluginVisualizerTableFactory<T> tableFactory) {
         this.context = context;
         this.result = result;
         this.tableFactory = tableFactory;
