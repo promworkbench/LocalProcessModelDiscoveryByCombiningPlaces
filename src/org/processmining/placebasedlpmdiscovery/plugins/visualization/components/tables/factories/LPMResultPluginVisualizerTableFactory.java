@@ -9,6 +9,7 @@ import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableC
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.PluginVisualizerTable;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.PluginVisualizerTableColumnModel;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.PluginVisualizerTableModel;
+import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.TableListener;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.visualizers.LocalProcessModelVisualizer;
 
 import javax.swing.*;
@@ -31,7 +32,7 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
     }
 
     public PluginVisualizerTable<LocalProcessModel> getPluginVisualizerTable(SerializableCollection<LocalProcessModel> result,
-                                                                             JComponent visualizerComponent,
+                                                                             TableListener<LocalProcessModel> listener,
                                                                              UIPluginContext context) {
         // create map of (index, LPM)
         Iterator<LocalProcessModel> lpmIterator = result.getElements().iterator();
@@ -72,7 +73,8 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
         ((PluginVisualizerTableColumnModel) table.getColumnModel()).keepOnlyFirstColumn(); // in the beginning show only the first column
         // create sorter for the columns
         table.setRowSorter(new TableRowSorter<PluginVisualizerTableModel<LocalProcessModel>>(
-                (PluginVisualizerTableModel<LocalProcessModel>) table.getModel()) {
+                //(PluginVisualizerTableModel<LocalProcessModel>) table.getModel()) {
+                tableModel) {
             @Override
             public Comparator<?> getComparator(int column) {
                 if (column == 0)
@@ -91,18 +93,7 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
             if (listSelectionEvent.getValueIsAdjusting()) // if the value is adjusting
                 return; // don't do anything
 
-            // if in the visualizer component there is a LPM drawn
-            if (visualizerComponent.getComponents().length >= 1)
-                visualizerComponent.remove(0); // remove it
-            // create the visualizer
-            LocalProcessModelVisualizer visualizer = new LocalProcessModelVisualizer();
-            // add visualization for the newly selected LPM
-            visualizerComponent.add(
-                    visualizer.visualize(
-                            context,
-                            lpmIndexMap.get(table.convertRowIndexToModel(table.getSelectedRow()))),
-                    BorderLayout.CENTER);
-            visualizerComponent.revalidate(); // revalidate the component
+            listener.newSelection(lpmIndexMap.get(table.convertRowIndexToModel(table.getSelectedRow())));
         });
         // select the first row in the beginning
         table.changeSelection(0, 0, false, false);

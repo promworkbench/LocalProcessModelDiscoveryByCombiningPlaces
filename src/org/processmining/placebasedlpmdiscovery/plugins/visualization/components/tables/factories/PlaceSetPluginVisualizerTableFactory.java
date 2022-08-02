@@ -6,6 +6,7 @@ import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableC
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.PluginVisualizerTable;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.PluginVisualizerTableColumnModel;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.PluginVisualizerTableModel;
+import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.TableListener;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.visualizers.PlaceVisualizer;
 
 import javax.swing.*;
@@ -20,7 +21,7 @@ import java.util.stream.IntStream;
 public class PlaceSetPluginVisualizerTableFactory extends AbstractPluginVisualizerTableFactory<Place> {
 
     public PluginVisualizerTable<Place> getPluginVisualizerTable(SerializableCollection<Place> result,
-                                                                 JComponent visualizerComponent,
+                                                                 TableListener<Place> listener,
                                                                  UIPluginContext context) {
         // create map of (index, LPM)
         final Iterator<Place> placeIterator = result.getElements().iterator();
@@ -61,18 +62,7 @@ public class PlaceSetPluginVisualizerTableFactory extends AbstractPluginVisualiz
             if (listSelectionEvent.getValueIsAdjusting()) // if the value is adjusting
                 return; // don't do anything
 
-            // if in the visualizer component there is a Place drawn
-            if (visualizerComponent.getComponents().length >= 1)
-                visualizerComponent.remove(0); // remove it
-            // create the visualizer
-            PlaceVisualizer visualizer = new PlaceVisualizer();
-            // add visualization for the newly selected Place
-            visualizerComponent.add(
-                    visualizer.visualize(
-                            context,
-                            placeIndexMap.get(table.convertRowIndexToModel(table.getSelectedRow()))),
-                    BorderLayout.CENTER);
-            visualizerComponent.revalidate(); // revalidate the component
+            listener.newSelection(placeIndexMap.get(table.convertRowIndexToModel(table.getSelectedRow())));
         });
         // select the first row in the beginning
         table.changeSelection(0, 0, false, false);
