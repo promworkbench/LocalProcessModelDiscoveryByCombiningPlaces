@@ -19,7 +19,7 @@ public class InteractiveLPMsDiscovery {
         this.parameters = parameters;
 
         Main.setUp(context);
-        this.lpmResult = (LPMResult) Main.run(log, parameters)[0];
+//        this.lpmResult = (LPMResult) Main.run(log, parameters)[0];
     }
 
     public JComponent getComponentForContext(final UIPluginContext context) {
