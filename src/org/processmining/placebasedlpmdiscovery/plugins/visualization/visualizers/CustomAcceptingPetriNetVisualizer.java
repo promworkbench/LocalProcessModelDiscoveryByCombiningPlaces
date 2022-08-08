@@ -1,8 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.plugins.visualization.visualizers;
 
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
-import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.Visualizer;
+import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.models.graphbased.AttributeMap;
@@ -24,7 +24,7 @@ public class CustomAcceptingPetriNetVisualizer {
             userAccessible = false)
     @Visualizer
     @PluginVariant(requiredParameterLabels = {0})
-    public JComponent visualize(UIPluginContext context, AcceptingPetriNet net) {
+    public JComponent visualize(PluginContext context, AcceptingPetriNet net) {
         ViewSpecificAttributeMap map = new ViewSpecificAttributeMap();
         for (Place place : net.getInitialMarking().baseSet()) {
             map.putViewSpecific(place, AttributeMap.FILLCOLOR, new Color(127, 0, 0));

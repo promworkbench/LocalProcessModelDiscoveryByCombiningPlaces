@@ -4,6 +4,7 @@ import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.acceptingpetrinetclassicalreductor.plugins.ReduceUsingMurataRulesPlugin;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.Visualizer;
+import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.placebasedlpmdiscovery.Main;
@@ -19,7 +20,7 @@ public class LocalProcessModelVisualizer {
             returnTypes = {JComponent.class}, parameterLabels = {"Local Process Model"}, userAccessible = false)
     @Visualizer
     @PluginVariant(requiredParameterLabels = {0})
-    public JComponent visualize(UIPluginContext context, LocalProcessModel lpm) {
+    public JComponent visualize(PluginContext context, LocalProcessModel lpm) {
         if (lpm == null)
             throw new IllegalArgumentException("The local process model to be visualized should not be null: " + lpm);
         AcceptingPetriNet net = LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);

@@ -28,7 +28,8 @@ public class MainGUI extends JFrame {
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
-        contentPane.add(getDummyDiscovery().getComponentForContext(null));
+        PluginContext context = new CLIPluginContext(new CLIContext(), "");
+        contentPane.add(getDummyDiscovery().getComponentForContext());
         setContentPane(contentPane);
     }
 
