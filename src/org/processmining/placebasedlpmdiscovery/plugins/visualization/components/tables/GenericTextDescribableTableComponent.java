@@ -8,11 +8,11 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Map;
 
-public class PluginVisualizerTable<T extends TextDescribable> extends JTable {
+public class GenericTextDescribableTableComponent<T extends TextDescribable> extends JTable {
 
     private final Map<Integer, T> indexMap;
 
-    public PluginVisualizerTable(Map<Integer, T> indexMap) {
+    public GenericTextDescribableTableComponent(Map<Integer, T> indexMap) {
         this.indexMap = indexMap;
     }
 
@@ -36,8 +36,8 @@ public class PluginVisualizerTable<T extends TextDescribable> extends JTable {
             return null;
 
         int row = this.rowAtPoint(event.getPoint());
-        int lpmInd = this.getRowSorter().convertRowIndexToModel(row);
-        return this.indexMap.containsKey(lpmInd) ?
-                this.indexMap.get(lpmInd).getShortString() : null;
+        int ind = this.getRowSorter().convertRowIndexToModel(row);
+        return this.indexMap.containsKey(ind) ?
+                this.indexMap.get(ind).getShortString() : null;
     }
 }

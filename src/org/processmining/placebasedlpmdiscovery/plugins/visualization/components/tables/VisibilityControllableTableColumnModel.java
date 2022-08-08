@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-public class PluginVisualizerTableColumnModel extends DefaultTableColumnModel {
+public class VisibilityControllableTableColumnModel extends DefaultTableColumnModel {
     private static final long serialVersionUID = -4792541007726925693L;
     private final Map<TableColumn, Boolean> columnVisibilityMap;
     protected Vector<TableColumn> allTableColumns;
 
-    public PluginVisualizerTableColumnModel() {
+    public VisibilityControllableTableColumnModel() {
         super();
         this.allTableColumns = new Vector<>();
         this.columnVisibilityMap = new HashMap<>();

@@ -1,12 +1,11 @@
 package org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.factories;
 
-import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.placebasedlpmdiscovery.model.TextDescribable;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
-import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.PluginVisualizerTable;
-import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.PluginVisualizerTableColumnModel;
-import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.PluginVisualizerTableModel;
+import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.CustomObjectTableModel;
+import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.GenericTextDescribableTableComponent;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.TableListener;
+import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.VisibilityControllableTableColumnModel;
 
 import javax.swing.*;
 import javax.swing.table.TableRowSorter;
@@ -16,21 +15,19 @@ import java.util.Map;
 
 public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescribable & Serializable> {
 
-    public PluginVisualizerTable<T> getPluginVisualizerTable(SerializableCollection<T> result,
-                                                                      TableListener<T> listener,
-                                                                      UIPluginContext context) {
+    public GenericTextDescribableTableComponent<T> getPluginVisualizerTable(SerializableCollection<T> result, TableListener<T> listener) {
 
         // create table
         Map<Integer, T> indexObjectMap = getIndexObjectMap(result);
-        PluginVisualizerTable<T> table = new PluginVisualizerTable<>(indexObjectMap);
+        GenericTextDescribableTableComponent<T> table = new GenericTextDescribableTableComponent<>(indexObjectMap);
 
         // set table model
-        PluginVisualizerTableModel<T> tableModel = createTableModel(indexObjectMap);
+        CustomObjectTableModel<T> tableModel = createTableModel(indexObjectMap);
         table.setModel(tableModel); // set the table model
-        table.setColumnModel(new PluginVisualizerTableColumnModel()); // set the column model
+        table.setColumnModel(new VisibilityControllableTableColumnModel()); // set the column model
         table.createDefaultColumnsFromModel(); // create the columns from the model
-        ((PluginVisualizerTableColumnModel) table.getColumnModel()).keepOnlyFirstColumn(); // in the beginning show only the first column
-        table.setRowSorter(new TableRowSorter<PluginVisualizerTableModel<T>>(
+        ((VisibilityControllableTableColumnModel) table.getColumnModel()).keepOnlyFirstColumn(); // in the beginning show only the first column
+        table.setRowSorter(new TableRowSorter<CustomObjectTableModel<T>>(
                 tableModel) {
             @Override
             public Comparator<?> getComparator(int column) {
@@ -59,6 +56,6 @@ public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescrib
 
     protected abstract Map<Integer,T> getIndexObjectMap(SerializableCollection<T> elements);
 
-    protected abstract PluginVisualizerTableModel<T> createTableModel(Map<Integer, T> indexObjectMap);
+    protected abstract CustomObjectTableModel<T> createTableModel(Map<Integer, T> indexObjectMap);
 
 }

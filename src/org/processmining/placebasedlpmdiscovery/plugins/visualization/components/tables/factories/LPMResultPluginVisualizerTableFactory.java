@@ -5,7 +5,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEval
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
-import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.PluginVisualizerTableModel;
+import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.CustomObjectTableModel;
 
 import java.text.DecimalFormat;
 import java.util.Iterator;
@@ -32,9 +32,9 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
     }
 
     @Override
-    protected PluginVisualizerTableModel<LocalProcessModel> createTableModel(Map<Integer, LocalProcessModel> indexObjectMap) {
+    protected CustomObjectTableModel<LocalProcessModel> createTableModel(Map<Integer, LocalProcessModel> indexObjectMap) {
         DecimalFormat df = new DecimalFormat("#.###");
-        return new PluginVisualizerTableModel<>(
+        return new CustomObjectTableModel<>(
                 indexObjectMap,
                 new String[]{
                         "LPM Index",

@@ -4,13 +4,13 @@ import javax.swing.table.DefaultTableModel;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-public class PluginVisualizerTableModel<T> extends DefaultTableModel {
+public class CustomObjectTableModel<T> extends DefaultTableModel {
 
     private static final long serialVersionUID = -1387582980490254274L;
 
-    public PluginVisualizerTableModel(Map<Integer, T> indexMap,
-                                      String[] columnNames,
-                                      BiFunction<Integer, T, Object[]> objectToColumnsMapper) {
+    public CustomObjectTableModel(Map<Integer, T> indexMap,
+                                  String[] columnNames,
+                                  BiFunction<Integer, T, Object[]> objectToColumnsMapper) {
         super(getTableData(indexMap, objectToColumnsMapper), columnNames);
     }
 

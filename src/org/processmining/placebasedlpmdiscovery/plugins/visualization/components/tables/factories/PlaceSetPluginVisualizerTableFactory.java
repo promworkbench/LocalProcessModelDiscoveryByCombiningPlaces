@@ -2,7 +2,7 @@ package org.processmining.placebasedlpmdiscovery.plugins.visualization.component
 
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
-import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.PluginVisualizerTableModel;
+import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.CustomObjectTableModel;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -21,8 +21,8 @@ public class PlaceSetPluginVisualizerTableFactory extends AbstractPluginVisualiz
     }
 
     @Override
-    protected PluginVisualizerTableModel<Place> createTableModel(Map<Integer, Place> indexObjectMap) {
-        return new PluginVisualizerTableModel<>(
+    protected CustomObjectTableModel<Place> createTableModel(Map<Integer, Place> indexObjectMap) {
+        return new CustomObjectTableModel<>(
                 indexObjectMap,
                 new String[]{"Place Index", "Place Short Name"},
                 (ind, place) -> new Object[]{
