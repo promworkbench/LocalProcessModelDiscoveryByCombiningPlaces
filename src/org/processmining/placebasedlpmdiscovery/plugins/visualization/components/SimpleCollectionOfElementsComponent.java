@@ -6,6 +6,7 @@ import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.TextDescribable;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.TableComposition;
+import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.TableListener;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.factories.AbstractPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.visualizers.LocalProcessModelVisualizer;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.visualizers.PlaceVisualizer;
@@ -15,7 +16,7 @@ import java.awt.*;
 import java.io.Serializable;
 
 public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Serializable>
-        extends JComponent implements WeirdComponentController<T> {
+        extends JComponent implements TableListener<T>, ComponentListener {
 
     private final UIPluginContext context;
     private final SerializableCollection<T> result;

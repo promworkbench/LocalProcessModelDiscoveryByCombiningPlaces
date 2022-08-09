@@ -4,7 +4,6 @@ import org.processmining.placebasedlpmdiscovery.model.TextDescribable;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.ComponentId;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.ICommunicativePanel;
-import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.WeirdComponentController;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.factories.AbstractPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.utils.RegexConverter;
 
@@ -19,11 +18,11 @@ public class TableComposition<T extends TextDescribable & Serializable> extends 
     private final ComponentId componentId;
     private final SerializableCollection<T> result;
     private final AbstractPluginVisualizerTableFactory<T> tableFactory;
-    private final WeirdComponentController<T> controller;
+    private final TableListener<T> controller;
 
     public TableComposition(SerializableCollection<T> result,
                             AbstractPluginVisualizerTableFactory<T> tableFactory,
-                            WeirdComponentController<T> controller) {
+                            TableListener<T> controller) {
         this.componentId = new ComponentId(ComponentId.Type.TableComponent);
         this.result = result;
         this.tableFactory = tableFactory;

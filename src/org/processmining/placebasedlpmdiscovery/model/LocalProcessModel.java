@@ -1,5 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.model;
 
+import org.processmining.models.graphbased.NodeID;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
 
 import java.io.Serializable;
@@ -209,5 +210,9 @@ public class LocalProcessModel implements Serializable, TextDescribable {
         for (Place place : places)
             sb.append(place.getShortString());
         return sb.toString();
+    }
+
+    public Place getPlace(NodeID id) {
+        return null;
     }
 }

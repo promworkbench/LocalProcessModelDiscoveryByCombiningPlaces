@@ -3,22 +3,25 @@ package org.processmining.placebasedlpmdiscovery.plugins.visualization.controlle
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.models.graphbased.AttributeMap;
 import org.processmining.models.graphbased.ViewSpecificAttributeMap;
+import org.processmining.models.graphbased.directed.DirectedGraphNode;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetGraph;
 import org.processmining.models.graphbased.directed.petrinet.elements.Place;
 import org.processmining.models.jgraph.ProMJGraphVisualizer;
 import org.processmining.models.jgraph.visualization.ProMJGraphPanel;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.ComponentId;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.SettablePanelContainer;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.WeirdComponentController;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.TableComposition;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.factories.LPMResultPluginVisualizerTableFactory;
-import org.processmining.placebasedlpmdiscovery.plugins.visualization.visualizers.LocalProcessModelVisualizer;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class InteractiveLPMsDiscoveryController implements WeirdComponentController<LocalProcessModel> {
 
@@ -70,7 +73,7 @@ public class InteractiveLPMsDiscoveryController implements WeirdComponentControl
         gbc.weighty = 1;
         this.settablePanels.setLayout(new GridBagLayout());
 
-        addLpmVisualizerPanel();
+        addLpmGraphPanel();
 
         gbc.gridx = 0;
         gbc.gridy = 1;
@@ -89,7 +92,7 @@ public class InteractiveLPMsDiscoveryController implements WeirdComponentControl
         this.settablePanels.add(new SettablePanelContainer(), gbc);
     }
 
-    private void addLpmVisualizerPanel() {
+    private void addLpmGraphPanel() {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
@@ -102,20 +105,6 @@ public class InteractiveLPMsDiscoveryController implements WeirdComponentControl
         this.lpmGraphPanel.setLayout(new BorderLayout());
 
         this.settablePanels.add(this.lpmGraphPanel, gbc);
-    }
-
-    public JComponent getComponent() {
-        return container;
-    }
-
-    @Override
-    public void componentExpansion(ComponentId componentId, boolean expanded) {
-
-    }
-
-    @Override
-    public void newSelection(LocalProcessModel selectedObject) {
-        updateLpmGraphPanel(selectedObject);
     }
 
     private void updateLpmGraphPanel (LocalProcessModel selectedObject) {
@@ -133,11 +122,45 @@ public class InteractiveLPMsDiscoveryController implements WeirdComponentControl
         }
 
         ProMJGraphPanel proMJGraphPanel = ProMJGraphVisualizer.instance().visualizeGraph(context, net, map);
+        proMJGraphPanel.getGraph().addGraphSelectionListener(e -> {
+            if (proMJGraphPanel.getSelectedNodes().size() > 1) return;
+
+            List<DirectedGraphNode> collect = proMJGraphPanel.getSelectedNodes().stream().limit(1).collect(Collectors.toList());
+            if (collect.isEmpty()) return;
+
+            DirectedGraphNode node = collect.get(0);
+            if (node instanceof Place)
+                placeSelected(selectedObject.getPlace(((Place) node).getId()));
+        });
 
         this.lpmGraphPanel.add(
                 proMJGraphPanel,
                 BorderLayout.CENTER);
 
         this.lpmGraphPanel.revalidate(); // revalidate the component
+    }
+
+    public JComponent getComponent() {
+        return container;
+    }
+
+    @Override
+    public void componentExpansion(ComponentId componentId, boolean expanded) {
+
+    }
+
+    @Override
+    public void newSelection(LocalProcessModel selectedObject) {
+        updateLpmGraphPanel(selectedObject);
+    }
+
+    @Override
+    public void placeSelected(org.processmining.placebasedlpmdiscovery.model.Place p) {
+
+    }
+
+    @Override
+    public void transitionSelected(Transition t) {
+
     }
 }

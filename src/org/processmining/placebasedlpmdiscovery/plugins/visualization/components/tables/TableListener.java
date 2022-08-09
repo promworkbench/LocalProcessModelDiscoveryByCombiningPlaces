@@ -1,6 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables;
 
-public interface TableListener<T> {
+import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.ComponentListener;
+
+public interface TableListener<T> extends ComponentListener {
 
     void newSelection(T selectedObject);
 }
