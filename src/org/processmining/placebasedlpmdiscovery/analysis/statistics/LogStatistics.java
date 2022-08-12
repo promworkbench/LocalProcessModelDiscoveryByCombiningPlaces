@@ -69,7 +69,7 @@ public class LogStatistics implements IStatistics {
         this.activitiesCount = activitiesCount;
     }
 
-    public void setWindowSize(int wcdindowSize) {
+    public void setWindowSize(int windowSize) {
         this.windowSize = windowSize;
     }
 
@@ -79,5 +79,33 @@ public class LogStatistics implements IStatistics {
         } else {
             this.logName = logName;
         }
+    }
+
+    public String getLogName() {
+        return logName;
+    }
+
+    public Integer getAllWindowsCount() {
+        return allWindowsCount;
+    }
+
+    public int getDistinctWindowsCount() {
+        return distinctWindowsCount;
+    }
+
+    public int getTraceVariantsCount() {
+        return traceVariantsCount;
+    }
+
+    public int getTraceVariantsTotalEvents() {
+        return traceVariantsTotalEvents;
+    }
+
+    public int getActivitiesCount() {
+        return activitiesCount;
+    }
+
+    public int getWindowSize() {
+        return windowSize;
     }
 }

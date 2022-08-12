@@ -17,8 +17,12 @@ public class SettablePanelContainer extends JPanel {
     public SettablePanelContainer(SettableComponentFactory settableComponentsFactory) {
         this.settableComponentsFactory = settableComponentsFactory;
 
+        int windowHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+        int windowWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+
         this.setLayout(new BorderLayout());
         this.setBorder(BorderUIResource.getEtchedBorderUIResource());
+        this.setMaximumSize(new Dimension(25 * windowWidth / 100, 50 * windowHeight / 100));
 
         this.header = new JPanel();
         this.header.setLayout(new FlowLayout());
@@ -27,7 +31,10 @@ public class SettablePanelContainer extends JPanel {
         this.add(this.header, BorderLayout.PAGE_START);
 
         this.content = new JPanel();
-        this.content.setLayout(new BoxLayout(this.content, BoxLayout.X_AXIS));
+        this.content.setMaximumSize(new Dimension(25 * windowWidth / 100, 45 * windowHeight / 100));
+        this.content.setMinimumSize(new Dimension(25 * windowWidth / 100, 45 * windowHeight / 100));
+        this.content.setPreferredSize(new Dimension(25 * windowWidth / 100, 45 * windowHeight / 100));
+        this.content.setLayout(new BorderLayout());
         this.add(this.content, BorderLayout.CENTER);
     }
 
@@ -52,7 +59,7 @@ public class SettablePanelContainer extends JPanel {
         if (this.content.getComponents().length > 0) {
             this.content.remove(0);
         }
-        this.content.add(this.settableComponentsFactory.getComponent(type));
+        this.content.add(this.settableComponentsFactory.getComponent(type), BorderLayout.CENTER);
         this.content.revalidate();
     }
 }

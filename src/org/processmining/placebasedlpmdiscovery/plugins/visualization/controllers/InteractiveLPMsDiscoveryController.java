@@ -8,6 +8,7 @@ import org.processmining.models.graphbased.directed.petrinet.PetrinetGraph;
 import org.processmining.models.graphbased.directed.petrinet.elements.Place;
 import org.processmining.models.jgraph.ProMJGraphVisualizer;
 import org.processmining.models.jgraph.visualization.ProMJGraphPanel;
+import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
@@ -27,7 +28,10 @@ import java.util.stream.Collectors;
 public class InteractiveLPMsDiscoveryController implements WeirdComponentController<LocalProcessModel> {
 
     private final LPMResult result;
+    private final Statistics statistics;
     private final PluginContext context;
+
+    private SettableComponentFactory scf;
 
     // main panels
     private JComponent container;
@@ -35,8 +39,9 @@ public class InteractiveLPMsDiscoveryController implements WeirdComponentControl
     private JComponent settablePanels;
     private JComponent lpmGraphPanel;
 
-    public InteractiveLPMsDiscoveryController(LPMResult lpmResult, PluginContext context) {
+    public InteractiveLPMsDiscoveryController(LPMResult lpmResult, Statistics statistics, PluginContext context) {
         this.result = lpmResult;
+        this.statistics = statistics;
         this.context = context;
 
         init();
@@ -66,7 +71,8 @@ public class InteractiveLPMsDiscoveryController implements WeirdComponentControl
     }
 
     private void initSettablePanels() {
-        SettableComponentFactory scf = new SettableComponentFactory();
+        this.scf = new SettableComponentFactory();
+        this.scf.setStatistics(statistics);
 
         // set up the layout of this component
         this.settablePanels = new JPanel();
@@ -156,6 +162,7 @@ public class InteractiveLPMsDiscoveryController implements WeirdComponentControl
     @Override
     public void newSelection(LocalProcessModel selectedObject) {
         updateLpmGraphPanel(selectedObject);
+        scf.setSelectedLpm(selectedObject);
     }
 
     @Override
