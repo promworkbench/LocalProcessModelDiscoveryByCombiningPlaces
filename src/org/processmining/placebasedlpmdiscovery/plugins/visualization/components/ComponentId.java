@@ -5,9 +5,11 @@ import java.util.UUID;
 public class ComponentId {
 
     public enum Type {
+        Empty,
         TableComponent,
         LPMVisualizer,
-        LogStatistics
+        LogStatistics,
+        BasicLPMEvalMetrics
     }
 
     private final Type type;

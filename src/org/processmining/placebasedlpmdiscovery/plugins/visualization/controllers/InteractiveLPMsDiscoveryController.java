@@ -12,6 +12,7 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.ComponentId;
+import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.SettableComponentFactory;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.SettablePanelContainer;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.WeirdComponentController;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.TableComposition;
@@ -65,31 +66,34 @@ public class InteractiveLPMsDiscoveryController implements WeirdComponentControl
     }
 
     private void initSettablePanels() {
+        SettableComponentFactory scf = new SettableComponentFactory();
+
         // set up the layout of this component
         this.settablePanels = new JPanel();
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1;
         gbc.weighty = 1;
+        gbc.insets = new Insets(3, 3, 3, 3);
         this.settablePanels.setLayout(new GridBagLayout());
 
         addLpmGraphPanel();
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        this.settablePanels.add(new SettablePanelContainer(), gbc);
+        this.settablePanels.add(new SettablePanelContainer(scf), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 1;
-        this.settablePanels.add(new SettablePanelContainer(), gbc);
+        this.settablePanels.add(new SettablePanelContainer(scf), gbc);
 
         gbc.gridx = 2;
         gbc.gridy = 0;
-        this.settablePanels.add(new SettablePanelContainer(), gbc);
+        this.settablePanels.add(new SettablePanelContainer(scf), gbc);
 
         gbc.gridx = 2;
         gbc.gridy = 1;
-        this.settablePanels.add(new SettablePanelContainer(), gbc);
+        this.settablePanels.add(new SettablePanelContainer(scf), gbc);
     }
 
     private void addLpmGraphPanel() {
