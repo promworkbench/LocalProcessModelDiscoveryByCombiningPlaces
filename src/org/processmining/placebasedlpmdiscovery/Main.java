@@ -80,7 +80,7 @@ public class Main {
                             + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());
             ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
 
-            lpmResult = Main.discover(result.getPlaces(), result.getLog(), parameters);
+            lpmResult = Main.discover(result.getPlaces(), log, parameters);
             statistics = Analyzer.getStatistics();
         } finally {
             Analyzer.totalExecution.stop();
@@ -138,11 +138,11 @@ public class Main {
             // analyze log
             Analyzer.logAnalyzer.analyze(parameters.getLpmCombinationParameters().getLpmProximity());
             LEFRMatrix lefrMatrix = Analyzer.logAnalyzer.getLEFRMatrix(parameters.getLpmCombinationParameters().getLpmProximity());
-            Main.getContext().getProvidedObjectManager()
-                    .createProvidedObject("LEFR - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
-                                    + log.getAttributes().get("concept:name"), lefrMatrix, LEFRMatrix.class,
-                            Main.getContext());
-            ProvidedObjectHelper.setFavorite(Main.getContext(), lefrMatrix);
+//            Main.getContext().getProvidedObjectManager()
+//                    .createProvidedObject("LEFR - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
+//                                    + log.getAttributes().get("concept:name"), lefrMatrix, LEFRMatrix.class,
+//                            Main.getContext());
+//            ProvidedObjectHelper.setFavorite(Main.getContext(), lefrMatrix);
 
             // choose places
             parameters.getPlaceChooserParameters()
@@ -153,10 +153,10 @@ public class Main {
             // export chosen places
             PlaceSet placeSet = new PlaceSet(places);
             placeSet.writePassageUsage(Analyzer.logAnalyzer.getLEFRMatrix(parameters.getLpmCombinationParameters().getLpmProximity()));
-            Main.getContext().getProvidedObjectManager()
-                    .createProvidedObject("Chosen Place Set - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
-                            + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());
-            ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
+//            Main.getContext().getProvidedObjectManager()
+//                    .createProvidedObject("Chosen Place Set - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
+//                            + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());
+//            ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
 
             // setup the combination controller
             LPMCombinationController controller = new LPMCombinationController(parameters.getLpmCombinationParameters());
