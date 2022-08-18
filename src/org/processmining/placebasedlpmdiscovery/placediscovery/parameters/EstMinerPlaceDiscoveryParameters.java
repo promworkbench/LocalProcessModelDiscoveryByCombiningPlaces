@@ -4,13 +4,14 @@ import org.deckfour.xes.classification.XEventNameClassifier;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.placebasedlpmdiscovery.placediscovery.algorithms.PlaceDiscoveryAlgorithm;
 import org.processmining.placebasedlpmdiscovery.placediscovery.algorithms.PlaceDiscoveryAlgorithmFactory;
-import org.processmining.v8.eSTMinerGIT.Parameters;
+import org.processmining.v7.postproc_after_tc.MyParameters;
+//import org.processmining.v8.eSTMinerGIT.Parameters;
 
 public class EstMinerPlaceDiscoveryParameters extends PlaceDiscoveryParameters {
-    private Parameters wrappedParameters;
+    private MyParameters wrappedParameters;
 
     public EstMinerPlaceDiscoveryParameters() {
-        this.wrappedParameters = new Parameters();
+        this.wrappedParameters = new MyParameters();
         this.wrappedParameters.setClassifier(new XEventNameClassifier());
         this.wrappedParameters.setThreshold(0.5);
         this.wrappedParameters.setTimeAllowance(3600000);
@@ -21,11 +22,11 @@ public class EstMinerPlaceDiscoveryParameters extends PlaceDiscoveryParameters {
         return factory.createPlaceDiscoveryAlgorithm(this);
     }
 
-    public Parameters getWrappedParameters() {
+    public MyParameters getWrappedParameters() {
         return wrappedParameters;
     }
 
-    public void setWrappedParameters(Parameters wrappedParameters) {
+    public void setWrappedParameters(MyParameters wrappedParameters) {
         this.wrappedParameters = wrappedParameters;
     }
 }
