@@ -8,6 +8,7 @@ import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.L
 import org.processmining.placebasedlpmdiscovery.analysis.parametermanager.ParameterPrioritiser;
 import org.processmining.placebasedlpmdiscovery.analysis.parametermanager.ParameterSetup;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
+import org.processmining.placebasedlpmdiscovery.placechooser.MainPlaceChooser;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryAlgorithmId;
 import org.processmining.placebasedlpmdiscovery.plugins.exports.PlaceSetExportPlugin;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;

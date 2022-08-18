@@ -231,14 +231,6 @@ public class PlaceUtils {
         return resSet;
     }
 
-    public static void filterTransitionsInPlace(Place place, Set<String> acceptedTransitionLabels) {
-        Set<Transition> transitions = new HashSet<>(Sets.union(place.getInputTransitions(), place.getOutputTransitions()));
-        transitions.forEach(t -> {
-            if (!t.isInvisible() && !acceptedTransitionLabels.contains(t.getLabel()))
-                place.removeTransitions(t.getLabel());
-        });
-    }
-
     public static Set<Passage> getPassages(Place place) {
         Set<Passage> passages = new HashSet<>();
         for (Transition inTr : place.getInputTransitions()) {

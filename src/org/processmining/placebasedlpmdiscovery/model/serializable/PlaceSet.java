@@ -14,11 +14,11 @@ public class PlaceSet extends SerializableSet<Place> {
         super(places);
     }
 
-    public void writePassageUsage(LEFRMatrix lefrMatrix) {
+    public void writePassageUsage(LEFRMatrix lefrMatrix) { // TODO: Why is this here?
         for (Place place : getElements()) {
             if (place.getAdditionalInfo() == null)
-                place.setAdditionalInfo(new PlaceAdditionalInfo(place));
-            place.getAdditionalInfo().writePassageUsage(lefrMatrix);
+                place.setAdditionalInfo(new PlaceAdditionalInfo());
+            place.getAdditionalInfo().writePassageUsage(lefrMatrix, place);
         }
     }
 }
