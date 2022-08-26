@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.model.CanBeInterrupted;
+import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 
 import java.util.*;

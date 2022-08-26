@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.model;
+package org.processmining.placebasedlpmdiscovery.model.interruptible;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,6 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="0bcbcf38-135f-400c-b885-348d1df7283b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/lpmdiscovery/fpgrowth/ContextLPMTreeBuilder.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/interruptible" afterDir="true" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/interruptible/Interruptible.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/plugins/mining/wizards/steps/LPMContextWizardStep.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/plugins/visualization/components/eventattributesummaries" afterDir="true" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/plugins/visualization/components/eventattributesummaries/ContinuousEventAttributeSummaryComponent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/plugins/visualization/components/eventattributesummaries/DistinctValuesEventAttributeSummaryComponent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/plugins/visualization/components/eventattributesummaries/EventAttributeSummaryComponent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/plugins/visualization/components/eventattributesummaries/EventAttributeSummaryComponentFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/plugins/visualization/components/eventattributesummaries/RangeEventAttributeSummaryComponent.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/utilityandcontext" afterDir="true" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/utilityandcontext/eventattributesummary" afterDir="true" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/utilityandcontext/eventattributesummary/BooleanEventAttributeSummary.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/utilityandcontext/eventattributesummary/ContinuousEventAttributeSummary.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/utilityandcontext/eventattributesummary/DiscreteEventAttributeSummary.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/utilityandcontext/eventattributesummary/DistinctValuesEventAttributeSummary.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/utilityandcontext/eventattributesummary/EventAttributeSummary.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/utilityandcontext/eventattributesummary/EventAttributeSummaryController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/utilityandcontext/eventattributesummary/EventAttributeSummaryFactory.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/utilityandcontext/eventattributesummary/LiteralEventAttributeSummary.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/utilityandcontext/eventattributesummary/RangeEventAttributeSummary.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/utilityandcontext/eventattributesummary/TimestampEventAttributeSummary.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/plugins/mining/InteractiveLPMsDiscovery.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/plugins/mining/InteractiveLPMsDiscoveryPlugin.java" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/plugins/visualization/controllers" afterDir="true" />
@@ -86,12 +108,12 @@
       <change beforePath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/lpmdiscovery/filterstrategies/places/SubPlaceFilter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/lpmdiscovery/filterstrategies/places/SubPlaceFilter.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/lpmdiscovery/filtration/LPMFiltrationAndEvaluationController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/lpmdiscovery/filtration/LPMFiltrationAndEvaluationController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/lpmdiscovery/fpgrowth/FPGrowthLPMDiscoveryTreeBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/lpmdiscovery/fpgrowth/FPGrowthLPMDiscoveryTreeBuilder.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/lpmdiscovery/fpgrowth/FPGrowthLPMDiscoveryTreeBuilderFirstEdition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/lpmdiscovery/fpgrowth/FPGrowthLPMDiscoveryTreeBuilderFirstEdition.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/lpmdiscovery/fpgrowth/FPGrowthLPMDiscoveryTreeBuilderFirstEdition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/lpmdiscovery/fpgrowth/LPMTreeBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/lpmdiscovery/fpgrowth/FPGrowthLPMDiscoveryTreeBuilderSecondEdition.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/lpmdiscovery/fpgrowth/FPGrowthLPMDiscoveryTreeBuilderSecondEdition.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/lpmdiscovery/fpgrowth/FPGrowthPlaceFollowGraphBuilder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/lpmdiscovery/fpgrowth/FPGrowthPlaceFollowGraphBuilder.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/Arc.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/Arc.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/CanBeInterrupted.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/CanBeInterrupted.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/InterrupterSubject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/InterrupterSubject.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/CanBeInterrupted.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/interruptible/CanBeInterrupted.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/InterrupterSubject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/interruptible/InterrupterSubject.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/LocalProcessModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/LocalProcessModel.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/Place.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/Place.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/TextDescribable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/model/TextDescribable.java" afterDir="false" />
@@ -232,20 +254,24 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/ivysettings.xml" />
-    <property name="settings.editor.selected.configurable" value="IvyIDEA.ProjectSettings" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
-      <recent name="org.processmining.placebasedlpmdiscovery.placechooser.placepredicates" />
+      <recent name="org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.functional" />
+      <recent name="org.processmining.placebasedlpmdiscovery.plugins.visualization.components.eventattributesummaries" />
+      <recent name="org.processmining.placebasedlpmdiscovery.plugins.mining.wizards.steps" />
+    </key>
+    <key name="MoveInnerDialog.RECENTS_KEY">
+      <recent name="org.processmining.placebasedlpmdiscovery.lpmevaluation.logs" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth" />
+      <recent name="org.processmining.placebasedlpmdiscovery.plugins.visualization.components.eventattributesummaries" />
     </key>
   </component>
-  <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="org.processmining.placebasedlpmdiscovery.plugins.visualization.controllers" />
-    </key>
-  </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.ProM">
     <configuration name="ProM" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="1.8" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -255,6 +281,24 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Runner" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="org.processmining.placebasedlpmdiscovery.analysis.Runner" />
+      <module name="ProM-version" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="org.processmining.placebasedlpmdiscovery.analysis.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Runner" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration" cleanupOnStartRun="true">
@@ -324,6 +368,22 @@
     <MESSAGE value="author update" />
     <MESSAGE value="possibility to choose concurrency cardinality" />
     <option name="LAST_COMMIT_MESSAGE" value="possibility to choose concurrency cardinality" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/utilityandcontext/eventattributesummary/TimestampEventAttributeSummary.java</url>
+          <line>23</line>
+          <option name="timeStamp" value="26" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/org/processmining/placebasedlpmdiscovery/lpmdiscovery/fpgrowth/ContextLPMTreeBuilder.java</url>
+          <line>85</line>
+          <option name="timeStamp" value="57" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

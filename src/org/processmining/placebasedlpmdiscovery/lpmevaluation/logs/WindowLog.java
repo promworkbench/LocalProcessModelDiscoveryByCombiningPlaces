@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
 
 import org.deckfour.xes.model.XLog;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.IntegerMappedLog;
 
 import java.util.*;
 
