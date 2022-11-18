@@ -235,7 +235,7 @@ public class PlaceUtils {
         Set<Passage> passages = new HashSet<>();
         for (Transition inTr : place.getInputTransitions()) {
             for (Transition outTr : place.getOutputTransitions()) {
-                passages.add(new Passage(inTr, outTr));
+                passages.add(new Passage(inTr.getLabel(), outTr.getLabel()));
             }
         }
         return passages;
