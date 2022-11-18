@@ -3,7 +3,7 @@ package org.processmining.placebasedlpmdiscovery.placechooser.placepredicates;
 public class PlacePredicateFactory {
 
     public PlacePredicate selfLoop() {
-        return new SelfLoopPlacePredicate();
+        return new NonSelfLoopPlacePredicate();
     }
 
     public PlacePredicate emptyIOTransitionSet() {

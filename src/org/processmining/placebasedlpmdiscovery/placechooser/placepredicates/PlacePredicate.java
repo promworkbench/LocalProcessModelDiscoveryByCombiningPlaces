@@ -11,10 +11,10 @@ public interface PlacePredicate extends Predicate<Place> {
      * @param place that we want to check for filtering
      * @return true when the predicate is satisfied and false otherwise
      */
-    boolean filter(Place place);
+    boolean testPlace(Place place);
 
     @Override
     default boolean test(Place place) {
-        return filter(place);
+        return testPlace(place);
     }
 }

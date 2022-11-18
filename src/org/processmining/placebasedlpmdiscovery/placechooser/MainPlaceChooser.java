@@ -4,7 +4,7 @@ import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.EmptyIOTransitionSetPlacePredicate;
-import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.SelfLoopPlacePredicate;
+import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.NonSelfLoopPlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.RankedPlace;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.RankedPlaceComparator;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.TotalPassageCoveragePlaceRankConverter;
@@ -13,6 +13,8 @@ import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.I
 import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.PassageUsagePlaceTransformer;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -38,11 +40,12 @@ public class MainPlaceChooser implements PlaceChooser {
         return places.stream()
                 .map(new IncludedActivitiesPlaceTransformer(this.placeChooserParameters.getChosenActivities()))
                 .map(new PassageUsagePlaceTransformer(LogUtils.getFollowRelations(log, placeChooserParameters.getFollowRelationsLimit()))) // TODO: this might be duplicate work, since the lefr should already contain it
-                .filter(new SelfLoopPlacePredicate())
+                .filter(new NonSelfLoopPlacePredicate())
                 .filter(new EmptyIOTransitionSetPlacePredicate())
-                .map(p -> new RankedPlace(p, new TransitionCountPlaceRankConverter().convert(p), new TotalPassageCoveragePlaceRankConverter(lefr).convert(p)))
+                .map(p -> new RankedPlace(p, new TransitionCountPlaceRankConverter().convert(p) /*, new TotalPassageCoveragePlaceRankConverter(lefr).convert(p) */))
                 .sorted(new RankedPlaceComparator())
                 .map(RankedPlace::getPlace)
+                .limit(count)
                 .collect(Collectors.toSet());
     }
 }

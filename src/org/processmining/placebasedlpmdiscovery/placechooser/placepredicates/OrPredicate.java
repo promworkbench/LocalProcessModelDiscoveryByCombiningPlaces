@@ -14,9 +14,9 @@ public class OrPredicate implements PlacePredicate {
         this.predicates.addAll(Arrays.asList(predicates));
     }
     @Override
-    public boolean filter(Place place) {
+    public boolean testPlace(Place place) {
         for (PlacePredicate predicate : predicates) {
-            if (predicate.filter(place)) {
+            if (predicate.testPlace(place)) {
                 return true;
             }
         }
@@ -25,6 +25,6 @@ public class OrPredicate implements PlacePredicate {
 
     @Override
     public boolean test(Place place) {
-        return filter(place);
+        return testPlace(place);
     }
 }

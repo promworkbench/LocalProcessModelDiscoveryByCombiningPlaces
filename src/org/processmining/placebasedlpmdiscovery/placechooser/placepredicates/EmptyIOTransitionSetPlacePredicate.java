@@ -10,7 +10,7 @@ public class EmptyIOTransitionSetPlacePredicate implements PlacePredicate {
      * @return true when the input or output transition set is empty, false otherwise
      */
     @Override
-    public boolean filter(Place place) {
-        return place.getInputTransitions().size() < 1 || place.getOutputTransitions().size() < 1;
+    public boolean testPlace(Place place) {
+        return place.getInputTransitions().size() > 0 && place.getOutputTransitions().size() > 0;
     }
 }
