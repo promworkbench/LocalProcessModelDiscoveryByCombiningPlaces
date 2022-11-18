@@ -1,5 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.model.additionalinfo;
 
+import org.processmining.placebasedlpmdiscovery.model.Transition;
+
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -7,19 +9,19 @@ public class Passage implements Serializable {
 
     private static final long serialVersionUID = 8617832102315118677L;
 
-    private final String inTr;
-    private final String outTr;
+    private final Transition inTr;
+    private final Transition outTr;
 
-    public Passage(String inTr, String outTr) {
+    public Passage(Transition inTr, Transition outTr) {
         this.inTr = inTr;
         this.outTr = outTr;
     }
 
-    public String getInTr() {
+    public Transition getInTr() {
         return inTr;
     }
 
-    public String getOutTr() {
+    public Transition getOutTr() {
         return outTr;
     }
 

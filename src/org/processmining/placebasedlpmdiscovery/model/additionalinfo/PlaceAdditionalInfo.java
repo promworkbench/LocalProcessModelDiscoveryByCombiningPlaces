@@ -21,9 +21,7 @@ public class PlaceAdditionalInfo implements Serializable {
         passageUsage = new HashMap<>();
         for (Transition inTr : place.getInputTransitions()) {
             for (Transition outTr : place.getOutputTransitions()) {
-                String in = inTr.getLabel();
-                String out = outTr.getLabel();
-                passageUsage.put(new Passage(in, out), lefrMatrix.get(in, out));
+                passageUsage.put(new Passage(inTr, outTr), lefrMatrix.get(inTr.getLabel(), outTr.getLabel()));
             }
         }
     }
