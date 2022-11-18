@@ -93,6 +93,7 @@ public class Main {
     }
 
     public static Object[] run(Set<Place> places, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
+        System.out.println(places.size());
         setUpAnalyzer(log);
         LPMResult lpmResult;
         Statistics statistics;
@@ -154,10 +155,10 @@ public class Main {
             // export chosen places
             PlaceSet placeSet = new PlaceSet(places);
             placeSet.writePassageUsage(Analyzer.logAnalyzer.getLEFRMatrix(parameters.getLpmCombinationParameters().getLpmProximity()));
-//            Main.getContext().getProvidedObjectManager()
-//                    .createProvidedObject("Chosen Place Set - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
-//                            + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());
-//            ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
+            Main.getContext().getProvidedObjectManager()
+                    .createProvidedObject("Chosen Place Set - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
+                            + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());
+            ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
 
             // setup the combination controller
             LPMCombinationController controller = new LPMCombinationController(parameters);
