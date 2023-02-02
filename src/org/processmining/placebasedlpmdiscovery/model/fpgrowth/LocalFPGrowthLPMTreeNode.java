@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
 import com.google.common.collect.Sets;
-import org.processmining.placebasedlpmdiscovery.evaluation.ReplayableLocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import java.util.*;
 import java.util.stream.Collectors;

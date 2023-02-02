@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.model.additionalinfo;
 
-import org.processmining.placebasedlpmdiscovery.loganalyzer.LEFRMatrix;
+import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 
@@ -15,14 +15,9 @@ public class PlaceAdditionalInfo implements Serializable {
 
     private static final long serialVersionUID = -8322911097736437096L;
 
-    private final Place place;
-    private Map<Passage, Integer> passageUsage;
+    private Map<Passage, Integer> passageUsage; // TODO: This is problematic for Gson
 
-    public PlaceAdditionalInfo(Place place) {
-        this.place = place;
-    }
-
-    public void writePassageUsage(LEFRMatrix lefrMatrix) {
+    public void writePassageUsage(LEFRMatrix lefrMatrix, Place place) {
         passageUsage = new HashMap<>();
         for (Transition inTr : place.getInputTransitions()) {
             for (Transition outTr : place.getOutputTransitions()) {

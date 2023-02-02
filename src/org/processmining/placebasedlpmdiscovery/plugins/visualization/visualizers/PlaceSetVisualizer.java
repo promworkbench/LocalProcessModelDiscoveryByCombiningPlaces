@@ -8,7 +8,7 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableList;
-import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.TableAndVisualizerForCollectionOfElementsComponent;
+import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.SimpleCollectionOfElementsComponent;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.factories.PlaceSetPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.models.graphbased.ViewSpecificAttributeMap;
@@ -32,7 +32,7 @@ public class PlaceSetVisualizer {
         if (result.size() < 1)
             return new JPanel();
 
-        return new TableAndVisualizerForCollectionOfElementsComponent<>(
+        return new SimpleCollectionOfElementsComponent<>(
                 context, result, new PlaceSetPluginVisualizerTableFactory());
 
 

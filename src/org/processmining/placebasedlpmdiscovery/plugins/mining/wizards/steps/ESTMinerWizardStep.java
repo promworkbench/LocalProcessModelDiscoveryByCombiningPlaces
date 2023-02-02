@@ -4,8 +4,8 @@ import org.deckfour.xes.model.XLog;
 import org.processmining.framework.util.ui.wizard.ProMWizardStep;
 import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.EstMinerPlaceDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
-import org.processmining.v7.postproc_after_tc.MyMinerWizardStep;
 //import org.processmining.v8.eSTMinerGIT.UI;
+import org.processmining.v7.postproc_after_tc.MyMinerWizardStep;
 
 import javax.swing.*;
 

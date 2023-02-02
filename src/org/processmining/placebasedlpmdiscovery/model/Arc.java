@@ -13,9 +13,9 @@ public class Arc implements Serializable {
 
     private static final long serialVersionUID = 8467902054818439558L;
 
-    private Place place;
-    private Transition transition;
-    private boolean input;
+    private final Place place;
+    private final Transition transition;
+    private final boolean input;
 
     public Arc(Place place, Transition transition, boolean input) {
         this.place = place;

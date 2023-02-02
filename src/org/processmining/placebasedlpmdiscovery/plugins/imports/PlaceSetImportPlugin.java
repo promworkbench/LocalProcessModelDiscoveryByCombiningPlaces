@@ -8,6 +8,7 @@ import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 
 import java.io.InputStream;
+import java.io.ObjectInputStream;
 
 @Plugin(name = "Import Set of places from a file", parameterLabels = {"Filename"}, returnLabels = {"Set of places"}, returnTypes = {PlaceSet.class})
 @UIImportPlugin(description = "Import set of places from a file", extensions = {"promspl"})
@@ -22,6 +23,14 @@ public class PlaceSetImportPlugin extends AbstractImportPlugin {
 
         }
 
-        return PlaceUtils.getPlaceSetFromInputStream(input);
+        ObjectInputStream ois = new ObjectInputStream(input);
+        Object object = ois.readObject();
+        ois.close();
+        if (object instanceof PlaceSet) {
+            return (PlaceSet) object;
+        } else {
+            System.err.println("File could not be parsed as valid PlaceSet object");
+        }
+        return null;
     }
 }

@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
-import org.processmining.placebasedlpmdiscovery.evaluation.ReplayableLocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.model.CanBeInterrupted;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 
 import java.util.*;
@@ -66,8 +66,8 @@ public class WindowLPMTree implements CanBeInterrupted {
             WindowLPMTreeNode node = queue.poll();
             if (node.getNullChild() != null)
                 res.add(node.getNullChild());
-            else
-                System.out.println(node.getLpm().toString());
+//            else //TODO: At some point I expected that every node will have a null child. I have to think this through whether such nodes should exist.
+//                System.out.println(node.getLpm().toString());
             queue.addAll(node.getChildren());
         }
         return res;

@@ -9,13 +9,13 @@ import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.EstMin
 import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.HeuristicMinerPlaceDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.InductiveMinerPlaceDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.PlaceDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummary;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class PlaceBasedLPMDiscoveryParameters {
-
-    // log
-    private final XLog log;
 
     // place discovery parameters
     private PlaceDiscoveryAlgorithmId placeDiscoveryAlgorithmId;
@@ -35,8 +35,10 @@ public class PlaceBasedLPMDiscoveryParameters {
     // limit
     private long timeLimit;
 
+    // event attribute summary
+    private final Map<String, EventAttributeSummary<?,?>> eventAttributeSummary;
+
     public PlaceBasedLPMDiscoveryParameters(XLog log) {
-        this.log = log;
         this.placeDiscoveryAlgorithmId = PlaceDiscoveryAlgorithmId.ESTMiner;
         this.placeDiscoveryParameters = new EstMinerPlaceDiscoveryParameters();
         this.placeChooserParameters = new PlaceChooserParameters(log);
@@ -44,10 +46,7 @@ public class PlaceBasedLPMDiscoveryParameters {
         this.lpmFilterParameters = new LPMFilterParameters();
         this.lpmCount = 100;
         this.timeLimit = 600000;
-    }
-
-    public XLog getLog() {
-        return log;
+        this.eventAttributeSummary = new HashMap<>();
     }
 
     public PlaceDiscoveryAlgorithmId getPlaceDiscoveryAlgorithmId() {
@@ -87,8 +86,7 @@ public class PlaceBasedLPMDiscoveryParameters {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         PlaceBasedLPMDiscoveryParameters that = (PlaceBasedLPMDiscoveryParameters) o;
-        return log.equals(that.log) &&
-                placeDiscoveryAlgorithmId == that.placeDiscoveryAlgorithmId &&
+        return placeDiscoveryAlgorithmId == that.placeDiscoveryAlgorithmId &&
                 placeDiscoveryParameters.equals(that.placeDiscoveryParameters) &&
                 lpmCombinationParameters.equals(that.lpmCombinationParameters) &&
                 lpmFilterParameters.equals(that.lpmFilterParameters);
@@ -96,7 +94,7 @@ public class PlaceBasedLPMDiscoveryParameters {
 
     @Override
     public int hashCode() {
-        return Objects.hash(log, placeDiscoveryAlgorithmId, placeDiscoveryParameters,
+        return Objects.hash(placeDiscoveryAlgorithmId, placeDiscoveryParameters,
                 lpmCombinationParameters, lpmFilterParameters);
     }
 
@@ -127,5 +125,22 @@ public class PlaceBasedLPMDiscoveryParameters {
 
     public PlaceChooserParameters getPlaceChooserParameters() {
         return placeChooserParameters;
+    }
+
+    public Map<String, EventAttributeSummary<?,?>> getEventAttributeSummary() {
+        return eventAttributeSummary;
+    }
+
+    @Override
+    public String toString() {
+        return "PlaceBasedLPMDiscoveryParameters{" +
+                "placeDiscoveryAlgorithmId=" + placeDiscoveryAlgorithmId +
+                ", useDefaultPlaceDiscoveryParameters=" + useDefaultPlaceDiscoveryParameters +
+                ", placeChooserParameters=" + placeChooserParameters +
+                ", lpmCombinationParameters=" + lpmCombinationParameters +
+                ", lpmFilterParameters=" + lpmFilterParameters +
+                ", lpmCount=" + lpmCount +
+                ", timeLimit=" + timeLimit +
+                '}';
     }
 }

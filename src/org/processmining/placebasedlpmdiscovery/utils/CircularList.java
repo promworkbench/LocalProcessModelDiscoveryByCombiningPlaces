@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.utils;
 
-import javafx.util.Pair;
+import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.model.exception.CircularListWrongPositionException;
 
 import java.util.ArrayList;

@@ -1,8 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration;
 
-import org.processmining.placebasedlpmdiscovery.evaluation.lpmevaluators.AbstractLPMEvaluator;
-import org.processmining.placebasedlpmdiscovery.evaluation.lpmevaluators.LPMEvaluatorFactory;
-import org.processmining.placebasedlpmdiscovery.evaluation.results.AbstractEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.AbstractLPMEvaluator;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorFactory;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.AbstractEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.NeedsEvaluationLPMFilter;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;

@@ -1,12 +1,13 @@
 package org.processmining.placebasedlpmdiscovery.utils;
 
-import javafx.util.Pair;
+import org.apache.commons.math3.util.Pair;
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventNameClassifier;
 import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.in.XesXmlParser;
 import org.deckfour.xes.info.XLogInfo;
 import org.deckfour.xes.info.XLogInfoFactory;
+import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
@@ -77,5 +78,18 @@ public class LogUtils {
             }
         }
         return resSet;
+    }
+
+    /**
+     * Extract the event log name given the event log.
+     * @param eventLog: the event log object
+     * @return the name
+     */
+    public static String getEventLogName(XLog eventLog) {
+        XAttribute nameAttribute = eventLog.getAttributes().get(XConceptExtension.KEY_NAME);
+        if (nameAttribute != null) {
+            return ((XAttributeLiteral) nameAttribute).getValue();
+        }
+        return null;
     }
 }

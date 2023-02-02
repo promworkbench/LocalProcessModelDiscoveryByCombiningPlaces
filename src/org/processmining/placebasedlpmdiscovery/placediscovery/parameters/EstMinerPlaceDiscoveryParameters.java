@@ -13,8 +13,8 @@ public class EstMinerPlaceDiscoveryParameters extends PlaceDiscoveryParameters {
     public EstMinerPlaceDiscoveryParameters() {
         this.wrappedParameters = new MyParameters();
         this.wrappedParameters.setClassifier(new XEventNameClassifier());
-//        this.wrappedParameters.setRemoveImps(false);
-        this.wrappedParameters.setTimeAllowance(36000000);
+        this.wrappedParameters.setThreshold(0.5);
+        this.wrappedParameters.setTimeAllowance(3600000);
     }
 
     @Override

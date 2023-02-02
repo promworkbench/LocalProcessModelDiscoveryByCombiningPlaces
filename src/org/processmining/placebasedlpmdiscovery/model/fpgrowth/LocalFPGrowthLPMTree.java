@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
 import com.google.common.collect.Sets;
-import org.processmining.placebasedlpmdiscovery.model.CanBeInterrupted;
+import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;

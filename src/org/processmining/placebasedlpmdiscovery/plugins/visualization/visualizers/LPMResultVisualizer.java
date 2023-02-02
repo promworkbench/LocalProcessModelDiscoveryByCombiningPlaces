@@ -5,7 +5,7 @@ import org.processmining.contexts.uitopia.annotations.Visualizer;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
-import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.TableAndVisualizerForCollectionOfElementsComponent;
+import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.SimpleCollectionOfElementsComponent;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.factories.LPMResultPluginVisualizerTableFactory;
 
 import javax.swing.*;
@@ -24,7 +24,7 @@ public class LPMResultVisualizer {
         if (result.size() < 1)
             return new JPanel();
 
-        return new TableAndVisualizerForCollectionOfElementsComponent<>(
+        return new SimpleCollectionOfElementsComponent<>(
                 context, result, new LPMResultPluginVisualizerTableFactory());
     }
 }

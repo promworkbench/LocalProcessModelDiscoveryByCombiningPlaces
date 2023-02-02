@@ -2,7 +2,7 @@ package org.processmining.placebasedlpmdiscovery.utils;
 
 
 import com.google.common.collect.Sets;
-import javafx.util.Pair;
+import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.Passage;
@@ -229,14 +229,6 @@ public class PlaceUtils {
             }
         }
         return resSet;
-    }
-
-    public static void filterTransitionsInPlace(Place place, Set<String> acceptedTransitionLabels) {
-        Set<Transition> transitions = new HashSet<>(Sets.union(place.getInputTransitions(), place.getOutputTransitions()));
-        transitions.forEach(t -> {
-            if (!t.isInvisible() && !acceptedTransitionLabels.contains(t.getLabel()))
-                place.removeTransitions(t.getLabel());
-        });
     }
 
     public static Set<Passage> getPassages(Place place) {

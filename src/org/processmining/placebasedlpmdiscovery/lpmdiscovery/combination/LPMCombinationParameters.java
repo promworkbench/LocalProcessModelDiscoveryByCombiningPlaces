@@ -65,4 +65,16 @@ public class LPMCombinationParameters {
     public void setConcurrencyCardinality(int concurrencyCardinality) {
         this.concurrencyCardinality = concurrencyCardinality;
     }
+
+    @Override
+    public String toString() {
+        return "LPMCombinationParameters{" +
+                "minNumPlaces=" + minNumPlaces +
+                ", maxNumPlaces=" + maxNumPlaces +
+                ", lpmProximity=" + lpmProximity +
+                ", minNumTransitions=" + minNumTransitions +
+                ", maxNumTransitions=" + maxNumTransitions +
+                ", concurrencyCardinality=" + concurrencyCardinality +
+                '}';
+    }
 }

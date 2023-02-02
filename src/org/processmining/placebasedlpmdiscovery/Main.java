@@ -2,13 +2,12 @@ package org.processmining.placebasedlpmdiscovery;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.framework.plugin.PluginContext;
-import org.processmining.placebasedlpmdiscovery.evaluation.lpmevaluators.LPMEvaluatorFactory;
-import org.processmining.placebasedlpmdiscovery.evaluation.results.LPMEvaluationResultId;
-import org.processmining.placebasedlpmdiscovery.evaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
-import org.processmining.placebasedlpmdiscovery.evaluation.results.concrete.FittingWindowsEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.loganalyzer.LEFRMatrix;
-import org.processmining.placebasedlpmdiscovery.loganalyzer.LogAnalyzer;
-import org.processmining.placebasedlpmdiscovery.loganalyzer.LogAnalyzerParameters;
+import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorFactory;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationController;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.complex.AndCombinationGuard;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.simple.NotContainingCoveringPlacesCombinationGuard;
@@ -18,17 +17,18 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LP
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilterId;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationAndEvaluationController;
-import org.processmining.placebasedlpmdiscovery.model.InterrupterSubject;
+import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterSubject;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
+import org.processmining.placebasedlpmdiscovery.placechooser.MainPlaceChooser;
 import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.plugins.utils.ProvidedObjectHelper;
-import org.processmining.placebasedlpmdiscovery.utils.analysis.Analyzer;
+import org.processmining.placebasedlpmdiscovery.analysis.analyzers.Analyzer;
 
 import java.util.Set;
 import java.util.Timer;
@@ -44,8 +44,8 @@ public class Main {
         Main.Context = context;
     }
 
-    private static void setUpAnalyzer(XLog log, boolean placeDiscoveryIncluded) {
-        Main.Analyzer = new Analyzer(log, placeDiscoveryIncluded);
+    private static void setUpAnalyzer(XLog log) {
+        Main.Analyzer = new Analyzer(log);
     }
 
     public static PluginContext getContext() {
@@ -60,50 +60,58 @@ public class Main {
         return interrupterSubject;
     }
 
-    public static LPMResult run(XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
-        setUpAnalyzer(log, true);
+    public static Object[] run(XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
+        setUpAnalyzer(log);
         LPMResult lpmResult;
+        Statistics statistics;
+        PlaceSet placeSet;
 
         Analyzer.totalExecution.start();
 
         try {
 
             // Use some place generator to extract places from the log
-            Analyzer.setPlaceDiscoveryAlgorithmId(parameters.getPlaceDiscoveryAlgorithmId());
             PlaceDiscoveryResult result = PlaceDiscovery.discover(log, parameters.getPlaceDiscoveryParameters());
+            Analyzer.getStatistics().getParameterStatistics().setPlaceDiscoveryIncluded(true);
 
             // Add the places as a provided object
-            PlaceSet placeSet = new PlaceSet(result.getPlaces());
+            placeSet = new PlaceSet(result.getPlaces());
             Main.getContext().getProvidedObjectManager()
                     .createProvidedObject("Place Set - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
                             + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());
             ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
 
-            lpmResult = Main.discover(result.getPlaces(), result.getLog(), parameters);
+            lpmResult = Main.discover(result.getPlaces(), log, parameters);
+            statistics = Analyzer.getStatistics();
         } finally {
             Analyzer.totalExecution.stop();
-            Analyzer.write("analysis", false);
+            Analyzer.write();
             Analyzer = null;
         }
 
-        return lpmResult;
+        return new Object[] {lpmResult, statistics, placeSet};
     }
 
-    public static LPMResult run(Set<Place> places, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
-        setUpAnalyzer(log, false);
+    public static Object[] run(Set<Place> places, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
+        System.out.println(places.size());
+        setUpAnalyzer(log);
         LPMResult lpmResult;
+        Statistics statistics;
+        PlaceSet placeSet;
 
         Analyzer.totalExecution.start();
 
         try {
             lpmResult = Main.discover(places, log, parameters);
+            statistics = Analyzer.getStatistics();
+            placeSet = new PlaceSet(places);
         } finally {
             Analyzer.totalExecution.stop();
-            Analyzer.write("analysis", false);
+            Analyzer.write();
             Analyzer = null;
         }
 
-        return lpmResult;
+        return new Object[] {lpmResult, statistics, placeSet};
     }
 
     public static LPMResult discover(Set<Place> places, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
@@ -115,9 +123,14 @@ public class Main {
                     @Override
                     public void run() {
                         interrupterSubject.notifyInterruption();
+                        Analyzer.getStatistics().getGeneralStatistics().setInterrupted(true);
+                        System.out.println("INTERRUPTED");
                     }
                 }, parameters.getTimeLimit()
         );
+
+        // setup statistics for the parameters
+        Analyzer.setStatisticsForParameters(parameters);
 
         // places = PlaceDiscovery.filterPlaces(places);
 
@@ -125,31 +138,30 @@ public class Main {
         LPMResult result = new LPMResult();
         try {
             // analyze log
-            LogAnalyzer logAnalyzer = new LogAnalyzer(log, new LogAnalyzerParameters(parameters.getLpmCombinationParameters().getLpmProximity()));
-            logAnalyzer.calculateLEFRMatrix();
-            LEFRMatrix lefrMatrix = logAnalyzer.getLEFRMatrix();
-            Main.getContext().getProvidedObjectManager()
-                    .createProvidedObject("LEFR - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
-                                    + log.getAttributes().get("concept:name"), lefrMatrix, LEFRMatrix.class,
-                            Main.getContext());
-            ProvidedObjectHelper.setFavorite(Main.getContext(), lefrMatrix);
+            Analyzer.logAnalyzer.analyze(parameters.getLpmCombinationParameters().getLpmProximity());
+            LEFRMatrix lefrMatrix = Analyzer.logAnalyzer.getLEFRMatrix(parameters.getLpmCombinationParameters().getLpmProximity());
+//            Main.getContext().getProvidedObjectManager()
+//                    .createProvidedObject("LEFR - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
+//                                    + log.getAttributes().get("concept:name"), lefrMatrix, LEFRMatrix.class,
+//                            Main.getContext());
+//            ProvidedObjectHelper.setFavorite(Main.getContext(), lefrMatrix);
 
             // choose places
             parameters.getPlaceChooserParameters()
                     .setFollowRelationsLimit(parameters.getLpmCombinationParameters().getLpmProximity());
-            PlaceChooser placeChooser = new PlaceChooser(parameters.getPlaceChooserParameters(), places, log, lefrMatrix);
-            places = placeChooser.choose();
+            PlaceChooser placeChooser = new MainPlaceChooser(log, parameters.getPlaceChooserParameters(), lefrMatrix);
+            places = placeChooser.choose(places, parameters.getPlaceChooserParameters().getPlaceLimit());
 
             // export chosen places
             PlaceSet placeSet = new PlaceSet(places);
-            placeSet.writePassageUsage(logAnalyzer.getLEFRMatrix());
+            placeSet.writePassageUsage(Analyzer.logAnalyzer.getLEFRMatrix(parameters.getLpmCombinationParameters().getLpmProximity()));
             Main.getContext().getProvidedObjectManager()
                     .createProvidedObject("Chosen Place Set - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
                             + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());
             ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
 
             // setup the combination controller
-            LPMCombinationController controller = new LPMCombinationController(parameters.getLpmCombinationParameters());
+            LPMCombinationController controller = new LPMCombinationController(parameters);
 
             // set guard
             controller.setCombinationGuard(new AndCombinationGuard(
@@ -173,12 +185,12 @@ public class Main {
 
 //        Set<LocalProcessModel> finalLpms = controller.combine(places);
 
-            Analyzer.setCountPlacesUsed(places.size());
+            Analyzer.logCountPlacesUsed(places.size());
 
             result.addAll(controller.combineUsingFPGrowth(places, log,
                     parameters.getLpmCombinationParameters().getLpmProximity(), parameters.getLpmCount()));
 
-            Analyzer.setAllLpmDiscovered(result.size());
+            Analyzer.logAllLpmDiscovered(result.size());
             if (result.size() > 0) {
                 // normalize the fitting windows score
                 double max = result.highestScoringElement((LocalProcessModel lpm) -> lpm.getAdditionalInfo()
@@ -191,16 +203,15 @@ public class Main {
                         .normalizeResult(max, 0));
 
                 EvaluationResultAggregateOperation aggregateOperation = new EvaluationResultAggregateOperation();
-                result.sort((LocalProcessModel lpm1, LocalProcessModel lpm2) ->
-                        lpm1.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation)
-                                < lpm2.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation));
+                result.sort((LocalProcessModel lpm1, LocalProcessModel lpm2) -> Double.compare(
+                        lpm1.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation),
+                        lpm2.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation)));
                 result.keep(parameters.getLpmCount());
             }
         } finally {
-            Analyzer.setLpmDiscovered(result.size());
-
+            Analyzer.logLpmReturned(result.size());
             Analyzer.lpmDiscoveryExecution.stop();
-
+            Analyzer.close();
             timer.cancel();
         }
 
