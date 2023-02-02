@@ -1,0 +1,7 @@
+Configured Parameters:
+	ParameterRequirement("output_paths", OutputPathParameters) = OutputPathParameters{baseOutputPath='', globalFilenamePrefix='', globalFilenamePostfix=''}
+	ParameterRequirement("supervision.parameters", SupervisionParameters) = SupervisionParameters{useConsole=false, useFiles=false, classesToInstrument=[]}
+	ParameterRequirement("tau_fitness_thresholds", TauFitnessThresholds) = TauFitnessThresholds(𝛕=1.0)
+	ParameterRequirement("replay.parameters", ReplayComputationParameters) = org.processmining.specpp.evaluation.fitness.ReplayComputationParameters@14c29d2b
+	ParameterRequirement("implicitness.parameters", ImplicitnessTestingParameters) = org.processmining.specpp.evaluation.implicitness.ImplicitnessTestingParameters@50935845
+	ParameterRequirement("placegenerator.parameters", PlaceGeneratorParameters) = PlaceGeneratorParameters{maxTreeDepth=2147483647, acceptWiringConstraints=false, acceptTransitionBlacklistingConstraints=false, acceptDepthConstraints=false, acceptSubtreeCutoffConstraints=true}

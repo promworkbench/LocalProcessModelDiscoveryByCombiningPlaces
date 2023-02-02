@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.analysis;
+package org.processmining.placebasedlpmdiscovery.utils.analysis;
 
 import org.junit.Assert;
 import org.junit.Before;

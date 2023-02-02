@@ -16,6 +16,7 @@ import org.processmining.placebasedlpmdiscovery.model.interruptible.Interruptibl
 import org.processmining.placebasedlpmdiscovery.replayer.Replayer;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
+import org.processmining.placebasedlpmdiscovery.utils.SequenceUtils;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -189,12 +190,12 @@ public class LPMTreeBuilder extends Interruptible {
                 return;
 
             List<Integer> fsi = lpmFiringSequenceMap.get(lpms.get(i));
-            if (fsi.stream().noneMatch(fs::contains)) {
+            if (fsi.stream().noneMatch(fs::contains) || new HashSet<>(fs).containsAll(fsi) || new HashSet<>(fsi).containsAll(fs)) {
                 continue;
             }
             LocalProcessModel resLpm = LocalProcessModelUtils.join(lpms.get(i), lpm);
             if (!lpmFiringSequenceMap.containsKey(resLpm)) {
-                List<Integer> sequence = joinFiringSequences(fsi, fs, window);
+                List<Integer> sequence = SequenceUtils.joinSubsequences(fsi, fs, window, true);
                 Replayer replayer = new Replayer(resLpm, windowLog.getMapping().getLabelMap());
                 if (replayer.canReplay(sequence)) {
                     lpmFiringSequenceMap.put(resLpm, sequence);
@@ -202,67 +203,6 @@ public class LPMTreeBuilder extends Interruptible {
                         addBranchCombinations(resLpm, lpms, i+1, lpmFiringSequenceMap, window, currIteration + 1);
                     }
                 }
-            }
-        }
-    }
-
-    private boolean isSublist(List<Integer> list, List<Integer> sublist) {
-        int i = 0;
-        int j = 0;
-
-        while (i < list.size() && j < sublist.size()) {
-            if (list.get(i).equals(sublist.get(j))) {
-                i++;
-                j++;
-            } else {
-                i++;
-            }
-        }
-        return j == sublist.size();
-    }
-
-    private List<Integer> joinFiringSequences(List<Integer> one, List<Integer> two, List<Integer> superSequence) {
-        int i = 0;
-        int j = 0;
-        int k = 0;
-        List<Integer> result = new ArrayList<>();
-        while (true) {
-            while (i < one.size() && windowLog.getMapping().getInvisible().contains(one.get(i))) {
-                result.add(one.get(i));
-                i++;
-            }
-            while (j < two.size() && windowLog.getMapping().getInvisible().contains(two.get(j))) {
-                result.add(two.get(j));
-                j++;
-            }
-            if (i >= one.size() && j >= two.size())
-                return result;
-            if (i >= one.size()) {
-                result.addAll(two.subList(j, two.size()));
-                return result;
-            }
-            if (j >= two.size()) {
-                result.addAll(one.subList(i, one.size()));
-                return result;
-            }
-            if (k >= superSequence.size()) {
-                return result;
-            }
-            if (one.get(i).equals(two.get(j)) && one.get(i).equals(superSequence.get(k))) {
-                result.add(one.get(i));
-                i++;
-                j++;
-                k++;
-            } else if (one.get(i).equals(superSequence.get(k)) && !two.get(j).equals(superSequence.get(k))) {
-                result.add(one.get(i));
-                i++;
-                k++;
-            } else if (!one.get(i).equals(superSequence.get(k)) && two.get(j).equals(superSequence.get(k))) {
-                result.add(two.get(j));
-                j++;
-                k++;
-            } else {
-                k++;
             }
         }
     }
