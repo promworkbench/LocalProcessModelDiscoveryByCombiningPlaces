@@ -107,4 +107,8 @@ public class ContextWindowLog {
 
         return "true".equals(label.substring(label.lastIndexOf('+') + 1));
     }
+
+    public Integer getTraceCount() {
+        return this.integerMappedTraceVariantLog.getTraceCount();
+    }
 }

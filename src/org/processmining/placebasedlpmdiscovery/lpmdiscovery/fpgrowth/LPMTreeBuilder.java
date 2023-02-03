@@ -73,7 +73,7 @@ public class LPMTreeBuilder extends Interruptible {
             int eventPos = 0;
             for (int event : traceVariant) {
                 if (stop) {
-                    mainTree.updateAllTotalCount(windowTotalCounter);
+                    mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount());
                     Main.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
                     return mainTree;
                 }
@@ -103,14 +103,14 @@ public class LPMTreeBuilder extends Interruptible {
                 }
                 localTree.tryAddNullChildren(event, window.size() - 1);
                 Main.getAnalyzer().stopWindow();
-                addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog);
+                addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId);
             }
             if (window.size() < this.parameters.getLpmProximity()) {
                 for (int i = 0; i < this.parameters.getLpmProximity() - window.size(); ++i) {
                     eventPos++;
                     localTree.refreshPosition(eventPos);
                     windowTotalCounter.update(window, traceCount);
-                    addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog);
+                    addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId);
                 }
             }
             while (window.size() > 1) {
@@ -119,18 +119,18 @@ public class LPMTreeBuilder extends Interruptible {
 //                localTree.tryAddNullChildren(event, window.size() - 1);
                 localTree.refreshPosition(eventPos);
                 windowTotalCounter.update(window, traceCount);
-                addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog);
+                addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId);
             }
             Main.getAnalyzer().getStatistics().getFpGrowthStatistics().traceVariantPassed();
         }
 
-        mainTree.updateAllTotalCount(windowTotalCounter);
+        mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount());
         Main.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
         return mainTree;
     }
 
     private void addLocalTreeToMainTree(WindowLPMTree localTree, MainFPGrowthLPMTree mainTree,
-                                        int windowCount, LinkedList<Integer> window, WindowLog windowLog) {
+                                        int windowCount, LinkedList<Integer> window, WindowLog windowLog, Integer traceVariantId) {
         // get the null children
         Map<LocalProcessModel, List<Integer>> lpms =
                 getLPMsAndFiringSequences(windowLog.getMapping().getReverseLabelMap(), localTree, window);
@@ -147,7 +147,7 @@ public class LPMTreeBuilder extends Interruptible {
                     lpm.getPlaces().size() <= this.parameters.getMaxNumPlaces() &&
                     lpm.getTransitions().size() >= this.parameters.getMinNumTransitions() &&
                     lpm.getTransitions().size() <= this.parameters.getMaxNumTransitions()) {
-                mainTree.addOrUpdate(lpm, windowCount, window, lpmEntry.getValue());
+                mainTree.addOrUpdate(lpm, windowCount, window, lpmEntry.getValue(), traceVariantId);
                 countAdded++;
             }
         }

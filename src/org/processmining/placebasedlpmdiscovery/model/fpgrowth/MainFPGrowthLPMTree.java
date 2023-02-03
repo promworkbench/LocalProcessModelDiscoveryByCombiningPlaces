@@ -27,7 +27,7 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         return new MainFPGrowthLPMTreeNode(null);
     }
 
-    public void addOrUpdate(LocalProcessModel lpm, int count, List<Integer> window, List<Integer> firingSequence) {
+    public void addOrUpdate(LocalProcessModel lpm, int count, List<Integer> window, List<Integer> firingSequence, Integer traceVariantId) {
         List<Place> places = sortPlaces(lpm.getPlaces());
 
         if (places.size() < 1)
@@ -44,7 +44,7 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         }
         if (current.getWindowsEvaluationResult() == null)
             current.setWindowsEvaluationResult(new WindowsEvaluationResult(lpm, this.maxDependencyLength, this.labelMap));
-        current.updateEvaluation(count, window, firingSequence);
+        current.updateEvaluation(count, window, firingSequence,traceVariantId);
     }
 
     private List<Place> sortPlaces(Set<Place> places) {
@@ -78,10 +78,10 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         return lpms;
     }
 
-    public void updateAllTotalCount(WindowTotalCounter windowTotalCounter) {
+    public void updateAllTotalCount(WindowTotalCounter windowTotalCounter, Integer totalTraceCount) {
         for (MainFPGrowthLPMTreeNode node : this.nodes)
             if (node.getWindowsEvaluationResult() != null)
-                node.getWindowsEvaluationResult().setTotal(windowTotalCounter);
+                node.getWindowsEvaluationResult().setTotal(windowTotalCounter, totalTraceCount);
     }
 
     public int getHeight() {

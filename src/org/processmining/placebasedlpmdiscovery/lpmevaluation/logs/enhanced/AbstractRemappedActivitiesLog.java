@@ -69,4 +69,8 @@ public abstract class AbstractRemappedActivitiesLog<T> extends AbstractEnhancedL
     public Integer getTraceVariantCount(List<T> traceVariant) {
         return traceVariants.get(traceVariant);
     }
+
+    public Integer getTraceCount() {
+        return this.traceVariants.values().stream().mapToInt(Integer::intValue).sum();
+    }
 }

@@ -65,7 +65,6 @@ public class SerializableList<T extends Serializable> extends SerializableCollec
     public void sort(BiFunction<T, T, Integer> swapElementsFunction) {
         this.elements.sort(swapElementsFunction::apply);
         Collections.reverse(this.elements);
-//        GeneralUtils.quickSort(this.elements, 0, this.elements.size() - 1, swapElementsFunction);
         sorted = true;
     }
 

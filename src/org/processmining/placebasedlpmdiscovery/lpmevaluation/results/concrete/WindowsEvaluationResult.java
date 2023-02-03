@@ -14,6 +14,7 @@ public class WindowsEvaluationResult extends GroupedEvaluationResult {
     private final PassageCoverageEvaluationResult passageCoverageEvaluationResult;
     private final FittingWindowsEvaluationResult fittingWindowsEvaluationResult;
     private final TransitionCoverageEvaluationResult transitionCoverageEvaluationResult;
+    private final TraceSupportEvaluationResult traceSupportEvaluationResult;
 
     public WindowsEvaluationResult(LocalProcessModel lpm, int windowSize, Map<String, Integer> labelMap) {
         super(lpm);
@@ -24,15 +25,18 @@ public class WindowsEvaluationResult extends GroupedEvaluationResult {
         transitionCoverageEvaluationResult = new TransitionCoverageEvaluationResult(lpm, labelMap);
         transitionCoverageEvaluationResult.setTransitionsCount(lpm.getVisibleTransitions().size());
         this.addResult(transitionCoverageEvaluationResult);
+        traceSupportEvaluationResult = new TraceSupportEvaluationResult(lpm);
+        this.addResult(traceSupportEvaluationResult);
     }
 
-    public void updatePositive(int windowMultiplicity, List<Integer> window, List<Integer> firingSequence) {
+    public void updatePositive(int windowMultiplicity, List<Integer> window, List<Integer> firingSequence, Integer traceVariantId) {
         boolean successful = firingSequence != null;
         if (successful) {
             this.transitionCoverageEvaluationResult.updateTransitionCoverageCountMap(firingSequence, window, windowMultiplicity);
             passageCoverageEvaluationResult.updatePassageCoverage(firingSequence);
             fittingWindowsEvaluationResult.updateCount(windowMultiplicity);
             fittingWindowsEvaluationResult.updateWeightedCount(1.0 * firingSequence.size() * windowMultiplicity / window.size());
+            traceSupportEvaluationResult.addTraces(traceVariantId, windowMultiplicity);
         } else { // if the replay was successful
             throw new UnsupportedOperationException("This should be called only when a window is successful");
         }
@@ -50,8 +54,9 @@ public class WindowsEvaluationResult extends GroupedEvaluationResult {
         transitionCoverageEvaluationResult.updateTotal(window, windowMultiplicity);
     }
 
-    public void setTotal(WindowTotalCounter counter) {
+    public void setTotal(WindowTotalCounter counter, Integer totalTraceCount) {
         fittingWindowsEvaluationResult.setTotal(counter.getWindowCount());
+        traceSupportEvaluationResult.setTotalTraceCount(totalTraceCount);
 //        transitionCoverageEvaluationResult.setTransitionTotalCounts(counter.getTransitionCount());
     }
 }

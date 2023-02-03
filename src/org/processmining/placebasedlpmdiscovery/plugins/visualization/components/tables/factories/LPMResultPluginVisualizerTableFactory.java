@@ -44,6 +44,7 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
                         "Fitting Window Score",
                         "Passage Coverage Score",
                         "Passage Repetition Score",
+                        "Trace Support",
                         "Aggregate Result"
                 },
                 (ind, lpm) -> new Object[]{
@@ -54,6 +55,7 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
                         df.format(getResultOrDefault(lpm, LPMEvaluationResultId.FittingWindowsEvaluationResult)),
                         df.format(getResultOrDefault(lpm, LPMEvaluationResultId.PassageCoverageEvaluationResult)),
                         df.format(getResultOrDefault(lpm, LPMEvaluationResultId.PassageRepetitionEvaluationResult)),
+                        df.format(getResultOrDefault(lpm, LPMEvaluationResultId.TraceSupportEvaluationResult)),
                         df.format(lpm.getAdditionalInfo().getEvaluationResult()
                                 .getResult(new EvaluationResultAggregateOperation()))
                 });

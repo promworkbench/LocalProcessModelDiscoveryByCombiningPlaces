@@ -5,5 +5,6 @@ public enum LPMEvaluationResultId {
     TransitionOverlappingEvaluationResult,
     TransitionCoverageEvaluationResult,
     PassageCoverageEvaluationResult,
-    PassageRepetitionEvaluationResult
+    PassageRepetitionEvaluationResult,
+    TraceSupportEvaluationResult
 }
