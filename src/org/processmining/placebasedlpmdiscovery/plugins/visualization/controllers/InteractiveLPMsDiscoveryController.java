@@ -12,6 +12,7 @@ import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
+import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.ComponentId;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.SettableComponentFactory;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.SettablePanelContainer;
@@ -19,6 +20,7 @@ import org.processmining.placebasedlpmdiscovery.plugins.visualization.components
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.TableComposition;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.factories.LPMResultPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
+import org.processmining.plugins.utils.ProvidedObjectHelper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -163,6 +165,16 @@ public class InteractiveLPMsDiscoveryController implements WeirdComponentControl
     public void newSelection(LocalProcessModel selectedObject) {
         updateLpmGraphPanel(selectedObject);
         scf.setSelectedLpm(selectedObject);
+    }
+
+    @Override
+    public void export(SerializableCollection<LocalProcessModel> collection) {
+        if (collection instanceof LPMResult) {
+            LPMResult lpmResult = (LPMResult) collection;
+            context.getProvidedObjectManager()
+                    .createProvidedObject("Collection exported from LPM Discovery plugin", lpmResult, LPMResult.class, context);
+            ProvidedObjectHelper.setFavorite(context, lpmResult);
+        }
     }
 
     @Override

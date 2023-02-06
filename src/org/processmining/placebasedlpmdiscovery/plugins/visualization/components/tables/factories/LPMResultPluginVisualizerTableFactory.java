@@ -4,9 +4,13 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluat
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.CustomObjectTableModel;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 import java.util.Map;
@@ -44,6 +48,7 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
                         "Fitting Window Score",
                         "Passage Coverage Score",
                         "Passage Repetition Score",
+                        "Trace Support",
                         "Aggregate Result"
                 },
                 (ind, lpm) -> new Object[]{
@@ -54,8 +59,24 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
                         df.format(getResultOrDefault(lpm, LPMEvaluationResultId.FittingWindowsEvaluationResult)),
                         df.format(getResultOrDefault(lpm, LPMEvaluationResultId.PassageCoverageEvaluationResult)),
                         df.format(getResultOrDefault(lpm, LPMEvaluationResultId.PassageRepetitionEvaluationResult)),
+                        df.format(getResultOrDefault(lpm, LPMEvaluationResultId.TraceSupportEvaluationResult)),
                         df.format(lpm.getAdditionalInfo().getEvaluationResult()
                                 .getResult(new EvaluationResultAggregateOperation()))
                 });
+    }
+
+    @Override
+    protected JPopupMenu getPopupMenu() {
+        JPopupMenu popupMenu = new JPopupMenu();
+        JMenuItem exportItem = new JMenuItem("Export");
+        exportItem.addActionListener(e -> {
+            LPMResult res = new LPMResult();
+            for (Integer ind : table.getSelectedRows()) {
+                res.add(table.getIndexMap().get(table.convertRowIndexToModel(ind)));
+            }
+            this.listener.export(res);
+        });
+        popupMenu.add(exportItem);
+        return popupMenu;
     }
 }
