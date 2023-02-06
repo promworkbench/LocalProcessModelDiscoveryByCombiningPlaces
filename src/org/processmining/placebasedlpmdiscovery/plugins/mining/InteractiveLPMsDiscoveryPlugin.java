@@ -7,11 +7,6 @@ import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.framework.util.ui.wizard.ProMWizardDisplay;
 import org.processmining.framework.util.ui.wizard.ProMWizardStep;
-import org.processmining.placebasedlpmdiscovery.plugins.mining.wizards.PlaceBasedLPMDiscoveryWizard;
-import org.processmining.placebasedlpmdiscovery.plugins.mining.wizards.steps.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Plugin(
         name = "Interactive Local Process Models Discovery",

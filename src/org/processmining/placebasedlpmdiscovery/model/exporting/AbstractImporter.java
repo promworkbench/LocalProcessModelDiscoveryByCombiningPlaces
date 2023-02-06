@@ -1,6 +1,5 @@
 package org.processmining.placebasedlpmdiscovery.model.exporting;
 
-import java.io.File;
 import java.io.InputStream;
 
 public abstract class AbstractImporter<T> implements Importer<T> {

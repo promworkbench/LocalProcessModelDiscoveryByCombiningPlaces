@@ -1,4 +1,4 @@
-//package org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth;
+package org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth;//package org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth;
 //
 //import com.google.common.collect.Lists;
 //import org.apache.commons.math3.util.Pair;

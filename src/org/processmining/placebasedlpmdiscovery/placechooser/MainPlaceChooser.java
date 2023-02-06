@@ -7,14 +7,11 @@ import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.Emp
 import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.NonSelfLoopPlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.RankedPlace;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.RankedPlaceComparator;
-import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.TotalPassageCoveragePlaceRankConverter;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.TransitionCountPlaceRankConverter;
 import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.IncludedActivitiesPlaceTransformer;
 import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.PassageUsagePlaceTransformer;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
