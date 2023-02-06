@@ -15,11 +15,16 @@ import java.util.Map;
 
 public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescribable & Serializable> {
 
+    protected GenericTextDescribableTableComponent<T> table;
+
+    protected TableListener<T> listener;
+
     public GenericTextDescribableTableComponent<T> getPluginVisualizerTable(SerializableCollection<T> result, TableListener<T> listener) {
+        this.listener = listener;
 
         // create table
         Map<Integer, T> indexObjectMap = getIndexObjectMap(result);
-        GenericTextDescribableTableComponent<T> table = new GenericTextDescribableTableComponent<>(indexObjectMap);
+        table = new GenericTextDescribableTableComponent<>(indexObjectMap);
 
         // set table model
         CustomObjectTableModel<T> tableModel = createTableModel(indexObjectMap);
@@ -41,21 +46,26 @@ public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescrib
         table.setAutoCreateColumnsFromModel(true); // auto create the columns from the model
         table.setFillsViewportHeight(true); // make the table fill all available height
         // set the row selection to single row
-        table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        table.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         // add selection listener
         table.getSelectionModel().addListSelectionListener(listSelectionEvent -> {
             if (listSelectionEvent.getValueIsAdjusting()) // if the value is adjusting
                 return; // don't do anything
 
-            listener.newSelection(indexObjectMap.get(table.convertRowIndexToModel(table.getSelectedRow())));
+            if (table.getSelectedRowCount() == 1) {
+                listener.newSelection(indexObjectMap.get(table.convertRowIndexToModel(table.getSelectedRow())));
+            }
         });
         // select the first row in the beginning
         table.changeSelection(0, 0, false, false);
+        table.setComponentPopupMenu(this.getPopupMenu());
         return table;
     }
 
     protected abstract Map<Integer,T> getIndexObjectMap(SerializableCollection<T> elements);
 
     protected abstract CustomObjectTableModel<T> createTableModel(Map<Integer, T> indexObjectMap);
+
+    protected abstract JPopupMenu getPopupMenu();
 
 }

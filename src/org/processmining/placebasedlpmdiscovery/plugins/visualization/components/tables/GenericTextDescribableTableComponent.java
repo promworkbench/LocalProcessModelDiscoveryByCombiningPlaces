@@ -16,6 +16,10 @@ public class GenericTextDescribableTableComponent<T extends TextDescribable> ext
         this.indexMap = indexMap;
     }
 
+    public Map<Integer, T> getIndexMap() {
+        return indexMap;
+    }
+
     @Override
     protected JTableHeader createDefaultTableHeader() {
         return new JTableHeader(columnModel) {

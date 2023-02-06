@@ -10,6 +10,10 @@ public class PlaceSet extends SerializableSet<Place> {
 
     private static final long serialVersionUID = 1645883969214312641L;
 
+    public PlaceSet() {
+
+    }
+
     public PlaceSet(Set<Place> places) {
         super(places);
     }

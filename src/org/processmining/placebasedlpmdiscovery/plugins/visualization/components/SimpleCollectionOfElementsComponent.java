@@ -4,12 +4,15 @@ import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.TextDescribable;
+import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
+import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.TableComposition;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.TableListener;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.factories.AbstractPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.visualizers.LocalProcessModelVisualizer;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.visualizers.PlaceVisualizer;
+import org.processmining.plugins.utils.ProvidedObjectHelper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,7 +26,6 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
     private final AbstractPluginVisualizerTableFactory<T> tableFactory;
 
     private JComponent visualizerComponent;
-    private JComponent tableContainer;
 
     public SimpleCollectionOfElementsComponent(UIPluginContext context,
                                                SerializableCollection<T> result,
@@ -40,7 +42,7 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
 
         // create the table and LPM visualization containers
         visualizerComponent = createVisualizerComponent();
-        tableContainer = new TableComposition<>(this.result, this.tableFactory, this);
+        JComponent tableContainer = new TableComposition<>(this.result, this.tableFactory, this);
 
         // set the preferred dimension of the two containers
         int windowHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -62,7 +64,7 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
 
     @Override
     public void newSelection(T selectedObject) {
-        // if in the visualizer component there is a LPM drawn
+        // if in the visualizer component there is an LPM drawn
         if (visualizerComponent.getComponents().length >= 1)
             visualizerComponent.remove(0); // remove it
 
@@ -87,6 +89,23 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
         }
 
         visualizerComponent.revalidate(); // revalidate the component
+    }
+
+    @Override
+    public void export(SerializableCollection<T> collection) {
+        if (collection instanceof LPMResult) {
+            LPMResult lpmResult = (LPMResult) collection;
+            context.getProvidedObjectManager()
+                    .createProvidedObject("Collection exported from LPM Discovery plugin", lpmResult, LPMResult.class, context);
+            ProvidedObjectHelper.setFavorite(context, lpmResult);
+        }
+
+        if (collection instanceof PlaceSet) {
+            PlaceSet places = (PlaceSet) collection;
+            context.getProvidedObjectManager()
+                    .createProvidedObject("Collection exported from LPM Discovery plugin", places, PlaceSet.class, context);
+            ProvidedObjectHelper.setFavorite(context, places);
+        }
     }
 
     @Override

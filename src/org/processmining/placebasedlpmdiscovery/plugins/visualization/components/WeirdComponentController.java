@@ -4,7 +4,9 @@ import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.TableListener;
 
-public interface WeirdComponentController<T> extends TableListener<T>, ComponentListener {
+import java.io.Serializable;
+
+public interface WeirdComponentController<T extends Serializable> extends TableListener<T>, ComponentListener {
 
     void placeSelected(Place p);
 
