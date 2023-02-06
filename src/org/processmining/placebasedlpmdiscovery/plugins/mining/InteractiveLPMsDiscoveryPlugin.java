@@ -22,16 +22,16 @@ import java.util.Map;
 )
 public class InteractiveLPMsDiscoveryPlugin {
 
-    @UITopiaVariant(
-            affiliation = "RWTH - PADS",
-            author = "Viki Peeva",
-            email = "peeva@pads.rwth-aachen.de",
-            uiLabel = "Interactive Local Process Models Discovery"
-    )
-    @PluginVariant(
-            variantLabel = "Interactive Local Process Models Discovery",
-            requiredParameterLabels = {0}
-    )
+//    @UITopiaVariant(
+//            affiliation = "RWTH - PADS",
+//            author = "Viki Peeva",
+//            email = "peeva@pads.rwth-aachen.de",
+//            uiLabel = "Interactive Local Process Models Discovery"
+//    )
+//    @PluginVariant(
+//            variantLabel = "Interactive Local Process Models Discovery",
+//            requiredParameterLabels = {0}
+//    )
     public static InteractiveLPMsDiscovery mineInteractive(UIPluginContext context, XLog log){
         PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
 
