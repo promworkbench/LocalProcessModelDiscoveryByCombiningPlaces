@@ -6,6 +6,7 @@ import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.ContextWindowLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
+import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryInfo;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
@@ -24,18 +25,16 @@ import java.util.stream.Collectors;
 
 public class ContextLPMTreeBuilder implements CanBeInterrupted {
 
-    private final XLog log;
     private final Set<Place> places;
     LPMCombinationParameters parameters;
     private boolean stop;
-    private ContextWindowLog windowLog;
+    private final ContextWindowLog windowLog;
 
     public ContextLPMTreeBuilder(XLog log, Set<Place> places, LPMCombinationParameters parameters, Map<String, EventAttributeSummary<?,?>> context) {
-        this.log = log;
         this.places = places;
         this.parameters = parameters;
         this.stop = false;
-        windowLog = new ContextWindowLog(this.log, context); // create the integer mapped log
+        windowLog = new ContextWindowLog(log, context); // create the integer mapped log
     }
 
     public MainFPGrowthLPMTree buildTree() {
@@ -140,12 +139,11 @@ public class ContextLPMTreeBuilder implements CanBeInterrupted {
     private void addLocalTreeToMainTree(WindowLPMTree localTree, MainFPGrowthLPMTree mainTree,
                                         int windowCount, LinkedList<Integer> window, ContextWindowLog windowLog, Integer traceVariantId) {
         // get the null children
-        Map<LocalProcessModel, List<Integer>> lpms =
+        Map<LocalProcessModel, LPMTemporaryInfo> lpms =
                 getLPMsAndFiringSequences(windowLog.getMapping().getReverseLabelMap(), localTree, window);
 
         // give the lpm and the window count to the main tree so it can update itself
-        int countAdded = 0;
-        for (Map.Entry<LocalProcessModel, List<Integer>> lpmEntry : lpms.entrySet()) {
+        for (Map.Entry<LocalProcessModel, LPMTemporaryInfo> lpmEntry : lpms.entrySet()) {
             if (stop) {
                 Main.getAnalyzer().getStatistics().getFpGrowthStatistics().lpmsAddedInMainTree(lpms.size());
                 return;
@@ -156,78 +154,65 @@ public class ContextLPMTreeBuilder implements CanBeInterrupted {
                     lpm.getTransitions().size() >= this.parameters.getMinNumTransitions() &&
                     lpm.getTransitions().size() <= this.parameters.getMaxNumTransitions()) {
                 mainTree.addOrUpdate(lpm, windowCount, window, lpmEntry.getValue(), traceVariantId);
-                countAdded++;
             }
         }
         Main.getAnalyzer().getStatistics().getFpGrowthStatistics().lpmsAddedInMainTree(lpms.size());
     }
 
-    private Map<LocalProcessModel, List<Integer>> getLPMsAndFiringSequences(Map<Integer, String> reversedLabelMap,
+    private Map<LocalProcessModel, LPMTemporaryInfo> getLPMsAndFiringSequences(Map<Integer, String> reversedLabelMap,
                                                                             WindowLPMTree localTree,
                                                                             List<Integer> window) {
         Set<WindowLPMTreeNode> nullNodes = localTree.getNullNodes();
-        Map<LocalProcessModel, List<Integer>> lpmFiringSequenceMap = nullNodes // get the unique lpms
+        Map<LocalProcessModel, LPMTemporaryInfo> lpmWithTemporaryInfo = nullNodes // get the unique lpms
                 .stream()
                 .collect(Collectors.toMap(
                         n -> LocalProcessModelUtils
                                 .convertReplayableToLPM(n.getLpm(), reversedLabelMap),
-                        n -> n.getLpm().getFiringSequence(),
+                        n -> new LPMTemporaryInfo(n.getLpm().getFiringSequence(), n.getLpm().getUsedPassages()),
                         (n1, n2) -> n1)); // TODO: update how the firing sequences are added
-        addBranchCombinations(lpmFiringSequenceMap, new ArrayList<>(window));
-        return lpmFiringSequenceMap;
+        addBranchCombinations(lpmWithTemporaryInfo, new ArrayList<>(window));
+        return lpmWithTemporaryInfo;
     }
 
-    private void addBranchCombinations(Map<LocalProcessModel, List<Integer>> lpmFiringSequenceMap, List<Integer> window) {
+    private void addBranchCombinations(Map<LocalProcessModel, LPMTemporaryInfo> lpmWithTemporaryInfo, List<Integer> window) {
         // TODO: We combine only by two LPMs, but more can be done
         if (parameters.getConcurrencyCardinality() == 1)
             return;
-        List<LocalProcessModel> lpms = new ArrayList<>(lpmFiringSequenceMap.keySet());
+        List<LocalProcessModel> lpms = new ArrayList<>(lpmWithTemporaryInfo.keySet());
         for (int i = 0; i < lpms.size(); ++i) {
             if (stop)
                 return;
-            addBranchCombinations(lpms.get(i), lpms, i + 1, lpmFiringSequenceMap, window, 2);
+            addBranchCombinations(lpms.get(i), lpms, i + 1, lpmWithTemporaryInfo, window, 2);
         }
     }
 
     private void addBranchCombinations(LocalProcessModel lpm, List<LocalProcessModel> lpms, int from,
-                                       Map<LocalProcessModel, List<Integer>> lpmFiringSequenceMap,
+                                       Map<LocalProcessModel, LPMTemporaryInfo> lpmWithTemporaryInfo,
                                        List<Integer> window, int currIteration) {
-        List<Integer> fs = lpmFiringSequenceMap.get(lpm);
+        List<Integer> fs = lpmWithTemporaryInfo.get(lpm).getFiringSequence();
         for (int i = from; i < lpms.size(); ++i) {
             if (stop)
                 return;
 
-            List<Integer> fsi = lpmFiringSequenceMap.get(lpms.get(i));
+            List<Integer> fsi = lpmWithTemporaryInfo.get(lpms.get(i)).getFiringSequence();
             if (fsi.stream().noneMatch(fs::contains)) {
                 continue;
             }
             LocalProcessModel resLpm = LocalProcessModelUtils.join(lpms.get(i), lpm);
-            if (!lpmFiringSequenceMap.containsKey(resLpm)) {
+            if (!lpmWithTemporaryInfo.containsKey(resLpm)) {
                 List<Integer> sequence = joinFiringSequences(fsi, fs, window);
                 Replayer replayer = new Replayer(resLpm, windowLog.getMapping().getLabelMap());
                 if (replayer.canReplay(sequence)) {
-                    lpmFiringSequenceMap.put(resLpm, sequence);
+                    Set<Pair<Integer, Integer>> usedPassages = new HashSet<>();
+                    usedPassages.addAll(lpmWithTemporaryInfo.get(lpm).getUsedPassages());
+                    usedPassages.addAll(lpmWithTemporaryInfo.get(lpms.get(i)).getUsedPassages());
+                    lpmWithTemporaryInfo.put(resLpm, new LPMTemporaryInfo(sequence, usedPassages));
                     if (currIteration < this.parameters.getConcurrencyCardinality()) {
-                        addBranchCombinations(resLpm, lpms, i+1, lpmFiringSequenceMap, window, currIteration + 1);
+                        addBranchCombinations(resLpm, lpms, i+1, lpmWithTemporaryInfo, window, currIteration + 1);
                     }
                 }
             }
         }
-    }
-
-    private boolean isSublist(List<Integer> list, List<Integer> sublist) {
-        int i = 0;
-        int j = 0;
-
-        while (i < list.size() && j < sublist.size()) {
-            if (list.get(i).equals(sublist.get(j))) {
-                i++;
-                j++;
-            } else {
-                i++;
-            }
-        }
-        return j == sublist.size();
     }
 
     private List<Integer> joinFiringSequences(List<Integer> one, List<Integer> two, List<Integer> superSequence) {

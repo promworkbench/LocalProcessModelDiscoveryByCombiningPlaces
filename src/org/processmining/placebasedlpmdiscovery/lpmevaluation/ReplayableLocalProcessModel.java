@@ -1,5 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation;
 
+import com.google.common.collect.Sets;
+import org.apache.commons.math3.util.Pair;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -14,6 +17,7 @@ public class ReplayableLocalProcessModel {
     private final Set<Integer> invisibleTransitions; // some transitions are invisible
     private boolean hasFired;
     private final List<Integer> firingSequence;
+    private final Set<Pair<Integer, Integer>> usedPassages;
 
     private final Set<Integer> invisibleFired; // set that is used so that invisible transitions do not create infinite recursion
     private int silentFiresCount;
@@ -27,6 +31,7 @@ public class ReplayableLocalProcessModel {
         this.constraintIdentifier = 1;
         this.invisibleFired = new HashSet<>();
         this.firingSequence = new ArrayList<>();
+        this.usedPassages = new HashSet<>();
     }
 
     public ReplayableLocalProcessModel(Set<Integer> transitions, Set<Integer> invisibleTransitions) {
@@ -38,6 +43,7 @@ public class ReplayableLocalProcessModel {
         this.constraintIdentifier = 1;
         this.invisibleFired = new HashSet<>();
         this.firingSequence = new ArrayList<>();
+        this.usedPassages = new HashSet<>();
     }
 
     public ReplayableLocalProcessModel(ReplayableLocalProcessModel rlpm) {
@@ -59,8 +65,13 @@ public class ReplayableLocalProcessModel {
 //        this.paths = new HashSet<>(rlpm.paths);
         this.hasFired = rlpm.hasFired;
         this.firingSequence = new ArrayList<>(rlpm.getFiringSequence());
+        this.usedPassages = new HashSet<>(rlpm.getUsedPassages());
         this.silentFiresCount = rlpm.silentFiresCount;
         this.invisibleFired = new HashSet<>(rlpm.invisibleFired);
+    }
+
+    public Set<Pair<Integer, Integer>> getUsedPassages() {
+        return this.usedPassages;
     }
 
     public List<Integer> getFiringSequence() {
@@ -162,8 +173,29 @@ public class ReplayableLocalProcessModel {
             this.silentFiresCount++;
         }
         this.firingSequence.add(transition);
+        this.usedPassages.addAll(getUsedPassages(transition));
 
         return true;
+    }
+
+    /**
+     * Calculate the used passages after firing the latest transition
+     * @param transition: the fired transition
+     * @return the set of used passages
+     */
+    private Set<Pair<Integer, Integer>> getUsedPassages(int transition) {
+        Set<Integer> inConstraints = this.inputConstraints.get(transition);
+        if (inConstraints == null || inConstraints.isEmpty()) {
+            return new HashSet<>();
+        }
+
+        Set<Integer> inTransitions =
+                this.outputConstraints.entrySet()
+                        .stream()
+                        .filter(e -> !Sets.intersection(inConstraints, e.getValue()).isEmpty())
+                        .map(Map.Entry::getKey)
+                        .collect(Collectors.toSet());
+        return inTransitions.stream().map(t -> new Pair<>(t, transition)).collect(Collectors.toSet());
     }
 
     /**

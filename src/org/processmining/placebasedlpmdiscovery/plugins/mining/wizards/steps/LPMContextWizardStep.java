@@ -9,11 +9,8 @@ import org.processmining.placebasedlpmdiscovery.plugins.visualization.components
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.eventattributesummaries.EventAttributeSummaryComponentFactory;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummary;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummaryController;
-import org.processmining.plugins.InductiveMiner.Sets;
-import sun.awt.AWTAccessor;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.*;

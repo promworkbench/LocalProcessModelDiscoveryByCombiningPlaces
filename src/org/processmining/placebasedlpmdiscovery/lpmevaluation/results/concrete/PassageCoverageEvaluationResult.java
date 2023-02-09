@@ -1,5 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete;
 
+import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
@@ -24,20 +25,8 @@ public class PassageCoverageEvaluationResult extends SimpleEvaluationResult {
         this.allPossiblePassages = LocalProcessModelUtils.getPossiblePassages(lpm, labelMap);
     }
 
-    public void updatePassageCoverage(List<Integer> transitions) {
-        int inActivity, outActivity = -1;
-        for (int i = 0; i < transitions.size(); ++i) {
-            inActivity = outActivity;
-            outActivity = transitions.get(i);
-            String key = inActivity + "-" + outActivity;
-            if (inActivity > 0 && outActivity > 0 && this.allPossiblePassages.contains(key)) {
-                this.coveredPassages.add(key);
-            } else if (!this.allPossiblePassages.contains(key) && i < transitions.size() - 1) {
-                key = inActivity + "-" + transitions.get(i + 1);
-                if (this.allPossiblePassages.contains(key))
-                    this.coveredPassages.add(key);
-            }
-        }
+    public void updatePassageCoverage(Set<Pair<Integer, Integer>> passages) {
+        passages.forEach(passage -> this.coveredPassages.add(passage.getKey() + "-" + passage.getValue()));
     }
 
     @Override
