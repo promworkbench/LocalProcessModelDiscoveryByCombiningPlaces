@@ -35,13 +35,13 @@ public class Analyzer {
     }
 
     public void write() {
-        boolean rewrite = false;
-        if (ProjectProperties.getInstance().getIntProperty(ProjectProperties.ANALYSIS_WRITE_VERSION_KEY) != VERSION) {
-            ProjectProperties.getInstance().updateIntegerProperty(ProjectProperties.ANALYSIS_WRITE_VERSION_KEY, VERSION);
-            rewrite = true;
-        }
-        this.getStatistics().write(ProjectProperties.getInstance().getProperty(ProjectProperties.STATISTICS_WRITE_DESTINATION_KEY),
-                rewrite);
+//        boolean rewrite = false;
+//        if (ProjectProperties.getInstance().getIntProperty(ProjectProperties.ANALYSIS_WRITE_VERSION_KEY) != VERSION) {
+//            ProjectProperties.getInstance().updateIntegerProperty(ProjectProperties.ANALYSIS_WRITE_VERSION_KEY, VERSION);
+//            rewrite = true;
+//        }
+//        this.getStatistics().write(ProjectProperties.getInstance().getProperty(ProjectProperties.STATISTICS_WRITE_DESTINATION_KEY),
+//                rewrite);
     }
 
     public void setStatisticsForParameters(PlaceBasedLPMDiscoveryParameters parameters) {
