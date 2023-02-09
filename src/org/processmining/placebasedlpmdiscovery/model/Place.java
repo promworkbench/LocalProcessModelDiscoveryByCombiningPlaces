@@ -6,6 +6,9 @@ import org.processmining.placebasedlpmdiscovery.model.additionalinfo.PlaceAdditi
 import org.processmining.placebasedlpmdiscovery.model.exporting.Exportable;
 import org.processmining.placebasedlpmdiscovery.model.exporting.Exporter;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;

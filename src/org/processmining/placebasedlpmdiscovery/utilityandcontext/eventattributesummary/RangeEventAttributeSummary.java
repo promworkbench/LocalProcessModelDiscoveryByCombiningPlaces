@@ -4,6 +4,7 @@ import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.impl.XAttributeImpl;
 
 import java.text.ParseException;
+import java.util.Comparator;
 
 public abstract class RangeEventAttributeSummary<T extends Comparable<T>, C extends XAttributeImpl> extends EventAttributeSummary<T, C> {
 

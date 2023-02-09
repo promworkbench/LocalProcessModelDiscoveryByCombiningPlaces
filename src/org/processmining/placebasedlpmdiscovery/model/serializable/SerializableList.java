@@ -1,5 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.model.serializable;
 
+import org.processmining.placebasedlpmdiscovery.utils.GeneralUtils;
+
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.BiFunction;

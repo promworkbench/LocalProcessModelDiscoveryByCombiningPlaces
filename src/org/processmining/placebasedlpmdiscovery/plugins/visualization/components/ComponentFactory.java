@@ -5,6 +5,8 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.GroupedEva
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageCoverageEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.ContinuousEventAttributeSummary;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummary;
 
 import javax.swing.*;
 import java.text.DecimalFormat;

@@ -27,7 +27,7 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         return new MainFPGrowthLPMTreeNode(null);
     }
 
-    public void addOrUpdate(LocalProcessModel lpm, int count, List<Integer> window, List<Integer> firingSequence, Integer traceVariantId) {
+    public void addOrUpdate(LocalProcessModel lpm, int count, List<Integer> window, LPMTemporaryInfo lpmTemporaryInfo, Integer traceVariantId) {
         List<Place> places = sortPlaces(lpm.getPlaces());
 
         if (places.size() < 1)
@@ -44,7 +44,7 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         }
         if (current.getWindowsEvaluationResult() == null)
             current.setWindowsEvaluationResult(new WindowsEvaluationResult(lpm, this.maxDependencyLength, this.labelMap));
-        current.updateEvaluation(count, window, firingSequence,traceVariantId);
+        current.updateEvaluation(count, window, lpmTemporaryInfo, traceVariantId);
     }
 
     private List<Place> sortPlaces(Set<Place> places) {

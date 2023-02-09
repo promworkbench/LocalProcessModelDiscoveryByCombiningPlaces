@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.plugins.visualization.components.eventattributesummaries;
 
 import org.processmining.framework.util.ui.widgets.ProMTextField;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.DiscreteEventAttributeSummary;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.RangeEventAttributeSummary;
 
 import javax.swing.*;

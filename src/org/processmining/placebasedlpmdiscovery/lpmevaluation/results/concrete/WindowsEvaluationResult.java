@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.GroupedEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -29,30 +30,30 @@ public class WindowsEvaluationResult extends GroupedEvaluationResult {
         this.addResult(traceSupportEvaluationResult);
     }
 
-    public void updatePositive(int windowMultiplicity, List<Integer> window, List<Integer> firingSequence, Integer traceVariantId) {
-        boolean successful = firingSequence != null;
+    public void updatePositive(int windowMultiplicity, List<Integer> window, LPMTemporaryInfo lpmTemporaryInfo, Integer traceVariantId) {
+        boolean successful = lpmTemporaryInfo != null;
         if (successful) {
-            this.transitionCoverageEvaluationResult.updateTransitionCoverageCountMap(firingSequence, window, windowMultiplicity);
-            passageCoverageEvaluationResult.updatePassageCoverage(firingSequence);
+            this.transitionCoverageEvaluationResult.updateTransitionCoverageCountMap(lpmTemporaryInfo.getFiringSequence(), window, windowMultiplicity);
+            passageCoverageEvaluationResult.updatePassageCoverage(lpmTemporaryInfo.getUsedPassages());
             fittingWindowsEvaluationResult.updateCount(windowMultiplicity);
-            fittingWindowsEvaluationResult.updateWeightedCount(1.0 * firingSequence.size() * windowMultiplicity / window.size());
+            fittingWindowsEvaluationResult.updateWeightedCount(1.0 * lpmTemporaryInfo.getFiringSequence().size() * windowMultiplicity / window.size());
             traceSupportEvaluationResult.addTraces(traceVariantId, windowMultiplicity);
         } else { // if the replay was successful
             throw new UnsupportedOperationException("This should be called only when a window is successful");
         }
     }
 
-    public void updateAfterWindow(int windowMultiplicity, List<Integer> window, List<Integer> firingSequence) {
-        boolean successful = firingSequence != null;
-        if (successful) { // if the replay was successful
-            passageCoverageEvaluationResult.updatePassageCoverage(window);
-            fittingWindowsEvaluationResult.updateCount(windowMultiplicity);
-            fittingWindowsEvaluationResult.updateWeightedCount(1.0 * firingSequence.size() * windowMultiplicity / window.size());
-            transitionCoverageEvaluationResult.updateTransitionCoverageCountMap(firingSequence, window, windowMultiplicity);
-        }
-        fittingWindowsEvaluationResult.updateTotal(windowMultiplicity);
-        transitionCoverageEvaluationResult.updateTotal(window, windowMultiplicity);
-    }
+//    public void updateAfterWindow(int windowMultiplicity, List<Integer> window, List<Integer> firingSequence) {
+//        boolean successful = firingSequence != null;
+//        if (successful) { // if the replay was successful
+//            passageCoverageEvaluationResult.updatePassageCoverage(window);
+//            fittingWindowsEvaluationResult.updateCount(windowMultiplicity);
+//            fittingWindowsEvaluationResult.updateWeightedCount(1.0 * firingSequence.size() * windowMultiplicity / window.size());
+//            transitionCoverageEvaluationResult.updateTransitionCoverageCountMap(firingSequence, window, windowMultiplicity);
+//        }
+//        fittingWindowsEvaluationResult.updateTotal(windowMultiplicity);
+//        transitionCoverageEvaluationResult.updateTotal(window, windowMultiplicity);
+//    }
 
     public void setTotal(WindowTotalCounter counter, Integer totalTraceCount) {
         fittingWindowsEvaluationResult.setTotal(counter.getWindowCount());
