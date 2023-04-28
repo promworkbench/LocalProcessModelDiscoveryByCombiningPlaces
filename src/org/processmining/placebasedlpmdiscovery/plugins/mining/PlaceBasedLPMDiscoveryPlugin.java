@@ -22,6 +22,7 @@ import org.processmining.models.connections.petrinets.behavioral.FinalMarkingCon
 import org.processmining.models.connections.petrinets.behavioral.InitialMarkingConnection;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.semantics.petrinet.Marking;
+import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -95,28 +96,11 @@ public class PlaceBasedLPMDiscoveryPlugin {
 		if (parameters == null)
 			return null;
 
-		return (LPMResult) Main.run(getPlacesFromPetriNet(context, petrinet), log, parameters)[0];
+		return (LPMResult) Main.run(PlaceUtils.getPlacesFromPetriNet(context, petrinet), log, parameters)[0];
 	}
 
 	// TODO: What is this doing here???
-	private static Set<Place> getPlacesFromPetriNet(PluginContext context, Petrinet petrinet) {
-		Marking initialMarking = null;
-		List<Marking> finalMarkings = null;
-		try {
-			initialMarking = context.getConnectionManager()
-					.getFirstConnection(InitialMarkingConnection.class, context, petrinet)
-					.getObjectWithRole(InitialMarkingConnection.MARKING);
-			finalMarkings = context.getConnectionManager().getConnections(FinalMarkingConnection.class, context, petrinet)
-					.stream()
-					.map(c -> (Marking) c.getObjectWithRole(FinalMarkingConnection.MARKING))
-					.collect(Collectors.toList());
-		} catch (ConnectionCannotBeObtained cannotBeObtained) {
-			cannotBeObtained.printStackTrace();
-		}
-		AcceptingPetriNet acceptingPetriNet = new AcceptingPetriNetImpl(petrinet);
-		PetriNetPlaceConverter converter = new PetriNetPlaceConverter();
-		return converter.convert(acceptingPetriNet);
-	}
+
 
 	@UITopiaVariant(
 			affiliation = "RWTH - PADS",
@@ -177,7 +161,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
 		Main.setUp(context);
 
 		PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
-		PlaceSet places = new PlaceSet(getPlacesFromPetriNet(context, petrinet));
+		PlaceSet places = new PlaceSet(PlaceUtils.getPlacesFromPetriNet(context, petrinet));
 
 		return run(context, log, places, parameters);
 	}

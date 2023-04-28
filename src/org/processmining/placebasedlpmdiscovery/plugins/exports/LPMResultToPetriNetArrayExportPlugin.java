@@ -19,8 +19,8 @@ import java.io.IOException;
         returnTypes = {},
         parameterLabels = {"LPMResult", "Filename"})
 @UIExportPlugin(
-        description = "ProM local process models as Accepting Petri Nets",
-        extension = "zip")
+        description = "Exports local process models as Accepting Petri Nets together with a csv file that includes all filenames",
+        extension = "csv")
 public class LPMResultToPetriNetArrayExportPlugin {
 
     @PluginVariant(variantLabel = "Export local process models into a file", requiredParameterLabels = {0, 1})

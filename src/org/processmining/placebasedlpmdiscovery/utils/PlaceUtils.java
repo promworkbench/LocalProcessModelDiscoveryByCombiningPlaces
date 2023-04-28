@@ -3,10 +3,19 @@ package org.processmining.placebasedlpmdiscovery.utils;
 
 import com.google.common.collect.Sets;
 import org.apache.commons.math3.util.Pair;
+import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
+import org.processmining.acceptingpetrinet.models.impl.AcceptingPetriNetImpl;
+import org.processmining.framework.connections.ConnectionCannotBeObtained;
+import org.processmining.framework.plugin.PluginContext;
+import org.processmining.models.connections.petrinets.behavioral.FinalMarkingConnection;
+import org.processmining.models.connections.petrinets.behavioral.InitialMarkingConnection;
+import org.processmining.models.graphbased.directed.petrinet.Petrinet;
+import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.Passage;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
+import org.processmining.placebasedlpmdiscovery.placediscovery.converters.place.PetriNetPlaceConverter;
 
 import java.io.*;
 import java.util.*;
@@ -239,5 +248,11 @@ public class PlaceUtils {
             }
         }
         return passages;
+    }
+
+    public static Set<Place> getPlacesFromPetriNet(PluginContext context, Petrinet petrinet) {
+        AcceptingPetriNet acceptingPetriNet = new AcceptingPetriNetImpl(petrinet);
+        PetriNetPlaceConverter converter = new PetriNetPlaceConverter();
+        return converter.convert(acceptingPetriNet);
     }
 }
