@@ -74,7 +74,7 @@ public class LocalFPGrowthLPMTreeNode {
                 .map(t -> labelMap.get(t.getLabel()))
                 .collect(Collectors.toSet());
 
-        newLpm.addConstraint(0, outputTransitionIds, inputTransitionIds); // add the constraint
+        newLpm.addConstraint(place.getId(),0, outputTransitionIds, inputTransitionIds); // add the constraint
         newLpm.fire(event); // fire the event
         LocalFPGrowthLPMTreeNode child = new LocalFPGrowthLPMTreeNode(newLpm, this.offLimitTransitions, this); // create node
         child.offLimitTransitions.add(event); // add the fired event as off limit transition

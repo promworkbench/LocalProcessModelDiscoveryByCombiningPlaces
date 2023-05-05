@@ -78,8 +78,10 @@ public class ReplayableLocalProcessModel {
         return this.firingSequence;
     }
 
-    public Map<Integer, Constraint> getConstraintMap() {
-        return constraintMap;
+    public Map<Integer, String> getConstraintMap() {
+        return constraintMap.entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> e.getValue().getId()));
     }
 
     public Set<Integer> getTransitions() {
@@ -111,14 +113,14 @@ public class ReplayableLocalProcessModel {
      * @param haveAsInputConstraint:  the transition ids that have the constraint as input constraint
      * @param haveAsOutputConstraint: the transition ids that have the constraint as output constraint
      */
-    public void addConstraint(int numTokens, Set<Integer> haveAsInputConstraint, Set<Integer> haveAsOutputConstraint) {
+    public void addConstraint(String id, int numTokens, Set<Integer> haveAsInputConstraint, Set<Integer> haveAsOutputConstraint) {
 //        // check if the transitions were added previously
 //        if (!Sets.union(this.transitions, this.invisibleTransitions)
 //                .containsAll(Sets.union(haveAsInputConstraint, haveAsOutputConstraint))) {
 //            throw new IllegalStateException("All transitions should be previously added to the model");
 //        }
 
-        Constraint constraint = new Constraint(numTokens);
+        Constraint constraint = new Constraint(id, numTokens);
         // add it in the constraint map
         this.constraintMap.put(this.constraintIdentifier, constraint);
 
@@ -278,19 +280,26 @@ public class ReplayableLocalProcessModel {
 class Constraint {
     private int numTokens;
     private final int maxTokens;
+    private final String id;
 
-    Constraint(int numTokens) {
+    Constraint(String id, int numTokens) {
         this.numTokens = numTokens;
         this.maxTokens = 1;
+        this.id = id;
     }
 
     public Constraint(Constraint constraint) {
         this.numTokens = constraint.numTokens;
         this.maxTokens = constraint.maxTokens;
+        this.id = constraint.id;
     }
 
     int getNumTokens() {
         return numTokens;
+    }
+
+    public String getId() {
+        return id;
     }
 
     void takeTokens() {
@@ -330,6 +339,7 @@ class Constraint {
     @Override
     public String toString() {
         return "Constraint{" +
+                "id=" + id +
                 "numTokens=" + numTokens +
                 ", maxTokens=" + maxTokens +
                 '}';
