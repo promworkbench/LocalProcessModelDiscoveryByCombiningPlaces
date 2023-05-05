@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.concrete;//package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.concrete;
+//package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.concrete;
 //
 //import org.deckfour.xes.model.XLog;
 //import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;

@@ -15,10 +15,10 @@ public class PlaceChooserParameters {
     private int followRelationsLimit;
     private double coveredPassagesThreshold;
 
-    public PlaceChooserParameters(XLog log) {
+    public PlaceChooserParameters(Set<String> chosenActivities) {
         this.placeLimit = 50;
         this.averagePlaceDegree = Integer.MAX_VALUE;
-        this.chosenActivities = new HashSet<>(LogUtils.getActivitiesFromLog(log));
+        this.chosenActivities = chosenActivities;
         this.coveredPassagesThreshold = 0.3;
     }
 

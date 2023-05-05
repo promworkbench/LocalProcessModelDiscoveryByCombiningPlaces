@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.plugins.mining;//package org.processmining.placebasedlpmdiscovery.plugins.mining;
+//package org.processmining.placebasedlpmdiscovery.plugins.mining;
 //
 //import org.deckfour.xes.model.XLog;
 //import org.processmining.contexts.uitopia.UIPluginContext;

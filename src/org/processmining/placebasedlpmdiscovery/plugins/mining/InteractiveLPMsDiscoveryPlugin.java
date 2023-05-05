@@ -7,6 +7,7 @@ import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.framework.util.ui.wizard.ProMWizardDisplay;
 import org.processmining.framework.util.ui.wizard.ProMWizardStep;
+import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.wizards.PlaceBasedLPMDiscoveryWizard;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.wizards.steps.*;
 
@@ -33,7 +34,7 @@ public class InteractiveLPMsDiscoveryPlugin {
 //            requiredParameterLabels = {0}
 //    )
     public static InteractiveLPMsDiscovery mineInteractive(UIPluginContext context, XLog log){
-        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
+        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log));
 
         // show wizard
 //        Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryParameters>> stepMap = new HashMap<>();

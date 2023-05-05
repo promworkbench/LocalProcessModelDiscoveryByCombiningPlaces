@@ -52,7 +52,7 @@ public class LocalProcessModelUtils {
                     .stream()
                     .map(t -> labelMap.get(t.getLabel()))
                     .collect(Collectors.toSet());
-            replayable.addConstraint(p.getNumTokens(), outputTransitionIds, inputTransitionIds);
+            replayable.addConstraint(p.getId(), p.getNumTokens(), outputTransitionIds, inputTransitionIds);
         }
 
         return replayable;
@@ -71,8 +71,10 @@ public class LocalProcessModelUtils {
         }
 
         // create places for each constraint
-        Map<Integer, Place> constraintIdPlaceMap = replayable.getConstraintMap().keySet()
-                .stream().collect(Collectors.toMap(id -> id, id -> new Place()));
+        Map<Integer, Place> constraintIdPlaceMap = replayable.getConstraintMap()
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> new Place(e.getValue())));
         // add output transitions to the places
         for (Map.Entry<Integer, Set<Integer>> entry : replayable.getInputConstraints().entrySet()) {
             int trId = entry.getKey();

@@ -36,7 +36,7 @@ public class TraceLPMFactory implements DataFactory<List<Place>, TraceLPMData> {
                 .map(t -> labelMap.get(t.getLabel()))
                 .collect(Collectors.toSet());
 
-        rlpm.addConstraint(0, outputTransitionIds, inputTransitionIds); // add the constraint
+        rlpm.addConstraint(place.getId(), 0, outputTransitionIds, inputTransitionIds); // add the constraint
         return rlpm.fire(event); // fire the event
     }
 

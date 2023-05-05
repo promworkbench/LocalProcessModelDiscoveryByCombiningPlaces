@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.placechooser;//package org.processmining.placebasedlpmdiscovery.placechooser;
+//package org.processmining.placebasedlpmdiscovery.placechooser;
 //
 //import com.google.common.collect.Sets;
 //import org.apache.commons.math3.util.Pair;
