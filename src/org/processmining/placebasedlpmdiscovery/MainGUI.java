@@ -6,6 +6,7 @@ import org.processmining.contexts.cli.CLIPluginContext;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.InteractiveLPMsDiscovery;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
 import javax.swing.*;
@@ -34,6 +35,6 @@ public class MainGUI extends JFrame {
     private InteractiveLPMsDiscovery getDummyDiscovery() throws Exception {
         XLog log = LogUtils.readLogFromFile("data/sequence_3.xes");
         PluginContext context = new CLIPluginContext(new CLIContext(), "");
-        return new InteractiveLPMsDiscovery(context, new PlaceBasedLPMDiscoveryParameters(log), log);
+        return new InteractiveLPMsDiscovery(context, new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log)), log);
     }
 }
