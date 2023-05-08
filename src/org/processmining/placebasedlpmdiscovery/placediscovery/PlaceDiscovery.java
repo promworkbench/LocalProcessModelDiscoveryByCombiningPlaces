@@ -8,7 +8,7 @@ import org.processmining.placebasedlpmdiscovery.placediscovery.algorithms.PlaceD
 import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.PlaceDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.plugins.exports.PlaceSetExportPlugin;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
-import org.processmining.placebasedlpmdiscovery.utils.ProjectProperties;
+//import org.processmining.placebasedlpmdiscovery.utils.ProjectProperties;
 
 import java.io.*;
 
