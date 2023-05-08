@@ -3,7 +3,7 @@ package org.processmining.placebasedlpmdiscovery.analysis.analyzers;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LogAnalyzer;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.utils.ProjectProperties;
+//import org.processmining.placebasedlpmdiscovery.utils.ProjectProperties;
 import org.processmining.placebasedlpmdiscovery.analysis.statistics.*;
 
 import java.util.UUID;
@@ -35,13 +35,13 @@ public class Analyzer {
     }
 
     public void write() {
-        boolean rewrite = false;
-        if (ProjectProperties.getInstance().getIntProperty(ProjectProperties.ANALYSIS_WRITE_VERSION_KEY) != VERSION) {
-            ProjectProperties.getInstance().updateIntegerProperty(ProjectProperties.ANALYSIS_WRITE_VERSION_KEY, VERSION);
-            rewrite = true;
-        }
-        this.getStatistics().write(ProjectProperties.getInstance().getProperty(ProjectProperties.STATISTICS_WRITE_DESTINATION_KEY),
-                rewrite);
+//        boolean rewrite = false;
+//        if (ProjectProperties.getInstance().getIntProperty(ProjectProperties.ANALYSIS_WRITE_VERSION_KEY) != VERSION) {
+//            ProjectProperties.getInstance().updateIntegerProperty(ProjectProperties.ANALYSIS_WRITE_VERSION_KEY, VERSION);
+//            rewrite = true;
+//        }
+//        this.getStatistics().write(ProjectProperties.getInstance().getProperty(ProjectProperties.STATISTICS_WRITE_DESTINATION_KEY),
+//                rewrite);
     }
 
     public void setStatisticsForParameters(PlaceBasedLPMDiscoveryParameters parameters) {

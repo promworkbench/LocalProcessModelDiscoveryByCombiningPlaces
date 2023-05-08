@@ -21,7 +21,7 @@ import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDisc
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummaryController;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
-import org.processmining.placebasedlpmdiscovery.utils.ProjectProperties;
+//import org.processmining.placebasedlpmdiscovery.utils.ProjectProperties;
 import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
 
 import java.io.File;
@@ -65,7 +65,7 @@ public class Runner {
             // event logs folder
             System.out.println("Enter the absolute path to the folder where the event logs are stored:");
             String eventLogsAndPlacesPath = scn.nextLine();
-            ProjectProperties.getInstance(propertyFilePath).updateProperty(ProjectProperties.PLACE_WRITE_DESTINATION_KEY, eventLogsAndPlacesPath);
+//            ProjectProperties.getInstance(propertyFilePath).updateProperty(ProjectProperties.PLACE_WRITE_DESTINATION_KEY, eventLogsAndPlacesPath);
 
             // parameter setup file
             System.out.println("Enter the absolute path to the file where the parameter setup is given:");
