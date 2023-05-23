@@ -3,18 +3,16 @@ package org.processmining.placebasedlpmdiscovery.placechooser;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.model.Place;
-import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.EmptyIOTransitionSetPlacePredicate;
+import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.MostKArcsPredicate;
+import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.NonEmptyIOTransitionSetPlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.NonSelfLoopPlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.RankedPlace;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.RankedPlaceComparator;
-import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.TotalPassageCoveragePlaceRankConverter;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.TransitionCountPlaceRankConverter;
 import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.IncludedActivitiesPlaceTransformer;
 import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.PassageUsagePlaceTransformer;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -41,7 +39,8 @@ public class MainPlaceChooser implements PlaceChooser {
                 .map(new IncludedActivitiesPlaceTransformer(this.placeChooserParameters.getChosenActivities()))
                 .map(new PassageUsagePlaceTransformer(LogUtils.getFollowRelations(log, placeChooserParameters.getFollowRelationsLimit()))) // TODO: this might be duplicate work, since the lefr should already contain it
                 .filter(new NonSelfLoopPlacePredicate())
-                .filter(new EmptyIOTransitionSetPlacePredicate())
+                .filter(new NonEmptyIOTransitionSetPlacePredicate())
+                .filter(new MostKArcsPredicate(5))
                 .map(p -> new RankedPlace(p, new TransitionCountPlaceRankConverter().convert(p) /*, new TotalPassageCoveragePlaceRankConverter(lefr).convert(p) */))
                 .sorted(new RankedPlaceComparator())
                 .map(RankedPlace::getPlace)

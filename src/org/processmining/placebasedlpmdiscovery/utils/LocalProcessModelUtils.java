@@ -74,7 +74,7 @@ public class LocalProcessModelUtils {
         Map<Integer, Place> constraintIdPlaceMap = replayable.getConstraintMap()
                 .entrySet()
                 .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> new Place(e.getValue())));
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> new Place(e.getValue()))); // TODO: Here the sent places should be used
         // add output transitions to the places
         for (Map.Entry<Integer, Set<Integer>> entry : replayable.getInputConstraints().entrySet()) {
             int trId = entry.getKey();
