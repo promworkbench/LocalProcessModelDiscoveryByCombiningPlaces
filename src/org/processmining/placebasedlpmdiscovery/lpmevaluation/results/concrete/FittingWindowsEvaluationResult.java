@@ -21,7 +21,7 @@ public class FittingWindowsEvaluationResult extends SimpleEvaluationResult {
 
 
     public FittingWindowsEvaluationResult(LocalProcessModel lpm, int windowSize) {
-        super(lpm);
+        super(lpm, LPMEvaluationResultId.FittingWindowsEvaluationResult);
         this.windowSize = windowSize;
         this.count = 0;
         this.total = 0;
@@ -97,12 +97,6 @@ public class FittingWindowsEvaluationResult extends SimpleEvaluationResult {
         clone.setTotal(this.total);
         return clone;
     }
-
-    @Override
-    public LPMEvaluationResultId getId() {
-        return LPMEvaluationResultId.FittingWindowsEvaluationResult;
-    }
-
 
     @Override
     public boolean equals(Object o) {

@@ -29,7 +29,7 @@ public class TransitionCoverageEvaluationResult extends SimpleEvaluationResult {
     private Map<String, Integer> labelMap = new HashMap<>();
 
     public TransitionCoverageEvaluationResult(LocalProcessModel lpm, Map<String, Integer> labelMap) {
-        super(lpm);
+        super(lpm, LPMEvaluationResultId.TransitionCoverageEvaluationResult);
         this.transitionCountMap = new HashMap<>();
         this.transitionTotalCounts = new HashMap<>();
         this.total = 0;
@@ -85,11 +85,6 @@ public class TransitionCoverageEvaluationResult extends SimpleEvaluationResult {
             score = countTr == 0 ? 0 : sum / countTr;
         }
         return score;
-    }
-
-    @Override
-    public LPMEvaluationResultId getId() {
-        return LPMEvaluationResultId.TransitionCoverageEvaluationResult;
     }
 
     @Override

@@ -8,6 +8,7 @@ import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 
 import java.util.*;
 
+// TODO: Evaluation results should be different from evaluation result calculator.. Maybe?
 public class PassageCoverageEvaluationResult extends SimpleEvaluationResult {
 
     private static final long serialVersionUID = 357586627089534388L;
@@ -16,7 +17,7 @@ public class PassageCoverageEvaluationResult extends SimpleEvaluationResult {
     private Set<String> allPossiblePassages;
 
     public PassageCoverageEvaluationResult(LocalProcessModel lpm, Map<String, Integer> labelMap) {
-        super(lpm);
+        super(lpm, LPMEvaluationResultId.PassageCoverageEvaluationResult);
         this.coveredPassages = new HashSet<>();
         initializePossiblePassages(labelMap);
     }
@@ -27,11 +28,6 @@ public class PassageCoverageEvaluationResult extends SimpleEvaluationResult {
 
     public void updatePassageCoverage(Set<Pair<Integer, Integer>> passages) {
         passages.forEach(passage -> this.coveredPassages.add(passage.getKey() + "-" + passage.getValue()));
-    }
-
-    @Override
-    public LPMEvaluationResultId getId() {
-        return LPMEvaluationResultId.PassageCoverageEvaluationResult;
     }
 
     @Override
