@@ -1,16 +1,17 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.undecided;
 
-import org.deckfour.xes.model.XLog;
+import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
+import org.processmining.framework.connections.ConnectionCannotBeObtained;
+import org.processmining.framework.plugin.PluginContext;
+import org.processmining.models.connections.GraphLayoutConnection;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
-import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscovery;
-import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryResult;
-import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.EstMinerPlaceDiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
+import org.processmining.plugins.pnml.base.FullPnmlElementFactory;
+import org.processmining.plugins.pnml.base.Pnml;
+import org.processmining.plugins.pnml.base.PnmlElementFactory;
 
 import java.io.*;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.Set;
 
 public class Utils {
@@ -77,5 +78,28 @@ public class Utils {
             e.printStackTrace();
         }
         return resSet;
+    }
+
+    public static ByteArrayOutputStream exportAcceptingPetriNetToOutputStream(PluginContext context, AcceptingPetriNet apn) throws IOException {
+        GraphLayoutConnection layout;
+        try {
+            layout = (GraphLayoutConnection) context.getConnectionManager().getFirstConnection(GraphLayoutConnection.class, context, new Object[]{apn.getNet()});
+        } catch (ConnectionCannotBeObtained var9) {
+            layout = new GraphLayoutConnection(apn.getNet());
+        }
+
+        PnmlElementFactory factory = new FullPnmlElementFactory();
+        Pnml pnml = new Pnml();
+        synchronized(factory) {
+            Pnml.setFactory(factory);
+            pnml = (new Pnml()).convertFromNet(apn.getNet(), apn.getInitialMarking(), apn.getFinalMarkings(), layout);
+            pnml.setType(Pnml.PnmlType.PNML);
+        }
+
+        String text = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" + pnml.exportElement(pnml);
+
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        os.write(text.getBytes());
+        return os;
     }
 }
