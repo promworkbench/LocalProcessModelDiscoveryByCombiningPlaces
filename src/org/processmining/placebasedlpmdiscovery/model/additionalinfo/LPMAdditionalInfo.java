@@ -10,7 +10,7 @@ public class LPMAdditionalInfo implements Serializable {
     private static final long serialVersionUID = 3593199319792435898L;
     //    private double logFrequency;
 //    private TraceVariantInfo[] traceVariantInfos;
-    private LocalProcessModel lpm;
+    private transient LocalProcessModel lpm;
     private GroupedEvaluationResult evaluationResult;
 
     public LPMAdditionalInfo(LocalProcessModel lpm) {
