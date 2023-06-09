@@ -96,7 +96,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
 		if (parameters == null)
 			return null;
 
-		return (LPMResult) Main.run(PlaceUtils.getPlacesFromPetriNet(context, petrinet), log, parameters)[0];
+		return (LPMResult) Main.run(PlaceUtils.getPlacesFromPetriNet(petrinet), log, parameters)[0];
 	}
 
 	// TODO: What is this doing here???
@@ -161,7 +161,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
 		Main.setUp(context);
 
 		PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
-		PlaceSet places = new PlaceSet(PlaceUtils.getPlacesFromPetriNet(context, petrinet));
+		PlaceSet places = new PlaceSet(PlaceUtils.getPlacesFromPetriNet(petrinet));
 
 		return run(context, log, places, parameters);
 	}

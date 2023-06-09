@@ -1,23 +1,35 @@
 package org.processmining.placebasedlpmdiscovery.utils;
 
+import com.csvreader.CsvWriter;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.acceptingpetrinet.models.impl.AcceptingPetriNetImpl;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.model.Arc;
-import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.model.Place;
-import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.models.graphbased.AbstractGraphElement;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetEdge;
 import org.processmining.models.graphbased.directed.petrinet.impl.PetrinetFactory;
 import org.processmining.models.semantics.petrinet.Marking;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.undecided.Utils;
+import org.processmining.placebasedlpmdiscovery.model.Arc;
+import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.model.Transition;
+import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.file.Files;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class LocalProcessModelUtils {
 
@@ -207,5 +219,57 @@ public class LocalProcessModelUtils {
         LocalProcessModel lpm = new LocalProcessModel(lpm1);
         lpm.addAllPlaces(lpm2.getPlaces());
         return lpm;
+    }
+
+    public static void exportResult(LPMResult lpmResult, String filePath) throws IOException {
+        exportResult(lpmResult, new File(filePath));
+    }
+
+    public static void exportResult(LPMResult lpmResult, File file) throws IOException {
+        String fileName = file.getName();
+        String prefix = fileName.substring(0, fileName.indexOf("."));
+
+        ZipOutputStream out = new ZipOutputStream(Files.newOutputStream(file.toPath()));
+
+        String csvFileName = prefix + ".csv";
+        ByteArrayOutputStream csvOS = new ByteArrayOutputStream();
+        CsvWriter csvWriter = new CsvWriter(new OutputStreamWriter(csvOS), ',');
+        csvWriter.writeRecord(new String[]{"Name", "Fitting Windows Score", "Trace Support Score", "Aggregated Score"});
+
+        EvaluationResultAggregateOperation aggregateOperation = new EvaluationResultAggregateOperation();
+        LPMEvaluationResultId[] ids = new LPMEvaluationResultId[]{
+                LPMEvaluationResultId.FittingWindowsEvaluationResult,
+                LPMEvaluationResultId.TraceSupportEvaluationResult
+        };
+
+        for (LocalProcessModel lpm : lpmResult.getElements()) {
+            // convert lpm to accepting petri net
+            AcceptingPetriNet apn = LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
+
+            String zfName = prefix + "." + lpm.getId() + ".pnml";
+
+            // add the net file to the zip folder
+            ByteArrayOutputStream oos = Utils.exportAcceptingPetriNetToOutputStream(apn);
+            addContentToZip(out, oos.toByteArray(), prefix + "." + lpm.getId() + ".pnml");
+
+            // write an entry in the csv
+            csvWriter.write(zfName);
+            for (LPMEvaluationResultId id : ids) {
+                csvWriter.write(String.valueOf(lpm.getAdditionalInfo().getEvaluationResult().getEvaluationResult(id).getResult()));
+            }
+            csvWriter.write(String.valueOf(lpm.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation)));
+            csvWriter.endRecord();
+        }
+        // add csv file to zip
+        csvWriter.close();
+        addContentToZip(out, csvOS.toByteArray(), csvFileName);
+        out.close();
+    }
+
+    private static void addContentToZip(ZipOutputStream out, byte[] content, String fileName) throws IOException {
+        ZipEntry e = new ZipEntry(fileName.substring(0, fileName.lastIndexOf(".")) + fileName.substring(fileName.lastIndexOf(".")));
+        out.putNextEntry(e);
+        out.write(content);
+        out.closeEntry();
     }
 }

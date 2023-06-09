@@ -1,3 +1,0 @@
-ID	Log Name	Total Execution Time	LPM Discovery Execution Time	Place Discovery Included	Place Discovery Algorithm ID	Count Places Used	Places discovered	Places Average Out Degree	LPM discovered	All LPM Discovered	Proximity	Timestamp
-96538696-3a9a-406c-8458-2ea6ba7d60c9	choice-2-variants-7-activities	PT1.088S	PT0.845S	true	ESTMiner	50	56	7.730769230769231	100	418	7	Mon Nov 22 17:52:54 CET 2021
-ab6ce19d-151e-44b7-b81a-cda800cffaea	choice-2-variants-7-activities	PT0.592S	PT0.492S	true	ESTMiner	50	56	7.730769230769231	100	410	7	Mon Nov 22 17:53:05 CET 2021

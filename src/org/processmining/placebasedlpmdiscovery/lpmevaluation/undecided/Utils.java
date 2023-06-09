@@ -80,14 +80,11 @@ public class Utils {
         return resSet;
     }
 
-    public static ByteArrayOutputStream exportAcceptingPetriNetToOutputStream(PluginContext context, AcceptingPetriNet apn) throws IOException {
-        GraphLayoutConnection layout;
-        try {
-            layout = (GraphLayoutConnection) context.getConnectionManager().getFirstConnection(GraphLayoutConnection.class, context, new Object[]{apn.getNet()});
-        } catch (ConnectionCannotBeObtained var9) {
-            layout = new GraphLayoutConnection(apn.getNet());
-        }
+    public static ByteArrayOutputStream exportAcceptingPetriNetToOutputStream(AcceptingPetriNet apn) throws IOException {
+        return exportAcceptingPetriNetToOutputStream(apn, new GraphLayoutConnection(apn.getNet()));
+    }
 
+    public static ByteArrayOutputStream exportAcceptingPetriNetToOutputStream(AcceptingPetriNet apn, GraphLayoutConnection layout) throws IOException {
         PnmlElementFactory factory = new FullPnmlElementFactory();
         Pnml pnml = new Pnml();
         synchronized(factory) {
@@ -101,5 +98,15 @@ public class Utils {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         os.write(text.getBytes());
         return os;
+    }
+    public static ByteArrayOutputStream exportAcceptingPetriNetToOutputStream(PluginContext context, AcceptingPetriNet apn) throws IOException {
+        GraphLayoutConnection layout;
+        try {
+            layout = (GraphLayoutConnection) context.getConnectionManager().getFirstConnection(GraphLayoutConnection.class, context, new Object[]{apn.getNet()});
+        } catch (ConnectionCannotBeObtained var9) {
+            layout = new GraphLayoutConnection(apn.getNet());
+        }
+
+        return exportAcceptingPetriNetToOutputStream(apn, layout);
     }
 }

@@ -1,2 +1,0 @@
-ID	Log Name	Total Execution Time	LPM Discovery Execution Time	Interrupted	Count Places Used	Proximity	Concurrency cardinality	LPM discovered	LPM returned	Timestamp
-010d2953-3786-4bd3-a0ff-4fb74ba15820	choice-2-variants-7-activities	PT0S	PT0.993S	false	50	7	2	488	100	Thu Feb 02 18:02:47 CET 2023
