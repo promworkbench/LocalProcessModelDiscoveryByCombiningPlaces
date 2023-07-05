@@ -32,4 +32,7 @@ public class PlaceAdditionalInfo implements Serializable {
         return passageUsage;
     }
 
+    public void setPassageUsage(Map<Passage, Integer> passageUsage) {
+        this.passageUsage = passageUsage;
+    }
 }

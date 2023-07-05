@@ -14,7 +14,10 @@ public class JsonExporter<T> extends AbstractExporter<T> {
 
     @Override
     public void export(T object) {
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        Gson gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .enableComplexMapKeySerialization()
+                .create();
         String json = gson.toJson(object);
         try (FileWriter writer = new FileWriter(this.file)) {
             writer.write(json);

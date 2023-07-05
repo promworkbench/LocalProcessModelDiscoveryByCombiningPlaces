@@ -158,7 +158,7 @@ public class Main {
 //            Main.getContext().getProvidedObjectManager()
 //                    .createProvidedObject("Chosen Place Set - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
 //                            + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());
-            ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
+//            ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
 
             // setup the combination controller
             LPMCombinationController controller = new LPMCombinationController(parameters);

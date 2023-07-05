@@ -1,14 +1,10 @@
 package org.processmining.placebasedlpmdiscovery.model;
 
 import com.google.common.collect.Sets;
-import com.google.gson.Gson;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.PlaceAdditionalInfo;
 import org.processmining.placebasedlpmdiscovery.model.exporting.Exportable;
 import org.processmining.placebasedlpmdiscovery.model.exporting.Exporter;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Objects;

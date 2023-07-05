@@ -4,21 +4,19 @@ import com.google.gson.Gson;
 
 import java.io.*;
 
-public class JsonImporter<T> extends AbstractImporter<T> {
+public abstract class JsonImporter<T> implements Importer<T> {
 
-    public JsonImporter(InputStream is, Class<T> tClass) {
-        super(is, tClass);
-    }
-
-    @Override
-    public T read() {
-        Gson gson = new Gson();
-        try(InputStreamReader reader = new InputStreamReader(this.is)) {
-            return gson.fromJson(reader, this.tClass);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return null;
-    }
+//    @Override
+//    public T read() {
+//        Gson gson = new Gson();
+//        try(InputStreamReader reader = new InputStreamReader(this.is)) {
+//            return gson.fromJson(reader, this.tClass);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//
+//        return null;
+//    }
+//
+//    public abstract T read(String json);
 }
