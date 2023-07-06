@@ -4,8 +4,8 @@ import org.processmining.contexts.uitopia.annotations.UIImportPlugin;
 import org.processmining.framework.abstractplugins.AbstractImportPlugin;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
-import org.processmining.placebasedlpmdiscovery.model.exporting.JsonImporter;
-import org.processmining.placebasedlpmdiscovery.model.exporting.PlaceSetJsonImporter;
+import org.processmining.placebasedlpmdiscovery.model.exporting.importers.JsonImporter;
+import org.processmining.placebasedlpmdiscovery.model.exporting.importers.ImporterFactory;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 
 import java.io.InputStream;
@@ -22,8 +22,8 @@ public class PlaceSetJsonImportPlugin extends AbstractImportPlugin {
         } catch (final Throwable ignored) {
 
         }
-        PlaceSetJsonImporter importer = new PlaceSetJsonImporter();
-        return importer.read(input);
+        JsonImporter<PlaceSet> importer = ImporterFactory.createPlaceSetJsonImporter();
+        return importer.read(PlaceSet.class, input);
 //        return PlaceUtils.getPlaceSetFromInputStream(input);
     }
 }

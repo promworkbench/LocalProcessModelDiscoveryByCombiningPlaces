@@ -2,8 +2,6 @@ package org.processmining.placebasedlpmdiscovery.model;
 
 import com.google.common.collect.Sets;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.PlaceAdditionalInfo;
-import org.processmining.placebasedlpmdiscovery.model.exporting.Exportable;
-import org.processmining.placebasedlpmdiscovery.model.exporting.Exporter;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -15,7 +13,7 @@ import java.util.stream.Collectors;
 /***
  * The place class is used to represent the logic for a place in a PetriNet.
  */
-public class Place implements Serializable, Exportable<Place>, TextDescribable {
+public class Place implements Serializable, TextDescribable {
 
     private static final long serialVersionUID = -8990623494892563264L;
 
@@ -169,10 +167,5 @@ public class Place implements Serializable, Exportable<Place>, TextDescribable {
     public Set<Transition> getSilentTransitions(boolean isInput) {
         return isInput ? this.getInputTransitions().stream().filter(Transition::isInvisible).collect(Collectors.toSet()) :
                 this.getOutputTransitions().stream().filter(Transition::isInvisible).collect(Collectors.toSet());
-    }
-
-    @Override
-    public void export(Exporter<Place> exporter) { //TODO: Does it make sense to have this here?
-        exporter.export(this);
     }
 }
