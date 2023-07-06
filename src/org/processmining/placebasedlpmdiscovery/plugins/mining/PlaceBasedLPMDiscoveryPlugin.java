@@ -162,7 +162,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
 		Main.setUp(context);
 
 		PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log));
-		PlaceSet places = new PlaceSet(PlaceUtils.getPlacesFromPetriNet(context, petrinet));
+		PlaceSet places = new PlaceSet(PlaceUtils.getPlacesFromPetriNet(petrinet));
 
 		return run(context, log, places, parameters);
 	}

@@ -7,6 +7,7 @@ import org.processmining.models.graphbased.directed.petrinet.impl.PetrinetFactor
 import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
@@ -34,7 +35,7 @@ public class DefaultLogAndPetriNetRunner {
 
     private static void run(String eventLogPath, String petriNet, String resultPath) throws Exception {
         XLog log = LogUtils.readLogFromFile(eventLogPath);
-        LPMResult result = (LPMResult) Main.run(extractPlaceNets(petriNet), log, new PlaceBasedLPMDiscoveryParameters(log))[0];
+        LPMResult result = (LPMResult) Main.run(extractPlaceNets(petriNet), log, new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log)))[0];
         LocalProcessModelUtils.exportResult(result, resultPath);
     }
 
