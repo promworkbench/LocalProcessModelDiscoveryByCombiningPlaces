@@ -108,12 +108,13 @@ public class Place implements Serializable, TextDescribable {
 
         Place place = (Place) obj;
         return this.inputTransitions.equals(place.inputTransitions)
-                && this.outputTransitions.equals(place.outputTransitions);
+                && this.outputTransitions.equals(place.outputTransitions)
+                && this.id.equals(place.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(inputTransitions, outputTransitions);
+        return Objects.hash(inputTransitions, outputTransitions, id);
     }
 
     @Override
