@@ -155,10 +155,10 @@ public class Main {
             // export chosen places
             PlaceSet placeSet = new PlaceSet(places);
             placeSet.writePassageUsage(Analyzer.logAnalyzer.getLEFRMatrix(parameters.getLpmCombinationParameters().getLpmProximity()));
-            Main.getContext().getProvidedObjectManager()
-                    .createProvidedObject("Chosen Place Set - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
-                            + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());
-            ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
+//            Main.getContext().getProvidedObjectManager()
+//                    .createProvidedObject("Chosen Place Set - " + parameters.getPlaceDiscoveryAlgorithmId() + " from: "
+//                            + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());
+//            ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
 
             // setup the combination controller
             LPMCombinationController controller = new LPMCombinationController(parameters);

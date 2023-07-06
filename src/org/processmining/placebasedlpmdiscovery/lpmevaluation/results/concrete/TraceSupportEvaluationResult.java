@@ -14,17 +14,12 @@ public class TraceSupportEvaluationResult extends SimpleEvaluationResult {
     private final Map<Integer, Integer> coveredTraces;
 
     public TraceSupportEvaluationResult(LocalProcessModel lpm) {
-        super(lpm);
+        super(lpm, LPMEvaluationResultId.TraceSupportEvaluationResult);
         this.coveredTraces = new HashMap<>();
     }
 
     public void setTotalTraceCount(int count) {
         this.totalTraceCount = count;
-    }
-
-    @Override
-    public LPMEvaluationResultId getId() {
-        return LPMEvaluationResultId.TraceSupportEvaluationResult;
     }
 
     @Override

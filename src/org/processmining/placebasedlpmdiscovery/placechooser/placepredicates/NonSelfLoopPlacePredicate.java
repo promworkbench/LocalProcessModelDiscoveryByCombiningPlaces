@@ -8,7 +8,7 @@ public class NonSelfLoopPlacePredicate implements PlacePredicate {
     /**
      * Checks if all input or output transitions are self-loops
      * @param place that we want to check for filtering
-     * @return true if all input or output transitions are self-loops, false otherwise
+     * @return false if all input or output transitions are self-loops, true otherwise
      */
     @Override
     public boolean testPlace(Place place) {

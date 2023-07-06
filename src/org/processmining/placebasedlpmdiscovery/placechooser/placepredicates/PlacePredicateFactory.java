@@ -1,13 +1,13 @@
 package org.processmining.placebasedlpmdiscovery.placechooser.placepredicates;
 
-public class PlacePredicateFactory {
+public class PlacePredicateFactory { // TODO: Why is this not used?
 
     public PlacePredicate selfLoop() {
         return new NonSelfLoopPlacePredicate();
     }
 
     public PlacePredicate emptyIOTransitionSet() {
-        return new EmptyIOTransitionSetPlacePredicate();
+        return new NonEmptyIOTransitionSetPlacePredicate();
     }
 
     public PlacePredicate getPredicate(PlacePredicateConfig config) {

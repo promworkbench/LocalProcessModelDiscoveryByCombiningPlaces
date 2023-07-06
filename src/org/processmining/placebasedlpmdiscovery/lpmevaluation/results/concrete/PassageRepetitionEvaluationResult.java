@@ -11,11 +11,11 @@ public class PassageRepetitionEvaluationResult extends SimpleEvaluationResult {
 
     private static final long serialVersionUID = -13763990802711904L;
 
-    private Map<Passage, Integer> passageRepetitionMap;
+    private final Map<Passage, Integer> passageRepetitionMap;
     private double result;
 
     public PassageRepetitionEvaluationResult(LocalProcessModel lpm, Map<Passage, Integer> passageRepetitionMap) {
-        super(lpm);
+        super(lpm, LPMEvaluationResultId.PassageRepetitionEvaluationResult);
         this.passageRepetitionMap = passageRepetitionMap;
         this.result = -1;
     }
@@ -26,11 +26,6 @@ public class PassageRepetitionEvaluationResult extends SimpleEvaluationResult {
         int actual = passageRepetitionMap.values().stream().mapToInt(x -> x).sum();
 
         this.result = 1.0 * (max - actual) / (max - min);
-    }
-
-    @Override
-    public LPMEvaluationResultId getId() {
-        return LPMEvaluationResultId.PassageRepetitionEvaluationResult;
     }
 
     @Override

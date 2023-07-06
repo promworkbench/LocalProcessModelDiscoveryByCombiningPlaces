@@ -3,10 +3,13 @@ package org.processmining.placebasedlpmdiscovery.model.serializable;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.PlaceAdditionalInfo;
+import org.processmining.placebasedlpmdiscovery.model.exporting.Exportable;
+import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.Exporter;
 
+import java.io.OutputStream;
 import java.util.Set;
 
-public class PlaceSet extends SerializableSet<Place> {
+public class PlaceSet extends SerializableSet<Place> implements Exportable<PlaceSet> {
 
     private static final long serialVersionUID = 1645883969214312641L;
 
@@ -24,5 +27,10 @@ public class PlaceSet extends SerializableSet<Place> {
                 place.setAdditionalInfo(new PlaceAdditionalInfo());
             place.getAdditionalInfo().writePassageUsage(lefrMatrix, place);
         }
+    }
+
+    @Override
+    public void export(Exporter<PlaceSet> exporter, OutputStream os) {
+        exporter.export(this, os);
     }
 }

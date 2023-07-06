@@ -6,11 +6,16 @@ public abstract class SimpleEvaluationResult extends AbstractEvaluationResult {
 
     private static final long serialVersionUID = 8123973260828398630L;
 
-    public SimpleEvaluationResult(LocalProcessModel lpm) {
+    private final LPMEvaluationResultId id;
+
+    public SimpleEvaluationResult(LocalProcessModel lpm, LPMEvaluationResultId id) {
         super(lpm);
+        this.id = id;
     }
 
-    public abstract LPMEvaluationResultId getId();
+    public LPMEvaluationResultId getId() {
+        return this.id;
+    }
 
     public abstract double getResult();
 

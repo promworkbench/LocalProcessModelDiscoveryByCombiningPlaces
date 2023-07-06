@@ -30,6 +30,6 @@ public class PetriNetToPlaceNetsConverterPlugin {
             requiredParameterLabels = {0}
     )
     public static PlaceSet extractPlaceNets(UIPluginContext context, Petrinet net) {
-        return new PlaceSet(PlaceUtils.getPlacesFromPetriNet(context, net));
+        return new PlaceSet(PlaceUtils.getPlacesFromPetriNet(net));
     }
 }

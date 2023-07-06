@@ -53,7 +53,7 @@ public class PetriNetPlaceConverter extends AbstractPlaceConverter<AcceptingPetr
                     });
             discoveredPlaces.add(place);
         }
-        PlaceUtils.print(discoveredPlaces);
+//        PlaceUtils.print(discoveredPlaces);
         return discoveredPlaces;
     }
 }

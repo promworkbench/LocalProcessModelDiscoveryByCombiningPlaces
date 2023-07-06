@@ -4,11 +4,12 @@ import org.processmining.contexts.uitopia.annotations.UIExportPlugin;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
-import org.processmining.placebasedlpmdiscovery.model.Place;
-import org.processmining.placebasedlpmdiscovery.model.exporting.JsonExporter;
+import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.ExporterFactory;
+import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.JsonExporter;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 
 import java.io.*;
+import java.nio.file.Files;
 
 @Plugin(
         name = "Export set of places into a file",
@@ -21,8 +22,8 @@ import java.io.*;
 public class PlaceSetJsonExportPlugin {
 
     @PluginVariant(variantLabel = "Export set of places into a file", requiredParameterLabels = {0, 1})
-    public static void export(PluginContext context, PlaceSet placeSet, File file) {
-        JsonExporter<PlaceSet> exporter = new JsonExporter<>(file);
-        exporter.export(placeSet);
+    public static void export(PluginContext context, PlaceSet placeSet, File file) throws IOException {
+        JsonExporter<PlaceSet> exporter = new JsonExporter<>();
+        placeSet.export(ExporterFactory.createPlaceSetJsonExporter(), Files.newOutputStream(file.toPath()));
     }
 }

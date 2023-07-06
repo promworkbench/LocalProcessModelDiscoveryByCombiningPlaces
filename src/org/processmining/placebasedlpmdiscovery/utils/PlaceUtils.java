@@ -250,7 +250,7 @@ public class PlaceUtils {
         return passages;
     }
 
-    public static Set<Place> getPlacesFromPetriNet(PluginContext context, Petrinet petrinet) {
+    public static Set<Place> getPlacesFromPetriNet(Petrinet petrinet) {
         AcceptingPetriNet acceptingPetriNet = new AcceptingPetriNetImpl(petrinet);
         PetriNetPlaceConverter converter = new PetriNetPlaceConverter();
         return converter.convert(acceptingPetriNet);
