@@ -71,7 +71,10 @@ public class LocalProcessModelUtils {
     }
 
     public static LocalProcessModel convertReplayableToLPM(ReplayableLocalProcessModel replayable,
-                                                           Map<Integer, String> reversedLabelMap) {
+                                                           Map<Integer, String> reversedLabelMap,
+                                                           Set<Place> originalPlaces) {
+        Map<String, Place> idToPlace = originalPlaces.stream().collect(Collectors.toMap(Place::getId, p -> p));
+
         // create all transitions
         Map<Integer, Transition> transitions = new HashMap<>();
         Set<Integer> transitionsMapped = replayable.getTransitions();
@@ -86,7 +89,7 @@ public class LocalProcessModelUtils {
         Map<Integer, Place> constraintIdPlaceMap = replayable.getConstraintMap()
                 .entrySet()
                 .stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, e -> new Place(e.getValue()))); // TODO: Here the sent places should be used
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> idToPlace.get(e.getValue())));
         // add output transitions to the places
         for (Map.Entry<Integer, Set<Integer>> entry : replayable.getInputConstraints().entrySet()) {
             int trId = entry.getKey();
