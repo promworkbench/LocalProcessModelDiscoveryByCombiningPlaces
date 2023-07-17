@@ -159,7 +159,7 @@ public class LPMTreeBuilder extends Interruptible {
                 .stream()
                 .collect(Collectors.toMap(
                         n -> LocalProcessModelUtils
-                                .convertReplayableToLPM(n.getLpm(), reversedLabelMap),
+                                .convertReplayableToLPM(n.getLpm(), reversedLabelMap, this.places),
                         n -> new LPMTemporaryInfo(n.getLpm().getFiringSequence(), n.getLpm().getUsedPassages()),
                         (n1, n2) -> n1)); // TODO: update how the firing sequences are added
         addBranchCombinations(lpmWithTemporaryInfo, new ArrayList<>(window));
