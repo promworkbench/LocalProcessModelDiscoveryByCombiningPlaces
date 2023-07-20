@@ -18,7 +18,6 @@ import java.util.Set;
 public class LPMCombinationController {
 
     private final PlaceBasedLPMDiscoveryParameters parameters;
-    private LPMFiltrationAndEvaluationController lpmFiltrationAndEvaluationController;
     private int currentNumPlaces;
     private CombinationGuard guard;
     private final RunningContext runningContext;
@@ -30,7 +29,6 @@ public class LPMCombinationController {
         this.currentNumPlaces = 1;
         this.guard = (lpm, place) -> true;
 
-        this.lpmFiltrationAndEvaluationController = new LPMFiltrationAndEvaluationController();
         Main.getAnalyzer().getStatistics().getGeneralStatistics().setProximity(this.parameters.getLpmCombinationParameters().getLpmProximity());
     }
 
@@ -57,7 +55,7 @@ public class LPMCombinationController {
             Main.getInterrupterSubject().addObserver(tree);
             System.out.println("========End building tree========");
 
-            return tree.getLPMs(lpmFiltrationAndEvaluationController, count);
+            return tree.getLPMs(count);
         } else {
             ContextLPMTreeBuilder treeBuilder = new ContextLPMTreeBuilder(
                     log, new HashSet<>(places), this.parameters.getLpmCombinationParameters(),
@@ -68,7 +66,7 @@ public class LPMCombinationController {
             Main.getInterrupterSubject().addObserver(tree);
             System.out.println("========End building tree========");
 
-            return tree.getLPMs(lpmFiltrationAndEvaluationController, count);
+            return tree.getLPMs(count);
         }
     }
 
@@ -80,9 +78,5 @@ public class LPMCombinationController {
 //                (new RemoveStructuralRedundantPlacesPlugin())
 //                        .run(Main.getContext(), LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm), parameters));
         return lpm;
-    }
-
-    public void setFiltrationController(LPMFiltrationAndEvaluationController lpmFiltrationAndEvaluationController) {
-        this.lpmFiltrationAndEvaluationController = lpmFiltrationAndEvaluationController;
     }
 }

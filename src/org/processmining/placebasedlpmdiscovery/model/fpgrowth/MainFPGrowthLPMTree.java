@@ -68,7 +68,7 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         return sorted;
     }
 
-    public Set<LocalProcessModel> getLPMs(LPMFiltrationAndEvaluationController filtrationController, int count) {
+    public Set<LocalProcessModel> getLPMs(int count) {
         Set<LocalProcessModel> lpms = new HashSet<>();
 
         Queue<MainFPGrowthLPMTreeNode> queue = new LinkedList<>();
@@ -81,7 +81,7 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
             if (node != root && node.getWindowsEvaluationResult() != null) {
                 LocalProcessModel lpm = node.getLPM();
                 lpm.getAdditionalInfo().getEvaluationResult().addResult(node.getWindowsEvaluationResult());
-                if (filtrationController.shouldKeepLPM(lpm))
+                if (this.runningContext.getLpmFiltrationAndEvaluationController().shouldKeepLPM(lpm))
                     lpms.add(lpm);
             }
             queue.addAll(node.getChildren());

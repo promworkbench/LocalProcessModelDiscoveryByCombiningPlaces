@@ -181,7 +181,6 @@ public class Main {
                 LPMFilter filter = filterFactory.getLPMFilter(filterId);
                 filtrationController.addLPMFilter(filter, filter.needsEvaluation());
             }
-            controller.setFiltrationController(filtrationController);
             runningContext.setLpmFiltrationAndEvaluationController(filtrationController);
 //        controller.addFinalLPMFilter(new SubLPMFilter());
 
