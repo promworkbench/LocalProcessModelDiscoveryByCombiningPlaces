@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth;
 import org.apache.commons.math3.util.Pair;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.Main;
+import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.ContextWindowLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
@@ -29,12 +30,16 @@ public class ContextLPMTreeBuilder implements CanBeInterrupted {
     LPMCombinationParameters parameters;
     private boolean stop;
     private final ContextWindowLog windowLog;
+    private final RunningContext runningContext;
 
-    public ContextLPMTreeBuilder(XLog log, Set<Place> places, LPMCombinationParameters parameters, Map<String, EventAttributeSummary<?,?>> context) {
+    public ContextLPMTreeBuilder(XLog log, Set<Place> places, LPMCombinationParameters parameters,
+                                 Map<String, EventAttributeSummary<?,?>> context,
+                                 RunningContext runningContext) {
         this.places = places;
         this.parameters = parameters;
         this.stop = false;
         windowLog = new ContextWindowLog(log, context); // create the integer mapped log
+        this.runningContext = runningContext;
     }
 
     public MainFPGrowthLPMTree buildTree() {
@@ -47,7 +52,7 @@ public class ContextLPMTreeBuilder implements CanBeInterrupted {
                 .collect(Collectors.toSet()));
 
         MainFPGrowthLPMTree mainTree = new MainFPGrowthLPMTree(getPlacePriorityMap(),
-                windowLog.getMapping().getLabelMap(), this.parameters.getLpmProximity());
+                windowLog.getMapping().getLabelMap(), this.parameters.getLpmProximity(), this.runningContext);
 
         // map transitions to places that have it as input
 //        Set<String> transitionLabels = transitions.stream().map(Transition::getLabel).collect(Collectors.toSet());

@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.WindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
 
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +14,7 @@ public class MainFPGrowthLPMTreeNode {
     private final Set<MainFPGrowthLPMTreeNode> children;
     private final MainFPGrowthLPMTreeNode parent;
     private Place place;
+    private LPMAdditionalInfo additionalInfo;
     private WindowsEvaluationResult windowsEvaluationResult;
 
     public MainFPGrowthLPMTreeNode(MainFPGrowthLPMTreeNode parent) {
@@ -24,6 +26,7 @@ public class MainFPGrowthLPMTreeNode {
         this.parent = parent;
         this.place = place;
         this.children = new HashSet<>();
+        this.additionalInfo = new LPMAdditionalInfo();
     }
 
     public boolean hasChild(Place place) {
@@ -48,6 +51,10 @@ public class MainFPGrowthLPMTreeNode {
                 return child;
         }
         return null;
+    }
+
+    public LPMAdditionalInfo getAdditionalInfo() {
+        return additionalInfo;
     }
 
     public WindowsEvaluationResult getWindowsEvaluationResult() {

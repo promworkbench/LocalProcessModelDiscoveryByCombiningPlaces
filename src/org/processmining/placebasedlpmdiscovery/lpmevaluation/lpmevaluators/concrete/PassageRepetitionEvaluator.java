@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.concrete;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.AbstractLPMEvaluator;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluator;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageRepetitionEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-public class PassageRepetitionEvaluator extends AbstractLPMEvaluator<PassageRepetitionEvaluationResult> {
+public class PassageRepetitionEvaluator implements LPMEvaluator<PassageRepetitionEvaluationResult> {
 
     @Override
     public PassageRepetitionEvaluationResult evaluate(LocalProcessModel lpm) {

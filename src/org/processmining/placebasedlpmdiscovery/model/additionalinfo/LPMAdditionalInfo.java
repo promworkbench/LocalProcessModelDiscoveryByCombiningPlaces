@@ -1,11 +1,18 @@
 package org.processmining.placebasedlpmdiscovery.model.additionalinfo;
 
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.AbstractEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.GroupedEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LPMAdditionalInfo implements Serializable {
+
+    public enum DefaultInfoKeys {
+
+    }
 
     private static final long serialVersionUID = 3593199319792435898L;
     //    private double logFrequency;
@@ -13,15 +20,23 @@ public class LPMAdditionalInfo implements Serializable {
     private transient LocalProcessModel lpm;
     private GroupedEvaluationResult evaluationResult;
 
+    private Map<String, Object> infos;
+
+    public LPMAdditionalInfo() {
+        this.infos = new HashMap<>();
+    }
+
     public LPMAdditionalInfo(LocalProcessModel lpm) {
         this.lpm = lpm;
         this.evaluationResult = new GroupedEvaluationResult(lpm);
+        this.infos = new HashMap<>();
     }
 
     public LPMAdditionalInfo(LPMAdditionalInfo additionalInfo) {
         try {
             this.evaluationResult = additionalInfo.getEvaluationResult().clone();
             this.lpm = additionalInfo.lpm;
+            this.infos = new HashMap<>(additionalInfo.infos);
         } catch (CloneNotSupportedException e) {
             e.printStackTrace();
         }
@@ -71,5 +86,26 @@ public class LPMAdditionalInfo implements Serializable {
 
     public void clearEvaluation() {
         this.evaluationResult = new GroupedEvaluationResult(lpm);
+    }
+
+    public boolean existsInfo(String key) {
+        return this.infos.containsKey(key);
+    }
+
+    public void addInfo(String key, AbstractEvaluationResult info) {
+        this.infos.put(key, info);
+    }
+
+    public void updateInfo(String key, AbstractEvaluationResult info) {
+        this.infos.put(key, evaluationResult);
+    }
+
+    public <T> T getInfo(String key, Class<T> infoClass) {
+        Object info = this.infos.get(key);
+        if (!infoClass.isInstance(info)) {
+            throw new IllegalArgumentException("The info for the key " + key + " is of type " + info.getClass() +
+                    " while the requested class is " + infoClass);
+        }
+        return infoClass.cast(info);
     }
 }

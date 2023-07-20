@@ -6,7 +6,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.AbstractEv
 
 public class LPMEvaluatorFactory {
 
-    public AbstractLPMEvaluator<? extends AbstractEvaluationResult> getEvaluator(LPMEvaluatorId evaluatorId) {
+    public LPMEvaluator<? extends AbstractEvaluationResult> getEvaluator(LPMEvaluatorId evaluatorId) {
         if (evaluatorId == LPMEvaluatorId.TransitionOverlappingEvaluator)
             return new TransitionsOverlappingEvaluator();
         if (evaluatorId == LPMEvaluatorId.WindowEvaluator)

@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth;
 import org.apache.commons.math3.util.Pair;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.Main;
+import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
@@ -29,11 +30,17 @@ public class LPMTreeBuilder extends Interruptible {
     LPMCombinationParameters parameters;
     private final WindowLog windowLog;
 
-    public LPMTreeBuilder(XLog log, Set<Place> places, LPMCombinationParameters parameters) {
+    private final RunningContext runningContext;
+
+    public LPMTreeBuilder(XLog log,
+                          Set<Place> places,
+                          LPMCombinationParameters parameters,
+                          RunningContext runningContext) {
         this.places = places;
         this.parameters = parameters;
 //        this.stop = false;
         windowLog = new WindowLog(log); // create the integer mapped log
+        this.runningContext = runningContext;
     }
 
     public MainFPGrowthLPMTree buildTree() {
@@ -46,7 +53,7 @@ public class LPMTreeBuilder extends Interruptible {
                 .collect(Collectors.toSet()));
 
         MainFPGrowthLPMTree mainTree = new MainFPGrowthLPMTree(getPlacePriorityMap(),
-                windowLog.getMapping().getLabelMap(), this.parameters.getLpmProximity());
+                windowLog.getMapping().getLabelMap(), this.parameters.getLpmProximity(), this.runningContext);
 
         // map transitions to places that have it as input
 //        Set<String> transitionLabels = transitions.stream().map(Transition::getLabel).collect(Collectors.toSet());

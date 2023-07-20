@@ -160,8 +160,9 @@ public class Main {
 //                            + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());
 //            ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
 
+            RunningContext runningContext = new RunningContext();
             // setup the combination controller
-            LPMCombinationController controller = new LPMCombinationController(parameters);
+            LPMCombinationController controller = new LPMCombinationController(parameters, runningContext);
 
             // set guard
             controller.setCombinationGuard(new AndCombinationGuard(
@@ -181,6 +182,7 @@ public class Main {
                 filtrationController.addLPMFilter(filter, filter.needsEvaluation());
             }
             controller.setFiltrationController(filtrationController);
+            runningContext.setLpmFiltrationAndEvaluationController(filtrationController);
 //        controller.addFinalLPMFilter(new SubLPMFilter());
 
 //        Set<LocalProcessModel> finalLpms = controller.combine(places);

@@ -1,5 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
+import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.WindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationAndEvaluationController;
@@ -15,11 +16,16 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
     private final Map<String, Integer> labelMap; // label mapped into integer id
     private final int maxDependencyLength;
     private boolean stop;
+    private RunningContext runningContext;
 
-    public MainFPGrowthLPMTree(Map<Place, Integer> priorityMap, Map<String, Integer> labelMap, int maxDependencyLength) {
+    public MainFPGrowthLPMTree(Map<Place, Integer> priorityMap,
+                               Map<String, Integer> labelMap,
+                               int maxDependencyLength,
+                               RunningContext runningContext) {
         this.priorityMap = priorityMap;
         this.labelMap = labelMap;
         this.maxDependencyLength = maxDependencyLength;
+        this.runningContext = runningContext;
     }
 
     @Override
@@ -42,9 +48,18 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
                 this.nodes.add(current);
             }
         }
+        this.updateAdditionalInfos(lpm, lpmTemporaryInfo, current);
         if (current.getWindowsEvaluationResult() == null)
             current.setWindowsEvaluationResult(new WindowsEvaluationResult(lpm, this.maxDependencyLength, this.labelMap));
         current.updateEvaluation(count, window, lpmTemporaryInfo, traceVariantId);
+    }
+
+    private void updateAdditionalInfos(LocalProcessModel lpm,
+                                       LPMTemporaryInfo tempInfo,
+                                       MainFPGrowthLPMTreeNode treeNode) {
+        this.runningContext
+                .getLpmFiltrationAndEvaluationController()
+                .evaluateForOneWindow(lpm, tempInfo, treeNode.getAdditionalInfo());
     }
 
     private List<Place> sortPlaces(Set<Place> places) {

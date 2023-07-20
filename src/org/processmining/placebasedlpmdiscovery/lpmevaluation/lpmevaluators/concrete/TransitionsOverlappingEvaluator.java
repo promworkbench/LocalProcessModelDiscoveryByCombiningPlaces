@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.concrete;
 
 import com.google.common.collect.Sets;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.AbstractLPMEvaluator;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluator;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.TransitionsOverlappingEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
@@ -9,7 +9,7 @@ import org.processmining.placebasedlpmdiscovery.model.Transition;
 
 import java.util.Set;
 
-public class TransitionsOverlappingEvaluator extends AbstractLPMEvaluator<TransitionsOverlappingEvaluationResult> {
+public class TransitionsOverlappingEvaluator implements LPMEvaluator<TransitionsOverlappingEvaluationResult> {
 
     @Override
     public TransitionsOverlappingEvaluationResult evaluate(LocalProcessModel lpm) {

@@ -9,6 +9,9 @@ public class LPMTemporaryInfo {
 
     private final List<Integer> firingSequence;
     private final Set<Pair<Integer, Integer>> usedPassages;
+    private int count;
+    private List<Integer> window;
+    private Integer traceVariantId;
 
     public LPMTemporaryInfo(List<Integer> firingSequence, Set<Pair<Integer, Integer>> usedPassages) {
         this.firingSequence = firingSequence;

@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.Main;
+import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationAndEvaluationController;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth.ContextLPMTreeBuilder;
@@ -20,9 +21,12 @@ public class LPMCombinationController {
     private LPMFiltrationAndEvaluationController lpmFiltrationAndEvaluationController;
     private int currentNumPlaces;
     private CombinationGuard guard;
+    private final RunningContext runningContext;
 
-    public LPMCombinationController(PlaceBasedLPMDiscoveryParameters parameters) {
+    public LPMCombinationController(PlaceBasedLPMDiscoveryParameters parameters, RunningContext runningContext) {
         this.parameters = parameters;
+        this.runningContext = runningContext;
+
         this.currentNumPlaces = 1;
         this.guard = (lpm, place) -> true;
 
@@ -46,7 +50,7 @@ public class LPMCombinationController {
 //        FPGrowthLPMDiscoveryTreeBuilder treeBuilder = new FPGrowthLPMDiscoveryTreeBuilder(
         if (this.parameters.getEventAttributeSummary().isEmpty()) {
             LPMTreeBuilder treeBuilder = new LPMTreeBuilder(
-                    log, new HashSet<>(places), this.parameters.getLpmCombinationParameters());
+                    log, new HashSet<>(places), this.parameters.getLpmCombinationParameters(), this.runningContext);
             Main.getInterrupterSubject().addObserver(treeBuilder);
             System.out.println("========Building tree========");
             MainFPGrowthLPMTree tree = treeBuilder.buildTree();
@@ -56,7 +60,8 @@ public class LPMCombinationController {
             return tree.getLPMs(lpmFiltrationAndEvaluationController, count);
         } else {
             ContextLPMTreeBuilder treeBuilder = new ContextLPMTreeBuilder(
-                    log, new HashSet<>(places), this.parameters.getLpmCombinationParameters(), this.parameters.getEventAttributeSummary());
+                    log, new HashSet<>(places), this.parameters.getLpmCombinationParameters(),
+                    this.parameters.getEventAttributeSummary(), runningContext);
             Main.getInterrupterSubject().addObserver(treeBuilder);
             System.out.println("========Building tree========");
             MainFPGrowthLPMTree tree = treeBuilder.buildTree();
