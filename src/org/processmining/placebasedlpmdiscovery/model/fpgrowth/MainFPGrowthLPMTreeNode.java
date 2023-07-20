@@ -71,8 +71,8 @@ public class MainFPGrowthLPMTreeNode {
         return child;
     }
 
-    public void updateEvaluation(int count, List<Integer> window, LPMTemporaryInfo lpmTemporaryInfo, Integer traceVariantId) {
-        this.windowsEvaluationResult.updatePositive(count, window, lpmTemporaryInfo, traceVariantId);
+    public void updateEvaluation(int count, List<Integer> window, LPMTemporaryWindowInfo lpmTemporaryWindowInfo, Integer traceVariantId) {
+        this.windowsEvaluationResult.updatePositive(count, window, lpmTemporaryWindowInfo, traceVariantId);
     }
 
     @Override

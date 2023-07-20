@@ -5,7 +5,7 @@ import org.apache.commons.math3.util.Pair;
 import java.util.List;
 import java.util.Set;
 
-public class LPMTemporaryInfo {
+public class LPMTemporaryWindowInfo {
 
     private final List<Integer> firingSequence;
     private final Set<Pair<Integer, Integer>> usedPassages;
@@ -13,7 +13,7 @@ public class LPMTemporaryInfo {
     private List<Integer> window;
     private Integer traceVariantId;
 
-    public LPMTemporaryInfo(List<Integer> firingSequence, Set<Pair<Integer, Integer>> usedPassages) {
+    public LPMTemporaryWindowInfo(List<Integer> firingSequence, Set<Pair<Integer, Integer>> usedPassages) {
         this.firingSequence = firingSequence;
         this.usedPassages = usedPassages;
     }

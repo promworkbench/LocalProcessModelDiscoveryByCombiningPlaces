@@ -3,7 +3,7 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.GroupedEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryInfo;
+import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -30,13 +30,13 @@ public class WindowsEvaluationResult extends GroupedEvaluationResult {
         this.addResult(traceSupportEvaluationResult);
     }
 
-    public void updatePositive(int windowMultiplicity, List<Integer> window, LPMTemporaryInfo lpmTemporaryInfo, Integer traceVariantId) {
-        boolean successful = lpmTemporaryInfo != null;
+    public void updatePositive(int windowMultiplicity, List<Integer> window, LPMTemporaryWindowInfo lpmTemporaryWindowInfo, Integer traceVariantId) {
+        boolean successful = lpmTemporaryWindowInfo != null;
         if (successful) {
-            this.transitionCoverageEvaluationResult.updateTransitionCoverageCountMap(lpmTemporaryInfo.getFiringSequence(), window, windowMultiplicity);
-            passageCoverageEvaluationResult.updatePassageCoverage(lpmTemporaryInfo.getUsedPassages());
+            this.transitionCoverageEvaluationResult.updateTransitionCoverageCountMap(lpmTemporaryWindowInfo.getFiringSequence(), window, windowMultiplicity);
+            passageCoverageEvaluationResult.updatePassageCoverage(lpmTemporaryWindowInfo.getUsedPassages());
             fittingWindowsEvaluationResult.updateCount(windowMultiplicity);
-            fittingWindowsEvaluationResult.updateWeightedCount(1.0 * lpmTemporaryInfo.getFiringSequence().size() * windowMultiplicity / window.size());
+            fittingWindowsEvaluationResult.updateWeightedCount(1.0 * lpmTemporaryWindowInfo.getFiringSequence().size() * windowMultiplicity / window.size());
             traceSupportEvaluationResult.addTraces(traceVariantId, windowMultiplicity);
         } else { // if the replay was successful
             throw new UnsupportedOperationException("This should be called only when a window is successful");

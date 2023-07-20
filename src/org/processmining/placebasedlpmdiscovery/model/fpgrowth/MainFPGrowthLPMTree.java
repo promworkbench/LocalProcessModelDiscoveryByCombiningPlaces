@@ -3,7 +3,6 @@ package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.WindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationAndEvaluationController;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
@@ -33,7 +32,7 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         return new MainFPGrowthLPMTreeNode(null);
     }
 
-    public void addOrUpdate(LocalProcessModel lpm, int count, List<Integer> window, LPMTemporaryInfo lpmTemporaryInfo, Integer traceVariantId) {
+    public void addOrUpdate(LocalProcessModel lpm, int count, List<Integer> window, LPMTemporaryWindowInfo lpmTemporaryWindowInfo, Integer traceVariantId) {
         List<Place> places = sortPlaces(lpm.getPlaces());
 
         if (places.size() < 1)
@@ -48,14 +47,14 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
                 this.nodes.add(current);
             }
         }
-        this.updateAdditionalInfos(lpm, lpmTemporaryInfo, current);
+        this.updateAdditionalInfos(lpm, lpmTemporaryWindowInfo, current);
         if (current.getWindowsEvaluationResult() == null)
             current.setWindowsEvaluationResult(new WindowsEvaluationResult(lpm, this.maxDependencyLength, this.labelMap));
-        current.updateEvaluation(count, window, lpmTemporaryInfo, traceVariantId);
+        current.updateEvaluation(count, window, lpmTemporaryWindowInfo, traceVariantId);
     }
 
     private void updateAdditionalInfos(LocalProcessModel lpm,
-                                       LPMTemporaryInfo tempInfo,
+                                       LPMTemporaryWindowInfo tempInfo,
                                        MainFPGrowthLPMTreeNode treeNode) {
         this.runningContext
                 .getLpmFiltrationAndEvaluationController()

@@ -8,7 +8,7 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lp
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.NeedsEvaluationLPMFilter;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
-import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryInfo;
+import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
 
 import java.util.*;
 
@@ -111,7 +111,7 @@ public class LPMFiltrationAndEvaluationController implements EvaluatorHub {
         this.evaluatorFactory = evaluatorFactory;
     }
 
-    public void evaluateForOneWindow(LocalProcessModel lpm, LPMTemporaryInfo tempInfo, LPMAdditionalInfo additionalInfo) {
+    public void evaluateForOneWindow(LocalProcessModel lpm, LPMTemporaryWindowInfo tempInfo, LPMAdditionalInfo additionalInfo) {
         for (WindowLPMEvaluator<?> evaluator : this.windowEvaluators) {
             if (!additionalInfo.existsInfo(evaluator.getKey())) {
                 additionalInfo.addInfo(evaluator.getKey(), evaluator.createEmptyInfo());
