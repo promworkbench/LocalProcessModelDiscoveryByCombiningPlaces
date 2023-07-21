@@ -173,7 +173,8 @@ public class ContextLPMTreeBuilder implements CanBeInterrupted {
                 .collect(Collectors.toMap(
                         n -> LocalProcessModelUtils
                                 .convertReplayableToLPM(n.getLpm(), reversedLabelMap, this.places),
-                        n -> new LPMTemporaryWindowInfo(n.getLpm().getFiringSequence(), n.getLpm().getUsedPassages()),
+                        n -> new LPMTemporaryWindowInfo(n.getLpm().getFiringSequence(), n.getLpm().getUsedPassages(),
+                                this.windowLog.getMapping().getReverseLabelMap()),
                         (n1, n2) -> n1)); // TODO: update how the firing sequences are added
         addBranchCombinations(lpmWithTemporaryInfo, new ArrayList<>(window));
         return lpmWithTemporaryInfo;
@@ -194,12 +195,12 @@ public class ContextLPMTreeBuilder implements CanBeInterrupted {
     private void addBranchCombinations(LocalProcessModel lpm, List<LocalProcessModel> lpms, int from,
                                        Map<LocalProcessModel, LPMTemporaryWindowInfo> lpmWithTemporaryInfo,
                                        List<Integer> window, int currIteration) {
-        List<Integer> fs = lpmWithTemporaryInfo.get(lpm).getFiringSequence();
+        List<Integer> fs = lpmWithTemporaryInfo.get(lpm).getIntegerFiringSequence();
         for (int i = from; i < lpms.size(); ++i) {
             if (stop)
                 return;
 
-            List<Integer> fsi = lpmWithTemporaryInfo.get(lpms.get(i)).getFiringSequence();
+            List<Integer> fsi = lpmWithTemporaryInfo.get(lpms.get(i)).getIntegerFiringSequence();
             if (fsi.stream().noneMatch(fs::contains)) {
                 continue;
             }
@@ -209,9 +210,10 @@ public class ContextLPMTreeBuilder implements CanBeInterrupted {
                 Replayer replayer = new Replayer(resLpm, windowLog.getMapping().getLabelMap());
                 if (replayer.canReplay(sequence)) {
                     Set<Pair<Integer, Integer>> usedPassages = new HashSet<>();
-                    usedPassages.addAll(lpmWithTemporaryInfo.get(lpm).getUsedPassages());
-                    usedPassages.addAll(lpmWithTemporaryInfo.get(lpms.get(i)).getUsedPassages());
-                    lpmWithTemporaryInfo.put(resLpm, new LPMTemporaryWindowInfo(sequence, usedPassages));
+                    usedPassages.addAll(lpmWithTemporaryInfo.get(lpm).getIntegerUsedPassages());
+                    usedPassages.addAll(lpmWithTemporaryInfo.get(lpms.get(i)).getIntegerUsedPassages());
+                    lpmWithTemporaryInfo.put(resLpm, new LPMTemporaryWindowInfo(sequence, usedPassages,
+                            this.windowLog.getMapping().getReverseLabelMap()));
                     if (currIteration < this.parameters.getConcurrencyCardinality()) {
                         addBranchCombinations(resLpm, lpms, i+1, lpmWithTemporaryInfo, window, currIteration + 1);
                     }

@@ -19,7 +19,7 @@ public class WindowsEvaluationResult extends GroupedEvaluationResult {
 
     public WindowsEvaluationResult(LocalProcessModel lpm, int windowSize, Map<String, Integer> labelMap) {
         super(lpm);
-        passageCoverageEvaluationResult = new PassageCoverageEvaluationResult(lpm, labelMap);
+        passageCoverageEvaluationResult = new PassageCoverageEvaluationResult(lpm);
         this.addResult(passageCoverageEvaluationResult);
         fittingWindowsEvaluationResult = new FittingWindowsEvaluationResult(lpm, windowSize);
         this.addResult(fittingWindowsEvaluationResult);
@@ -33,10 +33,10 @@ public class WindowsEvaluationResult extends GroupedEvaluationResult {
     public void updatePositive(int windowMultiplicity, List<Integer> window, LPMTemporaryWindowInfo lpmTemporaryWindowInfo, Integer traceVariantId) {
         boolean successful = lpmTemporaryWindowInfo != null;
         if (successful) {
-            this.transitionCoverageEvaluationResult.updateTransitionCoverageCountMap(lpmTemporaryWindowInfo.getFiringSequence(), window, windowMultiplicity);
-            passageCoverageEvaluationResult.updatePassageCoverage(lpmTemporaryWindowInfo.getUsedPassages());
+            this.transitionCoverageEvaluationResult.updateTransitionCoverageCountMap(lpmTemporaryWindowInfo.getIntegerFiringSequence(), window, windowMultiplicity);
+//            passageCoverageEvaluationResult.updatePassageCoverage(lpmTemporaryWindowInfo.getUsedPassages());
             fittingWindowsEvaluationResult.updateCount(windowMultiplicity);
-            fittingWindowsEvaluationResult.updateWeightedCount(1.0 * lpmTemporaryWindowInfo.getFiringSequence().size() * windowMultiplicity / window.size());
+            fittingWindowsEvaluationResult.updateWeightedCount(1.0 * lpmTemporaryWindowInfo.getIntegerFiringSequence().size() * windowMultiplicity / window.size());
             traceSupportEvaluationResult.addTraces(traceVariantId, windowMultiplicity);
         } else { // if the replay was successful
             throw new UnsupportedOperationException("This should be called only when a window is successful");
