@@ -15,8 +15,10 @@ public class AbovePassageCoverageThresholdLPMFilter extends NeedsEvaluationLPMFi
 
     @Override
     public boolean shouldKeep(LocalProcessModel lpm) {
-        return lpm.getAdditionalInfo().getEvaluationResult()
-                .getSimpleEvaluationResult(PassageCoverageEvaluationResult.class).getResult() > threshold;
+        return lpm.getAdditionalInfo()
+                .getEvaluationResult(
+                        LPMEvaluationResultId.PassageCoverageEvaluationResult.name(),
+                        PassageCoverageEvaluationResult.class).getResult() > threshold;
     }
 
     @Override

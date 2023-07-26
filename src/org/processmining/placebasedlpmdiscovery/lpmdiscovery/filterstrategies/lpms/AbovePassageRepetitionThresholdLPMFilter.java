@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.l
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageCoverageEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
 public class AbovePassageRepetitionThresholdLPMFilter extends NeedsEvaluationLPMFilter {
@@ -14,8 +15,9 @@ public class AbovePassageRepetitionThresholdLPMFilter extends NeedsEvaluationLPM
 
     @Override
     public boolean shouldKeep(LocalProcessModel lpm) {
-        return lpm.getAdditionalInfo().getEvaluationResult()
-                .getEvaluationResult(LPMEvaluationResultId.PassageRepetitionEvaluationResult).getResult() > threshold;
+        return lpm.getAdditionalInfo().getEvaluationResult(
+                LPMEvaluationResultId.PassageRepetitionEvaluationResult.name(),
+                PassageCoverageEvaluationResult.class).getResult() > threshold;
     }
 
     @Override
