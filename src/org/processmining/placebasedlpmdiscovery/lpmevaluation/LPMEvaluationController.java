@@ -50,8 +50,7 @@ public class LPMEvaluationController implements EvaluatorHub {
         this.windowEvaluators.add(evaluator);
     }
 
-    public void evaluate(LPMEvaluatorId evaluatorId) {
-        LPMEvaluator<? extends LPMEvaluationResult> evaluator =
-                this.evaluatorFactory.getEvaluator(evaluatorId);
+    public LPMEvaluationResult evaluate(LPMEvaluatorId evaluatorId, LocalProcessModel lpm) {
+        return this.evaluatorFactory.getEvaluator(evaluatorId).evaluate(lpm);
     }
 }

@@ -8,6 +8,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.Wind
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.AbstractEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.NeedsEvaluationLPMFilter;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
@@ -57,9 +58,13 @@ public class LPMFiltrationController {
             if (filter.needsEvaluation()) {
                 NeedsEvaluationLPMFilter needsEvaluationLPMFilter = (NeedsEvaluationLPMFilter) filter;
                 // evaluate the lpms that haven't been evaluated
-                if (lpm.getAdditionalInfo().getEvaluationResult()
-                        .getEvaluationResult(needsEvaluationLPMFilter.getEvaluationId()) == null)
-                    this.runningContext.getLpmEvaluationController().evaluate(needsEvaluationLPMFilter.getEvaluatorId());
+                if (lpm.getAdditionalInfo().getEvaluationResult(
+                        needsEvaluationLPMFilter.getEvaluationId().name(),
+                        LPMEvaluationResult.class) == null)
+                    lpm.getAdditionalInfo().addEvaluationResult(
+                            needsEvaluationLPMFilter.getEvaluationId().name(),
+                            this.runningContext.getLpmEvaluationController()
+                                    .evaluate(needsEvaluationLPMFilter.getEvaluatorId(), lpm));
             }
             if (!filter.shouldKeep(lpm))
                 return false;
