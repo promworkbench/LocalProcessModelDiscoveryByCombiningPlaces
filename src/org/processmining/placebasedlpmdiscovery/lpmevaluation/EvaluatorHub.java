@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration;
+package org.processmining.placebasedlpmdiscovery.lpmevaluation;
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMEvaluator;
 

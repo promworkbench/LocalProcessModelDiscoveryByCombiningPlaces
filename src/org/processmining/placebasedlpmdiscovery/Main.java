@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery;
 import org.deckfour.xes.model.XLog;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorFactory;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
@@ -16,7 +17,7 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LP
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LPMFilterParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilterId;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationAndEvaluationController;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterSubject;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
@@ -169,10 +170,11 @@ public class Main {
                     new SameActivityCombinationGuard(), new NotContainingCoveringPlacesCombinationGuard()));
 
             // setup filtration controller
-            LPMFiltrationAndEvaluationController filtrationController = new LPMFiltrationAndEvaluationController();
+            LPMFiltrationController filtrationController = new LPMFiltrationController(runningContext);
+            LPMEvaluationController evaluationController = new LPMEvaluationController(runningContext);
             // set evaluator
             LPMEvaluatorFactory evaluatorFactory = new LPMEvaluatorFactory();
-            filtrationController.setEvaluatorFactory(evaluatorFactory);
+            evaluationController.setEvaluatorFactory(evaluatorFactory);
 
             // set filters
             LPMFilterParameters filterParameters = parameters.getLpmFilterParameters();
@@ -181,7 +183,8 @@ public class Main {
                 LPMFilter filter = filterFactory.getLPMFilter(filterId);
                 filtrationController.addLPMFilter(filter, filter.needsEvaluation());
             }
-            runningContext.setLpmFiltrationAndEvaluationController(filtrationController);
+            runningContext.setLpmFiltrationController(filtrationController);
+            runningContext.setLpmEvaluationController(evaluationController);
 //        controller.addFinalLPMFilter(new SubLPMFilter());
 
 //        Set<LocalProcessModel> finalLpms = controller.combine(places);

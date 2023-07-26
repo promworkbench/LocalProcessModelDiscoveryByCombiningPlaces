@@ -1,16 +1,26 @@
 package org.processmining.placebasedlpmdiscovery;
 
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationAndEvaluationController;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 
 public class RunningContext {
 
-    LPMFiltrationAndEvaluationController lpmFiltrationAndEvaluationController;
+    private LPMFiltrationController lpmFiltrationController;
+    private LPMEvaluationController lpmEvaluationController;
 
-    public LPMFiltrationAndEvaluationController getLpmFiltrationAndEvaluationController() {
-        return lpmFiltrationAndEvaluationController;
+    public void setLpmFiltrationController(LPMFiltrationController lpmFiltrationController) {
+        this.lpmFiltrationController = lpmFiltrationController;
     }
 
-    public void setLpmFiltrationAndEvaluationController(LPMFiltrationAndEvaluationController lpmFiltrationAndEvaluationController) {
-        this.lpmFiltrationAndEvaluationController = lpmFiltrationAndEvaluationController;
+    public LPMFiltrationController getLpmFiltrationController() {
+        return lpmFiltrationController;
+    }
+
+    public LPMEvaluationController getLpmEvaluationController() {
+        return lpmEvaluationController;
+    }
+
+    public void setLpmEvaluationController(LPMEvaluationController lpmEvaluationController) {
+        this.lpmEvaluationController = lpmEvaluationController;
     }
 }

@@ -1,5 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration;
 
+import org.processmining.placebasedlpmdiscovery.RunningContext;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.EvaluatorHub;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluator;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorFactory;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMEvaluator;
@@ -12,23 +14,24 @@ import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindo
 
 import java.util.*;
 
-public class LPMFiltrationAndEvaluationController implements EvaluatorHub {
+public class LPMFiltrationController {
 
+    private RunningContext runningContext;
     private final Map<String, LPMFilter> filterMap;
     private final List<LPMFilter> finalFilters;
     private final PriorityQueue<LPMFilter> filters;
     private List<LPMFilter> beforeEvalFilters;
     private List<LPMFilter> afterEvalFilters;
-    private LPMEvaluatorFactory evaluatorFactory;
-    private List<WindowLPMEvaluator<?>> windowEvaluators;
 
-    public LPMFiltrationAndEvaluationController() {
+
+    public LPMFiltrationController(RunningContext runningContext) {
+        this.runningContext = runningContext;
+
         this.filterMap = new HashMap<>();
         this.beforeEvalFilters = new ArrayList<>();
         this.afterEvalFilters = new ArrayList<>();
         this.finalFilters = new ArrayList<>();
         this.filters = new PriorityQueue<>(Comparator.comparingInt(LPMFilter::getPriority));
-        this.windowEvaluators = new ArrayList<>();
     }
 
     public Set<LocalProcessModel> filterFinals(Set<LocalProcessModel> lpms) {
@@ -54,27 +57,14 @@ public class LPMFiltrationAndEvaluationController implements EvaluatorHub {
             if (filter.needsEvaluation()) {
                 NeedsEvaluationLPMFilter needsEvaluationLPMFilter = (NeedsEvaluationLPMFilter) filter;
                 // evaluate the lpms that haven't been evaluated
-                LPMEvaluator<? extends AbstractEvaluationResult> evaluator =
-                        this.evaluatorFactory.getEvaluator(needsEvaluationLPMFilter.getEvaluatorId());
-                if (lpm.getAdditionalInfo().getEvaluationResult().getEvaluationResult(needsEvaluationLPMFilter.getEvaluationId()) == null)
-                    lpm.getAdditionalInfo().getEvaluationResult().addResult(evaluator.evaluate(lpm));
+                if (lpm.getAdditionalInfo().getEvaluationResult()
+                        .getEvaluationResult(needsEvaluationLPMFilter.getEvaluationId()) == null)
+                    this.runningContext.getLpmEvaluationController().evaluate(needsEvaluationLPMFilter.getEvaluatorId());
             }
             if (!filter.shouldKeep(lpm))
                 return false;
         }
         return true;
-    }
-
-    public void setBeforeEvalFilters(List<LPMFilter> beforeEvalFilters) {
-        this.beforeEvalFilters = beforeEvalFilters;
-        this.clearFiltersInMap(false);
-        this.addFiltersInMap(beforeEvalFilters, false);
-    }
-
-    public void setAfterEvalFilters(List<LPMFilter> afterEvalFilters) {
-        this.afterEvalFilters = afterEvalFilters;
-        this.clearFiltersInMap(true);
-        this.addFiltersInMap(afterEvalFilters, true);
     }
 
     private void addFiltersInMap(List<LPMFilter> filters, boolean needsEvaluation) {
@@ -91,10 +81,6 @@ public class LPMFiltrationAndEvaluationController implements EvaluatorHub {
         this.filterMap.entrySet().removeIf(e -> e.getKey().endsWith(needsEvaluation ? "After" : "Before"));
     }
 
-    private void clearFiltersInMap() {
-        this.filterMap.clear();
-    }
-
     public void addLPMFilter(LPMFilter filter, boolean needsEvaluation) {
         this.addFilterInMap(filter, needsEvaluation);
         if (needsEvaluation)
@@ -103,32 +89,4 @@ public class LPMFiltrationAndEvaluationController implements EvaluatorHub {
             this.beforeEvalFilters.add(filter);
     }
 
-    public void addFinalLPMFilter(LPMFilter filter) {
-        this.finalFilters.add(filter);
-    }
-
-    public void setEvaluatorFactory(LPMEvaluatorFactory evaluatorFactory) {
-        this.evaluatorFactory = evaluatorFactory;
-    }
-
-    public void evaluateForOneWindow(LocalProcessModel lpm, LPMTemporaryWindowInfo tempInfo, LPMAdditionalInfo additionalInfo) {
-        for (WindowLPMEvaluator<?> evaluator : this.windowEvaluators) {
-            if (!additionalInfo.existsInfo(evaluator.getKey())) {
-                additionalInfo.addEvaluationResult(evaluator.getKey(), evaluator.createEmptyResult(lpm));
-            }
-//            additionalInfo.updateInfo(
-//                    evaluator.getKey(),
-//                    evaluator.evaluate(lpm, tempInfo,
-//                            additionalInfo.getInfo(evaluator.getKey(), evaluator.getResultClass())));
-            additionalInfo.updateEvaluationResults(
-                    evaluator.getKey(),
-                    evaluator.evaluate(lpm, tempInfo,
-                            additionalInfo.<AbstractEvaluationResult>getEvaluationResult(evaluator.getKey(), AbstractEvaluationResult.class)));
-        }
-    }
-
-    @Override
-    public void registerEvaluator(WindowLPMEvaluator<?> evaluator) {
-        this.windowEvaluators.add(evaluator);
-    }
 }

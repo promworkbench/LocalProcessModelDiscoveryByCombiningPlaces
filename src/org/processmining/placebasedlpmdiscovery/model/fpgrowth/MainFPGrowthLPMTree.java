@@ -57,7 +57,7 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
                                        LPMTemporaryWindowInfo tempInfo,
                                        MainFPGrowthLPMTreeNode treeNode) {
         this.runningContext
-                .getLpmFiltrationAndEvaluationController()
+                .getLpmEvaluationController()
                 .evaluateForOneWindow(lpm, tempInfo, treeNode.getAdditionalInfo());
     }
 
@@ -80,7 +80,7 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
             if (node != root && node.getWindowsEvaluationResult() != null) {
                 LocalProcessModel lpm = node.getLPM();
                 lpm.getAdditionalInfo().getEvaluationResult().addResult(node.getWindowsEvaluationResult());
-                if (this.runningContext.getLpmFiltrationAndEvaluationController().shouldKeepLPM(lpm))
+                if (this.runningContext.getLpmFiltrationController().shouldKeepLPM(lpm))
                     lpms.add(lpm);
             }
             queue.addAll(node.getChildren());
