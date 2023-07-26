@@ -114,16 +114,16 @@ public class LPMFiltrationAndEvaluationController implements EvaluatorHub {
     public void evaluateForOneWindow(LocalProcessModel lpm, LPMTemporaryWindowInfo tempInfo, LPMAdditionalInfo additionalInfo) {
         for (WindowLPMEvaluator<?> evaluator : this.windowEvaluators) {
             if (!additionalInfo.existsInfo(evaluator.getKey())) {
-                additionalInfo.addInfo(evaluator.getKey(), evaluator.createEmptyResult(lpm));
+                additionalInfo.addEvaluationResult(evaluator.getKey(), evaluator.createEmptyResult(lpm));
             }
 //            additionalInfo.updateInfo(
 //                    evaluator.getKey(),
 //                    evaluator.evaluate(lpm, tempInfo,
 //                            additionalInfo.getInfo(evaluator.getKey(), evaluator.getResultClass())));
-            additionalInfo.updateInfo(
+            additionalInfo.updateEvaluationResults(
                     evaluator.getKey(),
                     evaluator.evaluate(lpm, tempInfo,
-                            additionalInfo.<AbstractEvaluationResult>getInfo(evaluator.getKey(), AbstractEvaluationResult.class)));
+                            additionalInfo.<AbstractEvaluationResult>getEvaluationResult(evaluator.getKey(), AbstractEvaluationResult.class)));
         }
     }
 
