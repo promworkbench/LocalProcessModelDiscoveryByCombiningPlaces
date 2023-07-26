@@ -1,10 +1,10 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.AbstractEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
 
-public interface WindowLPMEvaluator<T extends AbstractEvaluationResult> {
+public interface WindowLPMEvaluator<T extends LPMEvaluationResult> {
 
     /**
      * Evaluates a local process model given the parameters of the evaluator
@@ -13,7 +13,7 @@ public interface WindowLPMEvaluator<T extends AbstractEvaluationResult> {
      * @return the result of the evaluation
      */
 //    T evaluate(LocalProcessModel lpm, LPMTemporaryInfo lpmTemporaryInfo, T existingEvaluation);
-    T evaluate(LocalProcessModel lpm, LPMTemporaryWindowInfo lpmTemporaryWindowInfo, AbstractEvaluationResult existingEvaluation);
+    T evaluate(LocalProcessModel lpm, LPMTemporaryWindowInfo lpmTemporaryWindowInfo, LPMEvaluationResult existingEvaluation);
 
     String getKey();
 

@@ -1,6 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete;
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.GroupedEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
@@ -8,7 +10,7 @@ import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindo
 import java.util.List;
 import java.util.Map;
 
-public class WindowsEvaluationResult extends GroupedEvaluationResult {
+public class WindowsEvaluationResult extends GroupedEvaluationResult implements LPMEvaluationResult {
 
     private static final long serialVersionUID = -7983593681964435984L;
 
@@ -59,5 +61,20 @@ public class WindowsEvaluationResult extends GroupedEvaluationResult {
         fittingWindowsEvaluationResult.setTotal(counter.getWindowCount());
         traceSupportEvaluationResult.setTotalTraceCount(totalTraceCount);
 //        transitionCoverageEvaluationResult.setTransitionTotalCounts(counter.getTransitionCount());
+    }
+
+    @Override
+    public double getResult() {
+        return 0;
+    }
+
+    @Override
+    public double getNormalizedResult() {
+        return 0;
+    }
+
+    @Override
+    public LPMEvaluationResultId getId() {
+        return null;
     }
 }

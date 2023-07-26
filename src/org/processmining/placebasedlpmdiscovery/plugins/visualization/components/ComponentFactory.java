@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.plugins.visualization.component
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.AbstractEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.GroupedEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageCoverageEvaluationResult;
@@ -53,7 +54,7 @@ public class ComponentFactory {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        for (AbstractEvaluationResult result : evaluationResult.getResults()) {
+        for (LPMEvaluationResult result : evaluationResult.getResults()) {
             panel.add(ComponentFactory.getLPMEvaluationResultComponent(result));
         }
         panel.add(getjLabel("Aggregate Result:    " +
@@ -62,7 +63,7 @@ public class ComponentFactory {
         return panel;
     }
 
-    private static JPanel getLPMEvaluationResultComponent(AbstractEvaluationResult evaluationResult) {
+    private static JPanel getLPMEvaluationResultComponent(LPMEvaluationResult evaluationResult) {
         if (evaluationResult instanceof GroupedEvaluationResult)
             return getComplexEvaluationResultComponent((GroupedEvaluationResult) evaluationResult);
 //        if (evaluationResult instanceof PassageCoverageEvaluationResult)

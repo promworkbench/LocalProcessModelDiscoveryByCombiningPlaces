@@ -1,7 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.model.additionalinfo;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.AbstractEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.GroupedEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.*;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
 import java.io.Serializable;
@@ -13,8 +12,7 @@ public class LPMAdditionalInfo implements Serializable {
 
     private transient LocalProcessModel lpm;
     private GroupedEvaluationResult evaluationResult;
-
-    private Map<String, AbstractEvaluationResult> evalResults;
+    private Map<String, LPMEvaluationResult> evalResults;
 
     public LPMAdditionalInfo() {
         this.evalResults = new HashMap<>();
@@ -44,15 +42,15 @@ public class LPMAdditionalInfo implements Serializable {
         this.evaluationResult = new GroupedEvaluationResult(lpm);
     }
 
-    public boolean existsInfo(String key) {
+    public boolean existsEvaluationResult(String key) {
         return this.evalResults.containsKey(key);
     }
 
-    public void addEvaluationResult(String key, AbstractEvaluationResult evalResult) {
+    public void addEvaluationResult(String key, LPMEvaluationResult evalResult) {
         this.evalResults.put(key, evalResult);
     }
 
-    public void updateEvaluationResults(String key, AbstractEvaluationResult evalResult) {
+    public void updateEvaluationResults(String key, LPMEvaluationResult evalResult) {
         this.evalResults.put(key, evalResult);
     }
 

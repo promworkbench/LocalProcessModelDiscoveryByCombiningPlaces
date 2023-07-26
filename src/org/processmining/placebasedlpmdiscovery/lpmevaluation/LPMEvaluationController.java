@@ -6,6 +6,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPME
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMEvaluator;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.AbstractEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
@@ -30,7 +31,7 @@ public class LPMEvaluationController implements EvaluatorHub {
 
     public void evaluateForOneWindow(LocalProcessModel lpm, LPMTemporaryWindowInfo tempInfo, LPMAdditionalInfo additionalInfo) {
         for (WindowLPMEvaluator<?> evaluator : this.windowEvaluators) {
-            if (!additionalInfo.existsInfo(evaluator.getKey())) {
+            if (!additionalInfo.existsEvaluationResult(evaluator.getKey())) {
                 additionalInfo.addEvaluationResult(evaluator.getKey(), evaluator.createEmptyResult(lpm));
             }
 //            additionalInfo.updateInfo(
@@ -39,8 +40,8 @@ public class LPMEvaluationController implements EvaluatorHub {
 //                            additionalInfo.getInfo(evaluator.getKey(), evaluator.getResultClass())));
             additionalInfo.updateEvaluationResults(
                     evaluator.getKey(),
-                    evaluator.evaluate(lpm, tempInfo,
-                            additionalInfo.<AbstractEvaluationResult>getEvaluationResult(evaluator.getKey(), AbstractEvaluationResult.class)));
+                    (LPMEvaluationResult) evaluator.evaluate(lpm, tempInfo,
+                            additionalInfo.<LPMEvaluationResult>getEvaluationResult(evaluator.getKey(), LPMEvaluationResult.class)));
         }
     }
 
@@ -50,7 +51,7 @@ public class LPMEvaluationController implements EvaluatorHub {
     }
 
     public void evaluate(LPMEvaluatorId evaluatorId) {
-        LPMEvaluator<? extends AbstractEvaluationResult> evaluator =
+        LPMEvaluator<? extends LPMEvaluationResult> evaluator =
                 this.evaluatorFactory.getEvaluator(evaluatorId);
     }
 }

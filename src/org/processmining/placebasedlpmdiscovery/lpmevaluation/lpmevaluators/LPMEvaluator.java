@@ -1,9 +1,10 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators;
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.AbstractEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
-public interface LPMEvaluator<T extends AbstractEvaluationResult> {
+public interface LPMEvaluator<T extends LPMEvaluationResult> {
 
     /**
      * Evaluates a local process model given the parameters of the evaluator
