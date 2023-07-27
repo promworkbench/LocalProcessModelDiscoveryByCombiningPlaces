@@ -11,7 +11,6 @@ public class LPMAdditionalInfo implements Serializable {
     private static final long serialVersionUID = 3593199319792435898L;
 
     private transient LocalProcessModel lpm;
-    private GroupedEvaluationResult evaluationResult;
     private Map<String, LPMEvaluationResult> evalResults;
 
     public LPMAdditionalInfo() {
@@ -20,27 +19,21 @@ public class LPMAdditionalInfo implements Serializable {
 
     public LPMAdditionalInfo(LocalProcessModel lpm) {
         this.lpm = lpm;
-        this.evaluationResult = new GroupedEvaluationResult(lpm);
         this.evalResults = new HashMap<>();
     }
 
     public LPMAdditionalInfo(LPMAdditionalInfo additionalInfo) {
-        try {
-            this.evaluationResult = additionalInfo.getEvaluationResult().clone();
-            this.lpm = additionalInfo.lpm;
-            this.evalResults = new HashMap<>(additionalInfo.evalResults);
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
-        }
+        this.lpm = additionalInfo.lpm;
+        this.evalResults = new HashMap<>(additionalInfo.evalResults);
     }
 
-    public GroupedEvaluationResult getEvaluationResult() {
-        return evaluationResult;
-    }
+//    public GroupedEvaluationResult getEvaluationResult() {
+//        return evaluationResult;
+//    }
 
-    public void clearEvaluation() {
-        this.evaluationResult = new GroupedEvaluationResult(lpm);
-    }
+//    public void clearEvaluation() {
+//        this.evaluationResult = new GroupedEvaluationResult(lpm);
+//    }
 
     public boolean existsEvaluationResult(String key) {
         return this.evalResults.containsKey(key);

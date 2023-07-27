@@ -2,6 +2,8 @@ package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.WindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
@@ -94,7 +96,11 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
     }
 
     private static void transferAdditionalInfo(MainFPGrowthLPMTreeNode node, LocalProcessModel lpm) {
-        lpm.getAdditionalInfo().getEvaluationResult().addResult(node.getWindowsEvaluationResult());
+        for (LPMEvaluationResult res : node.getWindowsEvaluationResult().getResults()) {
+            if (!EnumSet.of(LPMEvaluationResultId.PassageCoverageEvaluationResult).contains(res.getId())) {
+                lpm.getAdditionalInfo().addEvaluationResult(res.getId().name(), res);
+            }
+        }
         for (Map.Entry<String, LPMEvaluationResult> entry : node.getAdditionalInfo().getEvalResults().entrySet()) {
             lpm.getAdditionalInfo().addEvaluationResult(entry.getKey(), entry.getValue());
         }

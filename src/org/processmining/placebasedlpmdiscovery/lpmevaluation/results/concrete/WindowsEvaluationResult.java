@@ -75,6 +75,6 @@ public class WindowsEvaluationResult extends GroupedEvaluationResult implements 
 
     @Override
     public LPMEvaluationResultId getId() {
-        return null;
+        return LPMEvaluationResultId.FittingWindowsEvaluationResult;
     }
 }

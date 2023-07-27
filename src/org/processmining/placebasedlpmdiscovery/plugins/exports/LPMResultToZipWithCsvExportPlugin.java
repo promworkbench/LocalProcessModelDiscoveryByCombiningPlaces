@@ -7,6 +7,8 @@ import org.processmining.contexts.uitopia.annotations.UIExportPlugin;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.GroupedEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.undecided.Utils;
@@ -63,9 +65,10 @@ public class LPMResultToZipWithCsvExportPlugin {
             // write an entry in the csv
             csvWriter.write(zfName);
             for (LPMEvaluationResultId id : ids) {
-                csvWriter.write(String.valueOf(lpm.getAdditionalInfo().getEvaluationResult().getEvaluationResult(id).getResult()));
+                csvWriter.write(String.valueOf(lpm.getAdditionalInfo()
+                        .getEvaluationResult(id.name(), LPMEvaluationResult.class).getResult()));
             }
-            csvWriter.write(String.valueOf(lpm.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation)));
+            csvWriter.write(String.valueOf(LocalProcessModelUtils.getGroupedEvaluationResult(lpm).getResult(aggregateOperation)));
             csvWriter.endRecord();
         }
         // add csv file to zip

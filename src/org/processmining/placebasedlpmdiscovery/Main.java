@@ -29,6 +29,7 @@ import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.plugins.utils.ProvidedObjectHelper;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.Analyzer;
 
@@ -201,18 +202,20 @@ public class Main {
             if (result.size() > 0) {
                 // normalize the fitting windows score
                 double max = result.highestScoringElement((LocalProcessModel lpm) -> lpm.getAdditionalInfo()
-                        .getEvaluationResult().getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult).getResult())
-                        .getAdditionalInfo().getEvaluationResult()
-                        .getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult).getResult();
+                        .getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+                                FittingWindowsEvaluationResult.class).getResult())
+                        .getAdditionalInfo().getEvaluationResult(
+                                LPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+                                FittingWindowsEvaluationResult.class).getResult();
                 result.edit(lpm -> ((FittingWindowsEvaluationResult) lpm.getAdditionalInfo()
-                        .getEvaluationResult()
-                        .getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult))
+                        .getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+                                FittingWindowsEvaluationResult.class))
                         .normalizeResult(max, 0));
 
                 EvaluationResultAggregateOperation aggregateOperation = new EvaluationResultAggregateOperation();
                 result.sort((LocalProcessModel lpm1, LocalProcessModel lpm2) -> Double.compare(
-                        lpm1.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation),
-                        lpm2.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation)));
+                        LocalProcessModelUtils.getGroupedEvaluationResult(lpm1).getResult(aggregateOperation),
+                        LocalProcessModelUtils.getGroupedEvaluationResult(lpm2).getResult(aggregateOperation)));
                 result.keep(parameters.getLpmCount());
             }
         } finally {
