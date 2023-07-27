@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
 import org.processmining.placebasedlpmdiscovery.RunningContext;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.WindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
@@ -79,7 +80,7 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
             MainFPGrowthLPMTreeNode node = queue.poll();
             if (node != root && node.getWindowsEvaluationResult() != null) {
                 LocalProcessModel lpm = node.getLPM();
-                lpm.getAdditionalInfo().getEvaluationResult().addResult(node.getWindowsEvaluationResult());
+                transferAdditionalInfo(node, lpm);
                 if (this.runningContext.getLpmFiltrationController().shouldKeepLPM(lpm))
                     lpms.add(lpm);
             }
@@ -90,6 +91,13 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         // TODO: How not sure yet
 
         return lpms;
+    }
+
+    private static void transferAdditionalInfo(MainFPGrowthLPMTreeNode node, LocalProcessModel lpm) {
+        lpm.getAdditionalInfo().getEvaluationResult().addResult(node.getWindowsEvaluationResult());
+        for (Map.Entry<String, LPMEvaluationResult> entry : node.getAdditionalInfo().getEvalResults().entrySet()) {
+            lpm.getAdditionalInfo().addEvaluationResult(entry.getKey(), entry.getValue());
+        }
     }
 
     public void updateAllTotalCount(WindowTotalCounter windowTotalCounter, Integer totalTraceCount) {

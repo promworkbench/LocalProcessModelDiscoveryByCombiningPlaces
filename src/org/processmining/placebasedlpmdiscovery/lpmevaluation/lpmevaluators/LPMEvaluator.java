@@ -7,7 +7,7 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 public interface LPMEvaluator<T extends LPMEvaluationResult> {
 
     /**
-     * Evaluates a local process model given the parameters of the evaluator
+     * Evaluates a local process model
      *
      * @param lpm: the local process model that needs to be evaluated
      * @return the result of the evaluation

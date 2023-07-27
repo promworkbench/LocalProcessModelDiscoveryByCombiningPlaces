@@ -4,5 +4,5 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.Wind
 
 public interface EvaluatorHub {
 
-    void registerEvaluator(WindowLPMEvaluator<?> evaluator);
+    void registerEvaluator(String key, WindowLPMEvaluator<?> evaluator);
 }

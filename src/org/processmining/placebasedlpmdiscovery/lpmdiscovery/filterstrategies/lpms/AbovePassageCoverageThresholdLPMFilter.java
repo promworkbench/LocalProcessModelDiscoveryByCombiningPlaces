@@ -28,11 +28,11 @@ public class AbovePassageCoverageThresholdLPMFilter extends NeedsEvaluationLPMFi
 
     @Override
     public LPMEvaluatorId getEvaluatorId() {
-        return LPMEvaluatorId.WindowEvaluator;
+        return LPMEvaluatorId.PassageCoverageEvaluator;
     }
 
     @Override
     public LPMEvaluationResultId getEvaluationId() {
-        return LPMEvaluationResultId.FittingWindowsEvaluationResult;
+        return LPMEvaluationResultId.PassageCoverageEvaluationResult;
     }
 }

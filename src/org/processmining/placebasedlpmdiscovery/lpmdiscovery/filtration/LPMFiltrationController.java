@@ -64,7 +64,7 @@ public class LPMFiltrationController {
                     lpm.getAdditionalInfo().addEvaluationResult(
                             needsEvaluationLPMFilter.getEvaluationId().name(),
                             this.runningContext.getLpmEvaluationController()
-                                    .evaluate(needsEvaluationLPMFilter.getEvaluatorId(), lpm));
+                                    .evaluate(needsEvaluationLPMFilter.getEvaluatorId().name(), lpm));
             }
             if (!filter.shouldKeep(lpm))
                 return false;

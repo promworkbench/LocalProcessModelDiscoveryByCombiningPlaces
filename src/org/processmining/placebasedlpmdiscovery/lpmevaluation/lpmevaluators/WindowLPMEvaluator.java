@@ -17,6 +17,8 @@ public interface WindowLPMEvaluator<T extends LPMEvaluationResult> {
 
     String getKey();
 
+    String getResultKey();
+
     T createEmptyResult(LocalProcessModel lpm);
 
     Class<T> getResultClass();

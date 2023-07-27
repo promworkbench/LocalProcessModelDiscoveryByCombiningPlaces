@@ -1,8 +1,9 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.concrete;
 
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMEvaluator;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.AbstractEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageCoverageEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
@@ -24,7 +25,12 @@ public class PassageCoverageEvaluator implements WindowLPMEvaluator<PassageCover
 
     @Override
     public String getKey() {
-        return null;
+        return LPMEvaluatorId.PassageCoverageEvaluator.name();
+    }
+
+    @Override
+    public String getResultKey() {
+        return LPMEvaluationResultId.PassageCoverageEvaluationResult.name();
     }
 
     @Override

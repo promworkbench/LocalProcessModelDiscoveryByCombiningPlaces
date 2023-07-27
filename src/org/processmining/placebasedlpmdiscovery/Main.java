@@ -5,6 +5,7 @@ import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorFactory;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
@@ -175,6 +176,8 @@ public class Main {
             // set evaluator
             LPMEvaluatorFactory evaluatorFactory = new LPMEvaluatorFactory();
             evaluationController.setEvaluatorFactory(evaluatorFactory);
+            evaluationController.registerEvaluator(LPMEvaluatorId.PassageCoverageEvaluator.name(),
+                    evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.PassageCoverageEvaluator));
 
             // set filters
             LPMFilterParameters filterParameters = parameters.getLpmFilterParameters();

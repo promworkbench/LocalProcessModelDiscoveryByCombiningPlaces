@@ -54,8 +54,15 @@ public class LPMAdditionalInfo implements Serializable {
         this.evalResults.put(key, evalResult);
     }
 
+    public Map<String, LPMEvaluationResult> getEvalResults() {
+        return evalResults;
+    }
+
     public <T> T getEvaluationResult(String key, Class<T> infoClass) {
         Object info = this.evalResults.get(key);
+        if (info == null) {
+            return null;
+        }
         if (!infoClass.isInstance(info)) {
             throw new IllegalArgumentException("The info for the key " + key + " is of type " + info.getClass() +
                     " while the requested class is " + infoClass);
