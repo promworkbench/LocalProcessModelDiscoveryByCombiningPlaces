@@ -13,8 +13,8 @@ import java.util.Map;
 public class TransitionCoverageEvaluationResult extends SimpleEvaluationResult {
     private static final long serialVersionUID = 3899013599519921214L;
 
-    private final Map<Integer, Integer> transitionCountMap;
-    private Map<Integer, Integer> transitionTotalCounts;
+    private final Map<String, Integer> transitionCountMap;
+    private Map<String, Integer> transitionTotalCounts;
     private int total;
 
     /**
@@ -26,14 +26,12 @@ public class TransitionCoverageEvaluationResult extends SimpleEvaluationResult {
      */
     private boolean updated;
     private int transitionsCount;
-    private Map<String, Integer> labelMap = new HashMap<>();
 
-    public TransitionCoverageEvaluationResult(LocalProcessModel lpm, Map<String, Integer> labelMap) {
+    public TransitionCoverageEvaluationResult(LocalProcessModel lpm) {
         super(lpm, LPMEvaluationResultId.TransitionCoverageEvaluationResult);
         this.transitionCountMap = new HashMap<>();
         this.transitionTotalCounts = new HashMap<>();
         this.total = 0;
-        this.labelMap = labelMap;
     }
 
     /**
@@ -42,30 +40,33 @@ public class TransitionCoverageEvaluationResult extends SimpleEvaluationResult {
      * @param usedTransitions: all usedTransitions for which we want to update the count
      * @param windowCount:     the number of windows we update
      */
-    public void updateTransitionCoverageCountMap(List<Integer> usedTransitions, List<Integer> allTransitions, int windowCount) {
+    public void updateTransitionCoverageCountMap(List<Integer> usedTransitions,
+                                                 List<Integer> allTransitions,
+                                                 int windowCount,
+                                                 Map<Integer, String> reverseLabelMap) {
         for (Integer transition : usedTransitions) {
-            Integer count = this.transitionCountMap.getOrDefault(transition, 0);
-            this.transitionCountMap.put(transition, count + windowCount);
+            Integer count = this.transitionCountMap.getOrDefault(reverseLabelMap.get(transition), 0);
+            this.transitionCountMap.put(reverseLabelMap.get(transition), count + windowCount);
         }
         for (Integer transition : allTransitions) {
-            Integer count = this.transitionTotalCounts.getOrDefault(transition, 0);
-            this.transitionTotalCounts.put(transition, count + windowCount);
+            Integer count = this.transitionTotalCounts.getOrDefault(reverseLabelMap.get(transition), 0);
+            this.transitionTotalCounts.put(reverseLabelMap.get(transition), count + windowCount);
         }
         this.total += windowCount;
         updated = true;
     }
 
-    public void updateTotal(List<Integer> transitions, int windowCount) {
-        for (Integer transition : new HashSet<>(transitions)) {
-            Integer count = this.transitionTotalCounts.getOrDefault(transition, 0);
-//            this.transitionTotalCounts.put(transition, count + windowCount);
-        }
-        updated = true;
-    }
+//    public void updateTotal(List<Integer> transitions, int windowCount) {
+//        for (Integer transition : new HashSet<>(transitions)) {
+//            Integer count = this.transitionTotalCounts.getOrDefault(transition, 0);
+////            this.transitionTotalCounts.put(transition, count + windowCount);
+//        }
+//        updated = true;
+//    }
 
-    public void setTransitionTotalCounts(Map<Integer, Integer> transitionTotalCounts) {
-        this.transitionTotalCounts = transitionTotalCounts;
-    }
+//    public void setTransitionTotalCounts(Map<Integer, Integer> transitionTotalCounts) {
+//        this.transitionTotalCounts = transitionTotalCounts;
+//    }
 
     private double calculateTransitionCoverageScore() {
         if (updated) {
@@ -73,8 +74,8 @@ public class TransitionCoverageEvaluationResult extends SimpleEvaluationResult {
             int countTr = 0;
             for (Transition tr : lpm.getTransitions()) {
                 if (!tr.isInvisible()) {
-                    int count = transitionCountMap.getOrDefault(labelMap.get(tr.getLabel()), 0);
-                    int total = transitionTotalCounts.getOrDefault(labelMap.get(tr.getLabel()), 0);
+                    int count = transitionCountMap.getOrDefault(tr.getLabel(), 0);
+                    int total = transitionTotalCounts.getOrDefault(tr.getLabel(), 0);
                     countTr++;
 //                if (count > total)
 //                    throw new IllegalStateException("We can't have more fitting windows than total (fitting + unfitting)");

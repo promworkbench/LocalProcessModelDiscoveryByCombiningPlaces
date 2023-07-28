@@ -179,6 +179,13 @@ public class Main {
             evaluationController.setEvaluatorFactory(evaluatorFactory);
             evaluationController.registerEvaluator(LPMEvaluatorId.PassageCoverageEvaluator.name(),
                     evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.PassageCoverageEvaluator));
+            evaluationController.registerEvaluator(LPMEvaluatorId.FittingWindowEvaluator.name(),
+                    evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.FittingWindowEvaluator));
+            evaluationController.registerEvaluator(LPMEvaluatorId.TransitionCoverageEvaluator.name(),
+                    evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.TransitionCoverageEvaluator));
+            evaluationController.registerEvaluator(LPMEvaluatorId.TraceSupportCountEvaluator.name(),
+                    evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.TraceSupportCountEvaluator));
+
 
             // set filters
             LPMFilterParameters filterParameters = parameters.getLpmFilterParameters();

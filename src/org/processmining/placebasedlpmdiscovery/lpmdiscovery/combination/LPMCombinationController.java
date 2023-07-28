@@ -1,10 +1,11 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth.ContextLPMTreeBuilder;
+//import org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth.ContextLPMTreeBuilder;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth.LPMTreeBuilder;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
@@ -56,16 +57,17 @@ public class LPMCombinationController {
 
             return tree.getLPMs(count);
         } else {
-            ContextLPMTreeBuilder treeBuilder = new ContextLPMTreeBuilder(
-                    log, new HashSet<>(places), this.parameters.getLpmCombinationParameters(),
-                    this.parameters.getEventAttributeSummary(), runningContext);
-            Main.getInterrupterSubject().addObserver(treeBuilder);
-            System.out.println("========Building tree========");
-            MainFPGrowthLPMTree tree = treeBuilder.buildTree();
-            Main.getInterrupterSubject().addObserver(tree);
-            System.out.println("========End building tree========");
-
-            return tree.getLPMs(count);
+            throw new NotImplementedException();
+//            ContextLPMTreeBuilder treeBuilder = new ContextLPMTreeBuilder(
+//                    log, new HashSet<>(places), this.parameters.getLpmCombinationParameters(),
+//                    this.parameters.getEventAttributeSummary(), runningContext);
+//            Main.getInterrupterSubject().addObserver(treeBuilder);
+//            System.out.println("========Building tree========");
+//            MainFPGrowthLPMTree tree = treeBuilder.buildTree();
+//            Main.getInterrupterSubject().addObserver(tree);
+//            System.out.println("========End building tree========");
+//
+//            return tree.getLPMs(count);
         }
     }
 

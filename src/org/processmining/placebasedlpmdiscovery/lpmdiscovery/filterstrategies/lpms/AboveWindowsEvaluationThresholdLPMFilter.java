@@ -27,7 +27,7 @@ public class AboveWindowsEvaluationThresholdLPMFilter extends NeedsEvaluationLPM
 
     @Override
     public LPMEvaluatorId getEvaluatorId() {
-        return LPMEvaluatorId.WindowEvaluator;
+        return LPMEvaluatorId.FittingWindowEvaluator;
     }
 
     @Override

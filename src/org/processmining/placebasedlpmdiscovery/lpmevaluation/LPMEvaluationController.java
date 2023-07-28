@@ -40,7 +40,7 @@ public class LPMEvaluationController implements EvaluatorHub {
 //                    evaluator.evaluate(lpm, tempInfo,
 //                            additionalInfo.getInfo(evaluator.getKey(), evaluator.getResultClass())));
             additionalInfo.updateEvaluationResults(
-                    evaluator.getKey(),
+                    evaluator.getResultKey(),
                     (LPMEvaluationResult) evaluator.evaluate(lpm, tempInfo,
                             additionalInfo.<LPMEvaluationResult>getEvaluationResult(evaluator.getResultKey(),
                                     LPMEvaluationResult.class)));

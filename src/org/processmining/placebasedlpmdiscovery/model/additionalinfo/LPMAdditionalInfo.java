@@ -11,7 +11,7 @@ public class LPMAdditionalInfo implements Serializable {
     private static final long serialVersionUID = 3593199319792435898L;
 
     private transient LocalProcessModel lpm;
-    private Map<String, LPMEvaluationResult> evalResults;
+    private final Map<String, LPMEvaluationResult> evalResults;
 
     public LPMAdditionalInfo() {
         this.evalResults = new HashMap<>();

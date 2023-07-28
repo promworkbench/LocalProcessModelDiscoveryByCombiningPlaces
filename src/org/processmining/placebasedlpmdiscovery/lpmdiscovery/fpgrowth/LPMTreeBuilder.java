@@ -135,11 +135,15 @@ public class LPMTreeBuilder extends Interruptible {
         return mainTree;
     }
 
-    private void addLocalTreeToMainTree(WindowLPMTree localTree, MainFPGrowthLPMTree mainTree,
-                                        int windowCount, LinkedList<Integer> window, WindowLog windowLog, Integer traceVariantId) {
+    private void addLocalTreeToMainTree(WindowLPMTree localTree,
+                                        MainFPGrowthLPMTree mainTree,
+                                        int windowCount,
+                                        LinkedList<Integer> window,
+                                        WindowLog windowLog,
+                                        Integer traceVariantId) {
         // get the null children
         Map<LocalProcessModel, LPMTemporaryWindowInfo> lpms =
-                getLPMsWithTemporaryInfo(localTree, window);
+                getLPMsWithTemporaryInfo(localTree, window, windowCount, traceVariantId);
 
         // give the lpm and the window count to the main tree, so it can update itself
         for (Map.Entry<LocalProcessModel, LPMTemporaryWindowInfo> lpmEntry : lpms.entrySet()) {
@@ -159,7 +163,9 @@ public class LPMTreeBuilder extends Interruptible {
     }
 
     private Map<LocalProcessModel, LPMTemporaryWindowInfo> getLPMsWithTemporaryInfo(WindowLPMTree localTree,
-                                                                                    List<Integer> window) {
+                                                                                    List<Integer> window,
+                                                                                    int windowCount,
+                                                                                    Integer traceVariantId) {
         Set<WindowLPMTreeNode> nullNodes = localTree.getNullNodes();
         Map<LocalProcessModel, LPMTemporaryWindowInfo> lpmWithTemporaryInfo = nullNodes // get the unique lpms
                 .stream()
@@ -167,8 +173,13 @@ public class LPMTreeBuilder extends Interruptible {
                         n -> LocalProcessModelUtils
                                 .convertReplayableToLPM(n.getLpm(), this.windowLog.getMapping().getReverseLabelMap(),
                                         this.places),
-                        n -> new LPMTemporaryWindowInfo(n.getLpm().getFiringSequence(), n.getLpm().getUsedPassages(),
-                                this.windowLog.getMapping().getReverseLabelMap()),
+                        n -> new LPMTemporaryWindowInfo(
+                                n.getLpm().getFiringSequence(),
+                                window,
+                                n.getLpm().getUsedPassages(),
+                                this.windowLog.getMapping().getReverseLabelMap(),
+                                windowCount,
+                                traceVariantId),
                         (n1, n2) -> n1)); // TODO: update how the firing sequences are added
         addBranchCombinations(lpmWithTemporaryInfo, new ArrayList<>(window));
         return lpmWithTemporaryInfo;
@@ -189,7 +200,8 @@ public class LPMTreeBuilder extends Interruptible {
     private void addBranchCombinations(LocalProcessModel lpm, List<LocalProcessModel> lpms, int from,
                                        Map<LocalProcessModel, LPMTemporaryWindowInfo> lpmWithTemporaryInfo,
                                        List<Integer> window, int currIteration) {
-        List<Integer> fs = lpmWithTemporaryInfo.get(lpm).getIntegerFiringSequence();
+        LPMTemporaryWindowInfo lpmTemporaryWindowInfo = lpmWithTemporaryInfo.get(lpm);
+        List<Integer> fs = lpmTemporaryWindowInfo.getIntegerFiringSequence();
         for (int i = from; i < lpms.size(); ++i) {
             if (stop)
                 return;
@@ -204,10 +216,13 @@ public class LPMTreeBuilder extends Interruptible {
                 Replayer replayer = new Replayer(resLpm, windowLog.getMapping().getLabelMap());
                 if (replayer.canReplay(sequence)) {
                     Set<Pair<Integer, Integer>> usedPassages = new HashSet<>();
-                    usedPassages.addAll(lpmWithTemporaryInfo.get(lpm).getIntegerUsedPassages());
+                    usedPassages.addAll(lpmTemporaryWindowInfo.getIntegerUsedPassages());
                     usedPassages.addAll(lpmWithTemporaryInfo.get(lpms.get(i)).getIntegerUsedPassages());
-                    lpmWithTemporaryInfo.put(resLpm, new LPMTemporaryWindowInfo(sequence, usedPassages,
-                            this.windowLog.getMapping().getReverseLabelMap()));
+                    lpmWithTemporaryInfo.put(resLpm, new LPMTemporaryWindowInfo(sequence, window,
+                            usedPassages,
+                            this.windowLog.getMapping().getReverseLabelMap(),
+                            lpmTemporaryWindowInfo.getWindowCount(),
+                            lpmTemporaryWindowInfo.getTraceVariantId()));
                     if (currIteration < this.parameters.getConcurrencyCardinality()) {
                         addBranchCombinations(resLpm, lpms, i+1, lpmWithTemporaryInfo, window, currIteration + 1);
                     }

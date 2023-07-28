@@ -1,13 +1,10 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.WindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public class MainFPGrowthLPMTreeNode {
@@ -15,11 +12,10 @@ public class MainFPGrowthLPMTreeNode {
     private final MainFPGrowthLPMTreeNode parent;
     private Place place;
     private LPMAdditionalInfo additionalInfo;
-    private WindowsEvaluationResult windowsEvaluationResult;
+//    private WindowsEvaluationResult windowsEvaluationResult;
 
     public MainFPGrowthLPMTreeNode(MainFPGrowthLPMTreeNode parent) {
-        this.parent = parent;
-        this.children = new HashSet<>();
+        this(parent, null);
     }
 
     public MainFPGrowthLPMTreeNode(MainFPGrowthLPMTreeNode parent, Place place) {
@@ -57,13 +53,13 @@ public class MainFPGrowthLPMTreeNode {
         return additionalInfo;
     }
 
-    public WindowsEvaluationResult getWindowsEvaluationResult() {
-        return windowsEvaluationResult;
-    }
+//    public WindowsEvaluationResult getWindowsEvaluationResult() {
+//        return windowsEvaluationResult;
+//    }
 
-    public void setWindowsEvaluationResult(WindowsEvaluationResult windowsEvaluationResult) {
-        this.windowsEvaluationResult = windowsEvaluationResult;
-    }
+//    public void setWindowsEvaluationResult(WindowsEvaluationResult windowsEvaluationResult) {
+//        this.windowsEvaluationResult = windowsEvaluationResult;
+//    }
 
     public MainFPGrowthLPMTreeNode add(MainFPGrowthLPMTreeNode parent, Place place) {
         MainFPGrowthLPMTreeNode child = new MainFPGrowthLPMTreeNode(parent, place);
@@ -71,24 +67,23 @@ public class MainFPGrowthLPMTreeNode {
         return child;
     }
 
-    public void updateEvaluation(int count, List<Integer> window, LPMTemporaryWindowInfo lpmTemporaryWindowInfo, Integer traceVariantId) {
-        this.windowsEvaluationResult.updatePositive(count, window, lpmTemporaryWindowInfo, traceVariantId);
-    }
+//    public void updateEvaluation(int count, List<Integer> window, LPMTemporaryWindowInfo lpmTemporaryWindowInfo, Integer traceVariantId) {
+//        this.windowsEvaluationResult.updatePositive(count, window, lpmTemporaryWindowInfo, traceVariantId);
+//    }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        MainFPGrowthLPMTreeNode that = (MainFPGrowthLPMTreeNode) o;
-        return Objects.equals(place, that.place) &&
-                Objects.equals(children, that.children) &&
-                Objects.equals(windowsEvaluationResult, that.windowsEvaluationResult);
-    }
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        MainFPGrowthLPMTreeNode that = (MainFPGrowthLPMTreeNode) o;
+//        return Objects.equals(place, that.place) &&
+//                Objects.equals(children, that.children);
+//    }
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(place, children, windowsEvaluationResult);
-    }
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(place, children);
+//    }
 
     public LocalProcessModel getLPM() {
         LocalProcessModel lpm = this.parent == null ? new LocalProcessModel() : parent.getLPM();
