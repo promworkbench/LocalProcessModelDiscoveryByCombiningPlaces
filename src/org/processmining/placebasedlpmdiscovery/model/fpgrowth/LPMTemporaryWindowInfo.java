@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 import org.apache.commons.math3.util.Pair;
 import org.deckfour.xes.model.XTrace;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,6 +12,7 @@ import java.util.stream.Collectors;
 public class LPMTemporaryWindowInfo {
 
     private final List<Integer> firingSequence;
+    private final Collection<Integer> replayedEventsIndices;
     private final Set<Pair<Integer, Integer>> usedPassages;
     private int windowCount;
     private List<Integer> window;
@@ -22,6 +24,7 @@ public class LPMTemporaryWindowInfo {
     private final Map<Integer, String> reverseLabelMap;
 
     public LPMTemporaryWindowInfo(List<Integer> firingSequence,
+                                  Collection<Integer> replayedEventsIndices,
                                   List<Integer> window,
                                   Set<Pair<Integer, Integer>> usedPassages,
                                   Map<Integer, String> reverseLabelMap,
@@ -30,6 +33,7 @@ public class LPMTemporaryWindowInfo {
                                   int windowLastEventPos,
                                   Set<XTrace> traces) {
         this.firingSequence = firingSequence;
+        this.replayedEventsIndices = replayedEventsIndices;
         this.window = window;
         this.usedPassages = usedPassages;
 
@@ -37,6 +41,9 @@ public class LPMTemporaryWindowInfo {
 
         this.windowCount = windowCount;
         this.traceVariantId = traceVariantId;
+
+        this.windowLastEventPos = windowLastEventPos;
+        this.traces = traces;
     }
 
     public List<Integer> getIntegerFiringSequence() {
@@ -91,5 +98,9 @@ public class LPMTemporaryWindowInfo {
      */
     public int getWindowLastEventPos() {
         return this.windowLastEventPos;
+    }
+
+    public Collection<Integer> getReplayedEventsIndices() {
+        return replayedEventsIndices;
     }
 }

@@ -21,10 +21,11 @@ public abstract class AbstractRemappedActivitiesLog<T> extends AbstractEnhancedL
     // The trace variant is represented as list of integers, where the integers are taken from the label map.
     private Map<List<T>, Integer> traceVariants;
 
-    private Map<List<T>, Set<XTrace>> backToOriginalMapping;
+    private final Map<List<T>, Set<XTrace>> backToOriginalMapping;
 
     public AbstractRemappedActivitiesLog(XLog log) {
         super(log);
+        this.backToOriginalMapping = new HashMap<>();
     }
 
     protected abstract AbstractActivityMapping<T> createMapping();
@@ -47,7 +48,9 @@ public abstract class AbstractRemappedActivitiesLog<T> extends AbstractEnhancedL
             }
             int count = this.traceVariants.getOrDefault(eventList, 0);
             this.traceVariants.put(eventList, count + 1);
-            this.backToOriginalMapping.getOrDefault(eventList, new HashSet<>()).add(trace);
+            Set<XTrace> traceSet = this.backToOriginalMapping.getOrDefault(eventList, new HashSet<>());
+            traceSet.add(trace);
+            this.backToOriginalMapping.put(eventList, traceSet);
         }
 
         this.traceVariantIdsMap = new HashMap<>();

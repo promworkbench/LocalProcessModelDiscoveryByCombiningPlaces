@@ -111,7 +111,7 @@ public class LPMTreeBuilder extends Interruptible {
                             placesForAddition, paths, windowLog.getMapping().getLabelMap());
                 }
                 // calculate fitting local process models
-                localTree.tryAddNullChildren(event, window.size() - 1);
+                localTree.tryAddNullChildren(event, window.size() - 1, eventPos);
                 Main.getAnalyzer().stopWindow(); // analysis
                 // transfer built local process models to the main tree
                 addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId, eventPos);
@@ -185,6 +185,7 @@ public class LPMTreeBuilder extends Interruptible {
                                         this.places),
                         n -> new LPMTemporaryWindowInfo(
                                 n.getLpm().getFiringSequence(),
+                                n.getReplayedEventsIndices(),
                                 window,
                                 n.getLpm().getUsedPassages(),
                                 this.windowLog.getMapping().getReverseLabelMap(),
@@ -214,29 +215,40 @@ public class LPMTreeBuilder extends Interruptible {
                                        List<Integer> window, int currIteration) {
         LPMTemporaryWindowInfo lpmTemporaryWindowInfo = lpmWithTemporaryInfo.get(lpm);
         List<Integer> fs = lpmTemporaryWindowInfo.getIntegerFiringSequence();
+        Collection<Integer> reIndices = lpmTemporaryWindowInfo.getReplayedEventsIndices();
         for (int i = from; i < lpms.size(); ++i) {
             if (stop)
                 return;
 
-            List<Integer> fsi = lpmWithTemporaryInfo.get(lpms.get(i)).getIntegerFiringSequence();
+            LPMTemporaryWindowInfo iLpmTemporaryWindowInfo = lpmWithTemporaryInfo.get(lpms.get(i));
+            List<Integer> fsi = iLpmTemporaryWindowInfo.getIntegerFiringSequence();
+            Collection<Integer> ireIndices = iLpmTemporaryWindowInfo.getReplayedEventsIndices();
             if (fsi.stream().noneMatch(fs::contains) || new HashSet<>(fs).containsAll(fsi) || new HashSet<>(fsi).containsAll(fs)) {
                 continue;
             }
             LocalProcessModel resLpm = LocalProcessModelUtils.join(lpms.get(i), lpm);
             if (!lpmWithTemporaryInfo.containsKey(resLpm)) {
                 List<Integer> sequence = SequenceUtils.joinSubsequences(fsi, fs, window, true);
+                Collection<Integer> replayedEventIndices = new HashSet<>();
+                replayedEventIndices.addAll(reIndices);
+                replayedEventIndices.addAll(ireIndices);
                 Replayer replayer = new Replayer(resLpm, windowLog.getMapping().getLabelMap());
                 if (replayer.canReplay(sequence)) {
                     Set<Pair<Integer, Integer>> usedPassages = new HashSet<>();
                     usedPassages.addAll(lpmTemporaryWindowInfo.getIntegerUsedPassages());
                     usedPassages.addAll(lpmWithTemporaryInfo.get(lpms.get(i)).getIntegerUsedPassages());
-                    lpmWithTemporaryInfo.put(resLpm, new LPMTemporaryWindowInfo(sequence, window,
-                            usedPassages,
-                            this.windowLog.getMapping().getReverseLabelMap(),
-                            lpmTemporaryWindowInfo.getWindowCount(),
-                            lpmTemporaryWindowInfo.getTraceVariantId(),
-                            lpmTemporaryWindowInfo.getWindowLastEventPos(),
-                            lpmTemporaryWindowInfo.getOriginalTraces()));
+                    lpmWithTemporaryInfo.put(
+                            resLpm,
+                            new LPMTemporaryWindowInfo(
+                                    sequence,
+                                    replayedEventIndices,
+                                    window,
+                                    usedPassages,
+                                    this.windowLog.getMapping().getReverseLabelMap(),
+                                    lpmTemporaryWindowInfo.getWindowCount(),
+                                    lpmTemporaryWindowInfo.getTraceVariantId(),
+                                    lpmTemporaryWindowInfo.getWindowLastEventPos(),
+                                    lpmTemporaryWindowInfo.getOriginalTraces()));
                     if (currIteration < this.parameters.getConcurrencyCardinality()) {
                         addBranchCombinations(resLpm, lpms, i+1, lpmWithTemporaryInfo, window, currIteration + 1);
                     }
