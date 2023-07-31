@@ -68,33 +68,36 @@ public class LPMTreeBuilder extends Interruptible {
 
         // iterate through all traces
         for (Integer traceVariantId : windowLog.getTraceVariantIds()) {
-            List<Integer> traceVariant = windowLog.getTraceVariant(traceVariantId);
-            int traceCount = windowLog.getTraceVariantCount(traceVariant);
+            List<Integer> traceVariant = windowLog.getTraceVariant(traceVariantId); // mapped trace variant
+            int traceCount = windowLog.getTraceVariantCount(traceVariant); // count of traces represented by the trace variant
 
-            // iterate through all windows in the trace
+            // Storage for the window
             LinkedList<Integer> window = new LinkedList<>();
-//            LocalFPGrowthLPMTree localTree = new LocalFPGrowthLPMTree();
+            // Storage for the window tree
             WindowLPMTree localTree = new WindowLPMTree(this.parameters.getLpmProximity());
             Main.getInterrupterSubject().addObserver(localTree);
-            int eventPos = 0;
-            for (int event : traceVariant) {
-                if (stop) {
+            int eventPos = 0; // position of end event of the current window
+            for (int event : traceVariant) { // for each event in the trace variant
+                if (stop) { // time stop
                     mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount());
                     Main.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
                     return mainTree;
                 }
 
-                Main.getAnalyzer().startWindow();
+                Main.getAnalyzer().startWindow(); // analysis
 
-                eventPos++;
-                if (window.size() >= this.parameters.getLpmProximity()) {
-                    window.removeFirst();
+                eventPos++; // move the window (last event is the pointer)
+                if (window.size() >= this.parameters.getLpmProximity()) { // if no space in the window
+                    window.removeFirst(); // remove the first event
+                    // remove branches for the removed event (last event position is used because modulo is used)
                     localTree.refreshPosition(eventPos);
                 }
-                window.add(event);
-                windowTotalCounter.update(window, traceCount);
+                window.add(event); // add the current event in the end
+                windowTotalCounter.update(window, traceCount); // update window counter
 
-                for (int i = 0; i < window.size() - 1; ++i) {
+                // process the window (only pairs with the last event need to be processed)
+                for (int i = 0; i < window.size() - 1; ++i) { // iterate through the first n-1 events in the window
+                    // update local tree for the i-th and last event (eventPos) of the window
                     Set<Place> placesForAddition = inoutTransitionPlacesMap.getOrDefault(
                             new Pair<>(window.get(i), event), new HashSet<>());
                     Set<List<Place>> paths = inoutViaSilentPlaceMap.getOrDefault(
@@ -107,25 +110,30 @@ public class LPMTreeBuilder extends Interruptible {
                             event, eventPos,
                             placesForAddition, paths, windowLog.getMapping().getLabelMap());
                 }
+                // calculate fitting local process models
                 localTree.tryAddNullChildren(event, window.size() - 1);
-                Main.getAnalyzer().stopWindow();
-                addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId);
+                Main.getAnalyzer().stopWindow(); // analysis
+                // transfer built local process models to the main tree
+                addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId, eventPos);
             }
+            // if trace is smaller than window size the next block would not change the local process models
+            // because the refresh would refresh empty positions
             if (window.size() < this.parameters.getLpmProximity()) {
                 for (int i = 0; i < this.parameters.getLpmProximity() - window.size(); ++i) {
                     eventPos++;
                     localTree.refreshPosition(eventPos);
-                    windowTotalCounter.update(window, traceCount);
-                    addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId);
+                    // don't add 5 times the same window just because the trace is smaller than the window size
+//                    windowTotalCounter.update(window, traceCount);
+//                    addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId);
                 }
             }
+            // cover smaller right end windows
             while (window.size() > 1) {
                 eventPos++;
                 window.removeFirst();
-//                localTree.tryAddNullChildren(event, window.size() - 1);
                 localTree.refreshPosition(eventPos);
                 windowTotalCounter.update(window, traceCount);
-                addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId);
+                addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId, eventPos);
             }
             Main.getAnalyzer().getStatistics().getFpGrowthStatistics().traceVariantPassed();
         }
@@ -140,10 +148,11 @@ public class LPMTreeBuilder extends Interruptible {
                                         int windowCount,
                                         LinkedList<Integer> window,
                                         WindowLog windowLog,
-                                        Integer traceVariantId) {
+                                        Integer traceVariantId,
+                                        int eventPos) {
         // get the null children
         Map<LocalProcessModel, LPMTemporaryWindowInfo> lpms =
-                getLPMsWithTemporaryInfo(localTree, window, windowCount, traceVariantId);
+                getLPMsWithTemporaryInfo(localTree, window, windowCount, traceVariantId, eventPos);
 
         // give the lpm and the window count to the main tree, so it can update itself
         for (Map.Entry<LocalProcessModel, LPMTemporaryWindowInfo> lpmEntry : lpms.entrySet()) {
@@ -165,7 +174,8 @@ public class LPMTreeBuilder extends Interruptible {
     private Map<LocalProcessModel, LPMTemporaryWindowInfo> getLPMsWithTemporaryInfo(WindowLPMTree localTree,
                                                                                     List<Integer> window,
                                                                                     int windowCount,
-                                                                                    Integer traceVariantId) {
+                                                                                    Integer traceVariantId,
+                                                                                    int eventPos) {
         Set<WindowLPMTreeNode> nullNodes = localTree.getNullNodes();
         Map<LocalProcessModel, LPMTemporaryWindowInfo> lpmWithTemporaryInfo = nullNodes // get the unique lpms
                 .stream()
@@ -179,7 +189,9 @@ public class LPMTreeBuilder extends Interruptible {
                                 n.getLpm().getUsedPassages(),
                                 this.windowLog.getMapping().getReverseLabelMap(),
                                 windowCount,
-                                traceVariantId),
+                                traceVariantId,
+                                eventPos,
+                                this.windowLog.getOriginalTraces(traceVariantId)),
                         (n1, n2) -> n1)); // TODO: update how the firing sequences are added
         addBranchCombinations(lpmWithTemporaryInfo, new ArrayList<>(window));
         return lpmWithTemporaryInfo;
@@ -222,7 +234,9 @@ public class LPMTreeBuilder extends Interruptible {
                             usedPassages,
                             this.windowLog.getMapping().getReverseLabelMap(),
                             lpmTemporaryWindowInfo.getWindowCount(),
-                            lpmTemporaryWindowInfo.getTraceVariantId()));
+                            lpmTemporaryWindowInfo.getTraceVariantId(),
+                            lpmTemporaryWindowInfo.getWindowLastEventPos(),
+                            lpmTemporaryWindowInfo.getOriginalTraces()));
                     if (currIteration < this.parameters.getConcurrencyCardinality()) {
                         addBranchCombinations(resLpm, lpms, i+1, lpmWithTemporaryInfo, window, currIteration + 1);
                     }

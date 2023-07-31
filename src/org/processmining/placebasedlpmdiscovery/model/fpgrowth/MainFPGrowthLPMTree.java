@@ -31,11 +31,6 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
     }
 
     private static void transferAdditionalInfo(MainFPGrowthLPMTreeNode node, LocalProcessModel lpm) {
-//        for (LPMEvaluationResult res : node.getWindowsEvaluationResult().getResults()) {
-//            if (!EnumSet.of(LPMEvaluationResultId.PassageCoverageEvaluationResult).contains(res.getId())) {
-//                lpm.getAdditionalInfo().addEvaluationResult(res.getId().name(), res);
-//            }
-//        }
         for (Map.Entry<String, LPMEvaluationResult> entry : node.getAdditionalInfo().getEvalResults().entrySet()) {
             lpm.getAdditionalInfo().addEvaluationResult(entry.getKey(), entry.getValue());
         }

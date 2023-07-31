@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
 import org.apache.commons.math3.util.Pair;
+import org.deckfour.xes.model.XTrace;
 
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,9 @@ public class LPMTemporaryWindowInfo {
     private int windowCount;
     private List<Integer> window;
     private Integer traceVariantId;
+    private int windowLastEventPos;
+
+    private Set<XTrace> traces;
 
     private final Map<Integer, String> reverseLabelMap;
 
@@ -22,7 +26,9 @@ public class LPMTemporaryWindowInfo {
                                   Set<Pair<Integer, Integer>> usedPassages,
                                   Map<Integer, String> reverseLabelMap,
                                   int windowCount,
-                                  Integer traceVariantId) {
+                                  Integer traceVariantId,
+                                  int windowLastEventPos,
+                                  Set<XTrace> traces) {
         this.firingSequence = firingSequence;
         this.window = window;
         this.usedPassages = usedPassages;
@@ -65,5 +71,25 @@ public class LPMTemporaryWindowInfo {
 
     public Map<Integer, String> getReverseLabelMap() {
         return reverseLabelMap;
+    }
+
+    public Set<XTrace> getOriginalTraces() {
+        return this.traces;
+    }
+
+    /**
+     * Returns the position of the first event of the window in the corresponding traces
+     * @return position of first event (inclusive)
+     */
+    public int getWindowFirstEventPos() {
+        return this.windowLastEventPos - this.window.size();
+    }
+
+    /**
+     * Returns the position of the event where the window ends in the corresponding traces
+     * @return position of window end (exclusive)
+     */
+    public int getWindowLastEventPos() {
+        return this.windowLastEventPos;
     }
 }
