@@ -22,7 +22,7 @@ public class FittingWindowEvaluator implements WindowLPMEvaluator<FittingWindows
         FittingWindowsEvaluationResult result = (FittingWindowsEvaluationResult) existingEvaluation;
         result.updateCount(lpmTemporaryWindowInfo.getWindowCount());
         result.updateWeightedCount(1.0 * lpmTemporaryWindowInfo.getIntegerFiringSequence().size() *
-                lpmTemporaryWindowInfo.getWindowCount() / lpmTemporaryWindowInfo.getWindow().size());
+                lpmTemporaryWindowInfo.getWindowCount() / lpmTemporaryWindowInfo.getIntegerWindow().size());
 
         return result;
     }

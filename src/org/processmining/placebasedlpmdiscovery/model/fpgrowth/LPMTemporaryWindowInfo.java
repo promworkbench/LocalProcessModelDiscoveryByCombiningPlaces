@@ -1,12 +1,11 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
 import org.apache.commons.math3.util.Pair;
+import org.deckfour.xes.extension.std.XConceptExtension;
+import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XTrace;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class LPMTemporaryWindowInfo {
@@ -68,7 +67,7 @@ public class LPMTemporaryWindowInfo {
         return windowCount;
     }
 
-    public List<Integer> getWindow() {
+    public List<Integer> getIntegerWindow() {
         return window;
     }
 
@@ -102,5 +101,17 @@ public class LPMTemporaryWindowInfo {
 
     public Collection<Integer> getReplayedEventsIndices() {
         return replayedEventsIndices;
+    }
+
+    public List<String> getWindow() {
+        List<String> window = new ArrayList<>();
+        Optional<XTrace> oTrace = this.traces.stream().findFirst();
+        if (!oTrace.isPresent()) throw new IllegalStateException("For each window there should be at least one trace.");
+        XTrace trace = oTrace.get();
+        for (int i = this.windowLastEventPos - this.window.size(); i < this.windowLastEventPos; ++i) {
+            XAttributeLiteral eventLabel = (XAttributeLiteral) trace.get(i).getAttributes().get(XConceptExtension.KEY_NAME);
+            window.add(eventLabel.getValue());
+        }
+        return window;
     }
 }

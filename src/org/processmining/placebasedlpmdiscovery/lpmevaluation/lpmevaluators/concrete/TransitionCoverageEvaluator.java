@@ -4,7 +4,6 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPME
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMEvaluator;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageCoverageEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.TransitionCoverageEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
@@ -19,10 +18,10 @@ public class TransitionCoverageEvaluator implements WindowLPMEvaluator<Transitio
 
         TransitionCoverageEvaluationResult result = (TransitionCoverageEvaluationResult) existingEvaluation;
         result.updateTransitionCoverageCountMap(
-                lpmTemporaryWindowInfo.getIntegerFiringSequence(),
+                lpmTemporaryWindowInfo.getFiringSequence(),
                 lpmTemporaryWindowInfo.getWindow(),
-                lpmTemporaryWindowInfo.getWindowCount(),
-                lpmTemporaryWindowInfo.getReverseLabelMap());
+                lpmTemporaryWindowInfo.getWindowCount()
+        );
         return result;
     }
 

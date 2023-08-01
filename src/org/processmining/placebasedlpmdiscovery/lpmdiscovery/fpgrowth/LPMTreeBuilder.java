@@ -133,7 +133,7 @@ public class LPMTreeBuilder extends Interruptible {
                 window.removeFirst();
                 localTree.refreshPosition(eventPos);
                 windowTotalCounter.update(window, traceCount);
-                addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId, eventPos);
+                addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId, traceVariant.size());
             }
             Main.getAnalyzer().getStatistics().getFpGrowthStatistics().traceVariantPassed();
         }
