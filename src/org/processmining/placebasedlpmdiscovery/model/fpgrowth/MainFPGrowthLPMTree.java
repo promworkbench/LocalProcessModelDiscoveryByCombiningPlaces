@@ -1,11 +1,14 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.WindowsEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.RunningContext;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.TraceSupportEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationAndEvaluationController;
-import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
 
 import java.util.*;
 
@@ -15,11 +18,22 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
     private final Map<String, Integer> labelMap; // label mapped into integer id
     private final int maxDependencyLength;
     private boolean stop;
+    private RunningContext runningContext;
 
-    public MainFPGrowthLPMTree(Map<Place, Integer> priorityMap, Map<String, Integer> labelMap, int maxDependencyLength) {
+    public MainFPGrowthLPMTree(Map<Place, Integer> priorityMap,
+                               Map<String, Integer> labelMap,
+                               int maxDependencyLength,
+                               RunningContext runningContext) {
         this.priorityMap = priorityMap;
         this.labelMap = labelMap;
         this.maxDependencyLength = maxDependencyLength;
+        this.runningContext = runningContext;
+    }
+
+    private static void transferAdditionalInfo(MainFPGrowthLPMTreeNode node, LocalProcessModel lpm) {
+        for (Map.Entry<String, LPMEvaluationResult> entry : node.getAdditionalInfo().getEvalResults().entrySet()) {
+            lpm.getAdditionalInfo().addEvaluationResult(entry.getKey(), entry.getValue());
+        }
     }
 
     @Override
@@ -27,7 +41,7 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         return new MainFPGrowthLPMTreeNode(null);
     }
 
-    public void addOrUpdate(LocalProcessModel lpm, int count, List<Integer> window, LPMTemporaryInfo lpmTemporaryInfo, Integer traceVariantId) {
+    public void addOrUpdate(LocalProcessModel lpm, int count, List<Integer> window, LPMTemporaryWindowInfo lpmTemporaryWindowInfo, Integer traceVariantId) {
         List<Place> places = sortPlaces(lpm.getPlaces());
 
         if (places.size() < 1)
@@ -42,9 +56,15 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
                 this.nodes.add(current);
             }
         }
-        if (current.getWindowsEvaluationResult() == null)
-            current.setWindowsEvaluationResult(new WindowsEvaluationResult(lpm, this.maxDependencyLength, this.labelMap));
-        current.updateEvaluation(count, window, lpmTemporaryInfo, traceVariantId);
+        this.updateAdditionalInfos(lpm, lpmTemporaryWindowInfo, current);
+    }
+
+    private void updateAdditionalInfos(LocalProcessModel lpm,
+                                       LPMTemporaryWindowInfo tempInfo,
+                                       MainFPGrowthLPMTreeNode treeNode) {
+        this.runningContext
+                .getLpmEvaluationController()
+                .evaluateForOneWindow(lpm, tempInfo, treeNode.getAdditionalInfo());
     }
 
     private List<Place> sortPlaces(Set<Place> places) {
@@ -53,20 +73,23 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         return sorted;
     }
 
-    public Set<LocalProcessModel> getLPMs(LPMFiltrationAndEvaluationController filtrationController, int count) {
+    public Set<LocalProcessModel> getLPMs(int count) {
         Set<LocalProcessModel> lpms = new HashSet<>();
+        Set<MainFPGrowthLPMTreeNode> visited = new HashSet<>();
 
         Queue<MainFPGrowthLPMTreeNode> queue = new LinkedList<>();
         queue.add(root);
+        int counter = 0;
+        int counter2 = 0;
         while (!queue.isEmpty()) {
             if (stop && lpms.size() >= count) {
                 return lpms;
             }
             MainFPGrowthLPMTreeNode node = queue.poll();
-            if (node != root && node.getWindowsEvaluationResult() != null) {
+            if (node != root && !node.getAdditionalInfo().getEvalResults().isEmpty()) {
                 LocalProcessModel lpm = node.getLPM();
-                lpm.getAdditionalInfo().getEvaluationResult().addResult(node.getWindowsEvaluationResult());
-                if (filtrationController.shouldKeepLPM(lpm))
+                transferAdditionalInfo(node, lpm);
+                if (this.runningContext.getLpmFiltrationController().shouldKeepLPM(lpm))
                     lpms.add(lpm);
             }
             queue.addAll(node.getChildren());
@@ -79,9 +102,15 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
     }
 
     public void updateAllTotalCount(WindowTotalCounter windowTotalCounter, Integer totalTraceCount) {
-        for (MainFPGrowthLPMTreeNode node : this.nodes)
-            if (node.getWindowsEvaluationResult() != null)
-                node.getWindowsEvaluationResult().setTotal(windowTotalCounter, totalTraceCount);
+        for (MainFPGrowthLPMTreeNode node : this.nodes) {
+            for (LPMEvaluationResult res : node.getAdditionalInfo().getEvalResults().values()) {
+                if (LPMEvaluationResultId.FittingWindowsEvaluationResult.equals(res.getId())) {
+                    ((FittingWindowsEvaluationResult) res).setTotal(windowTotalCounter.getWindowCount());
+                } else if (LPMEvaluationResultId.TraceSupportEvaluationResult.equals(res.getId())) {
+                    ((TraceSupportEvaluationResult) res).setTotalTraceCount(totalTraceCount);
+                }
+            }
+        }
     }
 
     public int getHeight() {

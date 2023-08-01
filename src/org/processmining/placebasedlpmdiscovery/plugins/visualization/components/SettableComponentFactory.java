@@ -5,6 +5,7 @@ import org.processmining.framework.util.ui.widgets.ProMTable;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.analysis.statistics.LogStatistics;
 import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.CustomObjectTableModel;
@@ -13,6 +14,7 @@ import javax.swing.*;
 import javax.swing.plaf.BorderUIResource;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -44,7 +46,7 @@ public class SettableComponentFactory {
     }
 
     private JPanel getSimpleEvalMetrics() {
-        List<SimpleEvaluationResult> results = this.lpm.getAdditionalInfo().getEvaluationResult().getResults();
+        Collection<LPMEvaluationResult> results = this.lpm.getAdditionalInfo().getEvalResults().values();
         List<Object[]> tableModel = results.stream().map(r -> new Object[]{r.getId(), r.getResult()}).collect(Collectors.toList());
         ProMTable table = new ProMTable(new DefaultTableModel(
                 tableModel.toArray(new Object[tableModel.size()][2]),

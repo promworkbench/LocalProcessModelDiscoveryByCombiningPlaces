@@ -3,7 +3,9 @@ package org.processmining.placebasedlpmdiscovery;
 import org.deckfour.xes.model.XLog;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorFactory;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
@@ -16,7 +18,7 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LP
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LPMFilterParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilterId;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationAndEvaluationController;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterSubject;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
@@ -27,6 +29,7 @@ import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.plugins.utils.ProvidedObjectHelper;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.Analyzer;
 
@@ -160,18 +163,29 @@ public class Main {
 //                            + log.getAttributes().get("concept:name"), placeSet, PlaceSet.class, Main.getContext());
 //            ProvidedObjectHelper.setFavorite(Main.getContext(), placeSet);
 
+            RunningContext runningContext = new RunningContext();
             // setup the combination controller
-            LPMCombinationController controller = new LPMCombinationController(parameters);
+            LPMCombinationController controller = new LPMCombinationController(parameters, runningContext);
 
             // set guard
             controller.setCombinationGuard(new AndCombinationGuard(
                     new SameActivityCombinationGuard(), new NotContainingCoveringPlacesCombinationGuard()));
 
             // setup filtration controller
-            LPMFiltrationAndEvaluationController filtrationController = new LPMFiltrationAndEvaluationController();
+            LPMFiltrationController filtrationController = new LPMFiltrationController(runningContext);
+            LPMEvaluationController evaluationController = new LPMEvaluationController(runningContext);
             // set evaluator
             LPMEvaluatorFactory evaluatorFactory = new LPMEvaluatorFactory();
-            filtrationController.setEvaluatorFactory(evaluatorFactory);
+            evaluationController.setEvaluatorFactory(evaluatorFactory);
+            evaluationController.registerEvaluator(LPMEvaluatorId.PassageCoverageEvaluator.name(),
+                    evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.PassageCoverageEvaluator));
+            evaluationController.registerEvaluator(LPMEvaluatorId.FittingWindowEvaluator.name(),
+                    evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.FittingWindowEvaluator));
+            evaluationController.registerEvaluator(LPMEvaluatorId.TransitionCoverageEvaluator.name(),
+                    evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.TransitionCoverageEvaluator));
+            evaluationController.registerEvaluator(LPMEvaluatorId.TraceSupportCountEvaluator.name(),
+                    evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.TraceSupportCountEvaluator));
+
 
             // set filters
             LPMFilterParameters filterParameters = parameters.getLpmFilterParameters();
@@ -180,7 +194,8 @@ public class Main {
                 LPMFilter filter = filterFactory.getLPMFilter(filterId);
                 filtrationController.addLPMFilter(filter, filter.needsEvaluation());
             }
-            controller.setFiltrationController(filtrationController);
+            runningContext.setLpmFiltrationController(filtrationController);
+            runningContext.setLpmEvaluationController(evaluationController);
 //        controller.addFinalLPMFilter(new SubLPMFilter());
 
 //        Set<LocalProcessModel> finalLpms = controller.combine(places);
@@ -194,18 +209,20 @@ public class Main {
             if (result.size() > 0) {
                 // normalize the fitting windows score
                 double max = result.highestScoringElement((LocalProcessModel lpm) -> lpm.getAdditionalInfo()
-                        .getEvaluationResult().getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult).getResult())
-                        .getAdditionalInfo().getEvaluationResult()
-                        .getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult).getResult();
+                        .getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+                                FittingWindowsEvaluationResult.class).getResult())
+                        .getAdditionalInfo().getEvaluationResult(
+                                LPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+                                FittingWindowsEvaluationResult.class).getResult();
                 result.edit(lpm -> ((FittingWindowsEvaluationResult) lpm.getAdditionalInfo()
-                        .getEvaluationResult()
-                        .getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult))
+                        .getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+                                FittingWindowsEvaluationResult.class))
                         .normalizeResult(max, 0));
 
                 EvaluationResultAggregateOperation aggregateOperation = new EvaluationResultAggregateOperation();
                 result.sort((LocalProcessModel lpm1, LocalProcessModel lpm2) -> Double.compare(
-                        lpm1.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation),
-                        lpm2.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation)));
+                        LocalProcessModelUtils.getGroupedEvaluationResult(lpm1).getResult(aggregateOperation),
+                        LocalProcessModelUtils.getGroupedEvaluationResult(lpm2).getResult(aggregateOperation)));
                 result.keep(parameters.getLpmCount());
             }
         } finally {

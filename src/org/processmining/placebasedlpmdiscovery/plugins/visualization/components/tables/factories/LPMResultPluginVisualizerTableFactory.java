@@ -1,5 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.factories;
 
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
@@ -7,6 +8,7 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.components.tables.CustomObjectTableModel;
+import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -20,7 +22,8 @@ import java.util.stream.IntStream;
 public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisualizerTableFactory<LocalProcessModel> {
 
     private static double getResultOrDefault(LocalProcessModel lpm, LPMEvaluationResultId resultId) {
-        SimpleEvaluationResult result = lpm.getAdditionalInfo().getEvaluationResult().getEvaluationResult(resultId);
+        SimpleEvaluationResult result = lpm.getAdditionalInfo()
+                .getEvaluationResult(resultId.name(), SimpleEvaluationResult.class);
         if (result != null)
             return result.getResult();
         return -1;
@@ -60,8 +63,7 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
                         df.format(getResultOrDefault(lpm, LPMEvaluationResultId.PassageCoverageEvaluationResult)),
                         df.format(getResultOrDefault(lpm, LPMEvaluationResultId.PassageRepetitionEvaluationResult)),
                         df.format(getResultOrDefault(lpm, LPMEvaluationResultId.TraceSupportEvaluationResult)),
-                        df.format(lpm.getAdditionalInfo().getEvaluationResult()
-                                .getResult(new EvaluationResultAggregateOperation()))
+                        df.format(LocalProcessModelUtils.getGroupedEvaluationResult(lpm).getResult(new EvaluationResultAggregateOperation()))
                 });
     }
 

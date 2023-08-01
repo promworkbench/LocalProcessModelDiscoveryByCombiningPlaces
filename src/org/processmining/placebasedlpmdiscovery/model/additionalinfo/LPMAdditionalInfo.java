@@ -1,75 +1,65 @@
 package org.processmining.placebasedlpmdiscovery.model.additionalinfo;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.GroupedEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.*;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LPMAdditionalInfo implements Serializable {
-
     private static final long serialVersionUID = 3593199319792435898L;
-    //    private double logFrequency;
-//    private TraceVariantInfo[] traceVariantInfos;
+
     private transient LocalProcessModel lpm;
-    private GroupedEvaluationResult evaluationResult;
+    private final Map<String, LPMEvaluationResult> evalResults;
+
+    public LPMAdditionalInfo() {
+        this.evalResults = new HashMap<>();
+    }
 
     public LPMAdditionalInfo(LocalProcessModel lpm) {
         this.lpm = lpm;
-        this.evaluationResult = new GroupedEvaluationResult(lpm);
+        this.evalResults = new HashMap<>();
     }
 
     public LPMAdditionalInfo(LPMAdditionalInfo additionalInfo) {
-        try {
-            this.evaluationResult = additionalInfo.getEvaluationResult().clone();
-            this.lpm = additionalInfo.lpm;
-        } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+        this.lpm = additionalInfo.lpm;
+        this.evalResults = new HashMap<>(additionalInfo.evalResults);
+    }
+
+//    public GroupedEvaluationResult getEvaluationResult() {
+//        return evaluationResult;
+//    }
+
+//    public void clearEvaluation() {
+//        this.evaluationResult = new GroupedEvaluationResult(lpm);
+//    }
+
+    public boolean existsEvaluationResult(String key) {
+        return this.evalResults.containsKey(key);
+    }
+
+    public void addEvaluationResult(String key, LPMEvaluationResult evalResult) {
+        this.evalResults.put(key, evalResult);
+    }
+
+    public void updateEvaluationResults(String key, LPMEvaluationResult evalResult) {
+        this.evalResults.put(key, evalResult);
+    }
+
+    public Map<String, LPMEvaluationResult> getEvalResults() {
+        return evalResults;
+    }
+
+    public <T> T getEvaluationResult(String key, Class<T> infoClass) {
+        Object info = this.evalResults.get(key);
+        if (info == null) {
+            return null;
         }
-    }
-
-//    public TraceVariantInfo[] getTraceVariantInfos() {
-//        return traceVariantInfos;
-//    }
-//
-//    public double getLogFrequency() {
-//        return logFrequency;
-//    }
-//
-//    public void setLogFrequency(double logFrequency) {
-//        this.logFrequency = logFrequency;
-//    }
-
-//    private void updateTraceVariantInfos(Place place) {
-//        // TODO: Improve how we update missing tokens, frequency and fitness for the lpm depending on the place we add
-//        if (this.traceVariantInfos == null)
-//            this.traceVariantInfos = new TraceVariantInfo[place.getAdditionalInfo().getTraceVariantInfo().length];
-//
-//        for (int i = 0; i < this.traceVariantInfos.length; ++i) {
-//            TraceVariantInfo placeInfo = place.getAdditionalInfo().getTraceVariantInfo()[i];
-//            if (this.traceVariantInfos[i] == null) {
-//                this.traceVariantInfos[i] = new TraceVariantInfo();
-//                this.traceVariantInfos[i].setRemainingTokens(placeInfo.getRemainingTokens());
-//                this.traceVariantInfos[i].setFrequency(placeInfo.getFrequency());
-//                this.traceVariantInfos[i].setFit(placeInfo.isFit());
-//            } else {
-//                this.traceVariantInfos[i].setRemainingTokens(this.traceVariantInfos[i].getRemainingTokens()
-//                        + placeInfo.getRemainingTokens());
-//                this.traceVariantInfos[i].setFrequency(
-//                        Math.min(this.traceVariantInfos[i].getFrequency(), placeInfo.getFrequency()));
-//                this.traceVariantInfos[i].setFit(this.traceVariantInfos[i].isFit() && placeInfo.isFit());
-//            }
-//        }
-//    }
-
-    public GroupedEvaluationResult getEvaluationResult() {
-        return evaluationResult;
-    }
-
-    public void setEvaluationResult(GroupedEvaluationResult evaluationResult) {
-        this.evaluationResult = evaluationResult;
-    }
-
-    public void clearEvaluation() {
-        this.evaluationResult = new GroupedEvaluationResult(lpm);
+        if (!infoClass.isInstance(info)) {
+            throw new IllegalArgumentException("The info for the key " + key + " is of type " + info.getClass() +
+                    " while the requested class is " + infoClass);
+        }
+        return infoClass.cast(info);
     }
 }

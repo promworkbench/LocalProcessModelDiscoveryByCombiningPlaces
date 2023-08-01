@@ -17,7 +17,7 @@ public class GroupedEvaluationResult extends AbstractEvaluationResult {
         this.results = new ArrayList<>();
     }
 
-    public void addResult(AbstractEvaluationResult result) {
+    public void addResult(LPMEvaluationResult result) {
         if (result instanceof SimpleEvaluationResult) {
             SimpleEvaluationResult castResult = (SimpleEvaluationResult) result;
             this.results.add(castResult);
