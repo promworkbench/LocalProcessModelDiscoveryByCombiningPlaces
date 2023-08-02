@@ -1,2 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.main;public class LPMDiscoveryResult {
+package org.processmining.placebasedlpmdiscovery.main;
+
+public interface LPMDiscoveryResult {
 }

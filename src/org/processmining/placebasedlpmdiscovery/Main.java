@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery;
 import org.deckfour.xes.model.XLog;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorFactory;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
@@ -10,7 +11,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluat
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationController;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.StandardLPMCombinationController;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.complex.AndCombinationGuard;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.simple.NotContainingCoveringPlacesCombinationGuard;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.simple.SameActivityCombinationGuard;
@@ -19,6 +20,8 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LP
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilterId;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
+import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
+import org.processmining.placebasedlpmdiscovery.main.StandardLPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterSubject;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
@@ -26,8 +29,8 @@ import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.placechooser.MainPlaceChooser;
 import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
-import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.placediscovery.StandardPlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.plugins.utils.ProvidedObjectHelper;
@@ -74,7 +77,8 @@ public class Main {
         try {
 
             // Use some place generator to extract places from the log
-            PlaceDiscoveryResult result = PlaceDiscovery.discover(log, parameters.getPlaceDiscoveryParameters());
+            StandardPlaceDiscovery standardPlaceDiscovery = new StandardPlaceDiscovery(log, parameters.getPlaceDiscoveryParameters());
+            PlaceDiscoveryResult result = standardPlaceDiscovery.getPlaces();
             Analyzer.getStatistics().getParameterStatistics().setPlaceDiscoveryIncluded(true);
 
             // Add the places as a provided object
@@ -115,6 +119,23 @@ public class Main {
         }
 
         return new Object[] {lpmResult, statistics, placeSet};
+    }
+
+    private static LPMDiscoveryBuilder createDefaultBuilder(XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
+        RunningContext runningContext = new RunningContext();
+
+        LPMDiscoveryBuilder builder = new StandardLPMDiscoveryBuilder();
+        builder.setPlaceDiscovery(new StandardPlaceDiscovery(log, parameters.getPlaceDiscoveryParameters()));
+        LEFRMatrix lefrMatrix = Analyzer.logAnalyzer.getLEFRMatrix(parameters.getLpmCombinationParameters().getLpmProximity());
+        builder.setPlaceChooser(new MainPlaceChooser(log, parameters.getPlaceChooserParameters(), lefrMatrix));
+        builder.setRunningContext(runningContext);
+        LPMCombinationController controller = new StandardLPMCombinationController(parameters, runningContext);
+        builder.setLPMCombination();
+
+        // set guard
+        controller.setGuard(new AndCombinationGuard(
+                new SameActivityCombinationGuard(), new NotContainingCoveringPlacesCombinationGuard()));
+        return builder;
     }
 
     public static LPMResult discover(Set<Place> places, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
@@ -165,7 +186,7 @@ public class Main {
 
             RunningContext runningContext = new RunningContext();
             // setup the combination controller
-            LPMCombinationController controller = new LPMCombinationController(parameters, runningContext);
+            StandardLPMCombinationController controller = new StandardLPMCombinationController(parameters, runningContext);
 
             // set guard
             controller.setCombinationGuard(new AndCombinationGuard(
@@ -202,8 +223,7 @@ public class Main {
 
             Analyzer.logCountPlacesUsed(places.size());
 
-            result.addAll(controller.combineUsingFPGrowth(places, log,
-                    parameters.getLpmCombinationParameters().getLpmProximity(), parameters.getLpmCount()));
+            result.addAll(controller.combineUsingFPGrowth(places, log, parameters.getLpmCount()));
 
             Analyzer.logAllLpmDiscovered(result.size());
             if (result.size() > 0) {
