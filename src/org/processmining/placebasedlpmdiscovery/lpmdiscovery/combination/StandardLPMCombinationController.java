@@ -17,26 +17,35 @@ import java.util.Set;
 
 public class StandardLPMCombinationController implements LPMCombinationController {
 
+    private XLog log;
     private final PlaceBasedLPMDiscoveryParameters parameters;
     private int currentNumPlaces;
     private CombinationGuard guard;
     private final RunningContext runningContext;
 
-    public StandardLPMCombinationController(PlaceBasedLPMDiscoveryParameters parameters, RunningContext runningContext) {
+    public StandardLPMCombinationController(XLog log,
+                                            PlaceBasedLPMDiscoveryParameters parameters,
+                                            RunningContext runningContext) {
+        this.log = log;
+
         this.parameters = parameters;
         this.runningContext = runningContext;
 
         this.currentNumPlaces = 1;
         this.guard = (lpm, place) -> true;
 
-        Main.getAnalyzer().getStatistics().getGeneralStatistics().setProximity(this.parameters.getLpmCombinationParameters().getLpmProximity());
+        this.runningContext
+                .getAnalyzer()
+                .getStatistics()
+                .getGeneralStatistics()
+                .setProximity(this.parameters.getLpmCombinationParameters().getLpmProximity());
     }
 
     public void setCombinationGuard(CombinationGuard guard) {
         this.guard = guard;
     }
 
-    public Set<LocalProcessModel> combineUsingFPGrowth(Set<Place> places, XLog log, int count) {
+    public Set<LocalProcessModel> combineUsingFPGrowth(Set<Place> places, int count) {
         // Build the place graph (we can use it to order the places)
 //        FPGrowthPlaceFollowGraphBuilder graphBuilder = new FPGrowthPlaceFollowGraphBuilder(
 //                log,
@@ -49,10 +58,10 @@ public class StandardLPMCombinationController implements LPMCombinationControlle
         if (this.parameters.getEventAttributeSummary().isEmpty()) {
             LPMTreeBuilder treeBuilder = new LPMTreeBuilder(
                     log, new HashSet<>(places), this.parameters.getLpmCombinationParameters(), this.runningContext);
-            Main.getInterrupterSubject().addObserver(treeBuilder);
+            this.runningContext.getInterrupterSubject().addObserver(treeBuilder);
             System.out.println("========Building tree========");
             MainFPGrowthLPMTree tree = treeBuilder.buildTree();
-            Main.getInterrupterSubject().addObserver(tree);
+            this.runningContext.getInterrupterSubject().addObserver(tree);
             System.out.println("========End building tree========");
 
             return tree.getLPMs(count);
@@ -87,7 +96,7 @@ public class StandardLPMCombinationController implements LPMCombinationControlle
     }
 
     @Override
-    public Set<LocalProcessModel> combine(Set<Place> places, XLog log, int count) {
-        return combineUsingFPGrowth(places, log, count);
+    public Set<LocalProcessModel> combine(Set<Place> places, int count) {
+        return combineUsingFPGrowth(places, count);
     }
 }

@@ -12,6 +12,8 @@ import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.framework.util.ui.wizard.ProMWizardDisplay;
 import org.processmining.framework.util.ui.wizard.ProMWizardStep;
 import org.processmining.placebasedlpmdiscovery.Main;
+import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
+import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
@@ -96,7 +98,8 @@ public class PlaceBasedLPMDiscoveryPlugin {
 		if (parameters == null)
 			return null;
 
-		return (LPMResult) Main.run(PlaceUtils.getPlacesFromPetriNet(petrinet), log, parameters)[0];
+		LPMDiscoveryBuilder builder = Main.createDefaultForPetriNetBuilder(log, petrinet, parameters);
+		return (LPMResult) builder.build().run();
 	}
 
 	// TODO: What is this doing here???
@@ -127,7 +130,8 @@ public class PlaceBasedLPMDiscoveryPlugin {
 		if (parameters == null)
 			return null;
 
-		return (LPMResult) Main.run(placeSet.getElements(), log, parameters)[0];
+		LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, placeSet, parameters);
+		return (LPMResult) builder.build().run();
 	}
 
 	@PluginVariant(
@@ -145,19 +149,20 @@ public class PlaceBasedLPMDiscoveryPlugin {
 			variantLabel = "Local Process Models Discovery Based on Set of Places given Places (faster)",
 			requiredParameterLabels = {0, 1}
 	)
-	public static Object[] mineLPMs(PluginContext context, XLog log, PlaceSet placeSet) {
+	public static LPMDiscoveryResult mineLPMs(PluginContext context, XLog log, PlaceSet placeSet) {
 		Main.setUp(context);
 
 		PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
 
-		return Main.run(placeSet.getElements(), log, parameters);
+		LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, placeSet, parameters);
+		return builder.build().run();
 	}
 
 	@PluginVariant(
 			variantLabel = "Local Process Models Discovery Based on Set of Places given Petri Net (faster)",
 			requiredParameterLabels = {0, 2}
 	)
-	public static Object[] mineLPMs(PluginContext context, XLog log, Petrinet petrinet) {
+	public static LPMDiscoveryResult mineLPMs(PluginContext context, XLog log, Petrinet petrinet) {
 		Main.setUp(context);
 
 		PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
@@ -178,7 +183,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
 			variantLabel = "Local Process Models Discovery Based on Set of Places given Places (faster)",
 			requiredParameterLabels = {0, 1, 3}
 	)
-	public static Object[] mineLPMs(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
+	public static LPMDiscoveryResult mineLPMs(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
 		return run(context, log, placeSet, parameters);
 	}
 
@@ -187,9 +192,10 @@ public class PlaceBasedLPMDiscoveryPlugin {
 		return Main.run(log, parameters);
 	}
 
-	private static Object[] run(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
+	private static LPMDiscoveryResult run(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
 		Main.setUp(context);
-		return Main.run(placeSet.getElements(), log, parameters);
+		LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, placeSet, parameters);
+		return builder.build().run();
 	}
 
 

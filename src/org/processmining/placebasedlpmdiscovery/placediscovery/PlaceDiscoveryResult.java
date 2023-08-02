@@ -10,6 +10,13 @@ public class PlaceDiscoveryResult {
     private Set<Place> places;
     private XLog log;
 
+    public PlaceDiscoveryResult() {
+
+    }
+    public PlaceDiscoveryResult(Set<Place> places) {
+        this.places = places;
+    }
+
     public Set<Place> getPlaces() {
         return places;
     }

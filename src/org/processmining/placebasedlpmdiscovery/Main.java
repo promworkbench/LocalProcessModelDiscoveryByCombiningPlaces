@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.framework.plugin.PluginContext;
+import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
@@ -12,7 +13,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateo
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.StandardLPMCombinationController;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.complex.AndCombinationGuard;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.complex.CombinationGuard;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.simple.NotContainingCoveringPlacesCombinationGuard;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.simple.SameActivityCombinationGuard;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LPMFilterFactory;
@@ -29,6 +30,7 @@ import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.placechooser.MainPlaceChooser;
 import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
+import org.processmining.placebasedlpmdiscovery.placediscovery.PetriNetPlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.placediscovery.StandardPlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
@@ -56,14 +58,6 @@ public class Main {
 
     public static PluginContext getContext() {
         return Context;
-    }
-
-    public static Analyzer getAnalyzer() {
-        return Analyzer;
-    }
-
-    public static InterrupterSubject getInterrupterSubject() {
-        return interrupterSubject;
     }
 
     public static Object[] run(XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
@@ -99,35 +93,41 @@ public class Main {
         return new Object[] {lpmResult, statistics, placeSet};
     }
 
-    public static Object[] run(Set<Place> places, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
-        System.out.println(places.size());
-        setUpAnalyzer(log);
-        LPMResult lpmResult;
-        Statistics statistics;
-        PlaceSet placeSet;
-
-        Analyzer.totalExecution.start();
-
-        try {
-            lpmResult = Main.discover(places, log, parameters);
-            statistics = Analyzer.getStatistics();
-            placeSet = new PlaceSet(places);
-        } finally {
-            Analyzer.totalExecution.stop();
-            Analyzer.write();
-            Analyzer = null;
-        }
-
-        return new Object[] {lpmResult, statistics, placeSet};
-    }
-
-    private static LPMDiscoveryBuilder createDefaultBuilder(XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
+    public static LPMDiscoveryBuilder createDefaultBuilder(XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
         // create builder
         LPMDiscoveryBuilder builder = new StandardLPMDiscoveryBuilder();
 
         // set running context
         RunningContext runningContext = new RunningContext();
-        builder.setRunningContext(runningContext);
+        setupStandardBase(log, parameters, builder, runningContext);
+
+        // set place discovery
+        builder.setPlaceDiscovery(placeSet);
+
+        // set place chooser
+        LEFRMatrix lefrMatrix = Analyzer.logAnalyzer.getLEFRMatrix(parameters.getLpmCombinationParameters().getLpmProximity());
+        builder.setPlaceChooser(new MainPlaceChooser(log, parameters.getPlaceChooserParameters(), lefrMatrix));
+
+        // set lpm combination controller
+        LPMCombinationController controller =
+                new StandardLPMCombinationController(log, parameters, runningContext);
+        builder.setLPMCombination(controller);
+        // set guard
+        builder.setCombinationGuard(new CombinationGuard(
+                new SameActivityCombinationGuard(), new NotContainingCoveringPlacesCombinationGuard()));
+
+        // set filtration and evaluation controllers
+        setupStandardEvaluationAndFiltrationControllers(parameters, builder, runningContext);
+        return builder;
+    }
+
+    public static LPMDiscoveryBuilder createDefaultBuilder(XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
+        // create builder
+        LPMDiscoveryBuilder builder = new StandardLPMDiscoveryBuilder();
+
+        // set running context
+        RunningContext runningContext = new RunningContext();
+        setupStandardBase(log, parameters, builder, runningContext);
 
         // set place discovery
         builder.setPlaceDiscovery(new StandardPlaceDiscovery(log, parameters.getPlaceDiscoveryParameters()));
@@ -137,13 +137,55 @@ public class Main {
         builder.setPlaceChooser(new MainPlaceChooser(log, parameters.getPlaceChooserParameters(), lefrMatrix));
 
         // set lpm combination controller
-        LPMCombinationController controller = new StandardLPMCombinationController(parameters, runningContext);
-        builder.setLPMCombination();
+        LPMCombinationController controller =
+                new StandardLPMCombinationController(log, parameters, runningContext);
+        builder.setLPMCombination(controller);
         // set guard
-        builder.setCombinationGuard(new AndCombinationGuard(
+        builder.setCombinationGuard(new CombinationGuard(
                 new SameActivityCombinationGuard(), new NotContainingCoveringPlacesCombinationGuard()));
 
         // set filtration and evaluation controllers
+        setupStandardEvaluationAndFiltrationControllers(parameters, builder, runningContext);
+        return builder;
+    }
+
+    public static LPMDiscoveryBuilder createDefaultForPetriNetBuilder(XLog log, Petrinet petrinet, PlaceBasedLPMDiscoveryParameters parameters) {
+        // create builder
+        LPMDiscoveryBuilder builder = new StandardLPMDiscoveryBuilder();
+
+        // set running context
+        RunningContext runningContext = new RunningContext();
+        setupStandardBase(log, parameters, builder, runningContext);
+
+        // set place discovery
+        builder.setPlaceDiscovery(new PetriNetPlaceDiscovery(petrinet));
+
+        // set place chooser
+        LEFRMatrix lefrMatrix = runningContext.getAnalyzer().logAnalyzer.getLEFRMatrix(parameters.getLpmCombinationParameters().getLpmProximity());
+        builder.setPlaceChooser(new MainPlaceChooser(log, parameters.getPlaceChooserParameters(), lefrMatrix));
+
+        // set lpm combination controller
+        LPMCombinationController controller =
+                new StandardLPMCombinationController(log, parameters, runningContext);
+        builder.setLPMCombination(controller);
+        // set guard
+        builder.setCombinationGuard(new CombinationGuard(
+                new SameActivityCombinationGuard(), new NotContainingCoveringPlacesCombinationGuard()));
+
+        // set filtration and evaluation controllers
+        setupStandardEvaluationAndFiltrationControllers(parameters, builder, runningContext);
+        return builder;
+    }
+
+    private static void setupStandardBase(XLog log, PlaceBasedLPMDiscoveryParameters parameters, LPMDiscoveryBuilder builder, RunningContext runningContext) {
+        runningContext.setAnalyzer(new Analyzer(log));
+        builder.setRunningContext(runningContext);
+
+        // set parameters
+        builder.setParameters(parameters);
+    }
+
+    private static void setupStandardEvaluationAndFiltrationControllers(PlaceBasedLPMDiscoveryParameters parameters, LPMDiscoveryBuilder builder, RunningContext runningContext) {
         LPMFiltrationController filtrationController = new LPMFiltrationController(runningContext);
         builder.setFiltrationController(filtrationController);
         LPMEvaluationController evaluationController = new LPMEvaluationController(runningContext);
@@ -170,7 +212,6 @@ public class Main {
         }
         runningContext.setLpmFiltrationController(filtrationController);
         runningContext.setLpmEvaluationController(evaluationController);
-        return builder;
     }
 
     public static LPMResult discover(Set<Place> places, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
@@ -221,10 +262,11 @@ public class Main {
 
             RunningContext runningContext = new RunningContext();
             // setup the combination controller
-            StandardLPMCombinationController controller = new StandardLPMCombinationController(parameters, runningContext);
+            StandardLPMCombinationController controller =
+                    new StandardLPMCombinationController(log, parameters, runningContext);
 
             // set guard
-            controller.setCombinationGuard(new AndCombinationGuard(
+            controller.setCombinationGuard(new CombinationGuard(
                     new SameActivityCombinationGuard(), new NotContainingCoveringPlacesCombinationGuard()));
 
             // setup filtration controller
@@ -258,7 +300,7 @@ public class Main {
 
             Analyzer.logCountPlacesUsed(places.size());
 
-            result.addAll(controller.combineUsingFPGrowth(places, log, parameters.getLpmCount()));
+            result.addAll(controller.combineUsingFPGrowth(places, parameters.getLpmCount()));
 
             Analyzer.logAllLpmDiscovered(result.size());
             if (result.size() > 0) {
