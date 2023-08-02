@@ -8,7 +8,7 @@ import org.processmining.models.graphbased.directed.petrinet.PetrinetGraph;
 import org.processmining.models.graphbased.directed.petrinet.elements.Place;
 import org.processmining.models.jgraph.ProMJGraphVisualizer;
 import org.processmining.models.jgraph.visualization.ProMJGraphPanel;
-import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
+import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
@@ -29,8 +29,8 @@ import java.util.stream.Collectors;
 
 public class InteractiveLPMsDiscoveryController implements WeirdComponentController<LocalProcessModel> {
 
-    private final LPMResult result;
-    private final Statistics statistics;
+    private final LPMDiscoveryResult result;
+
     private final PluginContext context;
 
     private SettableComponentFactory scf;
@@ -41,9 +41,8 @@ public class InteractiveLPMsDiscoveryController implements WeirdComponentControl
     private JComponent settablePanels;
     private JComponent lpmGraphPanel;
 
-    public InteractiveLPMsDiscoveryController(LPMResult lpmResult, Statistics statistics, PluginContext context) {
-        this.result = lpmResult;
-        this.statistics = statistics;
+    public InteractiveLPMsDiscoveryController(LPMDiscoveryResult result, PluginContext context) {
+        this.result = result;
         this.context = context;
 
         init();
@@ -69,12 +68,12 @@ public class InteractiveLPMsDiscoveryController implements WeirdComponentControl
     }
 
     private void initTablePanel() {
-        this.tablePanel = new TableComposition<>(this.result, new LPMResultPluginVisualizerTableFactory(), this);
+        this.tablePanel = new TableComposition<>((LPMResult) this.result, new LPMResultPluginVisualizerTableFactory(), this);
     }
 
     private void initSettablePanels() {
         this.scf = new SettableComponentFactory();
-        this.scf.setStatistics(statistics);
+//        this.scf.setStatistics(statistics);
 
         // set up the layout of this component
         this.settablePanels = new JPanel();
@@ -119,8 +118,8 @@ public class InteractiveLPMsDiscoveryController implements WeirdComponentControl
         this.settablePanels.add(this.lpmGraphPanel, gbc);
     }
 
-    private void updateLpmGraphPanel (LocalProcessModel selectedObject) {
-        // if in the visualizer component there is a LPM drawn
+    private void updateLpmGraphPanel(LocalProcessModel selectedObject) {
+        // if in the visualizer component there is an LPM drawn
         if (this.lpmGraphPanel.getComponents().length >= 1)
             this.lpmGraphPanel.remove(0); // remove it
 

@@ -88,6 +88,7 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 
             // discover places
             Set<Place> places = this.placeDiscovery.getPlaces().getPlaces();
+            this.runningContext.getAnalyzer().getStatistics().getParameterStatistics().setPlaceDiscoveryIncluded(true);
 
             // choose places
             parameters.getPlaceChooserParameters()

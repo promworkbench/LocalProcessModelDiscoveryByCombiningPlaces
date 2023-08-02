@@ -5,6 +5,8 @@ import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
+import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
+import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.plugins.visualization.controllers.InteractiveLPMsDiscoveryController;
 
@@ -14,8 +16,7 @@ public class InteractiveLPMsDiscovery {
 
     private PluginContext context;
 
-    private LPMResult lpmResult;
-    private Statistics statistics;
+    private LPMDiscoveryResult result;
 
     private PlaceBasedLPMDiscoveryParameters parameters;
 
@@ -25,16 +26,11 @@ public class InteractiveLPMsDiscovery {
         this.parameters = parameters;
 
         Main.setUp(context);
-        Object[] result = Main.run(log, parameters);
-        this.lpmResult = (LPMResult) result[0];
-        this.statistics = (Statistics) result[1];
+        LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, parameters);
+        result = builder.build().run();
     }
 
     public JComponent getComponentForContext() {
-        return new InteractiveLPMsDiscoveryController(lpmResult, statistics, context).getComponent();
-    }
-
-    public LPMResult getResult() {
-        return lpmResult;
+        return new InteractiveLPMsDiscoveryController(result, context).getComponent();
     }
 }
