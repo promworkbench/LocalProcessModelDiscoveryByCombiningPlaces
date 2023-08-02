@@ -122,19 +122,51 @@ public class Main {
     }
 
     private static LPMDiscoveryBuilder createDefaultBuilder(XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
-        RunningContext runningContext = new RunningContext();
-
+        // create builder
         LPMDiscoveryBuilder builder = new StandardLPMDiscoveryBuilder();
+
+        // set running context
+        RunningContext runningContext = new RunningContext();
+        builder.setRunningContext(runningContext);
+
+        // set place discovery
         builder.setPlaceDiscovery(new StandardPlaceDiscovery(log, parameters.getPlaceDiscoveryParameters()));
+
+        // set place chooser
         LEFRMatrix lefrMatrix = Analyzer.logAnalyzer.getLEFRMatrix(parameters.getLpmCombinationParameters().getLpmProximity());
         builder.setPlaceChooser(new MainPlaceChooser(log, parameters.getPlaceChooserParameters(), lefrMatrix));
-        builder.setRunningContext(runningContext);
+
+        // set lpm combination controller
         LPMCombinationController controller = new StandardLPMCombinationController(parameters, runningContext);
         builder.setLPMCombination();
-
         // set guard
         controller.setGuard(new AndCombinationGuard(
                 new SameActivityCombinationGuard(), new NotContainingCoveringPlacesCombinationGuard()));
+
+        // set filtration and evaluation controllers
+        LPMFiltrationController filtrationController = new LPMFiltrationController(runningContext);
+        LPMEvaluationController evaluationController = new LPMEvaluationController(runningContext);
+        // set evaluator
+        LPMEvaluatorFactory evaluatorFactory = new LPMEvaluatorFactory();
+        evaluationController.setEvaluatorFactory(evaluatorFactory);
+        evaluationController.registerEvaluator(LPMEvaluatorId.PassageCoverageEvaluator.name(),
+                evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.PassageCoverageEvaluator));
+        evaluationController.registerEvaluator(LPMEvaluatorId.FittingWindowEvaluator.name(),
+                evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.FittingWindowEvaluator));
+        evaluationController.registerEvaluator(LPMEvaluatorId.TransitionCoverageEvaluator.name(),
+                evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.TransitionCoverageEvaluator));
+        evaluationController.registerEvaluator(LPMEvaluatorId.TraceSupportCountEvaluator.name(),
+                evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.TraceSupportCountEvaluator));
+        
+        // set filters
+        LPMFilterParameters filterParameters = parameters.getLpmFilterParameters();
+        LPMFilterFactory filterFactory = new LPMFilterFactory(filterParameters);
+        for (LPMFilterId filterId : filterParameters.getLPMFilterIds()) {
+            LPMFilter filter = filterFactory.getLPMFilter(filterId);
+            filtrationController.addLPMFilter(filter, filter.needsEvaluation());
+        }
+        runningContext.setLpmFiltrationController(filtrationController);
+        runningContext.setLpmEvaluationController(evaluationController);
         return builder;
     }
 
