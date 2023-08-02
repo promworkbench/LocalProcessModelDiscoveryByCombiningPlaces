@@ -3,15 +3,10 @@ package org.processmining.placebasedlpmdiscovery;
 import org.deckfour.xes.model.XLog;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
+import org.processmining.placebasedlpmdiscovery.analysis.analyzers.Analyzer;
+import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationController;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorFactory;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.StandardLPMCombinationController;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.complex.CombinationGuard;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.simple.NotContainingCoveringPlacesCombinationGuard;
@@ -21,11 +16,17 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LP
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilterId;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorFactory;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.main.StandardLPMDiscoveryBuilder;
-import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterSubject;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterSubject;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.placechooser.MainPlaceChooser;
@@ -36,7 +37,6 @@ import org.processmining.placebasedlpmdiscovery.placediscovery.StandardPlaceDisc
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.plugins.utils.ProvidedObjectHelper;
-import org.processmining.placebasedlpmdiscovery.analysis.analyzers.Analyzer;
 
 import java.util.Set;
 import java.util.Timer;
@@ -90,7 +90,7 @@ public class Main {
             Analyzer = null;
         }
 
-        return new Object[] {lpmResult, statistics, placeSet};
+        return new Object[]{lpmResult, statistics, placeSet};
     }
 
     public static LPMDiscoveryBuilder createDefaultBuilder(XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
@@ -306,8 +306,8 @@ public class Main {
             if (result.size() > 0) {
                 // normalize the fitting windows score
                 double max = result.highestScoringElement((LocalProcessModel lpm) -> lpm.getAdditionalInfo()
-                        .getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
-                                FittingWindowsEvaluationResult.class).getResult())
+                                .getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+                                        FittingWindowsEvaluationResult.class).getResult())
                         .getAdditionalInfo().getEvaluationResult(
                                 LPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
                                 FittingWindowsEvaluationResult.class).getResult();

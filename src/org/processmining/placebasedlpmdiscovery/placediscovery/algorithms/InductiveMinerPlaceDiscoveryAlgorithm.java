@@ -5,6 +5,7 @@ import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.acceptingpetrinet.models.impl.AcceptingPetriNetFactory;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.placediscovery.StandardPlaceDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.placediscovery.converters.place.PetriNetPlaceConverter;
 import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.InductiveMinerPlaceDiscoveryParameters;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
@@ -20,10 +21,8 @@ public class InductiveMinerPlaceDiscoveryAlgorithm extends PlaceDiscoveryAlgorit
 
     @Override
     public PlaceDiscoveryResult getPlaces(XLog log) {
-        PlaceDiscoveryResult result = new PlaceDiscoveryResult();
         Object[] res = IM.minePetriNet(Main.getContext(), log, this.parameters.getMiningParameters());
         AcceptingPetriNet petriNet = AcceptingPetriNetFactory.createAcceptingPetriNet((Petrinet) res[0], (Marking) res[1], (Marking) res[2]);
-        result.setPlaces(converter.convert(petriNet));
-        return result;
+        return new StandardPlaceDiscoveryResult(converter.convert(petriNet));
     }
 }

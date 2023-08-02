@@ -7,6 +7,7 @@ import org.processmining.placebasedlpmdiscovery.model.exporting.Exportable;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.Exporter;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.placediscovery.StandardPlaceDiscoveryResult;
 
 import java.io.OutputStream;
 import java.util.Set;
@@ -38,6 +39,6 @@ public class PlaceSet extends SerializableSet<Place> implements Exportable<Place
 
     @Override
     public PlaceDiscoveryResult getPlaces() {
-        return new PlaceDiscoveryResult(this.getElements());
+        return new StandardPlaceDiscoveryResult(this.getElements());
     }
 }

@@ -5,6 +5,7 @@ import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.acceptingpetrinet.models.impl.AcceptingPetriNetImpl;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.placediscovery.StandardPlaceDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.placediscovery.converters.place.PetriNetPlaceConverter;
 import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.EstMinerPlaceDiscoveryParameters;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
@@ -22,7 +23,7 @@ public class EstMinerPlaceDiscoveryAlgorithm extends PlaceDiscoveryAlgorithm<
 
     @Override
     public PlaceDiscoveryResult getPlaces(XLog log) {
-        PlaceDiscoveryResult result = new PlaceDiscoveryResult();
+        StandardPlaceDiscoveryResult result = new StandardPlaceDiscoveryResult();
         try {
             MyFirstMinerPlugin mainPlugIn = new MyFirstMinerPlugin();
             Object[] modelAndLog = mainPlugIn.discover(Main.getContext(), log, parameters.getWrappedParameters());

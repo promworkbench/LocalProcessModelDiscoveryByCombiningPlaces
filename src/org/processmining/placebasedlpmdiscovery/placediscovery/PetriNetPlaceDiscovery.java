@@ -17,8 +17,6 @@ public class PetriNetPlaceDiscovery implements PlaceDiscovery {
     public PlaceDiscoveryResult getPlaces() {
         AcceptingPetriNet acceptingPetriNet = new AcceptingPetriNetImpl(this.petriNet);
         PetriNetPlaceConverter converter = new PetriNetPlaceConverter();
-        PlaceDiscoveryResult result = new PlaceDiscoveryResult();
-        result.setPlaces(converter.convert(acceptingPetriNet));
-        return result;
+        return new StandardPlaceDiscoveryResult(converter.convert(acceptingPetriNet));
     }
 }
