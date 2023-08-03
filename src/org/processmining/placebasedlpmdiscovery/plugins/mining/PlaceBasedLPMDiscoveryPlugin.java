@@ -16,6 +16,7 @@ import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.wizards.PlaceBasedLPMDiscoveryWizard;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.wizards.steps.*;
+import org.processmining.placebasedlpmdiscovery.prom.ContextKeeper;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 
 import java.util.HashMap;
@@ -41,7 +42,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
             requiredParameterLabels = {0}
     )
     public static LPMResult mineLPMs(UIPluginContext context, XLog log) {
-        Main.setUp(context);
+        ContextKeeper.setUp(context);
 
         PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
 
@@ -74,7 +75,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
             requiredParameterLabels = {0, 2}
     )
     public static LPMResult mineLPMs(UIPluginContext context, XLog log, Petrinet petrinet) {
-        Main.setUp(context);
+        ContextKeeper.setUp(context);
 
         PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
 
@@ -106,7 +107,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
             requiredParameterLabels = {0, 1}
     )
     public static LPMResult mineLPMs(UIPluginContext context, XLog log, PlaceSet placeSet) {
-        Main.setUp(context);
+        ContextKeeper.setUp(context);
 
         PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
 
@@ -129,7 +130,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
             requiredParameterLabels = {0}
     )
     public static LPMDiscoveryResult mineLPMs(PluginContext context, XLog log) {
-        Main.setUp(context);
+        ContextKeeper.setUp(context);
 
         PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
 
@@ -142,7 +143,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
             requiredParameterLabels = {0, 1}
     )
     public static LPMDiscoveryResult mineLPMs(PluginContext context, XLog log, PlaceSet placeSet) {
-        Main.setUp(context);
+        ContextKeeper.setUp(context);
 
         PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
 
@@ -155,7 +156,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
             requiredParameterLabels = {0, 2}
     )
     public static LPMDiscoveryResult mineLPMs(PluginContext context, XLog log, Petrinet petrinet) {
-        Main.setUp(context);
+        ContextKeeper.setUp(context);
 
         PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
         PlaceSet places = new PlaceSet(PlaceUtils.getPlacesFromPetriNet(petrinet));
@@ -180,13 +181,13 @@ public class PlaceBasedLPMDiscoveryPlugin {
     }
 
     private static LPMDiscoveryResult run(PluginContext context, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
-        Main.setUp(context);
+        ContextKeeper.setUp(context);
         LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, parameters);
         return builder.build().run();
     }
 
     private static LPMDiscoveryResult run(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
-        Main.setUp(context);
+        ContextKeeper.setUp(context);
         LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, placeSet, parameters);
         return builder.build().run();
     }

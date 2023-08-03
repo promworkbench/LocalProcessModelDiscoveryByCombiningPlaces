@@ -1,7 +1,6 @@
 package org.processmining.placebasedlpmdiscovery;
 
 import org.deckfour.xes.model.XLog;
-import org.processmining.framework.plugin.PluginContext;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.Analyzer;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
@@ -27,16 +26,6 @@ import org.processmining.placebasedlpmdiscovery.placediscovery.StandardPlaceDisc
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 
 public class Main {
-
-    private static PluginContext Context;
-
-    public static void setUp(PluginContext context) {
-        Main.Context = context;
-    }
-
-    public static PluginContext getContext() {
-        return Context;
-    }
 
     public static LPMDiscoveryBuilder createDefaultBuilder(XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
         // create builder
