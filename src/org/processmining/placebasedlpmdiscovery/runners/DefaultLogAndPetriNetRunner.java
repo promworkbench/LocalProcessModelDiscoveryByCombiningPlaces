@@ -38,7 +38,7 @@ public class DefaultLogAndPetriNetRunner {
     private static void run(String eventLogPath, String petriNet, String resultPath) throws Exception {
         XLog log = LogUtils.readLogFromFile(eventLogPath);
 
-        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
+        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log));
         parameters.setLpmCount(Integer.MAX_VALUE);
         parameters.getPlaceChooserParameters().setPlaceLimit(100);
 
