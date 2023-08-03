@@ -15,7 +15,6 @@ import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.wizards.PlaceBasedLPMDiscoveryWizard;
-import org.processmining.placebasedlpmdiscovery.plugins.mining.wizards.steps.*;
 import org.processmining.placebasedlpmdiscovery.prom.ContextKeeper;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.wizards.steps.*;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;

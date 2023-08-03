@@ -3,7 +3,6 @@ package org.processmining.placebasedlpmdiscovery.prom.plugins.mining;
 import org.deckfour.xes.model.XLog;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.framework.plugin.annotations.Plugin;
-import org.processmining.placebasedlpmdiscovery.plugins.mining.wizards.steps.*;
 
 @Plugin(
         name = "Interactive Local Process Models Discovery",
@@ -14,7 +13,7 @@ import org.processmining.placebasedlpmdiscovery.plugins.mining.wizards.steps.*;
 )
 public class InteractiveLPMsDiscoveryPlugin {
 
-//    @UITopiaVariant(
+    //    @UITopiaVariant(
 //            affiliation = "RWTH - PADS",
 //            author = "Viki Peeva",
 //            email = "peeva@pads.rwth-aachen.de",
@@ -24,7 +23,7 @@ public class InteractiveLPMsDiscoveryPlugin {
 //            variantLabel = "Interactive Local Process Models Discovery",
 //            requiredParameterLabels = {0}
 //    )
-    public static InteractiveLPMsDiscovery mineInteractive(UIPluginContext context, XLog log){
+    public static InteractiveLPMsDiscovery mineInteractive(UIPluginContext context, XLog log) {
         PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
 
         // show wizard
