@@ -123,7 +123,7 @@ public class LocalProcessModel implements Serializable, TextDescribable {
                 transitions.put(transition.getLabel(), transition);
         }
 
-        this.additionalInfo.clearEvaluation();
+        this.additionalInfo = new LPMAdditionalInfo(this);
     }
 
     public void addAllPlaces(Set<Place> places) {

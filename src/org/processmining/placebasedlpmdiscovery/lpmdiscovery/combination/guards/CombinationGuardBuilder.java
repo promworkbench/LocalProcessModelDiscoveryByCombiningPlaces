@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards;
 
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.complex.AndCombinationGuard;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.complex.CombinationGuard;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.complex.OrCombinationGuard;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.simple.NotCombinationGuard;
 
@@ -9,23 +9,23 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.
  */
 public class CombinationGuardBuilder {
 
-    public static CombinationGuard and(CombinationGuard... guards) {
-        AndCombinationGuard resGuard = new AndCombinationGuard();
-        for (CombinationGuard guard : guards)
+    public static org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard and(org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard... guards) {
+        CombinationGuard resGuard = new CombinationGuard();
+        for (org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard guard : guards)
             resGuard.add(guard);
 
         return resGuard;
     }
 
-    public static CombinationGuard or(CombinationGuard... guards) {
+    public static org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard or(org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard... guards) {
         OrCombinationGuard resGuard = new OrCombinationGuard();
-        for (CombinationGuard guard : guards)
+        for (org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard guard : guards)
             resGuard.add(guard);
 
         return resGuard;
     }
 
-    public static CombinationGuard not(CombinationGuard guard) {
+    public static org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard not(org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard guard) {
         return new NotCombinationGuard(guard);
     }
 }

@@ -101,20 +101,30 @@ public class Place implements Serializable, TextDescribable {
         return sb.toString();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (getClass() != obj.getClass())
-            return false;
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (getClass() != obj.getClass())
+//            return false;
+//
+//        Place place = (Place) obj;
+//        return this.inputTransitions.equals(place.inputTransitions)
+//                && this.outputTransitions.equals(place.outputTransitions)
+//                && this.id.equals(place.id);
+//    }
 
-        Place place = (Place) obj;
-        return this.inputTransitions.equals(place.inputTransitions)
-                && this.outputTransitions.equals(place.outputTransitions)
-                && this.id.equals(place.id);
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Place place = (Place) o;
+        return Objects.equals(inputTransitions, place.inputTransitions) &&
+                Objects.equals(outputTransitions, place.outputTransitions);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(inputTransitions, outputTransitions, id);
+        return Objects.hash(inputTransitions, outputTransitions);
     }
 
     @Override

@@ -13,7 +13,13 @@ public class WindowLPMTree implements CanBeInterrupted {
     private boolean stop;
 
     public WindowLPMTree(int windowSize) {
-        this.root = new WindowLPMTreeNode(0, windowSize, new ReplayableLocalProcessModel(), -1, -1);
+        this.root = new WindowLPMTreeNode(
+                0,
+                windowSize,
+                new ReplayableLocalProcessModel(),
+                -1,
+                -1,
+                new ArrayList<>());
     }
 
     public void add(int inEvent, int inPos, int outEvent, int outPos,
@@ -30,13 +36,13 @@ public class WindowLPMTree implements CanBeInterrupted {
         }
     }
 
-    public void tryAddNullChildren(int event, int position) {
+    public void tryAddNullChildren(int event, int position, int eventPos) {
         Set<WindowLPMTreeNode> nodes = getNodesThatCanFire(event, position);
         for (WindowLPMTreeNode node : nodes) {
             if (stop)
                 return;
             if (node.getNullChild() == null)
-                node.tryAddNullChild(event);
+                node.tryAddNullChild(event, eventPos);
         }
     }
 
@@ -66,8 +72,6 @@ public class WindowLPMTree implements CanBeInterrupted {
             WindowLPMTreeNode node = queue.poll();
             if (node.getNullChild() != null)
                 res.add(node.getNullChild());
-//            else //TODO: At some point I expected that every node will have a null child. I have to think this through whether such nodes should exist.
-//                System.out.println(node.getLpm().toString());
             queue.addAll(node.getChildren());
         }
         return res;

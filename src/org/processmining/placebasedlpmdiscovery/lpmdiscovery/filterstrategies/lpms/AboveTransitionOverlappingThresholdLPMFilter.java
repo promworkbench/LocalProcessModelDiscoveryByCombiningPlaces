@@ -14,8 +14,9 @@ public class AboveTransitionOverlappingThresholdLPMFilter extends NeedsEvaluatio
 
     @Override
     public boolean shouldKeep(LocalProcessModel lpm) {
-        return lpm.getAdditionalInfo().getEvaluationResult()
-                .getSimpleEvaluationResult(TransitionsOverlappingEvaluationResult.class).getResult() > this.threshold;
+        return lpm.getAdditionalInfo().getEvaluationResult(
+                LPMEvaluationResultId.TransitionOverlappingEvaluationResult.name(),
+                TransitionsOverlappingEvaluationResult.class).getResult() > this.threshold;
     }
 
     @Override

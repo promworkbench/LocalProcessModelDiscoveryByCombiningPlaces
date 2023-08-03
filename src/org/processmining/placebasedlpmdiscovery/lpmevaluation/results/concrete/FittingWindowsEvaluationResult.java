@@ -10,7 +10,6 @@ public class FittingWindowsEvaluationResult extends SimpleEvaluationResult {
 
     private static final long serialVersionUID = -7955265017819801410L;
 
-    private final int windowSize;
     private int count; // number of fitting windows
     private double weightedCount; // longer matching have larger weight
     private int total; // total number of windows in the log
@@ -20,9 +19,8 @@ public class FittingWindowsEvaluationResult extends SimpleEvaluationResult {
     private double normalizedResult;
 
 
-    public FittingWindowsEvaluationResult(LocalProcessModel lpm, int windowSize) {
+    public FittingWindowsEvaluationResult(LocalProcessModel lpm) {
         super(lpm, LPMEvaluationResultId.FittingWindowsEvaluationResult);
-        this.windowSize = windowSize;
         this.count = 0;
         this.total = 0;
         this.coveredWindowsHash = 0;
@@ -103,13 +101,12 @@ public class FittingWindowsEvaluationResult extends SimpleEvaluationResult {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         FittingWindowsEvaluationResult result = (FittingWindowsEvaluationResult) o;
-        return windowSize == result.windowSize &&
-                count == result.count &&
+        return count == result.count &&
                 total == result.total;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(windowSize, count, total);
+        return Objects.hash(count, total);
     }
 }

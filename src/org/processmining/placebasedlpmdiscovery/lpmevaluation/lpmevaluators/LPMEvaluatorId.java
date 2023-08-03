@@ -1,7 +1,10 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators;
 
 public enum LPMEvaluatorId {
-    WindowEvaluator,
+    FittingWindowEvaluator,
     TransitionOverlappingEvaluator,
-    PassageRepetitionEvaluator
+    PassageRepetitionEvaluator,
+    PassageCoverageEvaluator,
+    TransitionCoverageEvaluator,
+    TraceSupportCountEvaluator;
 }

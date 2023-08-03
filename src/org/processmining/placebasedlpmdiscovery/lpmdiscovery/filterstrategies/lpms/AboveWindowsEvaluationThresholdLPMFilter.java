@@ -15,9 +15,9 @@ public class AboveWindowsEvaluationThresholdLPMFilter extends NeedsEvaluationLPM
 
     @Override
     public boolean shouldKeep(LocalProcessModel lpm) {
-        return lpm.getAdditionalInfo().getEvaluationResult().
-                getSimpleEvaluationResult(FittingWindowsEvaluationResult.class).getResult()
-                >= this.evaluationThreshold;
+        return lpm.getAdditionalInfo().getEvaluationResult(
+                LPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+                FittingWindowsEvaluationResult.class).getResult() >= this.evaluationThreshold;
     }
 
     @Override
@@ -27,7 +27,7 @@ public class AboveWindowsEvaluationThresholdLPMFilter extends NeedsEvaluationLPM
 
     @Override
     public LPMEvaluatorId getEvaluatorId() {
-        return LPMEvaluatorId.WindowEvaluator;
+        return LPMEvaluatorId.FittingWindowEvaluator;
     }
 
     @Override

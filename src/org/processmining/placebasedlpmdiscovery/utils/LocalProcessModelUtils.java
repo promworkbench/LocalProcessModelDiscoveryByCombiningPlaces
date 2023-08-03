@@ -9,6 +9,8 @@ import org.processmining.models.graphbased.directed.petrinet.PetrinetEdge;
 import org.processmining.models.graphbased.directed.petrinet.impl.PetrinetFactory;
 import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.GroupedEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.undecided.Utils;
@@ -218,6 +220,12 @@ public class LocalProcessModelUtils {
         return lpm;
     }
 
+    public static GroupedEvaluationResult getGroupedEvaluationResult(LocalProcessModel lpm) {
+        GroupedEvaluationResult ger = new GroupedEvaluationResult(lpm);
+        lpm.getAdditionalInfo().getEvalResults().values().forEach(ger::addResult);
+        return ger;
+    }
+
     public static LocalProcessModel join(LocalProcessModel lpm1, LocalProcessModel lpm2) {
         LocalProcessModel lpm = new LocalProcessModel(lpm1);
         lpm.addAllPlaces(lpm2.getPlaces());
@@ -258,9 +266,10 @@ public class LocalProcessModelUtils {
             // write an entry in the csv
             csvWriter.write(zfName);
             for (LPMEvaluationResultId id : ids) {
-                csvWriter.write(String.valueOf(lpm.getAdditionalInfo().getEvaluationResult().getEvaluationResult(id).getResult()));
+                csvWriter.write(String.valueOf(lpm.getAdditionalInfo()
+                        .getEvaluationResult(id.name(), LPMEvaluationResult.class).getResult()));
             }
-            csvWriter.write(String.valueOf(lpm.getAdditionalInfo().getEvaluationResult().getResult(aggregateOperation)));
+            csvWriter.write(String.valueOf(LocalProcessModelUtils.getGroupedEvaluationResult(lpm).getResult(aggregateOperation)));
             csvWriter.endRecord();
         }
         // add csv file to zip

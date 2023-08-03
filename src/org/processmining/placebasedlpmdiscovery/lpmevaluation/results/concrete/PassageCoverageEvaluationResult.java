@@ -16,14 +16,14 @@ public class PassageCoverageEvaluationResult extends SimpleEvaluationResult {
     private final Set<String> coveredPassages;
     private Set<String> allPossiblePassages;
 
-    public PassageCoverageEvaluationResult(LocalProcessModel lpm, Map<String, Integer> labelMap) {
+    public PassageCoverageEvaluationResult(LocalProcessModel lpm) {
         super(lpm, LPMEvaluationResultId.PassageCoverageEvaluationResult);
         this.coveredPassages = new HashSet<>();
-        initializePossiblePassages(labelMap);
+        initializePossiblePassages();
     }
 
-    private void initializePossiblePassages(Map<String, Integer> labelMap) {
-        this.allPossiblePassages = LocalProcessModelUtils.getPossiblePassages(lpm, labelMap);
+    private void initializePossiblePassages() {
+        this.allPossiblePassages = LocalProcessModelUtils.getPossiblePassages(lpm);
     }
 
     public void updatePassageCoverage(Set<Pair<Integer, Integer>> passages) {

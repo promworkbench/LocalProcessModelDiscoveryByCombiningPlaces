@@ -17,12 +17,17 @@ public class WindowLPMTreeNode {
     private final int inEvent;
     private final int outEvent;
     private final ReplayableLocalProcessModel lpm;
+    private final Collection<Integer> replayedEventsIndices;
     CircularListWithMapping<CircularListWithMapping<Set<WindowLPMTreeNode>, Integer>, Integer> children;
-    Map<Integer, Integer> eventVsPositionMap;
-    private UUID uuid;
+    private final UUID uuid;
     private WindowLPMTreeNode nullChild;
 
-    public WindowLPMTreeNode(int position, int windowWidth, ReplayableLocalProcessModel lpm, int inEvent, int outEvent) {
+    public WindowLPMTreeNode(int position,
+                             int windowWidth,
+                             ReplayableLocalProcessModel lpm,
+                             int inEvent,
+                             int outEvent,
+                             List<Integer> replayedEventsIndices) {
         this.uuid = UUID.randomUUID();
         this.position = position;
         this.windowWidth = windowWidth;
@@ -32,24 +37,25 @@ public class WindowLPMTreeNode {
         this.outEvent = outEvent;
 
         this.children = new CircularListWithMapping<>(this.windowWidth);
-        eventVsPositionMap = new TreeMap<>();
+
+        this.replayedEventsIndices = replayedEventsIndices;
     }
 
     public void tryAddPlace(int inEvent, int inPos, int outEvent, int outPos, Place place, Map<String, Integer> labelMap) {
         if (!canAddPlace(inEvent, place, labelMap))
             return;
 
-        WindowLPMTreeNode child = createChild(inEvent, inPos, outEvent, place, labelMap);
+        WindowLPMTreeNode child = createChild(inEvent, inPos, outEvent, outPos, place, labelMap);
         addChild(inEvent, inPos, outEvent, outPos, child);
     }
 
     public void tryAddPath(int inEvent, int inPos, int outEvent, int outPos, List<Place> path, Map<String, Integer> labelMap) {
-        WindowLPMTreeNode child = createChild(inEvent, inPos, outEvent, path, labelMap);
+        WindowLPMTreeNode child = createChild(inEvent, inPos, outEvent, outPos, path, labelMap);
         addChild(inEvent, inPos, outEvent, outPos, child);
     }
 
     private void addChild(int inEvent, int inPos, int outEvent, int outPos, WindowLPMTreeNode child) {
-        child.tryAddNullChild(outEvent);
+        child.tryAddNullChild(outEvent, outPos);
         CircularListWithMapping<Set<WindowLPMTreeNode>, Integer> placesForInPos = this.children.get(inPos);
         if (placesForInPos == null)
             placesForInPos = new CircularListWithMapping<>(this.windowWidth);
@@ -59,20 +65,23 @@ public class WindowLPMTreeNode {
         this.children.set(inPos, placesForInPos, inEvent);
     }
 
-    public void tryAddNullChild(int event) {
+    public void tryAddNullChild(int event, int eventPos) {
         ReplayableLocalProcessModel rlpm = new ReplayableLocalProcessModel(lpm);
         rlpm.fire(event);
         if (rlpm.isEmptyMarking())
-            this.nullChild = new WindowLPMTreeNode(-1, this.windowWidth, rlpm, this.inEvent, this.outEvent);
+            this.nullChild = new WindowLPMTreeNode(-1, this.windowWidth, rlpm, this.inEvent, this.outEvent,
+                    getCopyOfUpdatedReplayedEventIndices(eventPos));
     }
 
-    private WindowLPMTreeNode createChild(int event, int position, int outEvent, Place place, Map<String, Integer> labelMap) {
+
+    private WindowLPMTreeNode createChild(int event, int position, int outEvent, int outPos, Place place, Map<String, Integer> labelMap) {
         ReplayableLocalProcessModel newLpm = new ReplayableLocalProcessModel(this.lpm);
         addPlaceInRLPM(newLpm, event, place, labelMap);
-        return new WindowLPMTreeNode(position, this.windowWidth, newLpm, event, outEvent); // create node
+        return new WindowLPMTreeNode(position, this.windowWidth, newLpm, event, outEvent,
+                getCopyOfUpdatedReplayedEventIndices(outPos)); // create node
     }
 
-    private WindowLPMTreeNode createChild(int event, int position, int outEvent, List<Place> path, Map<String, Integer> labelMap) {
+    private WindowLPMTreeNode createChild(int event, int position, int outEvent, int outPos, List<Place> path, Map<String, Integer> labelMap) {
         ReplayableLocalProcessModel newLpm = new ReplayableLocalProcessModel(this.lpm);
         addPlaceInRLPM(newLpm, event, path.get(0), labelMap);
         Place previous = path.get(0);
@@ -84,7 +93,8 @@ public class WindowLPMTreeNode {
             addPlaceInRLPM(newLpm, labelMap.get(silent.getLabel()), next, labelMap);
             previous = next;
         }
-        return new WindowLPMTreeNode(position, this.windowWidth, newLpm, event, outEvent); // create node
+        return new WindowLPMTreeNode(position, this.windowWidth, newLpm, event, outEvent,
+                getCopyOfUpdatedReplayedEventIndices(outPos)); // create node
     }
 
     private void addPlaceInRLPM(ReplayableLocalProcessModel rlpm, int event, Place place, Map<String, Integer> labelMap) {
@@ -173,6 +183,10 @@ public class WindowLPMTreeNode {
         return this.lpm;
     }
 
+    public Collection<Integer> getReplayedEventsIndices() {
+        return replayedEventsIndices;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -184,5 +198,11 @@ public class WindowLPMTreeNode {
     @Override
     public int hashCode() {
         return Objects.hash(uuid);
+    }
+
+    private List<Integer> getCopyOfUpdatedReplayedEventIndices(int eventPos) {
+        List<Integer> tempEventIndices = new ArrayList<>(this.replayedEventsIndices);
+        tempEventIndices.add(eventPos);
+        return tempEventIndices;
     }
 }

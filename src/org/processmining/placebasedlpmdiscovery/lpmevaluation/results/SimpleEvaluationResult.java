@@ -2,14 +2,16 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.results;
 
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
-public abstract class SimpleEvaluationResult extends AbstractEvaluationResult {
+public abstract class SimpleEvaluationResult implements LPMEvaluationResult {
 
     private static final long serialVersionUID = 8123973260828398630L;
+
+    protected LocalProcessModel lpm;
 
     private final LPMEvaluationResultId id;
 
     public SimpleEvaluationResult(LocalProcessModel lpm, LPMEvaluationResultId id) {
-        super(lpm);
+        this.lpm = lpm;
         this.id = id;
     }
 
