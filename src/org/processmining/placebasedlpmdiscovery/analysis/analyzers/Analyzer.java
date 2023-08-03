@@ -2,8 +2,7 @@ package org.processmining.placebasedlpmdiscovery.analysis.analyzers;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LogAnalyzer;
-import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.utils.ProjectProperties;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.analysis.statistics.*;
 
 import java.util.UUID;

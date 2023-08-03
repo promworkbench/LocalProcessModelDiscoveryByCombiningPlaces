@@ -75,16 +75,16 @@ public class LPMTreeBuilder extends Interruptible {
             LinkedList<Integer> window = new LinkedList<>();
             // Storage for the window tree
             WindowLPMTree localTree = new WindowLPMTree(this.parameters.getLpmProximity());
-            Main.getInterrupterSubject().addObserver(localTree);
+            this.runningContext.getInterrupterSubject().addObserver(localTree);
             int eventPos = 0; // position of end event of the current window
             for (int event : traceVariant) { // for each event in the trace variant
                 if (stop) { // time stop
                     mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount());
-                    Main.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
+                    this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
                     return mainTree;
                 }
 
-                Main.getAnalyzer().startWindow(); // analysis
+                this.runningContext.getAnalyzer().startWindow(); // analysis
 
                 eventPos++; // move the window (last event is the pointer)
                 if (window.size() >= this.parameters.getLpmProximity()) { // if no space in the window
@@ -103,7 +103,7 @@ public class LPMTreeBuilder extends Interruptible {
                     Set<List<Place>> paths = inoutViaSilentPlaceMap.getOrDefault(
                             new Pair<>(window.get(i), event), new HashSet<>());
 
-                    Main.getAnalyzer().getStatistics().getFpGrowthStatistics().placesAddedInLocalTree(
+                    this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().placesAddedInLocalTree(
                             placesForAddition.size() + paths.size());
 //                    localTree.add(window.get(i), placesForAddition, paths, windowLog.getLabelMap(), i);
                     localTree.add(window.get(i), eventPos - window.size() + 1 + i,
@@ -112,7 +112,7 @@ public class LPMTreeBuilder extends Interruptible {
                 }
                 // calculate fitting local process models
                 localTree.tryAddNullChildren(event, window.size() - 1, eventPos);
-                Main.getAnalyzer().stopWindow(); // analysis
+                this.runningContext.getAnalyzer().stopWindow(); // analysis
                 // transfer built local process models to the main tree
                 addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId, eventPos);
             }
@@ -135,11 +135,11 @@ public class LPMTreeBuilder extends Interruptible {
                 windowTotalCounter.update(window, traceCount);
                 addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId, traceVariant.size());
             }
-            Main.getAnalyzer().getStatistics().getFpGrowthStatistics().traceVariantPassed();
+            this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().traceVariantPassed();
         }
 
         mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount());
-        Main.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
+        this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
         return mainTree;
     }
 
@@ -157,7 +157,7 @@ public class LPMTreeBuilder extends Interruptible {
         // give the lpm and the window count to the main tree, so it can update itself
         for (Map.Entry<LocalProcessModel, LPMTemporaryWindowInfo> lpmEntry : lpms.entrySet()) {
             if (stop) {
-                Main.getAnalyzer().getStatistics().getFpGrowthStatistics().lpmsAddedInMainTree(lpms.size());
+                this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().lpmsAddedInMainTree(lpms.size());
                 return;
             }
             LocalProcessModel lpm = lpmEntry.getKey();
@@ -168,7 +168,7 @@ public class LPMTreeBuilder extends Interruptible {
                 mainTree.addOrUpdate(lpm, windowCount, window, lpmEntry.getValue(), traceVariantId);
             }
         }
-        Main.getAnalyzer().getStatistics().getFpGrowthStatistics().lpmsAddedInMainTree(lpms.size());
+        this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().lpmsAddedInMainTree(lpms.size());
     }
 
     private Map<LocalProcessModel, LPMTemporaryWindowInfo> getLPMsWithTemporaryInfo(WindowLPMTree localTree,

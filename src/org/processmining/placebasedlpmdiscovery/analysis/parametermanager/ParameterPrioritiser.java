@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.analysis.parametermanager;
 
 import org.deckfour.xes.model.XLog;
-import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 
 /**
  * Given some ParameterSetup, creates PlaceBasedLPMDiscoveryParameters for each possibility in the setup,

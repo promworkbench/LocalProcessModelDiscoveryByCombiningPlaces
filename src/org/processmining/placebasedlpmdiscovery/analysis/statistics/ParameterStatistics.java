@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.analysis.statistics;
 
-import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryAlgorithmId;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscoveryAlgorithmId;
 
 import java.io.File;
 import java.io.FileNotFoundException;
