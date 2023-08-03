@@ -10,7 +10,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.Wind
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscovery;
-import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 
 import java.util.ArrayList;
 import java.util.Collection;

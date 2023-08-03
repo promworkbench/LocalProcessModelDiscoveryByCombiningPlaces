@@ -2,7 +2,6 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.deckfour.xes.model.XLog;
-import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard;
 //import org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth.ContextLPMTreeBuilder;
@@ -10,7 +9,7 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth.LPMTreeBui
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTree;
-import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 
 import java.util.HashSet;
 import java.util.Set;

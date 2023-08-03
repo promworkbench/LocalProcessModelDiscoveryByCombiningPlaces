@@ -10,7 +10,7 @@ import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
-import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
