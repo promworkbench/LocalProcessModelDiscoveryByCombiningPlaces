@@ -1,14 +1,14 @@
-package org.processmining.placebasedlpmdiscovery.placediscovery.algorithms;
+package org.processmining.placebasedlpmdiscovery.prom.placediscovery.algorithms;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.acceptingpetrinet.models.impl.AcceptingPetriNetImpl;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.semantics.petrinet.Marking;
-import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryResult;
-import org.processmining.placebasedlpmdiscovery.placediscovery.StandardPlaceDiscoveryResult;
-import org.processmining.placebasedlpmdiscovery.placediscovery.converters.place.PetriNetPlaceConverter;
-import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.EstMinerPlaceDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.StandardPlaceDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.converters.place.PetriNetPlaceConverter;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.EstMinerPlaceDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.prom.ContextKeeper;
 import org.processmining.v7.postproc_after_tc.MyFirstMinerPlugin;
 //import org.processmining.v8.eSTMinerGIT.MainPlugIn;

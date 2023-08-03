@@ -2,7 +2,7 @@ package org.processmining.placebasedlpmdiscovery.plugins.mining.wizards;
 
 import org.processmining.framework.util.ui.wizard.MapWizard;
 import org.processmining.framework.util.ui.wizard.ProMWizardStep;
-import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryAlgorithmId;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscoveryAlgorithmId;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 
 import java.util.Collection;

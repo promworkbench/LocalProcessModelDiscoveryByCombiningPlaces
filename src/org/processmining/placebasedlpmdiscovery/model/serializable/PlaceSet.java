@@ -5,9 +5,9 @@ import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.PlaceAdditionalInfo;
 import org.processmining.placebasedlpmdiscovery.model.exporting.Exportable;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.Exporter;
-import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscovery;
-import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryResult;
-import org.processmining.placebasedlpmdiscovery.placediscovery.StandardPlaceDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscovery;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.StandardPlaceDiscoveryResult;
 
 import java.io.OutputStream;
 import java.util.Set;

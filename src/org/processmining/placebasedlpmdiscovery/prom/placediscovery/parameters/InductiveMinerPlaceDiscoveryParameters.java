@@ -1,8 +1,8 @@
-package org.processmining.placebasedlpmdiscovery.placediscovery.parameters;
+package org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters;
 
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
-import org.processmining.placebasedlpmdiscovery.placediscovery.algorithms.PlaceDiscoveryAlgorithm;
-import org.processmining.placebasedlpmdiscovery.placediscovery.algorithms.PlaceDiscoveryAlgorithmFactory;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.algorithms.PlaceDiscoveryAlgorithm;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.algorithms.PlaceDiscoveryAlgorithmFactory;
 import org.processmining.plugins.InductiveMiner.mining.MiningParameters;
 import org.processmining.plugins.InductiveMiner.mining.MiningParametersIM;
 import org.processmining.plugins.InductiveMiner.plugins.dialogs.IMMiningDialog;

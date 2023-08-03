@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.placediscovery;
+package org.processmining.placebasedlpmdiscovery.prom.placediscovery;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.model.Place;

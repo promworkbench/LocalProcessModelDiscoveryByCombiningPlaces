@@ -9,7 +9,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationContr
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMEvaluator;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
-import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscovery;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 
 public interface LPMDiscoveryBuilder {

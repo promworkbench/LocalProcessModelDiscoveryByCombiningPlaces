@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.placediscovery.converters.additionalinfo;//package org.processmining.placebasedlpmdiscovery.placediscovery.converters.additionalinfo;
+package org.processmining.placebasedlpmdiscovery.prom.placediscovery.converters.additionalinfo;//package org.processmining.placebasedlpmdiscovery.placediscovery.converters.additionalinfo;
 //
 //import org.processmining.placebasedlpmdiscovery.model.placeinfo.PlaceAdditionalInfo;
 //import org.processmining.placebasedlpmdiscovery.model.placeinfo.TraceVariantInfo;

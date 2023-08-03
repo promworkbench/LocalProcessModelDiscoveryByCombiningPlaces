@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.placediscovery;
+package org.processmining.placebasedlpmdiscovery.prom.placediscovery;
 
 public enum PlaceDiscoveryAlgorithmId {
     ESTMiner,

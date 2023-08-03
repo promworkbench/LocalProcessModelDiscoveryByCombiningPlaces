@@ -1,8 +1,8 @@
-package org.processmining.placebasedlpmdiscovery.placediscovery.parameters;
+package org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters;
 
 import org.deckfour.xes.classification.XEventNameClassifier;
-import org.processmining.placebasedlpmdiscovery.placediscovery.algorithms.PlaceDiscoveryAlgorithm;
-import org.processmining.placebasedlpmdiscovery.placediscovery.algorithms.PlaceDiscoveryAlgorithmFactory;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.algorithms.PlaceDiscoveryAlgorithm;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.algorithms.PlaceDiscoveryAlgorithmFactory;
 import org.processmining.plugins.heuristicsnet.miner.heuristics.miner.settings.HeuristicsMinerSettings;
 
 public class HeuristicMinerPlaceDiscoveryParameters extends PlaceDiscoveryParameters {

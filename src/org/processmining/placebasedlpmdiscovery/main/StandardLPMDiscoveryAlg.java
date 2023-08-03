@@ -12,7 +12,7 @@ import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterS
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
-import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscovery;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 

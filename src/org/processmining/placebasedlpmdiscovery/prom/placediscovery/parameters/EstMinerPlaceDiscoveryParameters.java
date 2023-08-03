@@ -1,9 +1,9 @@
-package org.processmining.placebasedlpmdiscovery.placediscovery.parameters;
+package org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters;
 
 import org.deckfour.xes.classification.XEventNameClassifier;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
-import org.processmining.placebasedlpmdiscovery.placediscovery.algorithms.PlaceDiscoveryAlgorithm;
-import org.processmining.placebasedlpmdiscovery.placediscovery.algorithms.PlaceDiscoveryAlgorithmFactory;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.algorithms.PlaceDiscoveryAlgorithm;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.algorithms.PlaceDiscoveryAlgorithmFactory;
 import org.processmining.v7.postproc_after_tc.MyParameters;
 //import org.processmining.v8.eSTMinerGIT.Parameters;
 

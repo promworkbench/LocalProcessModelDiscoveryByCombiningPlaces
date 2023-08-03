@@ -1,9 +1,9 @@
-package org.processmining.placebasedlpmdiscovery.placediscovery;
+package org.processmining.placebasedlpmdiscovery.prom.placediscovery;
 
 import org.deckfour.xes.model.XLog;
-import org.processmining.placebasedlpmdiscovery.placediscovery.algorithms.PlaceDiscoveryAlgorithm;
-import org.processmining.placebasedlpmdiscovery.placediscovery.algorithms.PlaceDiscoveryAlgorithmFactory;
-import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.PlaceDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.algorithms.PlaceDiscoveryAlgorithm;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.algorithms.PlaceDiscoveryAlgorithmFactory;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.PlaceDiscoveryParameters;
 
 public class StandardPlaceDiscovery implements PlaceDiscovery {
 

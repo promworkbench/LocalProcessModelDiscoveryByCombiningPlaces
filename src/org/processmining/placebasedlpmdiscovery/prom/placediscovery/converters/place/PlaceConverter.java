@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.placediscovery.converters.place;
+package org.processmining.placebasedlpmdiscovery.prom.placediscovery.converters.place;
 
 import org.processmining.placebasedlpmdiscovery.model.Place;
 

@@ -2,7 +2,7 @@ package org.processmining.placebasedlpmdiscovery.plugins.mining.wizards.steps;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.framework.util.ui.wizard.ProMWizardStep;
-import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.HeuristicMinerPlaceDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.HeuristicMinerPlaceDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.plugins.heuristicsnet.miner.heuristics.miner.LogUtility;
 import org.processmining.plugins.heuristicsnet.miner.heuristics.miner.gui.ParametersPanel;

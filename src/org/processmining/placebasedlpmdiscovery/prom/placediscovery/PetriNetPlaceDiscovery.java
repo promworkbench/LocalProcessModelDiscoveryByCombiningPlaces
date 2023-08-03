@@ -1,9 +1,9 @@
-package org.processmining.placebasedlpmdiscovery.placediscovery;
+package org.processmining.placebasedlpmdiscovery.prom.placediscovery;
 
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.acceptingpetrinet.models.impl.AcceptingPetriNetImpl;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
-import org.processmining.placebasedlpmdiscovery.placediscovery.converters.place.PetriNetPlaceConverter;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.converters.place.PetriNetPlaceConverter;
 
 public class PetriNetPlaceDiscovery implements PlaceDiscovery {
 

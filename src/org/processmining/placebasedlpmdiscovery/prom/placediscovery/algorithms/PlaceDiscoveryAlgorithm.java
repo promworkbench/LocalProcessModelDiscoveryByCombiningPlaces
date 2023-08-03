@@ -1,9 +1,9 @@
-package org.processmining.placebasedlpmdiscovery.placediscovery.algorithms;
+package org.processmining.placebasedlpmdiscovery.prom.placediscovery.algorithms;
 
 import org.deckfour.xes.model.XLog;
-import org.processmining.placebasedlpmdiscovery.placediscovery.PlaceDiscoveryResult;
-import org.processmining.placebasedlpmdiscovery.placediscovery.converters.place.AbstractPlaceConverter;
-import org.processmining.placebasedlpmdiscovery.placediscovery.parameters.PlaceDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.converters.place.AbstractPlaceConverter;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.PlaceDiscoveryParameters;
 
 /**
  * Given a log it discovers a set of places for that log

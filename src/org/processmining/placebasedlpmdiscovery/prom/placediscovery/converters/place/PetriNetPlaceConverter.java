@@ -1,9 +1,8 @@
-package org.processmining.placebasedlpmdiscovery.placediscovery.converters.place;
+package org.processmining.placebasedlpmdiscovery.prom.placediscovery.converters.place;
 
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
-import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 import org.processmining.placebasedlpmdiscovery.utils.TransitionUtils;
 
 import java.util.Collection;

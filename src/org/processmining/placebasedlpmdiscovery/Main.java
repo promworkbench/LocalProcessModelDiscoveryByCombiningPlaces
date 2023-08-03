@@ -21,8 +21,8 @@ import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.main.StandardLPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.placechooser.MainPlaceChooser;
-import org.processmining.placebasedlpmdiscovery.placediscovery.PetriNetPlaceDiscovery;
-import org.processmining.placebasedlpmdiscovery.placediscovery.StandardPlaceDiscovery;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PetriNetPlaceDiscovery;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.StandardPlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 
 public class Main {
