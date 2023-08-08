@@ -47,6 +47,7 @@ public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
 
         // register evaluators
         windowEvaluators.forEach((key, value) -> this.evaluationController.registerEvaluator(key, value));
+        lpmFilters.forEach(filter -> this.filtrationController.addLPMFilter(filter, filter.needsEvaluation()));
 
         StandardLPMDiscoveryAlg alg = new StandardLPMDiscoveryAlg(
                 this.runningContext,
