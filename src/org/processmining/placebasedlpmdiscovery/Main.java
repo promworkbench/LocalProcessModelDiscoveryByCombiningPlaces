@@ -16,7 +16,7 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lp
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorFactory;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.main.StandardLPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
@@ -128,14 +128,14 @@ public class Main {
         // add evaluators
         LPMEvaluatorFactory evaluatorFactory = new LPMEvaluatorFactory();
         evaluationController.setEvaluatorFactory(evaluatorFactory);
-        builder.registerLPMWindowEvaluator(LPMEvaluatorId.PassageCoverageEvaluator.name(),
-                evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.PassageCoverageEvaluator));
-        builder.registerLPMWindowEvaluator(LPMEvaluatorId.FittingWindowEvaluator.name(),
-                evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.FittingWindowEvaluator));
-        builder.registerLPMWindowEvaluator(LPMEvaluatorId.TransitionCoverageEvaluator.name(),
-                evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.TransitionCoverageEvaluator));
-        builder.registerLPMWindowEvaluator(LPMEvaluatorId.TraceSupportCountEvaluator.name(),
-                evaluatorFactory.getWindowEvaluator(LPMEvaluatorId.TraceSupportCountEvaluator));
+        builder.registerLPMWindowEvaluator(StandardLPMEvaluatorId.PassageCoverageEvaluator.name(),
+                evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.PassageCoverageEvaluator));
+        builder.registerLPMWindowEvaluator(StandardLPMEvaluatorId.FittingWindowEvaluator.name(),
+                evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.FittingWindowEvaluator));
+        builder.registerLPMWindowEvaluator(StandardLPMEvaluatorId.TransitionCoverageEvaluator.name(),
+                evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.TransitionCoverageEvaluator));
+        builder.registerLPMWindowEvaluator(StandardLPMEvaluatorId.TraceSupportCountEvaluator.name(),
+                evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.TraceSupportCountEvaluator));
 
         // set filters
         LPMFilterParameters filterParameters = parameters.getLpmFilterParameters();

@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.concrete;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMEvaluator;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
@@ -23,7 +23,7 @@ public class TraceSupportEvaluator implements WindowLPMEvaluator<TraceSupportEva
 
     @Override
     public String getKey() {
-        return LPMEvaluatorId.TraceSupportCountEvaluator.name();
+        return StandardLPMEvaluatorId.TraceSupportCountEvaluator.name();
     }
 
     @Override

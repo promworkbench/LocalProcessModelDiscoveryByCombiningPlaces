@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.concrete;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMEvaluator;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
@@ -25,7 +25,7 @@ public class PassageCoverageEvaluator implements WindowLPMEvaluator<PassageCover
 
     @Override
     public String getKey() {
-        return LPMEvaluatorId.PassageCoverageEvaluator.name();
+        return StandardLPMEvaluatorId.PassageCoverageEvaluator.name();
     }
 
     @Override

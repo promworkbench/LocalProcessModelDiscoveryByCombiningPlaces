@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.concrete;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMEvaluator;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
@@ -27,7 +27,7 @@ public class TransitionCoverageEvaluator implements WindowLPMEvaluator<Transitio
 
     @Override
     public String getKey() {
-        return LPMEvaluatorId.TransitionCoverageEvaluator.name();
+        return StandardLPMEvaluatorId.TransitionCoverageEvaluator.name();
     }
 
     @Override
