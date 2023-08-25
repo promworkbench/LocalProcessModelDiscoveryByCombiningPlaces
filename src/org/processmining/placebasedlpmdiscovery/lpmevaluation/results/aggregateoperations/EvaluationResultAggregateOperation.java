@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregate
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,23 +46,6 @@ public class EvaluationResultAggregateOperation {
      */
     public EvaluationResultAggregateOperation addWeight(LPMEvaluationResultId id, int weight) {
         weights.put(id, weight);
-        return this;
-    }
-
-    /**
-     * Nullifying all weights except for one
-     *
-     * @param chosenId: the id of the evaluation result we want to use
-     * @return the updated object so we can stream multiple calls
-     */
-    public EvaluationResultAggregateOperation useOnlyOne(LPMEvaluationResultId chosenId) {
-        for (LPMEvaluationResultId id : LPMEvaluationResultId.values()) {
-            if (id.equals(chosenId)) {
-                weights.put(id, 1);
-            } else {
-                weights.put(id, 0);
-            }
-        }
         return this;
     }
 }

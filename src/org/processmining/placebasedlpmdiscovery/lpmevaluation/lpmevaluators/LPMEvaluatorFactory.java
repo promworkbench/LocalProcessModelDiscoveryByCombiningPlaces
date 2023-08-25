@@ -6,24 +6,24 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluat
 public class LPMEvaluatorFactory {
 
     public LPMEvaluator<? extends LPMEvaluationResult> getEvaluator(LPMEvaluatorId evaluatorId) {
-        if (evaluatorId == LPMEvaluatorId.TransitionOverlappingEvaluator)
+        if (evaluatorId == StandardLPMEvaluatorId.TransitionOverlappingEvaluator)
             return new TransitionsOverlappingEvaluator();
-        if (evaluatorId == LPMEvaluatorId.FittingWindowEvaluator)
+        if (evaluatorId == StandardLPMEvaluatorId.FittingWindowEvaluator)
             return null;
-        if (evaluatorId == LPMEvaluatorId.PassageRepetitionEvaluator)
+        if (evaluatorId == StandardLPMEvaluatorId.PassageRepetitionEvaluator)
             return new PassageRepetitionEvaluator();
 
         throw new IllegalArgumentException("Evaluator with id " + evaluatorId + " does not exist.");
     }
 
     public WindowLPMEvaluator<? extends LPMEvaluationResult> getWindowEvaluator(LPMEvaluatorId evaluatorId) {
-        if (evaluatorId == LPMEvaluatorId.PassageCoverageEvaluator)
+        if (evaluatorId == StandardLPMEvaluatorId.PassageCoverageEvaluator)
             return new PassageCoverageEvaluator();
-        if (evaluatorId == LPMEvaluatorId.FittingWindowEvaluator)
+        if (evaluatorId == StandardLPMEvaluatorId.FittingWindowEvaluator)
             return new FittingWindowEvaluator();
-        if (evaluatorId == LPMEvaluatorId.TraceSupportCountEvaluator)
+        if (evaluatorId == StandardLPMEvaluatorId.TraceSupportCountEvaluator)
             return new TraceSupportEvaluator();
-        if (evaluatorId == LPMEvaluatorId.TransitionCoverageEvaluator)
+        if (evaluatorId == StandardLPMEvaluatorId.TransitionCoverageEvaluator)
             return new TransitionCoverageEvaluator();
         throw new IllegalArgumentException("Window evaluator with id " + evaluatorId + " does not exist.");
     }

@@ -5,10 +5,8 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 public abstract class SimpleEvaluationResult implements LPMEvaluationResult {
 
     private static final long serialVersionUID = 8123973260828398630L;
-
-    protected LocalProcessModel lpm;
-
     private final LPMEvaluationResultId id;
+    protected LocalProcessModel lpm;
 
     public SimpleEvaluationResult(LocalProcessModel lpm, LPMEvaluationResultId id) {
         this.lpm = lpm;

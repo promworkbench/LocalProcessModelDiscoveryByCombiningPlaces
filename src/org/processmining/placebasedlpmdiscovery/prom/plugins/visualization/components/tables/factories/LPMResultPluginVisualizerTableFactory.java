@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories;
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
@@ -55,11 +56,11 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
                         ind + 1,
                         lpm.getShortString(),
 //                        df.format(getResultOrDefault(lpm, LPMEvaluationResultId.TransitionOverlappingEvaluationResult)),
-                        df.format(getResultOrDefault(lpm, LPMEvaluationResultId.TransitionCoverageEvaluationResult)),
-                        df.format(getResultOrDefault(lpm, LPMEvaluationResultId.FittingWindowsEvaluationResult)),
-                        df.format(getResultOrDefault(lpm, LPMEvaluationResultId.PassageCoverageEvaluationResult)),
-                        df.format(getResultOrDefault(lpm, LPMEvaluationResultId.PassageRepetitionEvaluationResult)),
-                        df.format(getResultOrDefault(lpm, LPMEvaluationResultId.TraceSupportEvaluationResult)),
+                        df.format(getResultOrDefault(lpm, StandardLPMEvaluationResultId.TransitionCoverageEvaluationResult)),
+                        df.format(getResultOrDefault(lpm, StandardLPMEvaluationResultId.FittingWindowsEvaluationResult)),
+                        df.format(getResultOrDefault(lpm, StandardLPMEvaluationResultId.PassageCoverageEvaluationResult)),
+                        df.format(getResultOrDefault(lpm, StandardLPMEvaluationResultId.PassageRepetitionEvaluationResult)),
+                        df.format(getResultOrDefault(lpm, StandardLPMEvaluationResultId.TraceSupportEvaluationResult)),
                         df.format(LocalProcessModelUtils.getGroupedEvaluationResult(lpm).getResult(new EvaluationResultAggregateOperation()))
                 });
     }

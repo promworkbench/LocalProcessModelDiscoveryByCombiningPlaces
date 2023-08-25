@@ -1,8 +1,9 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms;
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageCoverageEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageRepetitionEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
@@ -17,7 +18,7 @@ public class AbovePassageRepetitionThresholdLPMFilter extends NeedsEvaluationLPM
     @Override
     public boolean shouldKeep(LocalProcessModel lpm) {
         return lpm.getAdditionalInfo().getEvaluationResult(
-                LPMEvaluationResultId.PassageRepetitionEvaluationResult.name(),
+                StandardLPMEvaluationResultId.PassageRepetitionEvaluationResult.name(),
                 PassageRepetitionEvaluationResult.class).getResult() > threshold;
     }
 
@@ -28,11 +29,11 @@ public class AbovePassageRepetitionThresholdLPMFilter extends NeedsEvaluationLPM
 
     @Override
     public LPMEvaluatorId getEvaluatorId() {
-        return LPMEvaluatorId.PassageRepetitionEvaluator;
+        return StandardLPMEvaluatorId.PassageRepetitionEvaluator;
     }
 
     @Override
     public LPMEvaluationResultId getEvaluationId() {
-        return LPMEvaluationResultId.PassageRepetitionEvaluationResult;
+        return StandardLPMEvaluationResultId.PassageRepetitionEvaluationResult;
     }
 }

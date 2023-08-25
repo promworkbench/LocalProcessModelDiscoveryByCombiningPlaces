@@ -1,13 +1,10 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation;
 
 import org.processmining.placebasedlpmdiscovery.RunningContext;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluator;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorFactory;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMEvaluator;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.AbstractEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageCoverageEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
@@ -53,8 +50,8 @@ public class LPMEvaluationController implements EvaluatorHub {
     }
 
     public LPMEvaluationResult evaluate(String key, LocalProcessModel lpm) {
-        if (EnumSet.of(LPMEvaluatorId.PassageCoverageEvaluator).contains(LPMEvaluatorId.valueOf(key)))
+        if (EnumSet.of(StandardLPMEvaluatorId.PassageCoverageEvaluator).contains(StandardLPMEvaluatorId.valueOf(key)))
             throw new UnsupportedOperationException("This should have been evaluated before hand.");
-        return this.evaluatorFactory.getEvaluator(LPMEvaluatorId.valueOf(key)).evaluate(lpm);
+        return this.evaluatorFactory.getEvaluator(StandardLPMEvaluatorId.valueOf(key)).evaluate(lpm);
     }
 }
