@@ -10,7 +10,7 @@ public class LPMCombinationParameters {
     private int concurrencyCardinality;
 
     public LPMCombinationParameters() {
-        this.minNumPlaces = 3;
+        this.minNumPlaces = 2;
         this.maxNumPlaces = 7;
         this.minNumTransitions = 3;
         this.maxNumTransitions = 10;

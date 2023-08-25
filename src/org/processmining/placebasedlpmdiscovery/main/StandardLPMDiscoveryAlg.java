@@ -3,7 +3,7 @@ package org.processmining.placebasedlpmdiscovery.main;
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationController;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
@@ -95,13 +95,13 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
             if (result.size() > 0) {
                 // normalize the fitting windows score
                 double max = result.highestScoringElement((LocalProcessModel lpm) -> lpm.getAdditionalInfo()
-                                .getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+                                .getEvaluationResult(StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
                                         FittingWindowsEvaluationResult.class).getResult())
                         .getAdditionalInfo().getEvaluationResult(
-                                LPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+                                StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
                                 FittingWindowsEvaluationResult.class).getResult();
                 result.edit(lpm -> ((FittingWindowsEvaluationResult) lpm.getAdditionalInfo()
-                        .getEvaluationResult(LPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+                        .getEvaluationResult(StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
                                 FittingWindowsEvaluationResult.class))
                         .normalizeResult(max, 0));
 

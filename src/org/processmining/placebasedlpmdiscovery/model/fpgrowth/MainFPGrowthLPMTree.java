@@ -2,7 +2,7 @@ package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.TraceSupportEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
@@ -104,9 +104,9 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
     public void updateAllTotalCount(WindowTotalCounter windowTotalCounter, Integer totalTraceCount) {
         for (MainFPGrowthLPMTreeNode node : this.nodes) {
             for (LPMEvaluationResult res : node.getAdditionalInfo().getEvalResults().values()) {
-                if (LPMEvaluationResultId.FittingWindowsEvaluationResult.equals(res.getId())) {
+                if (StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.equals(res.getId())) {
                     ((FittingWindowsEvaluationResult) res).setTotal(windowTotalCounter.getWindowCount());
-                } else if (LPMEvaluationResultId.TraceSupportEvaluationResult.equals(res.getId())) {
+                } else if (StandardLPMEvaluationResultId.TraceSupportEvaluationResult.equals(res.getId())) {
                     ((TraceSupportEvaluationResult) res).setTotalTraceCount(totalTraceCount);
                 }
             }

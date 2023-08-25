@@ -3,7 +3,7 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.con
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMEvaluator;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
@@ -34,7 +34,7 @@ public class FittingWindowEvaluator implements WindowLPMEvaluator<FittingWindows
 
     @Override
     public String getResultKey() {
-        return LPMEvaluationResultId.FittingWindowsEvaluationResult.name();
+        return StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name();
     }
 
     @Override

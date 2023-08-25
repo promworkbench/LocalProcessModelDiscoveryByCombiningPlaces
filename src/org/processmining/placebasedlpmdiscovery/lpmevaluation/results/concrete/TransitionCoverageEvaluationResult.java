@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
@@ -25,7 +25,7 @@ public class TransitionCoverageEvaluationResult extends SimpleEvaluationResult {
     private boolean updated;
 
     public TransitionCoverageEvaluationResult(LocalProcessModel lpm) {
-        super(lpm, LPMEvaluationResultId.TransitionCoverageEvaluationResult);
+        super(lpm, StandardLPMEvaluationResultId.TransitionCoverageEvaluationResult);
         this.transitionCountMap = new HashMap<>();
         this.transitionTotalCounts = new HashMap<>();
     }

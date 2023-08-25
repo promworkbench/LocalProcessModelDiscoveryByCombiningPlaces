@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete;
 
 import org.apache.commons.math3.util.Pair;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
@@ -17,7 +17,7 @@ public class PassageCoverageEvaluationResult extends SimpleEvaluationResult {
     private Set<String> allPossiblePassages;
 
     public PassageCoverageEvaluationResult(LocalProcessModel lpm) {
-        super(lpm, LPMEvaluationResultId.PassageCoverageEvaluationResult);
+        super(lpm, StandardLPMEvaluationResultId.PassageCoverageEvaluationResult);
         this.coveredPassages = new HashSet<>();
         initializePossiblePassages();
     }

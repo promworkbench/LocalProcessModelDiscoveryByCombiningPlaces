@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.model.serializable.grouped;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
@@ -27,7 +27,7 @@ public class WindowCoverageLPMResultGroup extends LPMResultGroup {
     public boolean shouldNotAdd(LocalProcessModel element) {
         FittingWindowsEvaluationResult fitWindowRes = element.getAdditionalInfo()
                 .getEvaluationResult(
-                        LPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+                        StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
                         FittingWindowsEvaluationResult.class);
         return this.windowCount != fitWindowRes.getCount()
                 || this.commonId != fitWindowRes.getCoveredWindowsHash()
@@ -40,7 +40,7 @@ public class WindowCoverageLPMResultGroup extends LPMResultGroup {
     public void initializeGroup(LocalProcessModel element) {
         FittingWindowsEvaluationResult fitWindowRes = element.getAdditionalInfo()
                 .getEvaluationResult(
-                        LPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+                        StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
                         FittingWindowsEvaluationResult.class);
         this.commonId = fitWindowRes.getCoveredWindowsHash();
         this.windowCount = fitWindowRes.getCount();

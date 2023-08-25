@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.l
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.TransitionsOverlappingEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
@@ -15,7 +16,7 @@ public class AboveTransitionOverlappingThresholdLPMFilter extends NeedsEvaluatio
     @Override
     public boolean shouldKeep(LocalProcessModel lpm) {
         return lpm.getAdditionalInfo().getEvaluationResult(
-                LPMEvaluationResultId.TransitionOverlappingEvaluationResult.name(),
+                StandardLPMEvaluationResultId.TransitionOverlappingEvaluationResult.name(),
                 TransitionsOverlappingEvaluationResult.class).getResult() > this.threshold;
     }
 
@@ -31,6 +32,6 @@ public class AboveTransitionOverlappingThresholdLPMFilter extends NeedsEvaluatio
 
     @Override
     public LPMEvaluationResultId getEvaluationId() {
-        return LPMEvaluationResultId.TransitionOverlappingEvaluationResult;
+        return StandardLPMEvaluationResultId.TransitionOverlappingEvaluationResult;
     }
 }

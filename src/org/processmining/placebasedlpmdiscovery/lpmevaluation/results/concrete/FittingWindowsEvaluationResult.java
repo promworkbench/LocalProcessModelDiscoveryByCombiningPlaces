@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
@@ -20,7 +20,7 @@ public class FittingWindowsEvaluationResult extends SimpleEvaluationResult {
 
 
     public FittingWindowsEvaluationResult(LocalProcessModel lpm) {
-        super(lpm, LPMEvaluationResultId.FittingWindowsEvaluationResult);
+        super(lpm, StandardLPMEvaluationResultId.FittingWindowsEvaluationResult);
         this.count = 0;
         this.total = 0;
         this.coveredWindowsHash = 0;

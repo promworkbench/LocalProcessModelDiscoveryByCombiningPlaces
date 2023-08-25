@@ -12,6 +12,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalPro
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.GroupedEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.undecided.Utils;
 import org.processmining.placebasedlpmdiscovery.model.Arc;
@@ -248,9 +249,9 @@ public class LocalProcessModelUtils {
         csvWriter.writeRecord(new String[]{"Name", "Fitting Windows Score", "Trace Support Score", "Aggregated Score"});
 
         EvaluationResultAggregateOperation aggregateOperation = new EvaluationResultAggregateOperation();
-        LPMEvaluationResultId[] ids = new LPMEvaluationResultId[]{
-                LPMEvaluationResultId.FittingWindowsEvaluationResult,
-                LPMEvaluationResultId.TraceSupportEvaluationResult
+        StandardLPMEvaluationResultId[] ids = new StandardLPMEvaluationResultId[]{
+                StandardLPMEvaluationResultId.FittingWindowsEvaluationResult,
+                StandardLPMEvaluationResultId.TraceSupportEvaluationResult
         };
 
         for (LocalProcessModel lpm : lpmResult.getElements()) {

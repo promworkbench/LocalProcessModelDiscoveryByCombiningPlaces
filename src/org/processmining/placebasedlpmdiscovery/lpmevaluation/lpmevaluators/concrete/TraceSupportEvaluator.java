@@ -3,8 +3,7 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.con
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMEvaluator;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageCoverageEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.TraceSupportEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
@@ -29,7 +28,7 @@ public class TraceSupportEvaluator implements WindowLPMEvaluator<TraceSupportEva
 
     @Override
     public String getResultKey() {
-        return LPMEvaluationResultId.TraceSupportEvaluationResult.name();
+        return StandardLPMEvaluationResultId.TraceSupportEvaluationResult.name();
     }
 
     @Override

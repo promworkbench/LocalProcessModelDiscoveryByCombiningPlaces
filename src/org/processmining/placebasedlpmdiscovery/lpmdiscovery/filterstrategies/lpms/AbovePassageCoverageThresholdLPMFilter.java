@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.l
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageCoverageEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
@@ -17,7 +18,7 @@ public class AbovePassageCoverageThresholdLPMFilter extends NeedsEvaluationLPMFi
     public boolean shouldKeep(LocalProcessModel lpm) {
         return lpm.getAdditionalInfo()
                 .getEvaluationResult(
-                        LPMEvaluationResultId.PassageCoverageEvaluationResult.name(),
+                        StandardLPMEvaluationResultId.PassageCoverageEvaluationResult.name(),
                         PassageCoverageEvaluationResult.class).getResult() > threshold;
     }
 
@@ -33,6 +34,6 @@ public class AbovePassageCoverageThresholdLPMFilter extends NeedsEvaluationLPMFi
 
     @Override
     public LPMEvaluationResultId getEvaluationId() {
-        return LPMEvaluationResultId.PassageCoverageEvaluationResult;
+        return StandardLPMEvaluationResultId.PassageCoverageEvaluationResult;
     }
 }

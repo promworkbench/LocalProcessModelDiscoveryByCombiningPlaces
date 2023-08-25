@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.Passage;
@@ -15,7 +15,7 @@ public class PassageRepetitionEvaluationResult extends SimpleEvaluationResult {
     private double result;
 
     public PassageRepetitionEvaluationResult(LocalProcessModel lpm, Map<Passage, Integer> passageRepetitionMap) {
-        super(lpm, LPMEvaluationResultId.PassageRepetitionEvaluationResult);
+        super(lpm, StandardLPMEvaluationResultId.PassageRepetitionEvaluationResult);
         this.passageRepetitionMap = passageRepetitionMap;
         this.result = -1;
     }
