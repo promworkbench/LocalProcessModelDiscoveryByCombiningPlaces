@@ -1,13 +1,12 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.GroupedEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageCoverageEvaluationResult;
 
 import javax.swing.*;
 import java.text.DecimalFormat;
+import java.util.Collection;
 
 public class ComponentFactory {
 
@@ -47,32 +46,17 @@ public class ComponentFactory {
         return df.format(result);
     }
 
-    public static JPanel getComplexEvaluationResultComponent(GroupedEvaluationResult evaluationResult) {
+    public static JPanel getComplexEvaluationResultComponent(Collection<LPMEvaluationResult> results) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
-        for (LPMEvaluationResult result : evaluationResult.getResults()) {
+        for (LPMEvaluationResult result : results) {
             panel.add(ComponentFactory.getLPMEvaluationResultComponent(result));
         }
         panel.add(getjLabel("Aggregate Result:    " +
-                getEvaluationTextResult(evaluationResult.getResult(new EvaluationResultAggregateOperation()))));
+                getEvaluationTextResult(new EvaluationResultAggregateOperation().aggregate(results))));
 
         return panel;
-    }
-
-    private static JPanel getLPMEvaluationResultComponent(LPMEvaluationResult evaluationResult) {
-        if (evaluationResult instanceof GroupedEvaluationResult)
-            return getComplexEvaluationResultComponent((GroupedEvaluationResult) evaluationResult);
-//        if (evaluationResult instanceof PassageCoverageEvaluationResult)
-//            return getCoveredPassages((PassageCoverageEvaluationResult) evaluationResult);
-        if (evaluationResult instanceof SimpleEvaluationResult)
-            return getSimpleEvaluationResultComponent((SimpleEvaluationResult) evaluationResult);
-//        if (evaluationResult instanceof FittingWindowsEvaluationResult)
-//            return getWindowsEvaluationResultComponent((FittingWindowsEvaluationResult) evaluationResult);
-//        if (evaluationResult instanceof TransitionsOverlappingEvaluationResult)
-//            return getTransitionOverlappingEvaluationResultComponent((TransitionsOverlappingEvaluationResult) evaluationResult);
-
-        return null;
     }
 
     private static JPanel getCoveredPassages(PassageCoverageEvaluationResult evaluationResult) {
@@ -85,7 +69,7 @@ public class ComponentFactory {
         return panel;
     }
 
-    private static JPanel getSimpleEvaluationResultComponent(SimpleEvaluationResult evaluationResult) {
+    private static JPanel getLPMEvaluationResultComponent(LPMEvaluationResult evaluationResult) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 

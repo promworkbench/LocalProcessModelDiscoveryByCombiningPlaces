@@ -1,9 +1,11 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations;
 
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,13 +25,13 @@ public class EvaluationResultAggregateOperation {
      * @param results: list of results we want to aggregate
      * @return aggregate value of the results
      */
-    public double aggregate(List<SimpleEvaluationResult> results) {
+    public double aggregate(Collection<LPMEvaluationResult> results) {
         if (results.size() < 1)
             return -1;
 
         int total = 0;
         double sum = 0;
-        for (SimpleEvaluationResult result : results) {
+        for (LPMEvaluationResult result : results) {
             int weight = weights.getOrDefault(result.getId(), 1);
             sum += weight * result.getNormalizedResult();
             total += weight;

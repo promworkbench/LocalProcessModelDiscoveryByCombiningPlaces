@@ -107,8 +107,8 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 
                 EvaluationResultAggregateOperation aggregateOperation = new EvaluationResultAggregateOperation();
                 result.sort((LocalProcessModel lpm1, LocalProcessModel lpm2) -> Double.compare(
-                        LocalProcessModelUtils.getGroupedEvaluationResult(lpm1).getResult(aggregateOperation),
-                        LocalProcessModelUtils.getGroupedEvaluationResult(lpm2).getResult(aggregateOperation)));
+                        aggregateOperation.aggregate(lpm1.getAdditionalInfo().getEvalResults().values()),
+                        aggregateOperation.aggregate(lpm2.getAdditionalInfo().getEvalResults().values())));
                 result.keep(parameters.getLpmCount());
             }
         } finally {

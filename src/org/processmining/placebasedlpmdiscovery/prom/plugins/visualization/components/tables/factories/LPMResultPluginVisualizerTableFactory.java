@@ -61,7 +61,7 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
                         df.format(getResultOrDefault(lpm, StandardLPMEvaluationResultId.PassageCoverageEvaluationResult)),
                         df.format(getResultOrDefault(lpm, StandardLPMEvaluationResultId.PassageRepetitionEvaluationResult)),
                         df.format(getResultOrDefault(lpm, StandardLPMEvaluationResultId.TraceSupportEvaluationResult)),
-                        df.format(LocalProcessModelUtils.getGroupedEvaluationResult(lpm).getResult(new EvaluationResultAggregateOperation()))
+                        df.format(new EvaluationResultAggregateOperation().aggregate(lpm.getAdditionalInfo().getEvalResults().values()))
                 });
     }
 

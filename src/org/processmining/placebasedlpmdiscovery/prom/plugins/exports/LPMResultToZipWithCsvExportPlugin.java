@@ -68,7 +68,7 @@ public class LPMResultToZipWithCsvExportPlugin {
                 csvWriter.write(String.valueOf(lpm.getAdditionalInfo()
                         .getEvaluationResult(id.name(), LPMEvaluationResult.class).getResult()));
             }
-            csvWriter.write(String.valueOf(LocalProcessModelUtils.getGroupedEvaluationResult(lpm).getResult(aggregateOperation)));
+            csvWriter.write(String.valueOf(aggregateOperation.aggregate(lpm.getAdditionalInfo().getEvalResults().values())));
             csvWriter.endRecord();
         }
         // add csv file to zip
