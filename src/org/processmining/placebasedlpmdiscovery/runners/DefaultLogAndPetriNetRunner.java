@@ -8,6 +8,7 @@ import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
@@ -37,7 +38,7 @@ public class DefaultLogAndPetriNetRunner {
     private static void run(String eventLogPath, String petriNet, String resultPath) throws Exception {
         XLog log = LogUtils.readLogFromFile(eventLogPath);
 
-        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
+        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log));
         parameters.setLpmCount(Integer.MAX_VALUE);
         parameters.getPlaceChooserParameters().setPlaceLimit(100);
 

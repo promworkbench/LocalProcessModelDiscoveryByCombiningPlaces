@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.analysis.parametermanager;
 
 import org.deckfour.xes.model.XLog;
+import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 
 /**
@@ -62,7 +63,7 @@ public class ParameterPrioritiser {
     }
 
     private PlaceBasedLPMDiscoveryParameters create() {
-        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(eventLog);
+        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(eventLog));
         parameters.getLpmCombinationParameters().setLpmProximity(this.parameterSetup.getProximity().get(currentProximityIndex));
         parameters.getLpmCombinationParameters().setConcurrencyCardinality(this.parameterSetup.getCardinality().get(currentCardinalityIndex));
         parameters.getLpmCombinationParameters().setMinNumPlaces(this.parameterSetup.getMinPlaces());

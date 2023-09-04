@@ -1,8 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.mining;
 
-import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LPMFilterParameters;
+import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooserParameters;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscoveryAlgorithmId;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.EstMinerPlaceDiscoveryParameters;
@@ -11,9 +11,7 @@ import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.I
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.PlaceDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummary;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class PlaceBasedLPMDiscoveryParameters {
 
@@ -38,10 +36,10 @@ public class PlaceBasedLPMDiscoveryParameters {
     // event attribute summary
     private final Map<String, EventAttributeSummary<?,?>> eventAttributeSummary;
 
-    public PlaceBasedLPMDiscoveryParameters(XLog log) {
+    public PlaceBasedLPMDiscoveryParameters(EventLog log) {
         this.placeDiscoveryAlgorithmId = PlaceDiscoveryAlgorithmId.ESTMiner;
         this.placeDiscoveryParameters = new EstMinerPlaceDiscoveryParameters();
-        this.placeChooserParameters = new PlaceChooserParameters(log);
+        this.placeChooserParameters = new PlaceChooserParameters(log.getActivities());
         this.lpmCombinationParameters = new LPMCombinationParameters();
         this.lpmFilterParameters = new LPMFilterParameters();
         this.lpmCount = 100;
