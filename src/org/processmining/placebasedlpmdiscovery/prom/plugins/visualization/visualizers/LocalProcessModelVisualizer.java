@@ -32,7 +32,7 @@ public class LocalProcessModelVisualizer {
         JComponent evalComponent = new JPanel();
         evalComponent.setLayout(new BoxLayout(evalComponent, BoxLayout.Y_AXIS));
         evalComponent.add(ComponentFactory.getComplexEvaluationResultComponent(
-                LocalProcessModelUtils.getGroupedEvaluationResult(lpm)));
+                lpm.getAdditionalInfo().getEvalResults().values()));
         evalComponent.add(new JLabel("Histogram"));
         component.add(evalComponent);
         return component;

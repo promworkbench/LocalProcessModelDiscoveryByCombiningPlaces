@@ -9,7 +9,6 @@ import org.processmining.models.graphbased.directed.petrinet.PetrinetEdge;
 import org.processmining.models.graphbased.directed.petrinet.impl.PetrinetFactory;
 import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.GroupedEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
@@ -221,11 +220,11 @@ public class LocalProcessModelUtils {
         return lpm;
     }
 
-    public static GroupedEvaluationResult getGroupedEvaluationResult(LocalProcessModel lpm) {
-        GroupedEvaluationResult ger = new GroupedEvaluationResult(lpm);
-        lpm.getAdditionalInfo().getEvalResults().values().forEach(ger::addResult);
-        return ger;
-    }
+//    public static GroupedEvaluationResult getGroupedEvaluationResult(LocalProcessModel lpm) {
+//        GroupedEvaluationResult ger = new GroupedEvaluationResult(lpm);
+//        lpm.getAdditionalInfo().getEvalResults().values().forEach(ger::addResult);
+//        return ger;
+//    }
 
     public static LocalProcessModel join(LocalProcessModel lpm1, LocalProcessModel lpm2) {
         LocalProcessModel lpm = new LocalProcessModel(lpm1);
@@ -270,7 +269,7 @@ public class LocalProcessModelUtils {
                 csvWriter.write(String.valueOf(lpm.getAdditionalInfo()
                         .getEvaluationResult(id.name(), LPMEvaluationResult.class).getResult()));
             }
-            csvWriter.write(String.valueOf(LocalProcessModelUtils.getGroupedEvaluationResult(lpm).getResult(aggregateOperation)));
+            csvWriter.write(String.valueOf(aggregateOperation.aggregate(lpm.getAdditionalInfo().getEvalResults().values())));
             csvWriter.endRecord();
         }
         // add csv file to zip
