@@ -17,7 +17,7 @@ public class WindowLPMTreeNode {
     private final int inEvent;
     private final int outEvent;
     private final ReplayableLocalProcessModel lpm;
-    private final Collection<Integer> replayedEventsIndices;
+    private final List<Integer> replayedEventsIndices;
     CircularListWithMapping<CircularListWithMapping<Set<WindowLPMTreeNode>, Integer>, Integer> children;
     private final UUID uuid;
     private WindowLPMTreeNode nullChild;
@@ -78,7 +78,7 @@ public class WindowLPMTreeNode {
         ReplayableLocalProcessModel newLpm = new ReplayableLocalProcessModel(this.lpm);
         addPlaceInRLPM(newLpm, event, place, labelMap);
         return new WindowLPMTreeNode(position, this.windowWidth, newLpm, event, outEvent,
-                getCopyOfUpdatedReplayedEventIndices(outPos)); // create node
+                getCopyOfUpdatedReplayedEventIndices(position)); // create node
     }
 
     private WindowLPMTreeNode createChild(int event, int position, int outEvent, int outPos, List<Place> path, Map<String, Integer> labelMap) {
@@ -94,7 +94,7 @@ public class WindowLPMTreeNode {
             previous = next;
         }
         return new WindowLPMTreeNode(position, this.windowWidth, newLpm, event, outEvent,
-                getCopyOfUpdatedReplayedEventIndices(outPos)); // create node
+                getCopyOfUpdatedReplayedEventIndices(position)); // create node
     }
 
     private void addPlaceInRLPM(ReplayableLocalProcessModel rlpm, int event, Place place, Map<String, Integer> labelMap) {
@@ -183,7 +183,7 @@ public class WindowLPMTreeNode {
         return this.lpm;
     }
 
-    public Collection<Integer> getReplayedEventsIndices() {
+    public List<Integer> getReplayedEventsIndices() {
         return replayedEventsIndices;
     }
 
