@@ -1,9 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth;
 
-import jnr.ffi.annotations.In;
 import org.apache.commons.math3.util.Pair;
 import org.deckfour.xes.model.XLog;
-import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
@@ -16,10 +14,10 @@ import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTr
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.WindowLPMTree;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.WindowLPMTreeNode;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.Interruptible;
+import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.replayer.Replayer;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
-import org.processmining.placebasedlpmdiscovery.utils.SequenceUtils;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -80,7 +78,7 @@ public class LPMTreeBuilder extends Interruptible {
             int eventPos = -1; // position of end event of the current window
             for (int event : traceVariant) { // for each event in the trace variant
                 if (stop) { // time stop
-                    mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount());
+                    mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount(), this.windowLog.getOriginalLog());
                     this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
                     return mainTree;
                 }
@@ -139,7 +137,7 @@ public class LPMTreeBuilder extends Interruptible {
             this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().traceVariantPassed();
         }
 
-        mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount());
+        mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount(), this.windowLog.getOriginalLog());
         this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
         return mainTree;
     }
