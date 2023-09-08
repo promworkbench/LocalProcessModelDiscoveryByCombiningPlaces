@@ -56,6 +56,8 @@ public class WindowLPMTreeNode {
 
     private void addChild(int inEvent, int inPos, int outEvent, int outPos, WindowLPMTreeNode child) {
         child.tryAddNullChild(outEvent, outPos);
+        if (this.children.isPosOld(inPos))
+            return;
         CircularListWithMapping<Set<WindowLPMTreeNode>, Integer> placesForInPos = this.children.get(inPos);
         if (placesForInPos == null)
             placesForInPos = new CircularListWithMapping<>(this.windowWidth);
@@ -153,6 +155,8 @@ public class WindowLPMTreeNode {
     public Collection<WindowLPMTreeNode> getChildren(int pos) {
         Collection<WindowLPMTreeNode> res = new HashSet<>();
         for (int i = this.position; i <= pos; ++i) {
+            if (this.children.isPosOld(i))
+                continue;
             CircularListWithMapping<Set<WindowLPMTreeNode>, Integer> subChildren = this.children.get(i);
             if (subChildren == null)
                 continue;
@@ -164,12 +168,16 @@ public class WindowLPMTreeNode {
     public Collection<WindowLPMTreeNode> getChildren(int event, int pos) {
         Collection<WindowLPMTreeNode> res = new HashSet<>();
         for (int i = this.position; i < pos; ++i) {
+            if (children.isPosOld(i)) continue;
             CircularListWithMapping<Set<WindowLPMTreeNode>, Integer> subChildren = this.children.get(i);
             if (subChildren == null)
                 continue;
             for (int j = i + 1; j <= pos; ++j) {
-                if (subChildren.isMapping(j, event))
+                if (subChildren.isMapping(j, event)) {
+                    if (subChildren.isPosOld(j))
+                        continue;
                     res.addAll(subChildren.get(j));
+                }
             }
         }
         return res;
