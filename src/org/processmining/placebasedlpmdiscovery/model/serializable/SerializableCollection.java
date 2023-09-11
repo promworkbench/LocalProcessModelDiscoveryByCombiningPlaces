@@ -3,24 +3,17 @@ package org.processmining.placebasedlpmdiscovery.model.serializable;
 import java.io.Serializable;
 import java.util.Collection;
 
-public abstract class SerializableCollection<T extends Serializable> implements Serializable {
+public interface SerializableCollection<T extends Serializable> {
 
-    private static final long serialVersionUID = -1493304739663755466L;
-    private T type;
+    boolean add(T element);
 
-    public abstract boolean add(T element);
+    boolean contains(T element);
 
-    public abstract boolean contains(T element);
+    boolean remove(T element);
 
-    public abstract boolean remove(T element);
+    int size();
 
-    public abstract int size();
+    Collection<T> getElements();
 
-    public abstract Collection<T> getElements();
-
-    public abstract boolean addAll(Collection<T> elements);
-
-    public Class<?> getElementClass() {
-        return this.type.getClass();
-    }
+    boolean addAll(Collection<T> elements);
 }

@@ -3,7 +3,9 @@ package org.processmining.placebasedlpmdiscovery.model.serializable.grouped;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 
-public abstract class LPMResultGroup extends LPMResult {
+import java.io.Serializable;
+
+public abstract class LPMResultGroup extends LPMResult implements Serializable {
 
     private static final long serialVersionUID = 5041306587143244956L;
     protected int commonId;

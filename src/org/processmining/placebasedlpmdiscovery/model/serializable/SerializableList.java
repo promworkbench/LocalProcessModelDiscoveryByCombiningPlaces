@@ -8,7 +8,7 @@ import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-public class SerializableList<T extends Serializable> extends SerializableCollection<T> {
+public class SerializableList<T extends Serializable> implements SerializableCollection<T> {
 
     private static final long serialVersionUID = -1093078244499601417L;
     protected List<T> elements;
