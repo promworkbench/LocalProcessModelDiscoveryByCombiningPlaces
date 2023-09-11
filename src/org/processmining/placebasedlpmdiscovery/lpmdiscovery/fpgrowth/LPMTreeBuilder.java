@@ -2,7 +2,6 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth;
 
 import org.apache.commons.math3.util.Pair;
 import org.deckfour.xes.model.XLog;
-import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
@@ -15,10 +14,10 @@ import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTr
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.WindowLPMTree;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.WindowLPMTreeNode;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.Interruptible;
+import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.replayer.Replayer;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
-import org.processmining.placebasedlpmdiscovery.utils.SequenceUtils;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -76,10 +75,10 @@ public class LPMTreeBuilder extends Interruptible {
             // Storage for the window tree
             WindowLPMTree localTree = new WindowLPMTree(this.parameters.getLpmProximity());
             this.runningContext.getInterrupterSubject().addObserver(localTree);
-            int eventPos = 0; // position of end event of the current window
+            int eventPos = -1; // position of end event of the current window
             for (int event : traceVariant) { // for each event in the trace variant
                 if (stop) { // time stop
-                    mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount());
+                    mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount(), this.windowLog.getOriginalLog());
                     this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
                     return mainTree;
                 }
@@ -111,7 +110,7 @@ public class LPMTreeBuilder extends Interruptible {
                             placesForAddition, paths, windowLog.getMapping().getLabelMap());
                 }
                 // calculate fitting local process models
-                localTree.tryAddNullChildren(event, window.size() - 1, eventPos);
+                localTree.tryAddNullChildren(event, eventPos);
                 this.runningContext.getAnalyzer().stopWindow(); // analysis
                 // transfer built local process models to the main tree
                 addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId, eventPos);
@@ -133,12 +132,12 @@ public class LPMTreeBuilder extends Interruptible {
                 window.removeFirst();
                 localTree.refreshPosition(eventPos);
                 windowTotalCounter.update(window, traceCount);
-                addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId, traceVariant.size());
+                addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId, traceVariant.size() - 1);
             }
             this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().traceVariantPassed();
         }
 
-        mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount());
+        mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount(), this.windowLog.getOriginalLog());
         this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
         return mainTree;
     }
@@ -228,10 +227,11 @@ public class LPMTreeBuilder extends Interruptible {
             }
             LocalProcessModel resLpm = LocalProcessModelUtils.join(lpms.get(i), lpm);
             if (!lpmWithTemporaryInfo.containsKey(resLpm)) {
-                List<Integer> sequence = SequenceUtils.joinSubsequences(fsi, fs, window, true);
-                Collection<Integer> replayedEventIndices = new HashSet<>();
+                List<Integer> replayedEventIndices = new ArrayList<>();
                 replayedEventIndices.addAll(reIndices);
                 replayedEventIndices.addAll(ireIndices);
+                replayedEventIndices = replayedEventIndices.stream().distinct().sorted().collect(Collectors.toList());
+                List<Integer> sequence = getFiringSequence(replayedEventIndices, window, lpmTemporaryWindowInfo.getWindowLastEventPos());
                 Replayer replayer = new Replayer(resLpm, windowLog.getMapping().getLabelMap());
                 if (replayer.canReplay(sequence)) {
                     Set<Pair<Integer, Integer>> usedPassages = new HashSet<>();
@@ -255,6 +255,25 @@ public class LPMTreeBuilder extends Interruptible {
                 }
             }
         }
+    }
+
+    private List<Integer> getFiringSequence(List<Integer> replayedEventIndices, List<Integer> window, Integer windowLastEventPos) {
+        List<Integer> firingSequence = new ArrayList<>();
+        int ind = 0;
+        for (int i = 0; i < window.size(); ++i) {
+            int eventPos = windowLastEventPos - window.size() + i + 1; // the last event inclusive
+            if (eventPos == replayedEventIndices.get(ind)) {
+                firingSequence.add(window.get(i));
+                ind++;
+            }
+            if (replayedEventIndices.size() == ind) {
+                break;
+            }
+        }
+        if (ind != replayedEventIndices.size()) {
+            throw new IllegalStateException("Something went wrong.");
+        }
+        return firingSequence;
     }
 
     private Map<Place, Integer> getPlacePriorityMap() {

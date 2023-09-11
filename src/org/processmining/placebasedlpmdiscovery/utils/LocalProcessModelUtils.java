@@ -13,6 +13,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluat
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventCoverageEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.undecided.Utils;
 import org.processmining.placebasedlpmdiscovery.model.Arc;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;

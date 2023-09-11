@@ -25,6 +25,8 @@ public class LPMEvaluatorFactory {
             return new TraceSupportEvaluator();
         if (evaluatorId == StandardLPMEvaluatorId.TransitionCoverageEvaluator)
             return new TransitionCoverageEvaluator();
+        if (evaluatorId == StandardLPMEvaluatorId.EventCoverageEvaluator)
+            return new EventCoverageEvaluator();
         throw new IllegalArgumentException("Window evaluator with id " + evaluatorId + " does not exist.");
     }
 }

@@ -36,8 +36,8 @@ public class WindowLPMTree implements CanBeInterrupted {
         }
     }
 
-    public void tryAddNullChildren(int event, int position, int eventPos) {
-        Set<WindowLPMTreeNode> nodes = getNodesThatCanFire(event, position);
+    public void tryAddNullChildren(int event, int eventPos) {
+        Set<WindowLPMTreeNode> nodes = getNodesThatCanFire(event, eventPos);
         for (WindowLPMTreeNode node : nodes) {
             if (stop)
                 return;

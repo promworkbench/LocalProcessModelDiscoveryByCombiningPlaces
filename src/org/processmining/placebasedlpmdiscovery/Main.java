@@ -17,6 +17,7 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltr
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorFactory;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.concrete.EventCoverageEvaluator;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.main.StandardLPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
@@ -136,6 +137,8 @@ public class Main {
                 evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.TransitionCoverageEvaluator));
         builder.registerLPMWindowEvaluator(StandardLPMEvaluatorId.TraceSupportCountEvaluator.name(),
                 evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.TraceSupportCountEvaluator));
+        builder.registerLPMWindowEvaluator(StandardLPMEvaluatorId.EventCoverageEvaluator.name(),
+                evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.EventCoverageEvaluator));
 
         // set filters
         LPMFilterParameters filterParameters = parameters.getLpmFilterParameters();

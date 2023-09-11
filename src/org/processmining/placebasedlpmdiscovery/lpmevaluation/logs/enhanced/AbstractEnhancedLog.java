@@ -12,4 +12,8 @@ public abstract class AbstractEnhancedLog {
     }
 
     protected abstract void makeLog();
+
+    public XLog getOriginalLog() {
+        return this.originalLog;
+    }
 }

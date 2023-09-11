@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class LPMTemporaryWindowInfo {
 
     private final List<Integer> firingSequence;
-    private final Collection<Integer> replayedEventsIndices;
+    private final List<Integer> replayedEventsIndices;
     private final Set<Pair<Integer, Integer>> usedPassages;
     private int windowCount;
     private List<Integer> window;
@@ -23,7 +23,7 @@ public class LPMTemporaryWindowInfo {
     private final Map<Integer, String> reverseLabelMap;
 
     public LPMTemporaryWindowInfo(List<Integer> firingSequence,
-                                  Collection<Integer> replayedEventsIndices,
+                                  List<Integer> replayedEventsIndices,
                                   List<Integer> window,
                                   Set<Pair<Integer, Integer>> usedPassages,
                                   Map<Integer, String> reverseLabelMap,
@@ -88,18 +88,18 @@ public class LPMTemporaryWindowInfo {
      * @return position of first event (inclusive)
      */
     public int getWindowFirstEventPos() {
-        return this.windowLastEventPos - this.window.size();
+        return this.windowLastEventPos - this.window.size() + 1;
     }
 
     /**
      * Returns the position of the event where the window ends in the corresponding traces
-     * @return position of window end (exclusive)
+     * @return position of window end (inclusive)
      */
     public int getWindowLastEventPos() {
         return this.windowLastEventPos;
     }
 
-    public Collection<Integer> getReplayedEventsIndices() {
+    public List<Integer> getReplayedEventsIndices() {
         return replayedEventsIndices;
     }
 
@@ -108,7 +108,7 @@ public class LPMTemporaryWindowInfo {
         Optional<XTrace> oTrace = this.traces.stream().findFirst();
         if (!oTrace.isPresent()) throw new IllegalStateException("For each window there should be at least one trace.");
         XTrace trace = oTrace.get();
-        for (int i = this.windowLastEventPos - this.window.size(); i < this.windowLastEventPos; ++i) {
+        for (int i = this.getWindowFirstEventPos(); i <= this.windowLastEventPos; ++i) {
             XAttributeLiteral eventLabel = (XAttributeLiteral) trace.get(i).getAttributes().get(XConceptExtension.KEY_NAME);
             window.add(eventLabel.getValue());
         }

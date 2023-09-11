@@ -1,14 +1,18 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
+import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventCoverageEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.TraceSupportEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
+import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
+import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
 import java.util.*;
 
@@ -101,13 +105,15 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         return lpms;
     }
 
-    public void updateAllTotalCount(WindowTotalCounter windowTotalCounter, Integer totalTraceCount) {
+    public void updateAllTotalCount(WindowTotalCounter windowTotalCounter, Integer totalTraceCount, XLog log) {
         for (MainFPGrowthLPMTreeNode node : this.nodes) {
             for (LPMEvaluationResult res : node.getAdditionalInfo().getEvalResults().values()) {
                 if (StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.equals(res.getId())) {
                     ((FittingWindowsEvaluationResult) res).setTotal(windowTotalCounter.getWindowCount());
                 } else if (StandardLPMEvaluationResultId.TraceSupportEvaluationResult.equals(res.getId())) {
                     ((TraceSupportEvaluationResult) res).setTotalTraceCount(totalTraceCount);
+                } else if (StandardLPMEvaluationResultId.EventCoverageEvaluationResult.equals(res.getId())) {
+                    ((EventCoverageEvaluationResult) res).setEventCountPerActivity(LogUtils.getEventCountPerActivity(log));
                 }
             }
         }

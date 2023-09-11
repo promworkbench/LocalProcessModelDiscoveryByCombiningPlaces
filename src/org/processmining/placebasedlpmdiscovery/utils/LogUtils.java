@@ -13,10 +13,7 @@ import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -82,6 +79,7 @@ public class LogUtils {
 
     /**
      * Extract the event log name given the event log.
+     *
      * @param eventLog: the event log object
      * @return the name
      */
@@ -91,5 +89,24 @@ public class LogUtils {
             return ((XAttributeLiteral) nameAttribute).getValue();
         }
         return null;
+    }
+
+    /**
+     * Calculates how many events the event log contains for each activity.
+     * @param log the event log object
+     * @return the map of event counts per activity
+     */
+    public static Map<String, Integer> getEventCountPerActivity(XLog log) {
+        Map<String, Integer> res = new HashMap<>();
+        for (XTrace trace : log) {
+            List<String> events = trace
+                    .stream()
+                    .map(event -> ((XAttributeLiteral) event.getAttributes().get(XConceptExtension.KEY_NAME)).getValue())
+                    .collect(Collectors.toList());
+            for (String event : events) {
+                res.put(event, res.getOrDefault(event, 0) + 1);
+            }
+        }
+        return res;
     }
 }
