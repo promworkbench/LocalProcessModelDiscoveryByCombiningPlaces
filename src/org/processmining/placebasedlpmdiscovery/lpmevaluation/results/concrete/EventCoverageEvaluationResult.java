@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete;
 
-import org.apache.commons.math3.util.Pair;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
@@ -20,7 +21,7 @@ public class EventCoverageEvaluationResult implements LPMEvaluationResult {
         this.lastCoveredEvents = new HashMap<>();
         this.coveredEventsCount = new HashMap<>();
         lpm.getTransitions().forEach(t -> {
-            this.lastCoveredEvents.put(t.getLabel(), new Pair<>(-1, -1));
+            this.lastCoveredEvents.put(t.getLabel(), new ImmutablePair<>(-1, -1));
             this.coveredEventsCount.put(t.getLabel(), 0);
         });
     }
@@ -42,7 +43,7 @@ public class EventCoverageEvaluationResult implements LPMEvaluationResult {
 
     public boolean isLastCoveredEvent(String activity, Integer traceVariantId, Integer eventPos) {
         Pair<Integer, Integer> eventId = this.lastCoveredEvents.get(activity);
-        return eventId.getFirst().equals(traceVariantId) && eventId.getSecond().equals(eventPos);
+        return eventId.getLeft().equals(traceVariantId) && eventId.getRight().equals(eventPos);
     }
 
     public void updateCoveredEventsCount(String activity, int count) {
@@ -50,7 +51,7 @@ public class EventCoverageEvaluationResult implements LPMEvaluationResult {
     }
 
     public void updateLastCoveredEvent(String activity, Integer traceVariantId, Integer eventPos) {
-        this.lastCoveredEvents.put(activity, new Pair<>(traceVariantId, eventPos));
+        this.lastCoveredEvents.put(activity, new ImmutablePair<>(traceVariantId, eventPos));
     }
 
     public int getCoveredEventsCount(String activity) {
