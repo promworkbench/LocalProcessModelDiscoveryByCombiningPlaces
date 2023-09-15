@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.model.exporting.deserializers;
+package org.processmining.placebasedlpmdiscovery.model.exporting.gson.deserializers;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

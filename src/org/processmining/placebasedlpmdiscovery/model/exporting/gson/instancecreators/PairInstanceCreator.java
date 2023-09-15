@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.model.exporting.instancecreators;
+package org.processmining.placebasedlpmdiscovery.model.exporting.gson.instancecreators;
 
 import com.google.gson.InstanceCreator;
 import org.apache.commons.lang3.tuple.MutablePair;
