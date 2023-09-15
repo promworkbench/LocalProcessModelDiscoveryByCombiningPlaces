@@ -24,6 +24,5 @@ public class PlaceSetJsonImportPlugin extends AbstractImportPlugin {
         }
         JsonImporter<PlaceSet> importer = ImporterFactory.createPlaceSetJsonImporter();
         return importer.read(PlaceSet.class, input);
-//        return PlaceUtils.getPlaceSetFromInputStream(input);
     }
 }

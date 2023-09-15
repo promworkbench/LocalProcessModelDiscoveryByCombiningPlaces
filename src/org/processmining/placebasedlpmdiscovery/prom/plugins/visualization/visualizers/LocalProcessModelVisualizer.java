@@ -61,7 +61,7 @@ public class LocalProcessModelVisualizer {
                 .getEvaluationResult(StandardLPMEvaluationResultId.EventCoverageEvaluationResult.name(),
                         EventCoverageEvaluationResult.class);
 
-        return trLabel + ": " + System.lineSeparator() +
+        return res == null ? trLabel : trLabel + ": " + System.lineSeparator() +
                 res.getCoveredEventsCount(trLabel) + "/" + res.getEventCountPerActivity().get(trLabel);
     }
 }
