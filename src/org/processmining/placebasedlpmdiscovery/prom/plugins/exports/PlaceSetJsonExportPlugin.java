@@ -23,7 +23,6 @@ public class PlaceSetJsonExportPlugin {
 
     @PluginVariant(variantLabel = "Export set of places into a file", requiredParameterLabels = {0, 1})
     public static void export(PluginContext context, PlaceSet placeSet, File file) throws IOException {
-        JsonExporter<PlaceSet> exporter = new JsonExporter<>();
         placeSet.export(ExporterFactory.createPlaceSetJsonExporter(), Files.newOutputStream(file.toPath()));
     }
 }

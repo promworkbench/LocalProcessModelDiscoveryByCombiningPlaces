@@ -1,4 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.main;
 
-public interface LPMDiscoveryResult {
+import org.processmining.placebasedlpmdiscovery.model.exporting.Exportable;
+
+public interface LPMDiscoveryResult extends Exportable<LPMDiscoveryResult> {
 }
