@@ -24,7 +24,15 @@ public class MultipleLPMDiscoveryResultsVisualizer {
         if (result.getResults().size() < 1)
             return new JPanel();
 
+        // take a union of the nets
+
+        // for each lpm measures on both logs are shown
+
+        // passage usage numbers can be shown on both logs
+
         return new SimpleCollectionOfElementsComponent<>(
-                context, (LPMResult) result.getResults().stream().findAny().get(), new LPMResultPluginVisualizerTableFactory());
+                context,
+                (LPMResult) result.getResults().stream().findAny().get(),
+                new LPMResultPluginVisualizerTableFactory());
     }
 }

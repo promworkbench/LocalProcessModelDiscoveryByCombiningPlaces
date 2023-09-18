@@ -3,7 +3,7 @@ package org.processmining.placebasedlpmdiscovery.model.serializable;
 import java.io.Serializable;
 import java.util.Collection;
 
-public interface SerializableCollection<T extends Serializable> {
+public interface SerializableCollection<T extends Serializable> extends Serializable {
 
     boolean add(T element);
 

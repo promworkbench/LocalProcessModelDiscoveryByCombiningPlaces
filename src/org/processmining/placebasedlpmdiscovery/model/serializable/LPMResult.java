@@ -4,6 +4,7 @@ import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.Exporter;
 
+import java.util.Collection;
 import java.io.OutputStream;
 
 
@@ -13,5 +14,10 @@ public class LPMResult extends SerializableList<LocalProcessModel> implements LP
     @Override
     public void export(Exporter<LPMDiscoveryResult> exporter, OutputStream os) {
         exporter.export(this, os);
+    }
+
+    @Override
+    public Collection<LocalProcessModel> getAllLPMs() {
+        return null;
     }
 }
