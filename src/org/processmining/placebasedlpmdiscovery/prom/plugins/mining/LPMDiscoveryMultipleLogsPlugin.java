@@ -12,13 +12,13 @@ import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.main.MultipleLPMDiscoveryResults;
+import org.processmining.placebasedlpmdiscovery.model.inout.TwoStandardLPMDiscoveryResults;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.prom.ContextKeeper;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.wizards.PlaceBasedLPMDiscoveryWizard;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.wizards.steps.LPMDiscoveryWizardStep;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,7 +53,7 @@ public class LPMDiscoveryMultipleLogsPlugin {
         LPMDiscoveryBuilder builder2 = Main.createDefaultForPetriNetBuilder(log2, petrinet, parameters);
         LPMDiscoveryResult res2 = builder2.build().run();
 
-        return () -> Arrays.asList(res1, res2);
+        return new TwoStandardLPMDiscoveryResults(res1, res2);
     }
 
     @UITopiaVariant(
@@ -78,7 +78,7 @@ public class LPMDiscoveryMultipleLogsPlugin {
         LPMDiscoveryBuilder builder2 = Main.createDefaultBuilder(log2, placeSet, parameters);
         LPMDiscoveryResult res2 = builder2.build().run();
 
-        return () -> Arrays.asList(res1, res2);
+        return new TwoStandardLPMDiscoveryResults(res1, res2);
     }
 
     private static PlaceBasedLPMDiscoveryParameters getPlaceBasedLPMDiscoveryParameters(UIPluginContext context, XLog log1) {

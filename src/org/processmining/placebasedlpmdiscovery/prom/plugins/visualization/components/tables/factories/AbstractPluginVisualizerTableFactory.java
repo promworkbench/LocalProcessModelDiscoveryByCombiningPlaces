@@ -10,6 +10,7 @@ import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.compo
 import javax.swing.*;
 import javax.swing.table.TableRowSorter;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 
@@ -19,7 +20,7 @@ public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescrib
 
     protected TableListener<T> listener;
 
-    public GenericTextDescribableTableComponent<T> getPluginVisualizerTable(SerializableCollection<T> result, TableListener<T> listener) {
+    public GenericTextDescribableTableComponent<T> getPluginVisualizerTable(Collection<T> result, TableListener<T> listener) {
         this.listener = listener;
 
         // create table
@@ -62,7 +63,7 @@ public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescrib
         return table;
     }
 
-    protected abstract Map<Integer,T> getIndexObjectMap(SerializableCollection<T> elements);
+    protected abstract Map<Integer,T> getIndexObjectMap(Collection<T> elements);
 
     protected abstract CustomObjectTableModel<T> createTableModel(Map<Integer, T> indexObjectMap);
 

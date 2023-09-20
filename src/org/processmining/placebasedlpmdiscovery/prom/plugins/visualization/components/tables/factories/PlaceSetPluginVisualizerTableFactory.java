@@ -6,6 +6,7 @@ import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableC
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.CustomObjectTableModel;
 
 import javax.swing.*;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -14,8 +15,8 @@ import java.util.stream.IntStream;
 public class PlaceSetPluginVisualizerTableFactory extends AbstractPluginVisualizerTableFactory<Place> {
 
     @Override
-    protected Map<Integer, Place> getIndexObjectMap(SerializableCollection<Place> elements) {
-        final Iterator<Place> placeIterator = elements.getElements().iterator();
+    protected Map<Integer, Place> getIndexObjectMap(Collection<Place> elements) {
+        final Iterator<Place> placeIterator = elements.iterator();
         return IntStream
                 .range(0, elements.size())
                 .boxed()

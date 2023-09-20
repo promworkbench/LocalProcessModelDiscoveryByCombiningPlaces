@@ -18,6 +18,6 @@ public class LPMResult extends SerializableList<LocalProcessModel> implements LP
 
     @Override
     public Collection<LocalProcessModel> getAllLPMs() {
-        return null;
+        return this.elements;
     }
 }

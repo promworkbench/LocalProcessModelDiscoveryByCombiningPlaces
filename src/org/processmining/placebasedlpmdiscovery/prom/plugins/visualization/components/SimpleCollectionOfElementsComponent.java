@@ -17,18 +17,19 @@ import org.processmining.plugins.utils.ProvidedObjectHelper;
 import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
+import java.util.Collection;
 
 public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Serializable>
         extends JComponent implements TableListener<T>, ComponentListener {
 
     private final UIPluginContext context;
-    private final SerializableCollection<T> result;
+    private final Collection<T> result;
     private final AbstractPluginVisualizerTableFactory<T> tableFactory;
 
     private JComponent visualizerComponent;
 
     public SimpleCollectionOfElementsComponent(UIPluginContext context,
-                                               SerializableCollection<T> result,
+                                               Collection<T> result,
                                                AbstractPluginVisualizerTableFactory<T> tableFactory) {
         this.context = context;
         this.result = result;

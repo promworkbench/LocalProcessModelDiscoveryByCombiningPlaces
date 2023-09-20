@@ -33,7 +33,7 @@ public class PlaceSetVisualizer {
             return new JPanel();
 
         return new SimpleCollectionOfElementsComponent<>(
-                context, result, new PlaceSetPluginVisualizerTableFactory());
+                context, result.getElements(), new PlaceSetPluginVisualizerTableFactory());
 
 
 //        JComponent component = new JPanel();
