@@ -1,8 +1,10 @@
 package org.processmining.placebasedlpmdiscovery.main;
 
-import java.util.Collection;
+import java.util.Map;
 
 public interface MultipleLPMDiscoveryResults extends LPMDiscoveryResult {
 
-    Collection<LPMDiscoveryResult> getResults();
+    Map<String, LPMDiscoveryResult> getResults();
+
+    LPMDiscoveryResult getResult(String name);
 }

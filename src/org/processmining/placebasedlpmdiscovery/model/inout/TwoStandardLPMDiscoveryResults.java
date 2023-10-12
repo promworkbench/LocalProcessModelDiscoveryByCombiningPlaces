@@ -7,10 +7,15 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import java.util.*;
 
 public class TwoStandardLPMDiscoveryResults implements MultipleLPMDiscoveryResults {
+
+    private final Map<String, LPMDiscoveryResult> resMap;
     private final LPMDiscoveryResult res1;
     private final LPMDiscoveryResult res2;
 
     public TwoStandardLPMDiscoveryResults(LPMDiscoveryResult res1, LPMDiscoveryResult res2) {
+        this.resMap = new HashMap<>();
+        this.resMap.put("Set 1", res1);
+        this.resMap.put("Set 2", res2);
         this.res1 = res1;
         this.res2 = res2;
     }
@@ -24,7 +29,12 @@ public class TwoStandardLPMDiscoveryResults implements MultipleLPMDiscoveryResul
     }
 
     @Override
-    public Collection<LPMDiscoveryResult> getResults() {
-        return Arrays.asList(this.res1, this.res2);
+    public Map<String, LPMDiscoveryResult> getResults() {
+        return resMap;
+    }
+
+    @Override
+    public LPMDiscoveryResult getResult(String name) {
+        return this.resMap.get(name);
     }
 }
