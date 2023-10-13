@@ -10,6 +10,7 @@ import org.processmining.placebasedlpmdiscovery.view.controllers.DefaultMultiple
 import org.processmining.placebasedlpmdiscovery.view.controllers.MultipleLPMDiscoveryResultsViewController;
 import org.processmining.placebasedlpmdiscovery.view.models.DefaultMultipleLPMDiscoveryResultsViewModel;
 import org.processmining.placebasedlpmdiscovery.view.models.MultipleLPMDiscoveryResultsViewModel;
+import org.processmining.placebasedlpmdiscovery.view.views.MultipleLPMDiscoveryResultsView;
 
 import javax.swing.*;
 

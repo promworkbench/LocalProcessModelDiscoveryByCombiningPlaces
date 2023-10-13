@@ -9,22 +9,18 @@ import java.util.*;
 public class TwoStandardLPMDiscoveryResults implements MultipleLPMDiscoveryResults {
 
     private final Map<String, LPMDiscoveryResult> resMap;
-    private final LPMDiscoveryResult res1;
-    private final LPMDiscoveryResult res2;
 
     public TwoStandardLPMDiscoveryResults(LPMDiscoveryResult res1, LPMDiscoveryResult res2) {
         this.resMap = new HashMap<>();
         this.resMap.put("Set 1", res1);
         this.resMap.put("Set 2", res2);
-        this.res1 = res1;
-        this.res2 = res2;
     }
 
     @Override
     public Collection<LocalProcessModel> getAllLPMs() {
         Set<LocalProcessModel> all = new HashSet<>();
-        all.addAll(res1.getAllLPMs());
-        all.addAll(res2.getAllLPMs());
+        all.addAll(resMap.get("Set 1").getAllLPMs());
+        all.addAll(resMap.get("Set 2").getAllLPMs());
         return all;
     }
 

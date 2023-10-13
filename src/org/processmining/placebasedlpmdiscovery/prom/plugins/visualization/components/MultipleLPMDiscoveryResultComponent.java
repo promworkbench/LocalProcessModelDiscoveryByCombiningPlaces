@@ -1,7 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
 
 import org.processmining.contexts.uitopia.UIPluginContext;
-import org.processmining.placebasedlpmdiscovery.main.MultipleLPMDiscoveryResults;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.controlcomponents.TwoLPMDiscoveryResultsComparisonComponent;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.LPMResultPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.view.controllers.MultipleLPMDiscoveryResultsViewController;
@@ -14,14 +13,12 @@ import java.awt.*;
 
 public class MultipleLPMDiscoveryResultComponent extends JComponent implements MultipleLPMDiscoveryResultsView {
 
-    private MultipleLPMDiscoveryResultsViewListener listener;
-
     private final UIPluginContext context;
+    private MultipleLPMDiscoveryResultsViewListener listener;
     private boolean setupFinished;
 
     // sub-components
     private JComponent tablePanel;
-    private JPanel settablePanels;
 
     public MultipleLPMDiscoveryResultComponent(UIPluginContext context) {
         this.context = context;
@@ -32,7 +29,7 @@ public class MultipleLPMDiscoveryResultComponent extends JComponent implements M
 
         tablePanel = new JPanel();
         tablePanel.setLayout(new BorderLayout());
-        settablePanels = new TwoLPMDiscoveryResultsComparisonComponent(this.listener);
+        JPanel settablePanels = new TwoLPMDiscoveryResultsComparisonComponent(this.listener);
 
         // set the preferred dimension of the two containers
         int windowHeight = Toolkit.getDefaultToolkit().getScreenSize().height;

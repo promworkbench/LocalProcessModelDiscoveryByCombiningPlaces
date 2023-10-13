@@ -29,20 +29,25 @@ public class DefaultMultipleLPMDiscoveryResultsViewController implements Multipl
 
     @Override
     public void selectIntersection() {
+        model.setLPMs(model.intersection("Set 1", "Set 2"));
+        view.display(model);
     }
 
     @Override
     public void selectUnion() {
-
+        model.setLPMs(model.union("Set 1", "Set 2"));
+        view.display(model);
     }
 
     @Override
     public void selectOnlyInFirstSet() {
-
+        model.setLPMs(model.diff("Set 1", "Set 2"));
+        view.display(model);
     }
 
     @Override
     public void selectOnlyInSecondSet() {
-
+        model.setLPMs(model.diff("Set 2", "Set 1"));
+        view.display(model);
     }
 }
