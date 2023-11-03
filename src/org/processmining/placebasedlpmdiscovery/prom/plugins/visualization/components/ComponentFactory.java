@@ -46,17 +46,22 @@ public class ComponentFactory {
         return df.format(result);
     }
 
-    public static JPanel getComplexEvaluationResultComponent(Collection<LPMEvaluationResult> results) {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+    public static JComponent getComplexEvaluationResultComponent(Collection<LPMEvaluationResult> results) {
+        Object[][] rowData = results.stream().map(res -> new Object[] {res.getId(), res.getResult()}).toArray(Object[][]::new);
+        Object[] columns =  new String[] {"Measure", "Value"};
+        JTable jt = new JTable(rowData, columns);
+        return new JScrollPane(jt);
 
-        for (LPMEvaluationResult result : results) {
-            panel.add(ComponentFactory.getLPMEvaluationResultComponent(result));
-        }
-        panel.add(getjLabel("Aggregate Result:    " +
-                getEvaluationTextResult(new EvaluationResultAggregateOperation().aggregate(results))));
-
-        return panel;
+//        JPanel panel = new JPanel();
+//        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+//
+//        for (LPMEvaluationResult result : results) {
+//            panel.add(ComponentFactory.getLPMEvaluationResultComponent(result));
+//        }
+//        panel.add(getjLabel("Aggregate Result:    " +
+//                getEvaluationTextResult(new EvaluationResultAggregateOperation().aggregate(results))));
+//
+//        return panel;
     }
 
     private static JPanel getCoveredPassages(PassageCoverageEvaluationResult evaluationResult) {
