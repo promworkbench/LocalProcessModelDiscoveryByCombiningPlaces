@@ -62,9 +62,9 @@
 		<pathelement path="${java.class.path}" />
 		<fileset dir=".">
 			<include name="ivy/**/*.jar" />
-			<!--include name="lib/**/*.jar" /-->
-			<include name="stdlib/**/*.jar" />
-			<include name="packagelib/**/*.jar" />
+			<include name="lib/**/*.jar" />
+			<!--include name="stdlib/**/*.jar" />
+			<include name="packagelib/**/*.jar" /-->
 		</fileset>
 	</path>
 
@@ -121,7 +121,7 @@
 	</target>
 	
 	<target name="resolve" depends="init-ivy">
-		<ivy:retrieve pattern="ivy/[artifact]-[revision].[ext]" type="jar,bundle" sync="true" />
+		<ivy:retrieve type="jar,bundle" sync="true" />
 		<!--ivy:retrieve pattern="lib/[artifact]-[revision].[ext]" conf="lib" type="jar,bundle" sync="true" /-->
 	</target>
 
