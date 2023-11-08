@@ -3,7 +3,9 @@ package org.processmining.placebasedlpmdiscovery.model.inout;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.main.MultipleLPMDiscoveryResults;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.Exporter;
 
+import java.io.OutputStream;
 import java.util.*;
 
 public class TwoStandardLPMDiscoveryResults implements MultipleLPMDiscoveryResults {
@@ -32,5 +34,10 @@ public class TwoStandardLPMDiscoveryResults implements MultipleLPMDiscoveryResul
     @Override
     public LPMDiscoveryResult getResult(String name) {
         return this.resMap.get(name);
+    }
+
+    @Override
+    public void export(Exporter<LPMDiscoveryResult> exporter, OutputStream os) {
+        exporter.export(this, os);
     }
 }
