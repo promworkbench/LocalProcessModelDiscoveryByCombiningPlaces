@@ -28,12 +28,17 @@ public class EventCoverageEvaluationResult implements LPMEvaluationResult {
 
     @Override
     public double getResult() {
-        return 0;
+        double sum = 0;
+        for (String act : this.coveredEventsCount.keySet()) {
+            sum += this.coveredEventsCount.get(act) * 1.0 / this.eventCountPerActivity.get(act);
+        }
+
+        return sum / this.coveredEventsCount.size();
     }
 
     @Override
     public double getNormalizedResult() {
-        return 0;
+        return getResult();
     }
 
     @Override

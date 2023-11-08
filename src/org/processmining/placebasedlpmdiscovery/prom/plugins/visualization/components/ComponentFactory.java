@@ -1,12 +1,16 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
 
+import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageCoverageEvaluationResult;
 
 import javax.swing.*;
+import java.awt.*;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 public class ComponentFactory {
 
@@ -47,10 +51,33 @@ public class ComponentFactory {
     }
 
     public static JComponent getComplexEvaluationResultComponent(Collection<LPMEvaluationResult> results) {
-        Object[][] rowData = results.stream().map(res -> new Object[] {res.getId(), res.getResult()}).toArray(Object[][]::new);
-        Object[] columns =  new String[] {"Measure", "Value"};
+        JComponent component = new JPanel();
+        component.setPreferredSize(new Dimension(100, 50));
+        component.setLayout(new BoxLayout(component, BoxLayout.Y_AXIS));
+
+        Object[][] rowData = results
+                .stream()
+                .map(res -> {
+                    if (res.getResult() == res.getNormalizedResult())
+                        return Collections.singletonList(new Pair<>(res.getId().name(), res.getResult()));
+                    else
+                        return new ArrayList<>(Arrays.asList(
+                                new Pair<>(res.getId().name(), res.getResult()),
+                                new Pair<>(res.getId().name() + " - Normalized", res.getNormalizedResult())
+                        ));
+                })
+                .flatMap(Collection::stream).map(pair -> new Object[]{pair.getFirst(), pair.getSecond()})
+                .toArray(Object[][]::new);
+
+        Object[] columns = new String[]{"Measure", "Value"};
         JTable jt = new JTable(rowData, columns);
-        return new JScrollPane(jt);
+        JScrollPane js = new JScrollPane(jt);
+        component.add(js);
+
+        JButton btn = new JButton("Add Formula");
+        component.add(btn);
+
+        return component;
 
 //        JPanel panel = new JPanel();
 //        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
