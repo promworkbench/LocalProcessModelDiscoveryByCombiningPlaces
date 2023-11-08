@@ -12,6 +12,7 @@ import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 
 import javax.swing.*;
 import java.text.DecimalFormat;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -28,8 +29,8 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
     }
 
     @Override
-    protected Map<Integer, LocalProcessModel> getIndexObjectMap(SerializableCollection<LocalProcessModel> elements) {
-        Iterator<LocalProcessModel> lpmIterator = elements.getElements().iterator();
+    protected Map<Integer, LocalProcessModel> getIndexObjectMap(Collection<LocalProcessModel> elements) {
+        Iterator<LocalProcessModel> lpmIterator = elements.iterator();
         return IntStream
                 .range(0, elements.size())
                 .boxed()

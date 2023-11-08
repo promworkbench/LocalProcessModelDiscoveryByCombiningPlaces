@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SerializableSet<T extends Serializable> extends SerializableCollection<T> {
+public class SerializableSet<T extends Serializable> implements SerializableCollection<T> {
 
     private static final long serialVersionUID = -2512303328710773358L;
     private Set<T> elements;

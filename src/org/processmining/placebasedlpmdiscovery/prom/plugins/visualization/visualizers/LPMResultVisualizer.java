@@ -25,6 +25,6 @@ public class LPMResultVisualizer {
             return new JPanel();
 
         return new SimpleCollectionOfElementsComponent<>(
-                context, result, new LPMResultPluginVisualizerTableFactory());
+                context, result.getAllLPMs(), new LPMResultPluginVisualizerTableFactory());
     }
 }

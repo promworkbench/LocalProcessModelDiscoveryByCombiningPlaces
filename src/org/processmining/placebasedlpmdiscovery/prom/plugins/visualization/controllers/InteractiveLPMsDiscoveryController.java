@@ -68,7 +68,7 @@ public class InteractiveLPMsDiscoveryController implements WeirdComponentControl
     }
 
     private void initTablePanel() {
-        this.tablePanel = new TableComposition<>((LPMResult) this.result, new LPMResultPluginVisualizerTableFactory(), this);
+        this.tablePanel = new TableComposition<>(this.result.getAllLPMs(), new LPMResultPluginVisualizerTableFactory(), this);
     }
 
     private void initSettablePanels() {

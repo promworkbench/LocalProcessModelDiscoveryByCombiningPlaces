@@ -12,15 +12,16 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
 import java.io.Serializable;
+import java.util.Collection;
 
 public class TableComposition<T extends TextDescribable & Serializable> extends JComponent implements ICommunicativePanel {
 
     private final ComponentId componentId;
-    private final SerializableCollection<T> result;
+    private final Collection<T> result;
     private final AbstractPluginVisualizerTableFactory<T> tableFactory;
     private final TableListener<T> controller;
 
-    public TableComposition(SerializableCollection<T> result,
+    public TableComposition(Collection<T> result,
                             AbstractPluginVisualizerTableFactory<T> tableFactory,
                             TableListener<T> controller) {
         this.componentId = new ComponentId(ComponentId.Type.TableComponent);

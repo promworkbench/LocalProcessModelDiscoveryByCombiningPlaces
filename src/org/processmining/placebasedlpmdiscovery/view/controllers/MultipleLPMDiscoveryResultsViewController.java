@@ -1,0 +1,6 @@
+package org.processmining.placebasedlpmdiscovery.view.controllers;
+
+import org.processmining.placebasedlpmdiscovery.view.listeners.MultipleLPMDiscoveryResultsViewListener;
+
+public interface MultipleLPMDiscoveryResultsViewController extends ViewController, MultipleLPMDiscoveryResultsViewListener {
+}
