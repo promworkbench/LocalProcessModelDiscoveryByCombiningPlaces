@@ -6,6 +6,8 @@ import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard;
 //import org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth.ContextLPMTreeBuilder;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth.LPMTreeBuilder;
+import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.main.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTree;
@@ -44,7 +46,7 @@ public class StandardLPMCombinationController implements LPMCombinationControlle
         this.guard = guard;
     }
 
-    public Set<LocalProcessModel> combineUsingFPGrowth(Set<Place> places, int count) {
+    public LPMDiscoveryResult combineUsingFPGrowth(Set<Place> places, int count) {
         // Build the place graph (we can use it to order the places)
 //        FPGrowthPlaceFollowGraphBuilder graphBuilder = new FPGrowthPlaceFollowGraphBuilder(
 //                log,
@@ -63,7 +65,7 @@ public class StandardLPMCombinationController implements LPMCombinationControlle
             this.runningContext.getInterrupterSubject().addObserver(tree);
             System.out.println("========End building tree========");
 
-            return tree.getLPMs(count);
+            return new StandardLPMDiscoveryResult(tree);
         } else {
             throw new NotImplementedException();
 //            ContextLPMTreeBuilder treeBuilder = new ContextLPMTreeBuilder(
@@ -95,7 +97,7 @@ public class StandardLPMCombinationController implements LPMCombinationControlle
     }
 
     @Override
-    public Set<LocalProcessModel> combine(Set<Place> places, int count) {
+    public LPMDiscoveryResult combine(Set<Place> places, int count) {
         return combineUsingFPGrowth(places, count);
     }
 }
