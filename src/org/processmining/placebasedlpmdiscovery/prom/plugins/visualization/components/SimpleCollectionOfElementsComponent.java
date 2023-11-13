@@ -118,6 +118,6 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
     @Override
     public void componentExpansion(ComponentId componentId, boolean expanded) {
         // change visibility of lpm container
-        this.visualizerComponent.setVisible(!expanded);
+//        this.visualizerComponent.setVisible(!expanded);
     }
 }
