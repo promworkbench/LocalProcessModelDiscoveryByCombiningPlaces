@@ -44,7 +44,7 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
 
     private void init() {
         // set up the layout of this component
-        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        this.setLayout(new BorderLayout());
 
         // create the table and LPM visualization containers
         visualizerComponent = createVisualizerComponent();
@@ -57,9 +57,9 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
 //        visualizerComponent.setPreferredSize(new Dimension(80 * windowWidth / 100, windowHeight));
 
         // add the table and LPM visualization containers and add some space between them
-        this.add(tableContainer);
+        this.add(tableContainer, BorderLayout.LINE_START);
 //        this.add(Box.createRigidArea(new Dimension(windowWidth / 100, windowHeight)));
-        this.add(visualizerComponent);
+        this.add(visualizerComponent, BorderLayout.CENTER);
     }
 
     private JComponent createVisualizerComponent() {
