@@ -47,9 +47,9 @@ public class LocalProcessModelVisualizer {
 //        component.add((new CustomAcceptingPetriNetVisualizer()).visualize(context, net));
         component.add(ProMJGraphVisualizer.instance().visualizeGraph(context, net.getNet(), map));
 
-        JComponent evalComponent = ComponentFactory.getComplexEvaluationResultComponent(
-                lpm.getAdditionalInfo().getEvalResults().values());
-        component.add(evalComponent);
+//        JComponent evalComponent = ComponentFactory.getComplexEvaluationResultComponent(
+//                lpm.getAdditionalInfo().getEvalResults().values());
+//        component.add(evalComponent);
         return component;
     }
 

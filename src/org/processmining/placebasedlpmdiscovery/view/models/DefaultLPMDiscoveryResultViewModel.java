@@ -8,6 +8,7 @@ import java.util.Collection;
 public class DefaultLPMDiscoveryResultViewModel implements LPMDiscoveryResultViewModel {
 
     private final LPMDiscoveryResult result;
+    private LocalProcessModel selectedLPM;
 
     public DefaultLPMDiscoveryResultViewModel(LPMDiscoveryResult result) {
         this.result = result;
@@ -15,7 +16,7 @@ public class DefaultLPMDiscoveryResultViewModel implements LPMDiscoveryResultVie
 
     @Override
     public Collection<LocalProcessModel> getLPMs() {
-        return null;
+        return result.getAllLPMs();
     }
 
     @Override
@@ -23,4 +24,12 @@ public class DefaultLPMDiscoveryResultViewModel implements LPMDiscoveryResultVie
 
     }
 
+    @Override
+    public LocalProcessModel getSelectedLPM() {
+        return this.selectedLPM;
+    }
+
+    public void setSelectedLPM(LocalProcessModel selectedLPM) {
+        this.selectedLPM = selectedLPM;
+    }
 }

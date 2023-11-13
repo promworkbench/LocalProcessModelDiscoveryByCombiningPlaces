@@ -22,7 +22,8 @@ public class BaseLPMDiscoveryResultComponent extends JComponent {
 
     private void init(int countSettablePanels) {
         // setting up table container
-        this.tablePanel = new SettablePanelContainer();
+        this.tablePanel = new JPanel();
+        this.tablePanel.setPreferredSize(new Dimension(50, 50));
         this.tablePanel.setLayout(new BorderLayout());
 
         GridBagConstraints c = new GridBagConstraints();
@@ -39,9 +40,9 @@ public class BaseLPMDiscoveryResultComponent extends JComponent {
             c.gridheight = 3;
         } else if (countSettablePanels < 6) {
             c.weightx = 0.33;
+            c.weighty = 0.66;
             c.gridwidth = 2;
             c.gridheight = 2;
-            c.weighty = 0.66;
         } else {
             throw new NotImplementedException("You can not have more than 5 panels.");
         }
@@ -61,7 +62,7 @@ public class BaseLPMDiscoveryResultComponent extends JComponent {
                 c.gridy = i;
                 container.add(new JLabel(c.gridx + "," + c.gridy));
             } else {
-                this.settablePanels.put(new Pair<>(i % 3, 2), new SettablePanelContainer());
+                this.settablePanels.put(new Pair<>(i % 3, 2), container);
                 c.gridx = i % 3;
                 c.gridy = 2;
                 container.add(new JLabel(c.gridx + "," + c.gridy));

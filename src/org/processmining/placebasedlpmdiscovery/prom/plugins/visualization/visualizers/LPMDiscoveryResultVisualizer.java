@@ -30,7 +30,7 @@ public class LPMDiscoveryResultVisualizer {
     @PluginVariant(requiredParameterLabels = {0})
     public JComponent visualize(UIPluginContext context, LPMDiscoveryResult result) {
 
-        DefaultLPMDiscoveryResultComponent view = new DefaultLPMDiscoveryResultComponent();
+        DefaultLPMDiscoveryResultComponent view = new DefaultLPMDiscoveryResultComponent(context);
         DefaultLPMDiscoveryResultViewModel model = new DefaultLPMDiscoveryResultViewModel(result);
 
         LPMDiscoveryResultViewController controller =
