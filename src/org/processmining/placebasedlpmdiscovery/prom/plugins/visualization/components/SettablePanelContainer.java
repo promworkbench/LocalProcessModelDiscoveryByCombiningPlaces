@@ -3,9 +3,11 @@ package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.comp
 import org.processmining.framework.util.ui.widgets.ProMComboBox;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.util.Random;
 
 public class SettablePanelContainer extends JPanel {
 
@@ -18,21 +20,23 @@ public class SettablePanelContainer extends JPanel {
 //        int windowWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
 
         this.setLayout(new BorderLayout());
-        this.setBorder(BorderUIResource.getEtchedBorderUIResource());
+        this.setBorder(new EmptyBorder(5, 5, 5, 5));
+        Random random = new Random();
+        this.setBackground(new Color(random.nextFloat(), random.nextFloat(), random.nextFloat()));
 //        this.setMaximumSize(new Dimension(25 * windowWidth / 100, 50 * windowHeight / 100));
 
-        this.header = new JPanel();
-        this.header.setLayout(new FlowLayout());
+//        this.header = new JPanel();
+//        this.header.setLayout(new FlowLayout());
 //        ProMComboBox<ComponentId.Type> possiblePanelsComp = getChoosePanelComponent();
 //        this.header.add(possiblePanelsComp);
-        this.add(this.header, BorderLayout.PAGE_START);
+//        this.add(this.header, BorderLayout.PAGE_START);
 
-        this.content = new JPanel();
+//        this.content = new JPanel();
 //        this.content.setMaximumSize(new Dimension(25 * windowWidth / 100, 45 * windowHeight / 100));
 //        this.content.setMinimumSize(new Dimension(25 * windowWidth / 100, 45 * windowHeight / 100));
 //        this.content.setPreferredSize(new Dimension(25 * windowWidth / 100, 45 * windowHeight / 100));
-        this.content.setLayout(new BorderLayout());
-        this.add(this.content, BorderLayout.CENTER);
+//        this.content.setLayout(new BorderLayout());
+//        this.add(this.content, BorderLayout.CENTER);
     }
 
 //    private ProMComboBox<ComponentId.Type> getChoosePanelComponent() {

@@ -10,8 +10,8 @@ import java.util.Map;
 
 public class BaseLPMDiscoveryResultComponent extends JComponent {
 
-    private JPanel tablePanel;
-    private final Map<Pair<Integer, Integer>, SettablePanelContainer> settablePanels;
+    protected JPanel tablePanel;
+    protected final Map<Pair<Integer, Integer>, SettablePanelContainer> settablePanels;
 
     public BaseLPMDiscoveryResultComponent(int countSettablePanels) {
         this.setLayout(new GridBagLayout());
@@ -22,22 +22,26 @@ public class BaseLPMDiscoveryResultComponent extends JComponent {
 
     private void init(int countSettablePanels) {
         // setting up table container
-        this.tablePanel = new JPanel();
+        this.tablePanel = new SettablePanelContainer();
         this.tablePanel.setLayout(new BorderLayout());
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
         c.gridx = 0;
         c.gridy = 0;
-        c.weighty = 0.66;
+//        c.weightx = 0.5;
+//        c.weighty = 0.5;
+        c.insets = new Insets(5, 5, 5, 5);
         if (countSettablePanels < 4) {
-            c.weightx = 0.33;
-            c.gridwidth = 3;
-            c.gridheight = 2;
-        } else if (countSettablePanels < 6) {
             c.weightx = 0.66;
+            c.weighty = 1;
+            c.gridwidth = 2;
+            c.gridheight = 3;
+        } else if (countSettablePanels < 6) {
+            c.weightx = 0.33;
             c.gridwidth = 2;
             c.gridheight = 2;
+            c.weighty = 0.66;
         } else {
             throw new NotImplementedException("You can not have more than 5 panels.");
         }

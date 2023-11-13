@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery;
+package org.processmining.placebasedlpmdiscovery.runners.GUI;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.contexts.cli.CLIContext;
@@ -7,6 +7,7 @@ import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.InteractiveLPMsDiscovery;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.BaseLPMDiscoveryResultComponent;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
 import javax.swing.*;
@@ -28,7 +29,8 @@ public class MainGUI extends JFrame {
         contentPane = new JPanel();
         contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
         contentPane.setLayout(new BorderLayout(0, 0));
-        contentPane.add(getDummyDiscovery().getComponentForContext());
+//        contentPane.add(getDummyDiscovery().getComponentForContext());
+        contentPane.add(getDummyBaseView());
         setContentPane(contentPane);
     }
 
@@ -36,5 +38,9 @@ public class MainGUI extends JFrame {
         XLog log = LogUtils.readLogFromFile("data/sequence_3.xes");
         PluginContext context = new CLIPluginContext(new CLIContext(), "");
         return new InteractiveLPMsDiscovery(context, new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log)), log);
+    }
+
+    private BaseLPMDiscoveryResultComponent getDummyBaseView() {
+        return new BaseLPMDiscoveryResultComponent(5);
     }
 }
