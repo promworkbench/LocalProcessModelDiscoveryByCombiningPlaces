@@ -44,42 +44,10 @@ public class DefaultLogAndPetriNetRunner {
 
         LPMDiscoveryBuilder builder = Main.createDefaultBuilder(
                 log,
-                new PlaceSet(extractPlaceNets(petriNet)),
+                new PlaceSet(PlaceUtils.extractPlaceNets(petriNet)),
                 parameters);
         LocalProcessModelUtils.exportResult((LPMResult) builder.build().run(), resultPath);
     }
 
-    private static Set<Place> extractPlaceNets(String petriNetFileName) throws Exception {
-        FullPnmlElementFactory pnmlFactory = new FullPnmlElementFactory();
-        Petrinet net = PetrinetFactory.newPetrinet("place nets");
 
-        FileInputStream input = new FileInputStream(petriNetFileName);
-
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        factory.setNamespaceAware(true);
-        XmlPullParser xpp = factory.newPullParser();
-        xpp.setInput(input, (String) null);
-        int eventType = xpp.getEventType();
-        Pnml pnml = new Pnml();
-        synchronized (pnmlFactory) {
-            Pnml.setFactory(pnmlFactory);
-
-            while (eventType != 2) {
-                eventType = xpp.next();
-            }
-
-            if (xpp.getName().equals("pnml")) {
-                pnml.importElement(xpp, pnml);
-            } else {
-                pnml.log("pnml", xpp.getLineNumber(), "Expected pnml");
-            }
-
-
-            Marking marking = new Marking();
-            GraphLayoutConnection layout = new GraphLayoutConnection(net);
-            pnml.convertToNet(net, marking, layout);
-        }
-
-        return PlaceUtils.getPlacesFromPetriNet(net);
-    }
 }

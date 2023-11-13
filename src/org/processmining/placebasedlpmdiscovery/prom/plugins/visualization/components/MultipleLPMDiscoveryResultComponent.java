@@ -71,7 +71,8 @@ public class MultipleLPMDiscoveryResultComponent extends JComponent implements M
                 new SimpleCollectionOfElementsComponent<>(
                         context,
                         model.getLPMs(),
-                        new LPMResultPluginVisualizerTableFactory()),
+                        new LPMResultPluginVisualizerTableFactory(),
+                        lpm -> {}),
                 BorderLayout.CENTER);
 
         tablePanel.revalidate();

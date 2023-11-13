@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
 
 import org.processmining.contexts.uitopia.UIPluginContext;
+import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.TextDescribable;
@@ -12,6 +13,7 @@ import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.compo
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.AbstractPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers.LocalProcessModelVisualizer;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers.PlaceVisualizer;
+import org.processmining.placebasedlpmdiscovery.view.listeners.NewElementSelectedListener;
 import org.processmining.plugins.utils.ProvidedObjectHelper;
 
 import javax.swing.*;
@@ -22,39 +24,42 @@ import java.util.Collection;
 public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Serializable>
         extends JComponent implements TableListener<T>, ComponentListener {
 
-    private final UIPluginContext context;
+    private final PluginContext context;
     private final Collection<T> result;
     private final AbstractPluginVisualizerTableFactory<T> tableFactory;
+    private final NewElementSelectedListener<T> newElementSelectedListener;
 
     private JComponent visualizerComponent;
 
-    public SimpleCollectionOfElementsComponent(UIPluginContext context,
+    public SimpleCollectionOfElementsComponent(PluginContext context,
                                                Collection<T> result,
-                                               AbstractPluginVisualizerTableFactory<T> tableFactory) {
+                                               AbstractPluginVisualizerTableFactory<T> tableFactory,
+                                               NewElementSelectedListener<T> newElementSelectedListener) {
         this.context = context;
         this.result = result;
         this.tableFactory = tableFactory;
+        this.newElementSelectedListener = newElementSelectedListener;
         init();
     }
 
     private void init() {
         // set up the layout of this component
-        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        this.setLayout(new BorderLayout());
 
         // create the table and LPM visualization containers
         visualizerComponent = createVisualizerComponent();
         JComponent tableContainer = new TableComposition<>(this.result, this.tableFactory, this);
 
         // set the preferred dimension of the two containers
-        int windowHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
-        int windowWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
-        tableContainer.setPreferredSize(new Dimension(15 * windowWidth / 100, windowHeight));
-        visualizerComponent.setPreferredSize(new Dimension(80 * windowWidth / 100, windowHeight));
+//        int windowHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
+//        int windowWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
+//        tableContainer.setPreferredSize(new Dimension(15 * windowWidth / 100, windowHeight));
+//        visualizerComponent.setPreferredSize(new Dimension(80 * windowWidth / 100, windowHeight));
 
         // add the table and LPM visualization containers and add some space between them
-        this.add(tableContainer);
-        this.add(Box.createRigidArea(new Dimension(windowWidth / 100, windowHeight)));
-        this.add(visualizerComponent);
+        this.add(tableContainer, BorderLayout.LINE_START);
+//        this.add(Box.createRigidArea(new Dimension(windowWidth / 100, windowHeight)));
+        this.add(visualizerComponent, BorderLayout.CENTER);
     }
 
     private JComponent createVisualizerComponent() {
@@ -65,6 +70,7 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
 
     @Override
     public void newSelection(T selectedObject) {
+        this.newElementSelectedListener.newLPMSelected(selectedObject);
         // if in the visualizer component there is an LPM drawn
         if (visualizerComponent.getComponents().length >= 1)
             visualizerComponent.remove(0); // remove it
@@ -112,6 +118,6 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
     @Override
     public void componentExpansion(ComponentId componentId, boolean expanded) {
         // change visibility of lpm container
-        this.visualizerComponent.setVisible(!expanded);
+//        this.visualizerComponent.setVisible(!expanded);
     }
 }

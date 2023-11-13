@@ -74,8 +74,8 @@ public class ComponentFactory {
         JScrollPane js = new JScrollPane(jt);
         component.add(js);
 
-        JButton btn = new JButton("Add Formula");
-        component.add(btn);
+//        JButton btn = new JButton("Add Formula");
+//        component.add(btn);
 
         return component;
 

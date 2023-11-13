@@ -88,19 +88,19 @@ public class InteractiveLPMsDiscoveryController implements WeirdComponentControl
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        this.settablePanels.add(new SettablePanelContainer(scf), gbc);
+        this.settablePanels.add(new SettablePanelContainer(), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 1;
-        this.settablePanels.add(new SettablePanelContainer(scf), gbc);
+        this.settablePanels.add(new SettablePanelContainer(), gbc);
 
         gbc.gridx = 2;
         gbc.gridy = 0;
-        this.settablePanels.add(new SettablePanelContainer(scf), gbc);
+        this.settablePanels.add(new SettablePanelContainer(), gbc);
 
         gbc.gridx = 2;
         gbc.gridy = 1;
-        this.settablePanels.add(new SettablePanelContainer(scf), gbc);
+        this.settablePanels.add(new SettablePanelContainer(), gbc);
     }
 
     private void addLpmGraphPanel() {

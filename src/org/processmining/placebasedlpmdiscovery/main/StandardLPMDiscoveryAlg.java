@@ -1,20 +1,13 @@
 package org.processmining.placebasedlpmdiscovery.main;
 
 import org.processmining.placebasedlpmdiscovery.RunningContext;
-import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationController;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterSubject;
-import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 
 import java.util.Set;
 import java.util.Timer;
@@ -67,11 +60,11 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
         // places = PlaceDiscovery.filterPlaces(places);
 
         this.runningContext.getAnalyzer().lpmDiscoveryExecution.start();
-        LPMResult result = new LPMResult();
+        LPMDiscoveryResult result;
         try {
             // analyze log
             this.runningContext.getAnalyzer().logAnalyzer.analyze(parameters.getLpmCombinationParameters().getLpmProximity());
-            LEFRMatrix lefrMatrix = this.runningContext.getAnalyzer().logAnalyzer.getLEFRMatrix(parameters.getLpmCombinationParameters().getLpmProximity());
+//            LEFRMatrix lefrMatrix = this.runningContext.getAnalyzer().logAnalyzer.getLEFRMatrix(parameters.getLpmCombinationParameters().getLpmProximity());
 
             // discover places
             Set<Place> places = this.placeDiscovery.getPlaces().getPlaces();
@@ -88,31 +81,32 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 
             this.runningContext.getAnalyzer().logCountPlacesUsed(places.size());
 
-            result.addAll(this.lpmCombination.combine(places, parameters.getLpmCount()));
+            result = this.lpmCombination.combine(places, parameters.getLpmCount());
 
-            this.runningContext.getAnalyzer().logAllLpmDiscovered(result.size());
+            this.runningContext.getAnalyzer().logAllLpmDiscovered(result.getAllLPMs().size());
 
-            if (result.size() > 0) {
-                // normalize the fitting windows score
-                double max = result.highestScoringElement((LocalProcessModel lpm) -> lpm.getAdditionalInfo()
-                                .getEvaluationResult(StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
-                                        FittingWindowsEvaluationResult.class).getResult())
-                        .getAdditionalInfo().getEvaluationResult(
-                                StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
-                                FittingWindowsEvaluationResult.class).getResult();
-                result.edit(lpm -> ((FittingWindowsEvaluationResult) lpm.getAdditionalInfo()
-                        .getEvaluationResult(StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
-                                FittingWindowsEvaluationResult.class))
-                        .normalizeResult(max, 0));
-
-                EvaluationResultAggregateOperation aggregateOperation = new EvaluationResultAggregateOperation();
-                result.sort((LocalProcessModel lpm1, LocalProcessModel lpm2) -> Double.compare(
-                        aggregateOperation.aggregate(lpm1.getAdditionalInfo().getEvalResults().values()),
-                        aggregateOperation.aggregate(lpm2.getAdditionalInfo().getEvalResults().values())));
-                result.keep(parameters.getLpmCount());
-            }
+            // TODO: Normalization has to be moved to another place
+//            if (result.size() > 0) {
+//                // normalize the fitting windows score
+//                double max = result.highestScoringElement((LocalProcessModel lpm) -> lpm.getAdditionalInfo()
+//                                .getEvaluationResult(StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+//                                        FittingWindowsEvaluationResult.class).getResult())
+//                        .getAdditionalInfo().getEvaluationResult(
+//                                StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+//                                FittingWindowsEvaluationResult.class).getResult();
+//                result.edit(lpm -> ((FittingWindowsEvaluationResult) lpm.getAdditionalInfo()
+//                        .getEvaluationResult(StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+//                                FittingWindowsEvaluationResult.class))
+//                        .normalizeResult(max, 0));
+//
+//                EvaluationResultAggregateOperation aggregateOperation = new EvaluationResultAggregateOperation();
+//                result.sort((LocalProcessModel lpm1, LocalProcessModel lpm2) -> Double.compare(
+//                        aggregateOperation.aggregate(lpm1.getAdditionalInfo().getEvalResults().values()),
+//                        aggregateOperation.aggregate(lpm2.getAdditionalInfo().getEvalResults().values())));
+//                result.keep(parameters.getLpmCount());
+//            }
         } finally {
-            this.runningContext.getAnalyzer().logLpmReturned(result.size());
+            this.runningContext.getAnalyzer().logLpmReturned(parameters.getLpmCount());
             this.runningContext.getAnalyzer().lpmDiscoveryExecution.stop();
             this.runningContext.getAnalyzer().close();
             this.runningContext.getAnalyzer().totalExecution.stop();

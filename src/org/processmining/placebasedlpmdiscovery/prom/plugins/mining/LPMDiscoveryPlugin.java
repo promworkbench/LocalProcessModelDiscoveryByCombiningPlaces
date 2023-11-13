@@ -12,12 +12,11 @@ import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
-import org.processmining.placebasedlpmdiscovery.main.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.wizards.PlaceBasedLPMDiscoveryWizard;
 import org.processmining.placebasedlpmdiscovery.prom.ContextKeeper;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.wizards.PlaceBasedLPMDiscoveryWizard;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.wizards.steps.*;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 
@@ -26,24 +25,24 @@ import java.util.Map;
 
 
 @Plugin(
-        name = "Local Process Models Discovery Based on Set of Places",
+        name = "Local Process Models Discovery",
         parameterLabels = {"Log", "Set of Places", "Petri Net", "Parameters"},
         returnLabels = {"LPM set"},
-        returnTypes = {LPMResult.class},
-        help = "Finds Local Process Models for a given set of places"
+        returnTypes = {LPMDiscoveryResult.class},
+        help = "Builds Local Process Models"
 )
-public class PlaceBasedLPMDiscoveryPlugin {
+public class LPMDiscoveryPlugin {
     @UITopiaVariant(
             affiliation = "RWTH - PADS",
             author = "Viki Peeva",
             email = "viki.peeva@rwth-aachen.de",
-            uiLabel = "Local Process Models Discovery Based on Set of Places given Log"
+            uiLabel = "Local Process Models Discovery"
     )
     @PluginVariant(
-            variantLabel = "Local Process Models Discovery Based on Set of Places given Log",
+            variantLabel = "Local Process Models Discovery",
             requiredParameterLabels = {0}
     )
-    public static LPMResult mineLPMs(UIPluginContext context, XLog log) {
+    public static LPMDiscoveryResult mineLPMs(UIPluginContext context, XLog log) {
         ContextKeeper.setUp(context);
 
         PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log));
@@ -63,20 +62,20 @@ public class PlaceBasedLPMDiscoveryPlugin {
             return null;
 
         LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, parameters);
-        return new LPMResult((StandardLPMDiscoveryResult) builder.build().run());
+        return builder.build().run();
     }
 
     @UITopiaVariant(
             affiliation = "RWTH - PADS",
             author = "Viki Peeva",
             email = "viki.peeva@rwth-aachen.de",
-            uiLabel = "Local Process Models Discovery Based on Set of Places given Petri Net (faster)"
+            uiLabel = "Local Process Models Discovery given Petri Net (faster)"
     )
     @PluginVariant(
-            variantLabel = "Local Process Models Discovery Based on Set of Places given Petri Net (faster)",
+            variantLabel = "Local Process Models Discovery given Petri Net (faster)",
             requiredParameterLabels = {0, 2}
     )
-    public static LPMResult mineLPMs(UIPluginContext context, XLog log, Petrinet petrinet) {
+    public static LPMDiscoveryResult mineLPMs(UIPluginContext context, XLog log, Petrinet petrinet) {
         ContextKeeper.setUp(context);
 
         PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log));
@@ -92,23 +91,20 @@ public class PlaceBasedLPMDiscoveryPlugin {
             return null;
 
         LPMDiscoveryBuilder builder = Main.createDefaultForPetriNetBuilder(log, petrinet, parameters);
-        return new LPMResult((StandardLPMDiscoveryResult) builder.build().run());
+        return builder.build().run();
     }
-
-    // TODO: What is this doing here???
-
 
     @UITopiaVariant(
             affiliation = "RWTH - PADS",
             author = "Viki Peeva",
             email = "viki.peeva@rwth-aachen.de",
-            uiLabel = "Local Process Models Discovery Based on Set of Places given Places (faster)"
+            uiLabel = "Local Process Models Discovery given Places (faster)"
     )
     @PluginVariant(
-            variantLabel = "Local Process Models Discovery Based on Set of Places given Places (faster)",
+            variantLabel = "Local Process Models Discovery given Places (faster)",
             requiredParameterLabels = {0, 1}
     )
-    public static LPMResult mineLPMs(UIPluginContext context, XLog log, PlaceSet placeSet) {
+    public static LPMDiscoveryResult mineLPMs(UIPluginContext context, XLog log, PlaceSet placeSet) {
         ContextKeeper.setUp(context);
 
         PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log));
@@ -124,7 +120,7 @@ public class PlaceBasedLPMDiscoveryPlugin {
             return null;
 
         LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, placeSet, parameters);
-        return new LPMResult((StandardLPMDiscoveryResult) builder.build().run());
+        return builder.build().run();
     }
 
     @PluginVariant(

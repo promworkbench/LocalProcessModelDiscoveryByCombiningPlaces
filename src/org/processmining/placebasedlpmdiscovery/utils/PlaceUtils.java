@@ -5,12 +5,19 @@ import com.google.common.collect.Sets;
 import org.apache.commons.math3.util.Pair;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.acceptingpetrinet.models.impl.AcceptingPetriNetImpl;
+import org.processmining.models.connections.GraphLayoutConnection;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
+import org.processmining.models.graphbased.directed.petrinet.impl.PetrinetFactory;
+import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.Passage;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.converters.place.PetriNetPlaceConverter;
+import org.processmining.plugins.pnml.base.FullPnmlElementFactory;
+import org.processmining.plugins.pnml.base.Pnml;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.*;
 import java.util.*;
@@ -249,5 +256,39 @@ public class PlaceUtils {
         AcceptingPetriNet acceptingPetriNet = new AcceptingPetriNetImpl(petrinet);
         PetriNetPlaceConverter converter = new PetriNetPlaceConverter();
         return converter.convert(acceptingPetriNet);
+    }
+
+    public static Set<Place> extractPlaceNets(String petriNetFileName) throws Exception {
+        FullPnmlElementFactory pnmlFactory = new FullPnmlElementFactory();
+        Petrinet net = PetrinetFactory.newPetrinet("place nets");
+
+        FileInputStream input = new FileInputStream(petriNetFileName);
+
+        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+        factory.setNamespaceAware(true);
+        XmlPullParser xpp = factory.newPullParser();
+        xpp.setInput(input, (String) null);
+        int eventType = xpp.getEventType();
+        Pnml pnml = new Pnml();
+        synchronized (pnmlFactory) {
+            Pnml.setFactory(pnmlFactory);
+
+            while (eventType != 2) {
+                eventType = xpp.next();
+            }
+
+            if (xpp.getName().equals("pnml")) {
+                pnml.importElement(xpp, pnml);
+            } else {
+                pnml.log("pnml", xpp.getLineNumber(), "Expected pnml");
+            }
+
+
+            Marking marking = new Marking();
+            GraphLayoutConnection layout = new GraphLayoutConnection(net);
+            pnml.convertToNet(net, marking, layout);
+        }
+
+        return PlaceUtils.getPlacesFromPetriNet(net);
     }
 }
