@@ -15,7 +15,7 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
     private final PluginContext context;
 
     public DefaultLPMDiscoveryResultComponent(PluginContext context) {
-        super(5);
+        super(3);
         this.context = context;
     }
 
