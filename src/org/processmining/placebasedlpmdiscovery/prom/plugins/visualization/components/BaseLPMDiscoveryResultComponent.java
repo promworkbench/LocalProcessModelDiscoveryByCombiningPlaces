@@ -57,16 +57,14 @@ public class BaseLPMDiscoveryResultComponent extends JComponent {
         for (int i = 0; i < countSettableContainers; ++i) {
             SettablePanelContainer container = new SettablePanelContainer();
             if (i < 3) {
-                this.settablePanels.put(new Pair<>(2, i), container);
                 c.gridx = 2;
                 c.gridy = i;
-                container.add(new JLabel(c.gridx + "," + c.gridy));
             } else {
-                this.settablePanels.put(new Pair<>(i % 3, 2), container);
                 c.gridx = i % 3;
                 c.gridy = 2;
-                container.add(new JLabel(c.gridx + "," + c.gridy));
             }
+            this.settablePanels.put(new Pair<>(c.gridx, c.gridy), container);
+            container.add(new JLabel(c.gridx + "," + c.gridy));
             this.add(container, c);
         }
     }

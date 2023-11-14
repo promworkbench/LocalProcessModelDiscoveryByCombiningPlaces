@@ -1,13 +1,14 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
 
 import org.apache.commons.math3.util.Pair;
-import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.LPMResultPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.view.controllers.LPMDiscoveryResultViewController;
 import org.processmining.placebasedlpmdiscovery.view.listeners.LPMDiscoveryResultViewListener;
 import org.processmining.placebasedlpmdiscovery.view.models.LPMDiscoveryResultViewModel;
 import org.processmining.placebasedlpmdiscovery.view.views.LPMDiscoveryResultView;
+
+import java.util.stream.Collectors;
 
 public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultComponent implements LPMDiscoveryResultView {
 
@@ -17,6 +18,14 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
     public DefaultLPMDiscoveryResultComponent(PluginContext context) {
         super(3);
         this.context = context;
+
+        createDefaultPanels();
+    }
+
+    private void createDefaultPanels() {
+        this.settablePanels
+                .get(new Pair<>(2, 0))
+                .setComponentId(new ComponentId(ComponentId.Type.BasicLPMEvalMetrics));
     }
 
     @Override
@@ -33,10 +42,22 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
     }
 
     public void displaySelectedLPM(LPMDiscoveryResultViewModel model) {
-        if (model.getSelectedLPM() != null) {
-            for (SettablePanelContainer c : this.settablePanels.values()) {
-                c.removeAll();
-                c.add(ComponentFactory.getComplexEvaluationResultComponent(
+        if (model.getSelectedLPM() == null) {
+            return;
+        }
+
+//        SettablePanelContainer container = this.settablePanels.values()
+//                .stream()
+//                .filter(panel -> panel.getComponentId().getType().equals(ComponentId.Type.BasicLPMEvalMetrics))
+//                .findFirst()
+//                .orElse(this.settablePanels.get(new Pair<>(2, 1)));
+//        container = container.getComponentId().getType().equals(ComponentId.Type.Empty) ?
+//                container : this.settablePanels.values().stream().filter(panel -> panel.getComponentId().getType().equals(ComponentId.Type.Empty)).findFirst().get();
+
+        for (SettablePanelContainer container : this.settablePanels.values()) {
+            if (container.getComponentId().getType().equals(ComponentId.Type.BasicLPMEvalMetrics)) {
+                container.removeAll();
+                container.add(ComponentFactory.getComplexEvaluationResultComponent(
                         model.getSelectedLPM().getAdditionalInfo().getEvalResults().values()));
             }
         }

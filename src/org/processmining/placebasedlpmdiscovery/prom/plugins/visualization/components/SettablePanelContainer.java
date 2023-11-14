@@ -1,20 +1,22 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
 
-import org.processmining.framework.util.ui.widgets.ProMComboBox;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.BorderUIResource;
 import java.awt.*;
-import java.awt.event.ItemEvent;
 import java.util.Random;
 
 public class SettablePanelContainer extends JPanel {
 
+    private ComponentId componentId;
     private JPanel header;
     private JPanel content;
 
     public SettablePanelContainer() {
+        this(new ComponentId(ComponentId.Type.Empty));
+    }
+
+    public SettablePanelContainer(ComponentId componentId) {
+        this.componentId = componentId;
 
 //        int windowHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
 //        int windowWidth = Toolkit.getDefaultToolkit().getScreenSize().width;
@@ -63,4 +65,12 @@ public class SettablePanelContainer extends JPanel {
 //        this.content.add(this.settableComponentsFactory.getComponent(type), BorderLayout.CENTER);
 //        this.content.revalidate();
 //    }
+
+    public ComponentId getComponentId() {
+        return componentId;
+    }
+
+    public void setComponentId(ComponentId componentId) {
+        this.componentId = componentId;
+    }
 }

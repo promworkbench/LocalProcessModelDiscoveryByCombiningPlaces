@@ -57,8 +57,8 @@ public class SettableComponentFactory {
                 new Object[] {"Activities Count", logStat.getActivitiesCount()}
         };
         ProMTable table = new ProMTable(new DefaultTableModel(data, new Object[] {"Stat Description", "Value"}));
-        table.setPreferredSize(new Dimension(20 * windowWidth / 100, 40 * windowHeight / 100));
-        table.setMaximumSize(new Dimension(20 * windowWidth / 100, 40 * windowHeight / 100));
+//        table.setPreferredSize(new Dimension(20 * windowWidth / 100, 40 * windowHeight / 100));
+//        table.setMaximumSize(new Dimension(20 * windowWidth / 100, 40 * windowHeight / 100));
         return table;
     }
 
