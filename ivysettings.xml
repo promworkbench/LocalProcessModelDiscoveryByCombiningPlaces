@@ -5,6 +5,10 @@
             <ivy pattern="https://svn.win.tue.nl/repos/[organisation]/Releases/Packages/[module]/[revision]/ivy.xml" />
             <artifact pattern="https://svn.win.tue.nl/repos/[organisation]/Releases/Packages/[module]/[revision]/[artifact]-[revision].[ext]" />
         </url>
+        <url name="prom-svn" checkmodified="true">
+            <ivy pattern="https://github.com/promworkbench/Releases/raw/main/Packages/[module]/[revision]/ivy.xml" />
+            <artifact pattern="https://github.com/promworkbench/Releases/raw/main/Packages/[module]/[revision]/[artifact]-[revision].[ext]" />
+        </url>
         <url name="prom-libs">
             <ivy pattern="https://svn.win.tue.nl/repos/prom/Libraries/[module]/[revision]/ivy.xml" />
             <artifact pattern="https://svn.win.tue.nl/repos/prom/Libraries/[module]/[revision]/[artifact]-[revision].[ext]" />
@@ -14,6 +18,7 @@
 <!--        <ibiblio name="jitpack" m2compatible="true" root="https://jitpack.io"/>-->
         <chain name="default" returnFirst="true">
             <resolver ref="prom" />
+            <resolver ref="prom-svn" />
             <resolver ref="prom-libs" />
             <resolver ref="maven2" />
 <!--            <resolver ref="jitpack" />-->
