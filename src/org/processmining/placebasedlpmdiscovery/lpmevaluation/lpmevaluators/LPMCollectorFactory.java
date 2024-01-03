@@ -28,7 +28,7 @@ public class LPMCollectorFactory {
             return new TransitionCoverageCollector();
         if (collectorId == StandardLPMEvaluatorId.EventCoverageEvaluator)
             return new EventCoverageCollector();
-        if (collectorId == StandardLPMCollectorId.EventAttributeEvaluator)
+        if (collectorId == StandardLPMCollectorId.EventAttributeCollector)
             return new EventAttributeCollector();
         throw new IllegalArgumentException("Window evaluator with id " + collectorId + " does not exist.");
     }

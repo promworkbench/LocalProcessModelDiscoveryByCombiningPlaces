@@ -139,8 +139,8 @@ public class Main {
                 evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.TraceSupportCountEvaluator));
         builder.registerLPMWindowCollector(StandardLPMEvaluatorId.EventCoverageEvaluator.name(),
                 evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.EventCoverageEvaluator));
-        builder.registerLPMWindowCollector(StandardLPMCollectorId.EventAttributeEvaluator.name(),
-                evaluatorFactory.getWindowEvaluator(StandardLPMCollectorId.EventAttributeEvaluator));
+        builder.registerLPMWindowCollector(StandardLPMCollectorId.EventAttributeCollector.name(),
+                evaluatorFactory.getWindowEvaluator(StandardLPMCollectorId.EventAttributeCollector));
 
         // set filters
         LPMFilterParameters filterParameters = parameters.getLpmFilterParameters();
