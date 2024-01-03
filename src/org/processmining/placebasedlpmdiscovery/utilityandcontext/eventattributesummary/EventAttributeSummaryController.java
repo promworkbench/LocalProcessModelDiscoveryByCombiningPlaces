@@ -4,6 +4,7 @@ import org.deckfour.xes.info.XAttributeInfo;
 import org.deckfour.xes.info.XLogInfo;
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.*;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventAttributeCollectorResult;
 
 import java.util.*;
 
@@ -12,45 +13,41 @@ import java.util.*;
  */
 public class EventAttributeSummaryController {
 
-    private final Map<String, EventAttributeSummary<?, ?>> attributeValues;
-
-    public EventAttributeSummaryController(XLog log) {
-        this.attributeValues = new HashMap<>();
-
+    private void initializeEventAttributeSummaryStorage(EventAttributeCollectorResult result, XLog log) {
         XLogInfo logInfo = XLogInfoFactory.createLogInfo(log);
         XAttributeInfo eventAttributeInfo = logInfo.getEventAttributeInfo();
         Collection<XAttribute> eventAttributes = eventAttributeInfo.getAttributes();
         for (XAttribute attr : eventAttributes) {
-            initializeAttributeValueStorage(attr);
+            initializeEventAttributeSummaryStorage(result, attr);
         }
+    }
+
+    public EventAttributeCollectorResult computeEventAttributeSummary(XLog log) {
+        EventAttributeCollectorResult result = new EventAttributeCollectorResult();
+        this.initializeEventAttributeSummaryStorage(result, log);
 
         for (XTrace trace : log) {
             for (XEvent event : trace) {
                 for (XAttribute attribute : event.getAttributes().values()) {
-                    this.addAttributeValue(attribute);
+                    this.addAttributeValue(result, attribute);
                 }
             }
         }
 
-        for (EventAttributeSummary<?,?> summary : this.attributeValues.values()) {
+        for (EventAttributeSummary<?,?> summary : result.getAttributeValues().values()) {
             summary.summarize();
         }
+
+        return result;
     }
 
-    private void initializeAttributeValueStorage(XAttribute attribute) {
-        attributeValues.put(attribute.getKey(), EventAttributeSummaryFactory.getEventAttributeSummary(attribute));
+    public void initializeEventAttributeSummaryStorage(EventAttributeCollectorResult result, XAttribute attribute) {
+        result.getAttributeValues()
+                .put(attribute.getKey(), EventAttributeSummaryFactory.getEventAttributeSummary(attribute));
     }
 
-    private void addAttributeValue(XAttribute attribute) {
-        EventAttributeSummary<?,?> summary = this.attributeValues.get(attribute.getKey());
+    public void addAttributeValue(EventAttributeCollectorResult result, XAttribute attribute) {
+        EventAttributeSummary<?,?> summary = result.getAttributeValues().get(attribute.getKey());
         summary.addValue(attribute);
-    }
-
-    public Collection<String> getAttributeKeys() {
-        return new HashSet<>(this.attributeValues.keySet());
-    }
-
-    public EventAttributeSummary<?,?> getEventAttributeSummaryForAttributeKey(String key) {
-        return this.attributeValues.get(key);
     }
 }

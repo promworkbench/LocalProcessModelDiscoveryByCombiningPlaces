@@ -28,7 +28,7 @@ public class EventAttributeCollectorResult implements LPMCollectorResult {
     }
 
     public Collection<String> getAttributeKeys() {
-        return new HashSet<>(this.attributeValues.keySet());
+        return this.attributeValues.keySet();
     }
 
     public EventAttributeSummary<?,?> getEventAttributeSummaryForAttributeKey(String key) {
