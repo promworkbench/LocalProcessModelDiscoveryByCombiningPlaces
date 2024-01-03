@@ -2,7 +2,7 @@ package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.RunningContext;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventCoverageEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
@@ -11,7 +11,6 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.Wi
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
-import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
 import java.util.*;
@@ -35,8 +34,8 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
     }
 
     private static void transferAdditionalInfo(MainFPGrowthLPMTreeNode node, LocalProcessModel lpm) {
-        for (Map.Entry<String, LPMEvaluationResult> entry : node.getAdditionalInfo().getEvalResults().entrySet()) {
-            lpm.getAdditionalInfo().addEvaluationResult(entry.getKey(), entry.getValue());
+        for (Map.Entry<String, LPMCollectorResult> entry : node.getAdditionalInfo().getCollectorResults().entrySet()) {
+            lpm.getAdditionalInfo().addCollectorResult(entry.getKey(), entry.getValue());
         }
     }
 
@@ -90,7 +89,7 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
                 return lpms;
             }
             MainFPGrowthLPMTreeNode node = queue.poll();
-            if (node != root && !node.getAdditionalInfo().getEvalResults().isEmpty()) {
+            if (node != root && !node.getAdditionalInfo().getCollectorResults().isEmpty()) {
                 LocalProcessModel lpm = node.getLPM();
                 transferAdditionalInfo(node, lpm);
                 if (this.runningContext.getLpmFiltrationController().shouldKeepLPM(lpm))
@@ -107,7 +106,7 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
 
     public void updateAllTotalCount(WindowTotalCounter windowTotalCounter, Integer totalTraceCount, XLog log) {
         for (MainFPGrowthLPMTreeNode node : this.nodes) {
-            for (LPMEvaluationResult res : node.getAdditionalInfo().getEvalResults().values()) {
+            for (LPMCollectorResult res : node.getAdditionalInfo().getCollectorResults().values()) {
                 if (StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.equals(res.getId())) {
                     ((FittingWindowsEvaluationResult) res).setTotal(windowTotalCounter.getWindowCount());
                 } else if (StandardLPMEvaluationResultId.TraceSupportEvaluationResult.equals(res.getId())) {

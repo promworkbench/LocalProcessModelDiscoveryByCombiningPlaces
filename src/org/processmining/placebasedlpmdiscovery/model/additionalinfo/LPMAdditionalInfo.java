@@ -6,25 +6,26 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class LPMAdditionalInfo implements Serializable {
     private static final long serialVersionUID = 3593199319792435898L;
 
     private transient LocalProcessModel lpm;
-    private final Map<String, LPMEvaluationResult> evalResults;
+    private final Map<String, LPMCollectorResult> collectorResults;
 
     public LPMAdditionalInfo() {
-        this.evalResults = new HashMap<>();
+        this.collectorResults = new HashMap<>();
     }
 
     public LPMAdditionalInfo(LocalProcessModel lpm) {
         this.lpm = lpm;
-        this.evalResults = new HashMap<>();
+        this.collectorResults = new HashMap<>();
     }
 
     public LPMAdditionalInfo(LPMAdditionalInfo additionalInfo) {
         this.lpm = additionalInfo.lpm;
-        this.evalResults = new HashMap<>(additionalInfo.evalResults);
+        this.collectorResults = new HashMap<>(additionalInfo.collectorResults);
     }
 
 //    public GroupedEvaluationResult getEvaluationResult() {
@@ -35,24 +36,30 @@ public class LPMAdditionalInfo implements Serializable {
 //        this.evaluationResult = new GroupedEvaluationResult(lpm);
 //    }
 
-    public boolean existsEvaluationResult(String key) {
-        return this.evalResults.containsKey(key);
+    public boolean existsCollectorResult(String key) {
+        return this.collectorResults.containsKey(key);
     }
 
-    public void addEvaluationResult(String key, LPMEvaluationResult evalResult) {
-        this.evalResults.put(key, evalResult);
+    public void addCollectorResult(String key, LPMCollectorResult collectorResult) {
+        this.collectorResults.put(key, collectorResult);
     }
 
-    public void updateEvaluationResults(String key, LPMEvaluationResult evalResult) {
-        this.evalResults.put(key, evalResult);
+    public void updateCollectorResults(String key, LPMCollectorResult collectorResult) {
+        this.collectorResults.put(key, collectorResult);
     }
 
-    public Map<String, LPMEvaluationResult> getEvalResults() {
-        return evalResults;
+    public Map<String, LPMCollectorResult> getCollectorResults() {
+        return collectorResults;
+    }
+
+    public Map<String, LPMEvaluationResult> getEvaluationResults() {
+        return collectorResults.entrySet().stream()
+                .filter(e -> e.getValue() instanceof LPMEvaluationResult)
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> (LPMEvaluationResult) e.getValue()));
     }
 
     public <T> T getEvaluationResult(String key, Class<T> infoClass) {
-        Object info = this.evalResults.get(key);
+        Object info = this.collectorResults.get(key);
         if (info == null) {
             return null;
         }

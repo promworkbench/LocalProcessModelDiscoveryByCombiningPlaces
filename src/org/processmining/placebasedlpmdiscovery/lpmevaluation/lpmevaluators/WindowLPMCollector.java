@@ -1,10 +1,11 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators;
 
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
 
-public interface WindowLPMEvaluator<T extends LPMEvaluationResult> {
+public interface WindowLPMCollector<T extends LPMCollectorResult> {
 
     /**
      * Evaluates a local process model given the parameters of the evaluator

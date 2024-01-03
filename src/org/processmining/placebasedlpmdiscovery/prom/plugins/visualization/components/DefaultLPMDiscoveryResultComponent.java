@@ -8,8 +8,6 @@ import org.processmining.placebasedlpmdiscovery.view.listeners.LPMDiscoveryResul
 import org.processmining.placebasedlpmdiscovery.view.models.LPMDiscoveryResultViewModel;
 import org.processmining.placebasedlpmdiscovery.view.views.LPMDiscoveryResultView;
 
-import java.util.stream.Collectors;
-
 public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultComponent implements LPMDiscoveryResultView {
 
     private LPMDiscoveryResultViewListener listener;
@@ -58,7 +56,7 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
             if (container.getComponentId().getType().equals(ComponentId.Type.BasicLPMEvalMetrics)) {
                 container.removeAll();
                 container.add(ComponentFactory.getComplexEvaluationResultComponent(
-                        model.getSelectedLPM().getAdditionalInfo().getEvalResults().values()));
+                        model.getSelectedLPM().getAdditionalInfo().getEvaluationResults().values()));
             }
         }
     }

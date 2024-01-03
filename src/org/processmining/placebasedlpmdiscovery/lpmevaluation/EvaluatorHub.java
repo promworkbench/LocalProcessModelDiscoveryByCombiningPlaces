@@ -1,8 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMEvaluator;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMCollector;
 
 public interface EvaluatorHub {
 
-    void registerEvaluator(String key, WindowLPMEvaluator<?> evaluator);
+    void registerEvaluator(String key, WindowLPMCollector<?> evaluator);
 }

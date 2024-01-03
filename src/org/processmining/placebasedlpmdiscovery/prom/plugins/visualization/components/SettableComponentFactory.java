@@ -38,7 +38,7 @@ public class SettableComponentFactory {
     }
 
     private JPanel getSimpleEvalMetrics() {
-        Collection<LPMEvaluationResult> results = this.lpm.getAdditionalInfo().getEvalResults().values();
+        Collection<LPMEvaluationResult> results = this.lpm.getAdditionalInfo().getEvaluationResults().values();
         List<Object[]> tableModel = results.stream().map(r -> new Object[]{r.getId(), r.getResult()}).collect(Collectors.toList());
         ProMTable table = new ProMTable(new DefaultTableModel(
                 tableModel.toArray(new Object[tableModel.size()][2]),
