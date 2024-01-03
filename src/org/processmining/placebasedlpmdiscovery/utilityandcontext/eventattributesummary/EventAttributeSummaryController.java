@@ -22,6 +22,16 @@ public class EventAttributeSummaryController {
         }
     }
 
+    public void initializeEventAttributeSummaryStorage(EventAttributeCollectorResult result, XAttribute attribute) {
+        result.getAttributeValues()
+                .put(attribute.getKey(), EventAttributeSummaryFactory.getEventAttributeSummary(attribute));
+    }
+
+    public void addAttributeValue(EventAttributeCollectorResult result, XAttribute attribute) {
+        EventAttributeSummary<?,?> summary = result.getAttributeValues().get(attribute.getKey());
+        summary.addValue(attribute);
+    }
+
     public EventAttributeCollectorResult computeEventAttributeSummary(XLog log) {
         EventAttributeCollectorResult result = new EventAttributeCollectorResult();
         this.initializeEventAttributeSummaryStorage(result, log);
@@ -41,13 +51,10 @@ public class EventAttributeSummaryController {
         return result;
     }
 
-    public void initializeEventAttributeSummaryStorage(EventAttributeCollectorResult result, XAttribute attribute) {
-        result.getAttributeValues()
-                .put(attribute.getKey(), EventAttributeSummaryFactory.getEventAttributeSummary(attribute));
-    }
-
-    public void addAttributeValue(EventAttributeCollectorResult result, XAttribute attribute) {
-        EventAttributeSummary<?,?> summary = result.getAttributeValues().get(attribute.getKey());
-        summary.addValue(attribute);
+    public void computeEventAttributeSummary(EventAttributeCollectorResult result,
+                                             XEvent event) {
+        for (XAttribute attribute : event.getAttributes().values()) {
+            this.addAttributeValue(result, attribute);
+        }
     }
 }
