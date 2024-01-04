@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.con
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMCollector;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageCoverageEvaluationResult;
@@ -12,7 +13,7 @@ public class PassageCoverageCollector implements WindowLPMCollector<PassageCover
     @Override
     public PassageCoverageEvaluationResult evaluate(LocalProcessModel lpm,
                                                     LPMTemporaryWindowInfo lpmTemporaryWindowInfo,
-                                                    LPMEvaluationResult existingEvaluation) {
+                                                    LPMCollectorResult existingEvaluation) {
         if (!(existingEvaluation instanceof PassageCoverageEvaluationResult)) {
             throw new IllegalArgumentException("The passed evaluation result should be of type " +
                     PassageCoverageEvaluationResult.class);

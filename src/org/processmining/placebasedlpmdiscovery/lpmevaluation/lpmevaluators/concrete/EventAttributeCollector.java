@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.con
 import org.deckfour.xes.model.XTrace;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMCollectorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMCollector;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMCollectorResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventAttributeCollectorResult;
@@ -14,7 +15,7 @@ public class EventAttributeCollector implements WindowLPMCollector<EventAttribut
     @Override
     public EventAttributeCollectorResult evaluate(LocalProcessModel lpm,
                                                   LPMTemporaryWindowInfo lpmTemporaryWindowInfo,
-                                                  LPMEvaluationResult existingEvaluation) {
+                                                  LPMCollectorResult existingEvaluation) {
 
         if (!(existingEvaluation instanceof EventAttributeCollectorResult)) {
             throw new IllegalArgumentException("The passed evaluation result should be of type " +

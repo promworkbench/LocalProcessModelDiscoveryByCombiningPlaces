@@ -4,6 +4,7 @@ import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMCollectorFactory;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMCollector;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
@@ -40,7 +41,7 @@ public class LPMEvaluationController implements EvaluatorHub {
                     evaluator.getResultKey(),
                     evaluator.evaluate(lpm, tempInfo, additionalInfo.getEvaluationResult(
                             evaluator.getResultKey(),
-                            LPMEvaluationResult.class)));
+                            LPMCollectorResult.class)));
         }
     }
 

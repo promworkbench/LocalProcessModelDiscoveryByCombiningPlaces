@@ -14,7 +14,7 @@ public interface WindowLPMCollector<T extends LPMCollectorResult> {
      * @return the result of the evaluation
      */
 //    T evaluate(LocalProcessModel lpm, LPMTemporaryInfo lpmTemporaryInfo, T existingEvaluation);
-    T evaluate(LocalProcessModel lpm, LPMTemporaryWindowInfo lpmTemporaryWindowInfo, LPMEvaluationResult existingEvaluation);
+    T evaluate(LocalProcessModel lpm, LPMTemporaryWindowInfo lpmTemporaryWindowInfo, LPMCollectorResult existingEvaluation);
 
     String getKey();
 

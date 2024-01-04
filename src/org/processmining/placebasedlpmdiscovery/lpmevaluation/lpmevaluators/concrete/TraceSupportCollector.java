@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.con
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMCollector;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.TraceSupportEvaluationResult;
@@ -10,7 +11,9 @@ import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindo
 
 public class TraceSupportCollector implements WindowLPMCollector<TraceSupportEvaluationResult> {
     @Override
-    public TraceSupportEvaluationResult evaluate(LocalProcessModel lpm, LPMTemporaryWindowInfo lpmTemporaryWindowInfo, LPMEvaluationResult existingEvaluation) {
+    public TraceSupportEvaluationResult evaluate(LocalProcessModel lpm,
+                                                 LPMTemporaryWindowInfo lpmTemporaryWindowInfo,
+                                                 LPMCollectorResult existingEvaluation) {
         if (!(existingEvaluation instanceof TraceSupportEvaluationResult)) {
             throw new IllegalArgumentException("The passed evaluation result should be of type " +
                     TraceSupportEvaluationResult.class);
