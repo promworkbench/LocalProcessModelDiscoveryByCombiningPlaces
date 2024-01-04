@@ -7,9 +7,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class TimestampEventAttributeSummary extends RangeEventAttributeSummary<Date, XAttributeTimestampImpl>{
+public class TimestampAttributeSummary extends RangeAttributeSummary<Date, XAttributeTimestampImpl> {
 
-    public TimestampEventAttributeSummary(String key) {
+    public TimestampAttributeSummary(String key) {
         super(key);
     }
 

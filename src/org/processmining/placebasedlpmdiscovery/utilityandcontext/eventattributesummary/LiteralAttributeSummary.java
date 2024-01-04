@@ -1,20 +1,21 @@
 package org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary;
 
 import org.deckfour.xes.model.XAttribute;
-import org.deckfour.xes.model.impl.XAttributeBooleanImpl;
+import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
 
-public class BooleanEventAttributeSummary extends DistinctValuesEventAttributeSummary<Boolean, XAttributeBooleanImpl> {
-    public BooleanEventAttributeSummary(String key) {
+public class LiteralAttributeSummary extends DistinctValuesAttributeSummary<String, XAttributeLiteralImpl> {
+
+    public LiteralAttributeSummary(String key) {
         super(key);
     }
 
     @Override
     protected void setAttributeClass() {
-        this.attributeClass = XAttributeBooleanImpl.class;
+        this.attributeClass = XAttributeLiteralImpl.class;
     }
 
     @Override
-    protected Boolean extractAttributeValue(XAttribute attribute) {
+    protected String extractAttributeValue(XAttribute attribute) {
         return this.attributeClass.cast(attribute).getValue();
     }
 

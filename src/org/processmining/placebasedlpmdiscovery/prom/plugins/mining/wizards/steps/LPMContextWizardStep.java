@@ -8,8 +8,8 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.E
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.eventattributesummaries.EventAttributeSummaryComponent;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.eventattributesummaries.EventAttributeSummaryComponentFactory;
-import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummary;
-import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummaryController;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummary;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummaryController;
 
 import javax.swing.*;
 import java.awt.event.ItemEvent;
@@ -27,16 +27,16 @@ public class LPMContextWizardStep extends ProMPropertiesPanel implements ProMWiz
         super(TITLE);
 
         this.lastSelected = new HashSet<>();
-        EventAttributeSummaryController attributeSummaryController = new EventAttributeSummaryController();
+        AttributeSummaryController attributeSummaryController = new AttributeSummaryController();
         EventAttributeCollectorResult attributeSummaryResult = attributeSummaryController.computeEventAttributeSummary(log);
 
         this.components = new HashMap<>();
         for (String key : attributeSummaryResult.getAttributeKeys()) {
-            EventAttributeSummary<?,?> eventAttributeSummary = attributeSummaryResult
+            AttributeSummary<?,?> attributeSummary = attributeSummaryResult
                     .getEventAttributeSummaryForAttributeKey(key);
             this.components.put(
                     key,
-                    EventAttributeSummaryComponentFactory.getComponentForEventAttributeSummary(eventAttributeSummary)
+                    EventAttributeSummaryComponentFactory.getComponentForEventAttributeSummary(attributeSummary)
             );
         }
 

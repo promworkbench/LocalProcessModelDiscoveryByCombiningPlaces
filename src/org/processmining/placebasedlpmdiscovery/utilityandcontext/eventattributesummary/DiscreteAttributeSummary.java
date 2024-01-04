@@ -1,23 +1,22 @@
 package org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary;
 
 import org.deckfour.xes.model.XAttribute;
-import org.deckfour.xes.model.impl.XAttributeContinuousImpl;
+import org.deckfour.xes.model.impl.XAttributeDiscreteImpl;
 
+public class DiscreteAttributeSummary extends RangeAttributeSummary<Long, XAttributeDiscreteImpl> {
 
-public class ContinuousEventAttributeSummary extends RangeEventAttributeSummary<Double, XAttributeContinuousImpl> {
-
-    public ContinuousEventAttributeSummary(String key) {
+    public DiscreteAttributeSummary(String key) {
         super(key);
     }
 
     @Override
     public void setMinValue(String minValue) {
-        this.setMinValue(Double.parseDouble(minValue));
+        this.setMinValue(Long.parseLong(minValue));
     }
 
     @Override
     public void setMaxValue(String maxValue) {
-        this.setMinValue(Double.parseDouble(maxValue));
+        this.setMaxValue(Long.parseLong(maxValue));
     }
 
     @Override
@@ -32,17 +31,17 @@ public class ContinuousEventAttributeSummary extends RangeEventAttributeSummary<
 
     @Override
     protected void setAttributeClass() {
-        this.attributeClass = XAttributeContinuousImpl.class;
+        this.attributeClass = XAttributeDiscreteImpl.class;
     }
 
     @Override
-    protected Double extractAttributeValue(XAttribute attribute) {
+    protected Long extractAttributeValue(XAttribute attribute) {
         return this.attributeClass.cast(attribute).getValue();
     }
 
     @Override
     public void summarize() {
-        this.setMinValue(this.values.stream().min(Double::compare).orElse(-1.0));
-        this.setMaxValue(this.values.stream().max(Double::compare).orElse(-1.0));
+        this.setMinValue(this.values.stream().min(Long::compare).orElse(Long.MAX_VALUE));
+        this.setMaxValue(this.values.stream().max(Long::compare).orElse(Long.MAX_VALUE));
     }
 }

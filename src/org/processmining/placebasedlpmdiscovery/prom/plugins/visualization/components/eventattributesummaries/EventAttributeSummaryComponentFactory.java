@@ -3,21 +3,21 @@ package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.comp
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.*;
 
 public class EventAttributeSummaryComponentFactory {
-    public static EventAttributeSummaryComponent<?> getComponentForEventAttributeSummary(EventAttributeSummary<?, ?> eventAttributeSummary) {
-        if (eventAttributeSummary instanceof ContinuousEventAttributeSummary) {
-            ContinuousEventAttributeSummary summary = (ContinuousEventAttributeSummary) eventAttributeSummary;
+    public static EventAttributeSummaryComponent<?> getComponentForEventAttributeSummary(AttributeSummary<?, ?> attributeSummary) {
+        if (attributeSummary instanceof ContinuousAttributeSummary) {
+            ContinuousAttributeSummary summary = (ContinuousAttributeSummary) attributeSummary;
             return new RangeEventAttributeSummaryComponent(summary);
-        } else if (eventAttributeSummary instanceof DiscreteEventAttributeSummary) {
-            DiscreteEventAttributeSummary summary = (DiscreteEventAttributeSummary) eventAttributeSummary;
+        } else if (attributeSummary instanceof DiscreteAttributeSummary) {
+            DiscreteAttributeSummary summary = (DiscreteAttributeSummary) attributeSummary;
             return new RangeEventAttributeSummaryComponent(summary);
-        } else if (eventAttributeSummary instanceof TimestampEventAttributeSummary) {
-            TimestampEventAttributeSummary summary = (TimestampEventAttributeSummary) eventAttributeSummary;
+        } else if (attributeSummary instanceof TimestampAttributeSummary) {
+            TimestampAttributeSummary summary = (TimestampAttributeSummary) attributeSummary;
             return new RangeEventAttributeSummaryComponent(summary);
-        } else if (eventAttributeSummary instanceof DistinctValuesEventAttributeSummary<?,?>) {
-            DistinctValuesEventAttributeSummary<?,?> summary = (DistinctValuesEventAttributeSummary<?,?>) eventAttributeSummary;
+        } else if (attributeSummary instanceof DistinctValuesAttributeSummary<?,?>) {
+            DistinctValuesAttributeSummary<?,?> summary = (DistinctValuesAttributeSummary<?,?>) attributeSummary;
             return new DistinctValuesEventAttributeSummaryComponent(summary);
         } else {
-            throw new IllegalArgumentException("Component for the type: " + eventAttributeSummary.getClass() + " is not supported");
+            throw new IllegalArgumentException("Component for the type: " + attributeSummary.getClass() + " is not supported");
         }
     }
 }

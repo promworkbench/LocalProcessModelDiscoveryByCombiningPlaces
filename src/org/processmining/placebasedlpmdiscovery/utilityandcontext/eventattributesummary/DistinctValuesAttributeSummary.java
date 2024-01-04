@@ -3,9 +3,9 @@ package org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattribut
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.impl.XAttributeImpl;
 
-public abstract class DistinctValuesEventAttributeSummary<T, C extends XAttributeImpl> extends EventAttributeSummary<T, C> {
+public abstract class DistinctValuesAttributeSummary<T, C extends XAttributeImpl> extends AttributeSummary<T, C> {
 
-    public DistinctValuesEventAttributeSummary(String key) {
+    public DistinctValuesAttributeSummary(String key) {
         super(key);
     }
 

@@ -4,14 +4,13 @@ import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.impl.XAttributeImpl;
 
 import java.text.ParseException;
-import java.util.Comparator;
 
-public abstract class RangeEventAttributeSummary<T extends Comparable<T>, C extends XAttributeImpl> extends EventAttributeSummary<T, C> {
+public abstract class RangeAttributeSummary<T extends Comparable<T>, C extends XAttributeImpl> extends AttributeSummary<T, C> {
 
     private T minValue;
     private T maxValue;
 
-    public RangeEventAttributeSummary(String key) {
+    public RangeAttributeSummary(String key) {
         super(key);
     }
 

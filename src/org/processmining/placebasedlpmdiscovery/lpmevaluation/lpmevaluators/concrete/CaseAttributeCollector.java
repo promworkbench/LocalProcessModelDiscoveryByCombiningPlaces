@@ -5,51 +5,49 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.Stan
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMCollector;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMCollectorResultId;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventAttributeCollectorResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.CaseAttributeCollectorResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummaryController;
 
-public class EventAttributeCollector implements WindowLPMCollector<EventAttributeCollectorResult> {
+public class CaseAttributeCollector implements WindowLPMCollector<CaseAttributeCollectorResult> {
     @Override
-    public EventAttributeCollectorResult evaluate(LocalProcessModel lpm,
+    public CaseAttributeCollectorResult evaluate(LocalProcessModel lpm,
                                                   LPMTemporaryWindowInfo lpmTemporaryWindowInfo,
                                                   LPMEvaluationResult existingEvaluation) {
 
-        if (!(existingEvaluation instanceof EventAttributeCollectorResult)) {
+        if (!(existingEvaluation instanceof CaseAttributeCollectorResult)) {
             throw new IllegalArgumentException("The passed evaluation result should be of type " +
-                    EventAttributeCollectorResult.class);
+                    CaseAttributeCollectorResult.class);
         }
 
-        EventAttributeCollectorResult result = (EventAttributeCollectorResult) existingEvaluation;
+        CaseAttributeCollectorResult result = (CaseAttributeCollectorResult) existingEvaluation;
 
-        AttributeSummaryController eaSummaryController = new AttributeSummaryController();
+        AttributeSummaryController attrSummaryController = new AttributeSummaryController();
 
         for (XTrace trace : lpmTemporaryWindowInfo.getOriginalTraces()) {
-            for (int replayIndex : lpmTemporaryWindowInfo.getReplayedEventsIndices()) {
-                eaSummaryController.computeAttributeSummary(result, trace.get(replayIndex));
-            }
+            attrSummaryController.computeAttributeSummary(result, trace);
         }
         return result;
     }
 
     @Override
     public String getKey() {
-        return StandardLPMCollectorId.EventAttributeCollector.name();
+        return StandardLPMCollectorId.CaseAttributeCollector.name();
     }
 
     @Override
     public String getResultKey() {
-        return StandardLPMCollectorResultId.EventAttributeCollectorResult.name();
+        return StandardLPMCollectorResultId.CaseAttributeCollectorResult.name();
     }
 
     @Override
-    public EventAttributeCollectorResult createEmptyResult(LocalProcessModel lpm) {
-        return new EventAttributeCollectorResult();
+    public CaseAttributeCollectorResult createEmptyResult(LocalProcessModel lpm) {
+        return new CaseAttributeCollectorResult();
     }
 
     @Override
-    public Class<EventAttributeCollectorResult> getResultClass() {
-        return EventAttributeCollectorResult.class;
+    public Class<CaseAttributeCollectorResult> getResultClass() {
+        return CaseAttributeCollectorResult.class;
     }
 }

@@ -1,21 +1,19 @@
 package org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary;
 
 import org.deckfour.xes.model.XAttribute;
-import org.deckfour.xes.model.impl.XAttributeContinuousImpl;
 import org.deckfour.xes.model.impl.XAttributeImpl;
-import org.ujmp.core.collections.ArrayIndexList;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class EventAttributeSummary<T, C extends XAttributeImpl> {
+public abstract class AttributeSummary<T, C extends XAttributeImpl> {
 
     protected Class<C> attributeClass;
 
     protected String key;
     protected List<T> values;
 
-    public EventAttributeSummary(String key) {
+    public AttributeSummary(String key) {
         this.key = key;
         this.setAttributeClass();
         this.values = new ArrayList<>();

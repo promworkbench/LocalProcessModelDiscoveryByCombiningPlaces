@@ -5,17 +5,17 @@ import org.deckfour.xes.model.impl.*;
 
 public class EventAttributeSummaryFactory {
 
-    public static EventAttributeSummary<?,?> getEventAttributeSummary(XAttribute attribute) {
+    public static AttributeSummary<?,?> getEventAttributeSummary(XAttribute attribute) {
         if (attribute.getClass().equals(XAttributeContinuousImpl.class)) {
-            return new ContinuousEventAttributeSummary(attribute.getKey());
+            return new ContinuousAttributeSummary(attribute.getKey());
         } else if (attribute.getClass().equals(XAttributeDiscreteImpl.class)) {
-            return new DiscreteEventAttributeSummary(attribute.getKey());
+            return new DiscreteAttributeSummary(attribute.getKey());
         } else if (attribute.getClass().equals(XAttributeLiteralImpl.class)) {
-            return new LiteralEventAttributeSummary(attribute.getKey());
+            return new LiteralAttributeSummary(attribute.getKey());
         } else if (attribute.getClass().equals(XAttributeTimestampImpl.class)) {
-            return new TimestampEventAttributeSummary(attribute.getKey());
+            return new TimestampAttributeSummary(attribute.getKey());
         } else if (attribute.getClass().equals(XAttributeBooleanImpl.class)) {
-            return new BooleanEventAttributeSummary(attribute.getKey());
+            return new BooleanAttributeSummary(attribute.getKey());
         } else {
             throw new UnsupportedOperationException("Creating summary for the attribute type: " + attribute.getClass() + " is currently not supported");
         }
