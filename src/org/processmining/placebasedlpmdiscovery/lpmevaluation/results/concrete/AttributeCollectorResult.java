@@ -23,7 +23,7 @@ public abstract class AttributeCollectorResult implements LPMCollectorResult {
         return this.attributeValues.keySet();
     }
 
-    public AttributeSummary<?, ?> getEventAttributeSummaryForAttributeKey(String key) {
+    public AttributeSummary<?, ?> getAttributeSummaryForAttributeKey(String key) {
         return this.attributeValues.get(key);
     }
 }

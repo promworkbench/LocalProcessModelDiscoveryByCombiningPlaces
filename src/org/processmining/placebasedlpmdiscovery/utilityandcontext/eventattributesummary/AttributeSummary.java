@@ -6,7 +6,7 @@ import org.deckfour.xes.model.impl.XAttributeImpl;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AttributeSummary<T, C extends XAttributeImpl> {
+public abstract class AttributeSummary<T, C extends XAttribute> {
 
     protected Class<C> attributeClass;
 

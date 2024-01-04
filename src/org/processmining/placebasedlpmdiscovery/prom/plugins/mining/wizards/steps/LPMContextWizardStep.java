@@ -33,7 +33,7 @@ public class LPMContextWizardStep extends ProMPropertiesPanel implements ProMWiz
         this.components = new HashMap<>();
         for (String key : attributeSummaryResult.getAttributeKeys()) {
             AttributeSummary<?,?> attributeSummary = attributeSummaryResult
-                    .getEventAttributeSummaryForAttributeKey(key);
+                    .getAttributeSummaryForAttributeKey(key);
             this.components.put(
                     key,
                     EventAttributeSummaryComponentFactory.getComponentForEventAttributeSummary(attributeSummary)
