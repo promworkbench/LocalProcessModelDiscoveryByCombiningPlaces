@@ -6,6 +6,7 @@ import org.deckfour.xes.model.impl.XAttributeTimestampImpl;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class TimestampAttributeSummary extends RangeAttributeSummary<Date, XAttributeTimestampImpl> {
 
@@ -59,5 +60,18 @@ public class TimestampAttributeSummary extends RangeAttributeSummary<Date, XAttr
         }
         this.setMinValue(min);
         this.setMaxValue(max);
+    }
+
+    protected void computeRepresentationFeatures() {
+        this.representationFeatures = new HashMap<>();
+        this.representationFeatures.put("Min", this.values.stream().min(Date::compareTo).orElse(null));
+        this.representationFeatures.put("Max", this.values.stream().max(Date::compareTo).orElse(null));
+        this.representationFeatures.put("Mean", this.values.stream().mapToLong(Date::getTime).average().orElse(Long.MIN_VALUE));
+        this.representationFeatures.put("Sum", this.values.stream().mapToLong(Date::getTime).sum());
+
+        double median = this.values.size() % 2 == 0 ?
+                this.values.stream().mapToLong(Date::getTime).sorted().skip(this.values.size() / 2 - 1).limit(2).average().orElse(Long.MIN_VALUE) :
+                this.values.stream().mapToLong(Date::getTime).sorted().skip(this.values.size() / 2).findFirst().orElse(Long.MIN_VALUE);
+        this.representationFeatures.put("Median", median);
     }
 }

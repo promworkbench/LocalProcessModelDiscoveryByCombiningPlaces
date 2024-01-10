@@ -3,6 +3,8 @@ package org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattribut
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.impl.XAttributeDiscreteImpl;
 
+import java.util.HashMap;
+
 public class DiscreteAttributeSummary extends RangeAttributeSummary<Long, XAttributeDiscreteImpl> {
 
     public DiscreteAttributeSummary(String key) {
@@ -43,5 +45,19 @@ public class DiscreteAttributeSummary extends RangeAttributeSummary<Long, XAttri
     public void summarize() {
         this.setMinValue(this.values.stream().min(Long::compare).orElse(Long.MAX_VALUE));
         this.setMaxValue(this.values.stream().max(Long::compare).orElse(Long.MAX_VALUE));
+    }
+
+    @Override
+    protected void computeRepresentationFeatures() {
+        this.representationFeatures = new HashMap<>();
+        this.representationFeatures.put("Min", this.values.stream().min(Long::compareTo).orElse(Long.MIN_VALUE));
+        this.representationFeatures.put("Max", this.values.stream().max(Long::compareTo).orElse(Long.MAX_VALUE));
+        this.representationFeatures.put("Mean", this.values.stream().mapToLong(v -> v).average().orElse(Long.MIN_VALUE));
+        this.representationFeatures.put("Sum", this.values.stream().mapToLong(v -> v).sum());
+
+        double median = this.values.size() % 2 == 0 ?
+                this.values.stream().mapToLong(v -> v).sorted().skip(this.values.size() / 2 - 1).limit(2).average().orElse(Long.MIN_VALUE) :
+                this.values.stream().mapToLong(v -> v).sorted().skip(this.values.size() / 2).findFirst().orElse(Long.MIN_VALUE);
+        this.representationFeatures.put("Median", median);
     }
 }

@@ -3,6 +3,9 @@ package org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattribut
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.impl.XAttributeBooleanImpl;
 
+import java.util.HashMap;
+import java.util.stream.Collectors;
+
 public class BooleanAttributeSummary extends DistinctValuesAttributeSummary<Boolean, XAttributeBooleanImpl> {
     public BooleanAttributeSummary(String key) {
         super(key);
@@ -21,5 +24,13 @@ public class BooleanAttributeSummary extends DistinctValuesAttributeSummary<Bool
     @Override
     public void summarize() {
 
+    }
+
+    @Override
+    protected void computeRepresentationFeatures() {
+        int trues = (int) this.values.stream().filter(v -> v).count();
+        this.representationFeatures = new HashMap<>();
+        this.representationFeatures.put("True", trues);
+        this.representationFeatures.put("False", this.values.size() - trues);
     }
 }

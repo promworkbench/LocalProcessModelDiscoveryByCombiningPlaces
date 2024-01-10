@@ -3,6 +3,8 @@ package org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattribut
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.impl.XAttributeContinuousImpl;
 
+import java.util.HashMap;
+
 
 public class ContinuousAttributeSummary extends RangeAttributeSummary<Double, XAttributeContinuousImpl> {
 
@@ -42,7 +44,21 @@ public class ContinuousAttributeSummary extends RangeAttributeSummary<Double, XA
 
     @Override
     public void summarize() {
-        this.setMinValue(this.values.stream().min(Double::compare).orElse(-1.0));
-        this.setMaxValue(this.values.stream().max(Double::compare).orElse(-1.0));
+        this.setMinValue(this.values.stream().min(Double::compare).orElse(Double.MIN_VALUE));
+        this.setMaxValue(this.values.stream().max(Double::compare).orElse(Double.MAX_VALUE));
+    }
+
+    @Override
+    protected void computeRepresentationFeatures() {
+        this.representationFeatures = new HashMap<>();
+        this.representationFeatures.put("Min", this.values.stream().min(Double::compareTo).orElse(Double.NaN));
+        this.representationFeatures.put("Max", this.values.stream().max(Double::compareTo).orElse(Double.NaN));
+        this.representationFeatures.put("Mean", this.values.stream().mapToDouble(v -> v).average().orElse(Double.NaN));
+        this.representationFeatures.put("Sum", this.values.stream().mapToDouble(v -> v).sum());
+
+        double median = this.values.size() % 2 == 0 ?
+                this.values.stream().mapToDouble(v -> v).sorted().skip(this.values.size() / 2 - 1).limit(2).average().orElse(Double.NaN) :
+                this.values.stream().mapToDouble(v -> v).sorted().skip(this.values.size() / 2).findFirst().orElse(Double.NaN);
+        this.representationFeatures.put("Median", median);
     }
 }

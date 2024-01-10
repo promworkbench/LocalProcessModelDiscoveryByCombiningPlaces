@@ -5,6 +5,7 @@ import org.deckfour.xes.model.impl.XAttributeImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public abstract class AttributeSummary<T, C extends XAttribute> {
 
@@ -12,6 +13,9 @@ public abstract class AttributeSummary<T, C extends XAttribute> {
 
     protected String key;
     protected List<T> values;
+
+    protected Map<String, Object> representationFeatures;
+    private boolean changeDetected;
 
     public AttributeSummary(String key) {
         this.key = key;
@@ -32,6 +36,7 @@ public abstract class AttributeSummary<T, C extends XAttribute> {
     public void addValue(XAttribute attribute) {
         if (attributeClass.isInstance(attribute)) {
             this.values.add(extractAttributeValue(attribute));
+            this.changeDetected = true;
         } else {
             throw new IllegalArgumentException("The provided attribute is of type: " + attribute.getClass() +
                     " while the expected type is: " + attributeClass);
@@ -41,6 +46,17 @@ public abstract class AttributeSummary<T, C extends XAttribute> {
     protected abstract T extractAttributeValue(XAttribute attribute);
 
     public abstract void summarize();
+
+    protected abstract void computeRepresentationFeatures();
+
+    public Map<String, Object> getRepresentationFeatures() {
+        // if first computation or there is a change
+        if (this.representationFeatures == null || this.changeDetected) {
+            this.computeRepresentationFeatures(); // compute representation features
+            this.changeDetected = false; // until something is added changeDetected is false
+        }
+        return this.representationFeatures;
+    }
 
     public abstract boolean acceptValue(XAttribute attribute);
 }
