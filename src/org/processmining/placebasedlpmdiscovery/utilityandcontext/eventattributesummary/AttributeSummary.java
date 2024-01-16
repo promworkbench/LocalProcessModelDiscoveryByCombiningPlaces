@@ -14,7 +14,7 @@ public abstract class AttributeSummary<T, C extends XAttribute> {
     protected String key;
     protected List<T> values;
 
-    protected Map<String, Object> representationFeatures;
+    protected Map<String, Number> representationFeatures;
     private boolean changeDetected;
 
     public AttributeSummary(String key) {
@@ -49,7 +49,7 @@ public abstract class AttributeSummary<T, C extends XAttribute> {
 
     protected abstract void computeRepresentationFeatures();
 
-    public Map<String, Object> getRepresentationFeatures() {
+    public Map<String, Number> getRepresentationFeatures() {
         // if first computation or there is a change
         if (this.representationFeatures == null || this.changeDetected) {
             this.computeRepresentationFeatures(); // compute representation features

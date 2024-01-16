@@ -13,6 +13,7 @@ public class LPMAdditionalInfo implements Serializable {
 
     private transient LocalProcessModel lpm;
     private final Map<String, LPMCollectorResult> collectorResults;
+    private GroupsInfo groupsInfo;
 
     public LPMAdditionalInfo() {
         this.collectorResults = new HashMap<>();
@@ -68,5 +69,13 @@ public class LPMAdditionalInfo implements Serializable {
                     " while the requested class is " + infoClass);
         }
         return infoClass.cast(info);
+    }
+
+    public GroupsInfo getGroupsInfo() {
+        return groupsInfo;
+    }
+
+    public void setGroupsInfo(GroupsInfo groupsInfo) {
+        this.groupsInfo = groupsInfo;
     }
 }

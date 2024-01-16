@@ -64,8 +64,8 @@ public class TimestampAttributeSummary extends RangeAttributeSummary<Date, XAttr
 
     protected void computeRepresentationFeatures() {
         this.representationFeatures = new HashMap<>();
-        this.representationFeatures.put("Min", this.values.stream().min(Date::compareTo).orElse(null));
-        this.representationFeatures.put("Max", this.values.stream().max(Date::compareTo).orElse(null));
+        this.representationFeatures.put("Min", this.values.stream().mapToLong(Date::getTime).min().orElse(Long.MIN_VALUE));
+        this.representationFeatures.put("Max", this.values.stream().mapToLong(Date::getTime).max().orElse(Long.MIN_VALUE));
         this.representationFeatures.put("Mean", this.values.stream().mapToLong(Date::getTime).average().orElse(Long.MIN_VALUE));
         this.representationFeatures.put("Sum", this.values.stream().mapToLong(Date::getTime).sum());
 
