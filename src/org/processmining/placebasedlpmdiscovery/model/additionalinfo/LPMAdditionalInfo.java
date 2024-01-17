@@ -22,11 +22,13 @@ public class LPMAdditionalInfo implements Serializable {
     public LPMAdditionalInfo(LocalProcessModel lpm) {
         this.lpm = lpm;
         this.collectorResults = new HashMap<>();
+        this.groupsInfo = new GroupsInfo();
     }
 
     public LPMAdditionalInfo(LPMAdditionalInfo additionalInfo) {
         this.lpm = additionalInfo.lpm;
         this.collectorResults = new HashMap<>(additionalInfo.collectorResults);
+        this.groupsInfo = additionalInfo.getGroupsInfo();
     }
 
 //    public GroupedEvaluationResult getEvaluationResult() {

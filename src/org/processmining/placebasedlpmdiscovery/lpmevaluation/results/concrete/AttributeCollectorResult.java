@@ -6,6 +6,7 @@ import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattribute
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public abstract class AttributeCollectorResult implements LPMCollectorResult {
 
@@ -23,7 +24,7 @@ public abstract class AttributeCollectorResult implements LPMCollectorResult {
         return this.attributeValues.keySet();
     }
 
-    public AttributeSummary<?, ?> getAttributeSummaryForAttributeKey(String key) {
-        return this.attributeValues.get(key);
+    public Optional<AttributeSummary<?, ?>> getAttributeSummaryForAttributeKey(String key) {
+        return Optional.ofNullable(attributeValues.get(key));
     }
 }

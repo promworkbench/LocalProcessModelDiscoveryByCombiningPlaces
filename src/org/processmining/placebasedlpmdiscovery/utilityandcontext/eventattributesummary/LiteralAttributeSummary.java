@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattribut
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.impl.XAttributeLiteralImpl;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -29,9 +30,15 @@ public class LiteralAttributeSummary extends DistinctValuesAttributeSummary<Stri
 
     @Override
     protected void computeRepresentationFeatures() {
-        this.representationFeatures = this.values.stream()
-                .collect(Collectors.groupingBy(s -> s, Collectors.counting()))
-                .entrySet().stream()
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        this.representationFeatures = new HashMap<>();
+//        this.representationFeatures = this.values.stream()
+//                .collect(Collectors.groupingBy(s -> s, Collectors.counting()))
+//                .entrySet().stream()
+//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    @Override
+    protected void computeRepresentationFeaturesIfEmpty() {
+        computeRepresentationFeatures();
     }
 }

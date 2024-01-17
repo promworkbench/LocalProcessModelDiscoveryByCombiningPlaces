@@ -49,7 +49,14 @@ public abstract class AttributeSummary<T, C extends XAttribute> {
 
     protected abstract void computeRepresentationFeatures();
 
+    protected abstract void computeRepresentationFeaturesIfEmpty();
+
     public Map<String, Number> getRepresentationFeatures() {
+        // if there is no values return some default representation features
+        if (this.values.isEmpty()) {
+            this.computeRepresentationFeaturesIfEmpty();
+        }
+
         // if first computation or there is a change
         if (this.representationFeatures == null || this.changeDetected) {
             this.computeRepresentationFeatures(); // compute representation features

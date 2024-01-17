@@ -14,7 +14,7 @@ import java.util.*;
  */
 public class AttributeSummaryController {
 
-    private void initializeAttributeSummaryStorage(AttributeCollectorResult result, XLog log) {
+    public void initializeAttributeSummaryStorage(AttributeCollectorResult result, XLog log) {
         XLogInfo logInfo = XLogInfoFactory.createLogInfo(log);
         XAttributeInfo eventAttributeInfo = logInfo.getEventAttributeInfo();
         Collection<XAttribute> eventAttributes = eventAttributeInfo.getAttributes();
@@ -28,8 +28,18 @@ public class AttributeSummaryController {
                 .put(attribute.getKey(), EventAttributeSummaryFactory.getEventAttributeSummary(attribute));
     }
 
+    /**
+     * Adds attribute to an  {@link org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.AttributeCollectorResult}.
+     * If the attribute is the first one to be added of this kind, a new summary is created using the
+     * {@link org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummaryFactory#getEventAttributeSummary(XAttribute)}
+     * and added to the {@link org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.AttributeCollectorResult}.
+     */
     public void addAttributeValue(AttributeCollectorResult result, XAttribute attribute) {
         AttributeSummary<?,?> summary = result.getAttributeValues().get(attribute.getKey());
+        if (summary == null) {
+            summary = EventAttributeSummaryFactory.getEventAttributeSummary(attribute);
+            result.getAttributeValues().put(attribute.getKey(), summary);
+        }
         summary.addValue(attribute);
     }
 

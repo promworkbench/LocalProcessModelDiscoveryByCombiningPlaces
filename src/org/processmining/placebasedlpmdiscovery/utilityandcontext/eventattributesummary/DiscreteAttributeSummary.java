@@ -55,9 +55,20 @@ public class DiscreteAttributeSummary extends RangeAttributeSummary<Long, XAttri
         this.representationFeatures.put("Mean", this.values.stream().mapToLong(v -> v).average().orElse(Long.MIN_VALUE));
         this.representationFeatures.put("Sum", this.values.stream().mapToLong(v -> v).sum());
 
-        double median = this.values.size() % 2 == 0 ?
+        double median =
+                this.values.size() % 2 == 0 ?
                 this.values.stream().mapToLong(v -> v).sorted().skip(this.values.size() / 2 - 1).limit(2).average().orElse(Long.MIN_VALUE) :
                 this.values.stream().mapToLong(v -> v).sorted().skip(this.values.size() / 2).findFirst().orElse(Long.MIN_VALUE);
         this.representationFeatures.put("Median", median);
+    }
+
+    @Override
+    protected void computeRepresentationFeaturesIfEmpty() {
+        this.representationFeatures = new HashMap<>();
+        this.representationFeatures.put("Min", Long.MIN_VALUE);
+        this.representationFeatures.put("Max", Long.MIN_VALUE);
+        this.representationFeatures.put("Mean", Long.MIN_VALUE);
+        this.representationFeatures.put("Sum", Long.MIN_VALUE);
+        this.representationFeatures.put("Median", Long.MIN_VALUE);
     }
 }

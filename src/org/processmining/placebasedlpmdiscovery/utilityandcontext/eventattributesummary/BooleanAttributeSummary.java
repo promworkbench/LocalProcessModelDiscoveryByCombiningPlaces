@@ -33,4 +33,9 @@ public class BooleanAttributeSummary extends DistinctValuesAttributeSummary<Bool
         this.representationFeatures.put("True", trues);
         this.representationFeatures.put("False", this.values.size() - trues);
     }
+
+    @Override
+    protected void computeRepresentationFeaturesIfEmpty() {
+        computeRepresentationFeatures();
+    }
 }

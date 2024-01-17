@@ -33,7 +33,7 @@ public class Main {
         LPMDiscoveryBuilder builder = new StandardLPMDiscoveryBuilder();
 
         // set running context
-        RunningContext runningContext = new RunningContext();
+        RunningContext runningContext = new RunningContext(log);
         setupStandardBase(log, parameters, builder, runningContext);
 
         // set place discovery
@@ -61,7 +61,7 @@ public class Main {
         LPMDiscoveryBuilder builder = new StandardLPMDiscoveryBuilder();
 
         // set running context
-        RunningContext runningContext = new RunningContext();
+        RunningContext runningContext = new RunningContext(log);
         setupStandardBase(log, parameters, builder, runningContext);
 
         // set place discovery
@@ -89,7 +89,7 @@ public class Main {
         LPMDiscoveryBuilder builder = new StandardLPMDiscoveryBuilder();
 
         // set running context
-        RunningContext runningContext = new RunningContext();
+        RunningContext runningContext = new RunningContext(log);
         setupStandardBase(log, parameters, builder, runningContext);
 
         // set place discovery

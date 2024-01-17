@@ -61,4 +61,14 @@ public class ContinuousAttributeSummary extends RangeAttributeSummary<Double, XA
                 this.values.stream().mapToDouble(v -> v).sorted().skip(this.values.size() / 2).findFirst().orElse(Double.NaN);
         this.representationFeatures.put("Median", median);
     }
+
+    @Override
+    protected void computeRepresentationFeaturesIfEmpty() {
+        this.representationFeatures = new HashMap<>();
+        this.representationFeatures.put("Min", Double.MIN_VALUE);
+        this.representationFeatures.put("Max", Double.MIN_VALUE);
+        this.representationFeatures.put("Mean", Double.MIN_VALUE);
+        this.representationFeatures.put("Sum", Double.MIN_VALUE);
+        this.representationFeatures.put("Median", Double.MIN_VALUE);
+    }
 }

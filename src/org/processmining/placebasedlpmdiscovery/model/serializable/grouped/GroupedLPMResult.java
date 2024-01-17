@@ -1,8 +1,9 @@
 package org.processmining.placebasedlpmdiscovery.model.serializable.grouped;
 
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableList;
+
+import java.util.Collection;
 
 public class GroupedLPMResult extends SerializableList<LPMResultGroup> {
 
@@ -10,10 +11,10 @@ public class GroupedLPMResult extends SerializableList<LPMResultGroup> {
 
     private GroupingProperty property;
 
-    public GroupedLPMResult(LPMResult result, GroupingProperty property) {
+    public GroupedLPMResult(Collection<LocalProcessModel> lpms, GroupingProperty property) {
         super();
         this.property = property;
-        for (LocalProcessModel lpm : result.getElements()) {
+        for (LocalProcessModel lpm : lpms) {
             this.add(lpm);
         }
     }

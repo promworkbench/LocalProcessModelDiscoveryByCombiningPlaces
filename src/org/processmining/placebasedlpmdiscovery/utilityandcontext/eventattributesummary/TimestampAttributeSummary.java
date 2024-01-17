@@ -74,4 +74,14 @@ public class TimestampAttributeSummary extends RangeAttributeSummary<Date, XAttr
                 this.values.stream().mapToLong(Date::getTime).sorted().skip(this.values.size() / 2).findFirst().orElse(Long.MIN_VALUE);
         this.representationFeatures.put("Median", median);
     }
+
+    @Override
+    protected void computeRepresentationFeaturesIfEmpty() {
+        this.representationFeatures = new HashMap<>();
+        this.representationFeatures.put("Min", Long.MIN_VALUE);
+        this.representationFeatures.put("Max", Long.MIN_VALUE);
+        this.representationFeatures.put("Mean", Long.MIN_VALUE);
+        this.representationFeatures.put("Sum", Long.MIN_VALUE);
+        this.representationFeatures.put("Median", Long.MIN_VALUE);
+    }
 }
