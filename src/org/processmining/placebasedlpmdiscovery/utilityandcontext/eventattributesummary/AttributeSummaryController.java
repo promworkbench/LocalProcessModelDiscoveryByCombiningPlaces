@@ -62,6 +62,26 @@ public class AttributeSummaryController {
         return result;
     }
 
+    public AttributeSummary<?,?> computeEventAttributeSummary(XLog log, String attributeKey) {
+        AttributeSummary<?,?> attributeSummary = null;
+
+        for (XTrace trace : log) {
+            for (XEvent event : trace) {
+                if (!event.getAttributes().containsKey(attributeKey)) {
+                    continue;
+                }
+                XAttribute attribute = event.getAttributes().get(attributeKey);
+
+                if (attributeSummary == null) {
+                    attributeSummary = EventAttributeSummaryFactory.getEventAttributeSummary(attribute);
+                }
+                attributeSummary.addValue(attribute);
+            }
+        }
+
+        return attributeSummary;
+    }
+
     public void computeAttributeSummary(AttributeCollectorResult result,
                                         XElement event) {
         for (XAttribute attribute : event.getAttributes().values()) {

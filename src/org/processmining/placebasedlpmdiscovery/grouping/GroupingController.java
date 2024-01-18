@@ -7,16 +7,20 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLP
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.AttributeCollectorResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventAttributeCollectorResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummary;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummaryController;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.LiteralAttributeSummary;
 import smile.clustering.HierarchicalClustering;
 import smile.clustering.linkage.CompleteLinkage;
 import smile.math.distance.EuclideanDistance;
 import smile.math.distance.HammingDistance;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class GroupingController {
+
+    private final XLog log;
+    private final AttributeSummaryController attributeSummaryController;
 
     /**
      * Empty attribute summaries for all possible event attributes in the event log. Default values for local process
@@ -31,12 +35,22 @@ public class GroupingController {
      */
     private final List<String> eventAttributeKeysOrder;
 
+    /**
+     * For all literal attributes we need the full list of values to build vectors of the same dimension. Since not all
+     * LPMs would cover all values we store them here for easy access.
+     */
+    private final Map<String, List<String>> literalValuesOrder;
+
     public GroupingController(XLog log) {
-        defaultEventAttributeSummaries = new EventAttributeCollectorResult();
-        AttributeSummaryController attributeSummaryController = new AttributeSummaryController();
-        attributeSummaryController.initializeAttributeSummaryStorage(defaultEventAttributeSummaries, log);
+        this.log = log;
+        this.attributeSummaryController = new AttributeSummaryController();
+
+        this.defaultEventAttributeSummaries = new EventAttributeCollectorResult();
+        this.attributeSummaryController.initializeAttributeSummaryStorage(this.defaultEventAttributeSummaries, log);
         this.eventAttributeKeysOrder = new ArrayList<>(this.defaultEventAttributeSummaries.getAttributeKeys());
         Collections.sort(this.eventAttributeKeysOrder);
+
+        this.literalValuesOrder = new HashMap<>();
     }
 
     private List<double[]> convertToVectors(List<LocalProcessModel> lpms) {
@@ -79,19 +93,37 @@ public class GroupingController {
             AttributeCollectorResult attrCollectorResult = (AttributeCollectorResult) collectorResult;
 
             for (String attributeKey : eventAttributeKeysOrder) {
-                Map<String, Number> representationFeatures = attrCollectorResult
-                        .getAttributeSummaryForAttributeKey(attributeKey)
-                        .orElse(this.defaultEventAttributeSummaries.getAttributeSummaryForAttributeKey(attributeKey)
+                AttributeSummary<?, ?> defaultAttributeSummary =
+                        this.defaultEventAttributeSummaries.getAttributeSummaryForAttributeKey(attributeKey)
                                 .orElseThrow(() -> new IllegalStateException("There is an attribute key for which" +
                                         " there is not summary although the possible keys were extracted from the " +
-                                        "initially computed summaries.")))
-                        .getRepresentationFeatures();
+                                        "initially computed summaries."));
 
+                // get representation features for that attribute
+                Map<String, Number> representationFeatures = attrCollectorResult
+                        .getAttributeSummaryForAttributeKey(attributeKey)
+                        .orElse(defaultAttributeSummary)
+                        .getRepresentationFeatures();
+                List<String> featureKeys = new ArrayList<>(representationFeatures.keySet());
+
+                // if the attribute is of type literal we need all values of that attribute to have vectors of same dimension
+                if (defaultAttributeSummary instanceof LiteralAttributeSummary) {
+                    featureKeys = this.literalValuesOrder.get(attributeKey);
+
+                    if (featureKeys == null) {
+                        featureKeys = new ArrayList<>(
+                                this.attributeSummaryController
+                                        .computeEventAttributeSummary(this.log, attributeKey)
+                                        .getRepresentationFeatures()
+                                        .keySet());
+                        this.literalValuesOrder.put(attributeKey, featureKeys);
+                    }
+                }
                 // sort representation features keys such that for each vector the same order is used
-                List<String> featureKeys = representationFeatures.keySet()
-                        .stream().sorted().collect(Collectors.toList());
+                Collections.sort(featureKeys);
+
                 for (String feature : featureKeys) {
-                    attributeVector.add(representationFeatures.get(feature).doubleValue());
+                    attributeVector.add(representationFeatures.getOrDefault(feature, 0).doubleValue());
                 }
 
             }

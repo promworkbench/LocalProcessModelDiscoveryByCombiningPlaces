@@ -30,11 +30,10 @@ public class LiteralAttributeSummary extends DistinctValuesAttributeSummary<Stri
 
     @Override
     protected void computeRepresentationFeatures() {
-        this.representationFeatures = new HashMap<>();
-//        this.representationFeatures = this.values.stream()
-//                .collect(Collectors.groupingBy(s -> s, Collectors.counting()))
-//                .entrySet().stream()
-//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        this.representationFeatures = this.values.stream()
+                .collect(Collectors.groupingBy(s -> s, Collectors.counting()))
+                .entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
 
     @Override
