@@ -10,8 +10,6 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummary;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummaryController;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.LiteralAttributeSummary;
-import smile.clustering.HierarchicalClustering;
-import smile.clustering.linkage.CompleteLinkage;
 import smile.math.distance.EuclideanDistance;
 import smile.math.distance.HammingDistance;
 
@@ -65,12 +63,10 @@ public class GroupingController {
     public void groupLPMs(Collection<LocalProcessModel> lpms) {
         List<LocalProcessModel> lpmList = new ArrayList<>(lpms);
 
-//        Map<String, String> clusteringConfig = new HashMap<>();
-//        clusteringConfig.put("linkage", "complete");
-//        clusteringConfig.put("partitions", "5");
+        double[][] proximity = getProximityMatrix(lpmList);
 
-        HierarchicalClustering hc = HierarchicalClustering.fit(new CompleteLinkage(getProximityMatrix(lpmList)));
-        int[] membership = hc.partition(10);
+        int[] membership = ClusteringLPMs.cluster(lpmList, proximity, ClusteringAlgorithm.DBSCAN, new HashMap<>());
+
         for (int i = 0; i < lpmList.size(); ++i) {
             lpmList.get(i).getAdditionalInfo().getGroupsInfo()
                     .addGroupingProperty("default", membership[i]);
