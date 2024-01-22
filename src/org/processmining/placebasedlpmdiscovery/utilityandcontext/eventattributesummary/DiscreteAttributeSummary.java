@@ -7,8 +7,8 @@ import java.util.HashMap;
 
 public class DiscreteAttributeSummary extends RangeAttributeSummary<Long, XAttributeDiscreteImpl> {
 
-    public DiscreteAttributeSummary(String key) {
-        super(key);
+    public DiscreteAttributeSummary(String key, boolean completeList) {
+        super(key, completeList);
     }
 
     @Override
@@ -37,14 +37,35 @@ public class DiscreteAttributeSummary extends RangeAttributeSummary<Long, XAttri
     }
 
     @Override
-    protected Long extractAttributeValue(XAttribute attribute) {
-        return this.attributeClass.cast(attribute).getValue();
+    protected void addValueInSummary(XAttribute attribute) {
+        long value = extractAttributeValue(attribute);
+        // count
+        int count = (int) this.representationFeatures.getOrDefault(AttributeSummary.COUNT, 0);
+        this.representationFeatures.put(AttributeSummary.COUNT, ++count);
+
+        // min
+        long min = (long) this.representationFeatures.getOrDefault(AttributeSummary.MIN, Long.MAX_VALUE);
+        this.representationFeatures.put(AttributeSummary.MIN, Math.min(min, value));
+
+        // max
+        long max = (long) this.representationFeatures.getOrDefault(AttributeSummary.MAX, Long.MIN_VALUE);
+        this.representationFeatures.put(AttributeSummary.MAX, Math.max(max, value));
+
+        // sum
+        long sum = (long) this.representationFeatures.getOrDefault(AttributeSummary.SUM, 0L);
+        this.representationFeatures.put(AttributeSummary.SUM, sum += value);
+
+        // mean
+        this.representationFeatures.put(AttributeSummary.MEAN, sum / count);
+
+        // median (running median algorithm)
+        long median = (long) this.representationFeatures.getOrDefault(AttributeSummary.MEDIAN, 0L);
+        this.representationFeatures.put(AttributeSummary.MEDIAN, median + (value - median) / count);
     }
 
     @Override
-    public void summarize() {
-        this.setMinValue(this.values.stream().min(Long::compare).orElse(Long.MAX_VALUE));
-        this.setMaxValue(this.values.stream().max(Long::compare).orElse(Long.MAX_VALUE));
+    protected Long extractAttributeValue(XAttribute attribute) {
+        return this.attributeClass.cast(attribute).getValue();
     }
 
     @Override

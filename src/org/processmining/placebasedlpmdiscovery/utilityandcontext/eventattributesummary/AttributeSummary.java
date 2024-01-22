@@ -1,41 +1,53 @@
 package org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary;
 
 import org.deckfour.xes.model.XAttribute;
-import org.deckfour.xes.model.impl.XAttributeImpl;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public abstract class AttributeSummary<T, C extends XAttribute> {
 
-    protected Class<C> attributeClass;
+    protected static final String TRUE = "true";
+    protected static final String FALSE = "false";
+    public static final String MIN = "min";
+    public static final String MAX = "max";
+    public static final String COUNT = "count";
+    public static final String SUM = "sum";
+    public static final String MEAN = "mean";
+    public static final String MEDIAN = "median";
 
+
+    /**
+     * Used to determine whether all values that this summary summarizes are stored or not.
+     */
+    protected final boolean completeList;
+    protected Class<C> attributeClass;
     protected String key;
     protected List<T> values;
-
     protected Map<String, Number> representationFeatures;
     private boolean changeDetected;
 
-    public AttributeSummary(String key) {
+    public AttributeSummary(String key, boolean completeList) {
         this.key = key;
+        this.completeList = completeList;
+        this.representationFeatures = new HashMap<>();
         this.setAttributeClass();
-        this.values = new ArrayList<>();
     }
 
     public String getKey() {
         return this.key;
     }
 
-    public List<T> getValues() {
-        return this.values;
-    }
-
     protected abstract void setAttributeClass();
 
     public void addValue(XAttribute attribute) {
         if (attributeClass.isInstance(attribute)) {
-            this.values.add(extractAttributeValue(attribute));
+            if (this.completeList) {
+                this.values.add(extractAttributeValue(attribute));
+            } else {
+                this.addValueInSummary(attribute);
+            }
             this.changeDetected = true;
         } else {
             throw new IllegalArgumentException("The provided attribute is of type: " + attribute.getClass() +
@@ -43,15 +55,21 @@ public abstract class AttributeSummary<T, C extends XAttribute> {
         }
     }
 
+    protected abstract void addValueInSummary(XAttribute attribute);
+
     protected abstract T extractAttributeValue(XAttribute attribute);
 
-    public abstract void summarize();
+//    public abstract void summarize();
 
     protected abstract void computeRepresentationFeatures();
 
     protected abstract void computeRepresentationFeaturesIfEmpty();
 
     public Map<String, Number> getRepresentationFeatures() {
+        // if we do not keep the complete list of values, the representation features are already computed
+        if (!this.completeList) {
+            return this.representationFeatures;
+        }
         // if there is no values return some default representation features
         if (this.values.isEmpty()) {
             this.computeRepresentationFeaturesIfEmpty();

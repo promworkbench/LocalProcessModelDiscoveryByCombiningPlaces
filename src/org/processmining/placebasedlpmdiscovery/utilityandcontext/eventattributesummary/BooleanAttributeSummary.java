@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class BooleanAttributeSummary extends DistinctValuesAttributeSummary<Boolean, XAttributeBooleanImpl> {
-    public BooleanAttributeSummary(String key) {
-        super(key);
+    public BooleanAttributeSummary(String key, boolean completeList) {
+        super(key, completeList);
     }
 
     @Override
@@ -17,13 +17,16 @@ public class BooleanAttributeSummary extends DistinctValuesAttributeSummary<Bool
     }
 
     @Override
-    protected Boolean extractAttributeValue(XAttribute attribute) {
-        return this.attributeClass.cast(attribute).getValue();
+    protected void addValueInSummary(XAttribute attribute) {
+        boolean value = this.extractAttributeValue(attribute);
+        String key = value ? AttributeSummary.TRUE : AttributeSummary.FALSE;
+        int count = (int) this.representationFeatures.getOrDefault(key, 0);
+        this.representationFeatures.put(key, ++count);
     }
 
     @Override
-    public void summarize() {
-
+    protected Boolean extractAttributeValue(XAttribute attribute) {
+        return this.attributeClass.cast(attribute).getValue();
     }
 
     @Override

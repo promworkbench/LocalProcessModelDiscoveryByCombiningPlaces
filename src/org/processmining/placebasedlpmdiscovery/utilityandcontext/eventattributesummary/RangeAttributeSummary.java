@@ -11,8 +11,8 @@ public abstract class RangeAttributeSummary<T extends Comparable<T>, C extends X
     private T minValue;
     private T maxValue;
 
-    public RangeAttributeSummary(String key) {
-        super(key);
+    public RangeAttributeSummary(String key, boolean completeList) {
+        super(key, completeList);
     }
 
     public abstract void setMinValue(String minValue) throws ParseException;

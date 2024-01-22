@@ -25,19 +25,19 @@ public class AttributeSummaryController {
 
     public void initializeAttributeSummaryStorage(AttributeCollectorResult result, XAttribute attribute) {
         result.getAttributeValues()
-                .put(attribute.getKey(), EventAttributeSummaryFactory.getEventAttributeSummary(attribute));
+                .put(attribute.getKey(), EventAttributeSummaryFactory.getEventAttributeSummary(attribute, false));
     }
 
     /**
      * Adds attribute to an  {@link org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.AttributeCollectorResult}.
      * If the attribute is the first one to be added of this kind, a new summary is created using the
-     * {@link org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummaryFactory#getEventAttributeSummary(XAttribute)}
+     * {@link org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummaryFactory#getEventAttributeSummary(XAttribute, boolean)}
      * and added to the {@link org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.AttributeCollectorResult}.
      */
     public void addAttributeValue(AttributeCollectorResult result, XAttribute attribute) {
         AttributeSummary<?,?> summary = result.getAttributeValues().get(attribute.getKey());
         if (summary == null) {
-            summary = EventAttributeSummaryFactory.getEventAttributeSummary(attribute);
+            summary = EventAttributeSummaryFactory.getEventAttributeSummary(attribute, false);
             result.getAttributeValues().put(attribute.getKey(), summary);
         }
         summary.addValue(attribute);
@@ -55,10 +55,6 @@ public class AttributeSummaryController {
             }
         }
 
-        for (AttributeSummary<?,?> summary : result.getAttributeValues().values()) {
-            summary.summarize();
-        }
-
         return result;
     }
 
@@ -73,7 +69,7 @@ public class AttributeSummaryController {
                 XAttribute attribute = event.getAttributes().get(attributeKey);
 
                 if (attributeSummary == null) {
-                    attributeSummary = EventAttributeSummaryFactory.getEventAttributeSummary(attribute);
+                    attributeSummary = EventAttributeSummaryFactory.getEventAttributeSummary(attribute, false);
                 }
                 attributeSummary.addValue(attribute);
             }

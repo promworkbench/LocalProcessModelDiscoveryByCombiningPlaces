@@ -12,7 +12,7 @@ public class DistinctValuesEventAttributeSummaryComponent extends EventAttribute
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.setBackground(new Color(60, 60, 60, 160));
 
-        ProMComboCheckBox valueChooser = new ProMComboCheckBox(model.getValues().stream().distinct().toArray(), false);
+        ProMComboCheckBox valueChooser = new ProMComboCheckBox(model.getRepresentationFeatures().keySet().stream().distinct().toArray(), false);
         this.add(valueChooser);
     }
 }

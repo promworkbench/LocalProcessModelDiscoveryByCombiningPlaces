@@ -10,8 +10,8 @@ import java.util.HashMap;
 
 public class TimestampAttributeSummary extends RangeAttributeSummary<Date, XAttributeTimestampImpl> {
 
-    public TimestampAttributeSummary(String key) {
-        super(key);
+    public TimestampAttributeSummary(String key, boolean completeList) {
+        super(key, completeList);
     }
 
     @Override
@@ -44,22 +44,35 @@ public class TimestampAttributeSummary extends RangeAttributeSummary<Date, XAttr
     }
 
     @Override
-    protected Date extractAttributeValue(XAttribute attribute) {
-        return this.attributeClass.cast(attribute).getValue();
+    protected void addValueInSummary(XAttribute attribute) {
+        long value = extractAttributeValue(attribute).getTime();
+        // count
+        int count = (int) this.representationFeatures.getOrDefault(AttributeSummary.COUNT, 0);
+        this.representationFeatures.put(AttributeSummary.COUNT, ++count);
+
+        // min
+        long min = (long) this.representationFeatures.getOrDefault(AttributeSummary.MIN, Long.MAX_VALUE);
+        this.representationFeatures.put(AttributeSummary.MIN, Math.min(min, value));
+
+        // max
+        long max = (long) this.representationFeatures.getOrDefault(AttributeSummary.MAX, Long.MIN_VALUE);
+        this.representationFeatures.put(AttributeSummary.MAX, Math.max(max, value));
+
+        // sum
+        long sum = (long) this.representationFeatures.getOrDefault(AttributeSummary.SUM, 0L);
+        this.representationFeatures.put(AttributeSummary.SUM, sum += value);
+
+        // mean
+        this.representationFeatures.put(AttributeSummary.MEAN, sum / count);
+
+        // median (running median algorithm)
+        long median = (long) this.representationFeatures.getOrDefault(AttributeSummary.MEDIAN, 0L);
+        this.representationFeatures.put(AttributeSummary.MEDIAN, median + (value - median) / count);
     }
 
     @Override
-    public void summarize() {
-        Date min = this.values.get(0);
-        Date max = this.values.get(0);
-        for (Date date : this.values) {
-            if (date.before(min))
-                min = date;
-            if (date.after(max))
-                max = date;
-        }
-        this.setMinValue(min);
-        this.setMaxValue(max);
+    protected Date extractAttributeValue(XAttribute attribute) {
+        return this.attributeClass.cast(attribute).getValue();
     }
 
     protected void computeRepresentationFeatures() {

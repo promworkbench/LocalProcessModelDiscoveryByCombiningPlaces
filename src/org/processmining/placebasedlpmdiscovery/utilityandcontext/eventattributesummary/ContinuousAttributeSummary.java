@@ -8,8 +8,8 @@ import java.util.HashMap;
 
 public class ContinuousAttributeSummary extends RangeAttributeSummary<Double, XAttributeContinuousImpl> {
 
-    public ContinuousAttributeSummary(String key) {
-        super(key);
+    public ContinuousAttributeSummary(String key, boolean completeList) {
+        super(key, completeList);
     }
 
     @Override
@@ -38,14 +38,35 @@ public class ContinuousAttributeSummary extends RangeAttributeSummary<Double, XA
     }
 
     @Override
-    protected Double extractAttributeValue(XAttribute attribute) {
-        return this.attributeClass.cast(attribute).getValue();
+    protected void addValueInSummary(XAttribute attribute) {
+        double value = extractAttributeValue(attribute);
+        // count
+        int count = (int) this.representationFeatures.getOrDefault(AttributeSummary.COUNT, 0);
+        this.representationFeatures.put(AttributeSummary.COUNT, ++count);
+
+        // min
+        double min = (double) this.representationFeatures.getOrDefault(AttributeSummary.MIN, Double.MAX_VALUE);
+        this.representationFeatures.put(AttributeSummary.MIN, Math.min(min, value));
+
+        // max
+        double max = (double) this.representationFeatures.getOrDefault(AttributeSummary.MAX, Double.MIN_VALUE);
+        this.representationFeatures.put(AttributeSummary.MAX, Math.max(max, value));
+
+        // sum
+        double sum = (double) this.representationFeatures.getOrDefault(AttributeSummary.SUM, 0);
+        this.representationFeatures.put(AttributeSummary.SUM, sum += value);
+
+        // mean
+        this.representationFeatures.put(AttributeSummary.MEAN, sum / count);
+
+        // median (running median algorithm)
+        double median = (double) this.representationFeatures.getOrDefault(AttributeSummary.MEDIAN, 0);
+        this.representationFeatures.put(AttributeSummary.MEDIAN, median + (value - median) / count);
     }
 
     @Override
-    public void summarize() {
-        this.setMinValue(this.values.stream().min(Double::compare).orElse(Double.MIN_VALUE));
-        this.setMaxValue(this.values.stream().max(Double::compare).orElse(Double.MAX_VALUE));
+    protected Double extractAttributeValue(XAttribute attribute) {
+        return this.attributeClass.cast(attribute).getValue();
     }
 
     @Override
