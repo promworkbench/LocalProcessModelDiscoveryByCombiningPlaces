@@ -12,4 +12,12 @@ public class Constants {
             public static final Color TransparentColor = new Color(0f, 0f, 0f, 0f);
         }
     }
+
+    public static class Grouping {
+
+        public static class Config {
+            public static final String ClusteringAlgorithm = "clustering_alg";
+            public static final String Title = "title";
+        }
+    }
 }

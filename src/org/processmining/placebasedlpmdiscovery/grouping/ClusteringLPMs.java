@@ -36,7 +36,7 @@ public class ClusteringLPMs {
 
         HierarchicalClustering hc = HierarchicalClustering.fit(getLinkage((String) config.get("linkage"), proximity));
         if (config.containsKey("num_clusters")) {
-            return hc.partition((int) config.get("num_clusters"));
+            return hc.partition(Integer.parseInt((String) config.get("num_clusters")));
         } else if (config.containsKey("height")) {
             return hc.partition((double) config.get("height"));
         }

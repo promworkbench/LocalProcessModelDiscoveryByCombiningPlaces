@@ -10,6 +10,7 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummary;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummaryController;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.LiteralAttributeSummary;
+import org.processmining.placebasedlpmdiscovery.utils.Constants;
 import smile.math.distance.EuclideanDistance;
 import smile.math.distance.HammingDistance;
 
@@ -60,17 +61,25 @@ public class GroupingController {
         return lpmVectors;
     }
 
-    public void groupLPMs(Collection<LocalProcessModel> lpms) {
+    public void groupLPMs(Collection<LocalProcessModel> lpms, Map<String, Object> config) {
         List<LocalProcessModel> lpmList = new ArrayList<>(lpms);
 
         double[][] proximity = getProximityMatrix(lpmList);
 
-        int[] membership = ClusteringLPMs.cluster(lpmList, proximity, ClusteringAlgorithm.DBSCAN, new HashMap<>());
+        int[] membership = ClusteringLPMs.cluster(
+                lpmList,
+                proximity,
+                getClusteringAlgorithm(config),
+                config);
 
         for (int i = 0; i < lpmList.size(); ++i) {
             lpmList.get(i).getAdditionalInfo().getGroupsInfo()
-                    .addGroupingProperty("default", membership[i]);
+                    .addGroupingProperty((String) config.get(Constants.Grouping.Config.Title), membership[i]);
         }
+    }
+
+    private ClusteringAlgorithm getClusteringAlgorithm(Map<String, Object> config) {
+        return ClusteringAlgorithm.valueOf((String) config.get(Constants.Grouping.Config.ClusteringAlgorithm));
     }
 
     private double[][] getProximityMatrix(List<LocalProcessModel> lpms) {

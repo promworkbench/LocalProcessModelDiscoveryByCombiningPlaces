@@ -6,11 +6,11 @@ import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingController;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
-import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.grouped.GroupedLPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.grouped.GroupingProperty;
 
 import javax.swing.*;
+import java.util.HashMap;
 
 
 @Plugin(name = "@1 Visualize LPM Result in Groups",
@@ -100,7 +100,7 @@ public class LPMResultGroupedVisualizer {
         // TODO: See whether you don't have to do this if it has already be done
         if (property.equals(GroupingProperty.Clustering)) {
             GroupingController groupingController = new GroupingController(result.getInput().getLog());
-            groupingController.groupLPMs(result.getAllLPMs());
+            groupingController.groupLPMs(result.getAllLPMs(), new HashMap<>());
         }
         GroupedLPMResult grouped = new GroupedLPMResult(result.getAllLPMs(), property);
 

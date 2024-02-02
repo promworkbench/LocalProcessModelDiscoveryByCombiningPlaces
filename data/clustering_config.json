@@ -1,0 +1,26 @@
+[
+  {
+    "title": "hierarchical-complete",
+    "clustering_alg": "Hierarchical",
+    "num_clusters": "10",
+    "linkage": "complete"
+  },
+  {
+    "title": "hierarchical-single",
+    "clustering_alg": "Hierarchical",
+    "num_clusters": "10",
+    "linkage": "single"
+  },
+  {
+    "title": "hierarchical-upgma",
+    "clustering_alg": "Hierarchical",
+    "num_clusters": "10",
+    "linkage": "upgma"
+  },
+  {
+    "title": "hierarchical-wpgma",
+    "clustering_alg": "Hierarchical",
+    "num_clusters": "10",
+    "linkage": "wpgma"
+  }
+]
