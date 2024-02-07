@@ -21,6 +21,7 @@ import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -290,5 +291,30 @@ public class PlaceUtils {
         }
 
         return PlaceUtils.getPlacesFromPetriNet(net);
+    }
+
+    /**
+     * Computes the place matching cost such that the overlap between the input transition labels and output
+     * transition labels between the two places is measured and then combined with an equal weight. Since this
+     * would denote how similar the two places are, we subtract the result from one to get a cost.
+     * @param p1 the first place
+     * @param p2 the second place
+     * @return the place matching cost
+     */
+    public static double computePlaceMatchingCost(Place p1, Place p2) {
+        Set<String> inTr1 = p1.getInputTransitions().stream().map(Transition::getLabel).collect(Collectors.toSet());
+        Set<String> inTr2 = p2.getInputTransitions().stream().map(Transition::getLabel).collect(Collectors.toSet());
+        Set<String> outTr1 = p1.getOutputTransitions().stream().map(Transition::getLabel).collect(Collectors.toSet());
+        Set<String> outTr2 = p2.getOutputTransitions().stream().map(Transition::getLabel).collect(Collectors.toSet());
+
+        return 1 - (1.0 / 2 * (2.0 * Sets.intersection(inTr1, inTr2).size() / (inTr1.size() + inTr2.size())) +
+                1.0 / 2 * (2.0 * Sets.intersection(outTr1, outTr2).size() / (outTr1.size() + outTr2.size())));
+    }
+
+    public static Map<Place, Integer> mapPlacesToIndices(Set<Place> places) {
+        AtomicInteger counter = new AtomicInteger(0);
+        return places
+                .stream()
+                .collect(Collectors.toMap(p -> p, p -> counter.getAndIncrement()));
     }
 }

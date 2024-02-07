@@ -13,12 +13,12 @@ import java.util.Set;
  */
 public class HungarianAlgorithm {
 
-    int[][] matrix; // initial matrix (cost matrix)
+    double[][] matrix; // initial matrix (cost matrix)
 
     // markers in the matrix
     int[] squareInRow, squareInCol, rowIsCovered, colIsCovered, staredZeroesInRow;
 
-    public HungarianAlgorithm(int[][] matrix) {
+    public HungarianAlgorithm(double[][] matrix) {
         if (matrix.length != matrix[0].length) {
             try {
                 throw new IllegalAccessException("The matrix is not square!");
@@ -101,7 +101,7 @@ public class HungarianAlgorithm {
         // rows
         for (int i = 0; i < matrix.length; i++) {
             // find the min value of the current row
-            int currentRowMin = Integer.MAX_VALUE;
+            double currentRowMin = Integer.MAX_VALUE;
             for (int j = 0; j < matrix[i].length; j++) {
                 if (matrix[i][j] < currentRowMin) {
                     currentRowMin = matrix[i][j];
@@ -116,7 +116,7 @@ public class HungarianAlgorithm {
         // cols
         for (int i = 0; i < matrix[0].length; i++) {
             // find the min value of the current column
-            int currentColMin = Integer.MAX_VALUE;
+            double currentColMin = Integer.MAX_VALUE;
             for (int j = 0; j < matrix.length; j++) {
                 if (matrix[j][i] < currentColMin) {
                     currentColMin = matrix[j][i];
@@ -169,7 +169,7 @@ public class HungarianAlgorithm {
      */
     private void step7() {
         // Find the smallest uncovered value in the matrix
-        int minUncoveredValue = Integer.MAX_VALUE;
+        double minUncoveredValue = Integer.MAX_VALUE;
         for (int i = 0; i < matrix.length; i++) {
             if (rowIsCovered[i] == 1) {
                 continue;
