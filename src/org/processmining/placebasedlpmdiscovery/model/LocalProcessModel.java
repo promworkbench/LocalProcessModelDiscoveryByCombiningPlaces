@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery.model;
 import org.processmining.models.graphbased.NodeID;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
 
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,7 +19,7 @@ public class LocalProcessModel implements Serializable, TextDescribable {
     private final Set<Place> places;
     private final Map<String, Transition> transitions; // label -> transition map
     private final Set<Arc> arcs;
-    private LPMAdditionalInfo additionalInfo;
+    private transient LPMAdditionalInfo additionalInfo;
 
     public LocalProcessModel() {
         this.id = UUID.randomUUID().toString();
