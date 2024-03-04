@@ -99,7 +99,7 @@ public class LPMResultGroupedVisualizer {
         GroupingProperty property = showChooseGroupingPropertyDialog(new JFrame());
         // TODO: See whether you don't have to do this if it has already be done
         if (property.equals(GroupingProperty.Clustering)) {
-            GroupingController groupingController = new GroupingController(result.getInput().getLog());
+            GroupingController groupingController = new GroupingController();
             groupingController.groupLPMs(result.getAllLPMs(), new HashMap<>());
         }
         GroupedLPMResult grouped = new GroupedLPMResult(result.getAllLPMs(), property);

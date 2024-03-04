@@ -71,7 +71,7 @@ public class ClusteringRunner {
         ImmutableTable.Builder<String, String, Integer> tableBuilder = new ImmutableTable.Builder<>();
         for (Map<String, Object> config : configs) {
             // group the lpms for the specific config
-            GroupingController groupingController = new GroupingController(log);
+            GroupingController groupingController = new GroupingController();
             groupingController.groupLPMs(res.getAllLPMs(), config);
 
             // store the groups

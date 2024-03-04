@@ -5,6 +5,7 @@ import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.utils.HungarianAlgorithm;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 
+import java.util.List;
 import java.util.Map;
 
 public class NodeMatchingModelDistance implements ModelDistance {
@@ -35,5 +36,16 @@ public class NodeMatchingModelDistance implements ModelDistance {
         }
 
         return 2 * totalCost / (places1.size() + places2.size());
+    }
+
+    @Override
+    public double[][] calculatePairwiseDistance(List<LocalProcessModel> lpms) {
+        double[][] distances = new double[lpms.size()][lpms.size()];
+        for (int i = 0; i < lpms.size(); ++i) {
+            for (int j = 0; j < lpms.size(); ++i) {
+                distances[i][j] = this.calculateDistance(lpms.get(i), lpms.get(j));
+            }
+        }
+        return distances;
     }
 }
