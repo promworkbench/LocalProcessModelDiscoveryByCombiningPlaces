@@ -64,22 +64,24 @@ public class GroupingController {
     public void groupLPMs(Collection<LocalProcessModel> lpms, Map<String, Object> config) {
         List<LocalProcessModel> lpmList = new ArrayList<>(lpms);
 
-        double[][] proximity = getProximityMatrix(lpmList);
-
         int[] membership = ClusteringLPMs.cluster(
                 lpmList,
-                proximity,
+                computeProximity(lpmList, config),
                 getClusteringAlgorithm(config),
                 config);
 
         for (int i = 0; i < lpmList.size(); ++i) {
             lpmList.get(i).getAdditionalInfo().getGroupsInfo()
-                    .addGroupingProperty((String) config.get(Constants.Grouping.Config.Title), membership[i]);
+                    .addGroupingProperty((String) config.get(Constants.Grouping.Config.TITLE), membership[i]);
         }
     }
 
+    private double[][] computeProximity(List<LocalProcessModel> lpmList, Map<String, Object> config) {
+        return getProximityMatrix(lpmList);
+    }
+
     private ClusteringAlgorithm getClusteringAlgorithm(Map<String, Object> config) {
-        return ClusteringAlgorithm.valueOf((String) config.get(Constants.Grouping.Config.ClusteringAlgorithm));
+        return ClusteringAlgorithm.valueOf((String) config.get(Constants.Grouping.Config.CLUSTERING_ALG));
     }
 
     private double[][] getProximityMatrix(List<LocalProcessModel> lpms) {

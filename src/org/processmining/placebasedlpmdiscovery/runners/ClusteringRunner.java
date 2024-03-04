@@ -76,7 +76,7 @@ public class ClusteringRunner {
 
             // store the groups
             for (LocalProcessModel lpm : res.getAllLPMs()) {
-                String clusterTitle = (String) config.get(Constants.Grouping.Config.Title);
+                String clusterTitle = (String) config.get(Constants.Grouping.Config.TITLE);
                 int cluster = lpm.getAdditionalInfo().getGroupsInfo()
                         .getGroupingProperty(clusterTitle);
                 tableBuilder.put(lpm.getId(), clusterTitle, cluster);

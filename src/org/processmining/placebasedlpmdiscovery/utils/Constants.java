@@ -16,8 +16,9 @@ public class Constants {
     public static class Grouping {
 
         public static class Config {
-            public static final String ClusteringAlgorithm = "clustering_alg";
-            public static final String Title = "title";
+            public static final String DISTANCE_METHOD = "distance_method";
+            public static final String CLUSTERING_ALG = "clustering_alg";
+            public static final String TITLE = "title";
         }
     }
 }
