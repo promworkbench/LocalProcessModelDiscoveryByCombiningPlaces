@@ -1,7 +1,9 @@
-package org.processmining.placebasedlpmdiscovery.lpmdistances;
+package org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes;
 
+import com.google.inject.Inject;
 import org.apache.commons.lang3.ArrayUtils;
 import org.deckfour.xes.model.XLog;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistance;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMCollectorResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.AttributeCollectorResult;
@@ -37,6 +39,7 @@ public abstract class DataAttributeModelDistance implements ModelDistance {
      */
     private final Map<String, List<String>> literalValuesOrder;
 
+    @Inject
     public DataAttributeModelDistance(XLog log) {
         this.log = log;
         this.attributeSummaryController = new AttributeSummaryController();

@@ -1,12 +1,15 @@
-package org.processmining.placebasedlpmdiscovery.lpmdistances;
+package org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes;
 
+import com.google.inject.Inject;
 import org.deckfour.xes.model.XLog;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistance;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import smile.math.distance.EuclideanDistance;
 
 import java.util.List;
 
 public class EuclideanDataAttributeModelDistance extends DataAttributeModelDistance {
+    @Inject
     public EuclideanDataAttributeModelDistance(XLog log) {
         super(log);
     }

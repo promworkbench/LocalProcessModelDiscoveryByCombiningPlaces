@@ -17,11 +17,16 @@ public class Constants {
 
         public static class Config {
             public static final String CLUSTERING_ALG = "clustering_alg";
-            public static final String TITLE = "title";
+            public static final String IDENTIFIER = "identifier";
+            public static final String DISTANCE_CONFIG = "distance_config";
+        }
+    }
+
+    public static class ModelDistance {
+
+        public static class Config {
 
             public static final String DISTANCE_METHOD = "distance_method";
-
-            public static final String DISTANCE_CONFIG = "distance_config";
         }
     }
 }

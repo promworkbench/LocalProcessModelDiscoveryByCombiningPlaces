@@ -4,11 +4,22 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableTable;
 import com.google.common.collect.Table;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.deckfour.xes.model.XLog;
+import org.processmining.placebasedlpmdiscovery.InputModule;
 import org.processmining.placebasedlpmdiscovery.Main;
+import org.processmining.placebasedlpmdiscovery.grouping.DefaultGroupingConfig;
+import org.processmining.placebasedlpmdiscovery.grouping.GroupingConfig;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingController;
+import org.processmining.placebasedlpmdiscovery.grouping.serialization.GroupingConfigDeserializer;
+import org.processmining.placebasedlpmdiscovery.grouping.serialization.GroupingConfigInstanceCreator;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.dependencyinjection.LPMDistancesDependencyInjectionModule;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.serialization.ModelDistanceConfigDeserializer;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
@@ -26,7 +37,6 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ClusteringRunner {
@@ -61,22 +71,27 @@ public class ClusteringRunner {
         LPMDiscoveryResult res = builder.build().run();
 
         // read config
-        Gson gson = new Gson();
-        List<Map<String, Object>> configs = gson.fromJson(
+        GsonBuilder gsonBuilder = new GsonBuilder()
+                .registerTypeAdapter(GroupingConfig.class, new GroupingConfigDeserializer())
+                .registerTypeAdapter(ModelDistanceConfig.class, new ModelDistanceConfigDeserializer());
+
+        Gson gson = gsonBuilder.create();
+        List<GroupingConfig> configs = gson.fromJson(
                 new FileReader(configPath),
-                new TypeToken<List<Map<String, Object>>>() {
-                }.getType());
+                new TypeToken<List<GroupingConfig>>() {
+                }.getType()
+        );
 
         // group lpms
         ImmutableTable.Builder<String, String, Integer> tableBuilder = new ImmutableTable.Builder<>();
-        for (Map<String, Object> config : configs) {
+        for (GroupingConfig config : configs) {
             // group the lpms for the specific config
-            GroupingController groupingController = new GroupingController();
+            GroupingController groupingController = getGroupingController(log, config);
             groupingController.groupLPMs(res.getAllLPMs(), config);
 
             // store the groups
             for (LocalProcessModel lpm : res.getAllLPMs()) {
-                String clusterTitle = (String) config.get(Constants.Grouping.Config.TITLE);
+                String clusterTitle = config.getIdentifier();
                 int cluster = lpm.getAdditionalInfo().getGroupsInfo()
                         .getGroupingProperty(clusterTitle);
                 tableBuilder.put(lpm.getId(), clusterTitle, cluster);
@@ -96,5 +111,15 @@ public class ClusteringRunner {
                         .build())
                 .collect(Collectors.toList()));
 //        LocalProcessModelUtils.exportResult(new LPMResult((StandardLPMDiscoveryResult) res), resPath);
+    }
+
+
+    public static GroupingController getGroupingController(XLog log, GroupingConfig config) {
+        Injector injector = Guice.createInjector(
+                new InputModule(log),
+                new LPMDistancesDependencyInjectionModule(config.getModelDistanceConfig())
+        );
+
+        return injector.getInstance(GroupingController.class);
     }
 }

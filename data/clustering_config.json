@@ -1,26 +1,46 @@
 [
   {
-    "title": "hierarchical-complete",
-    "clustering_alg": "Hierarchical",
-    "num_clusters": "10",
-    "linkage": "complete"
+    "identifier": "hierarchical-complete",
+    "clusteringAlgorithm": "Hierarchical",
+    "clusteringConfig": {
+      "num_clusters": "10",
+      "linkage": "complete"
+    },
+    "modelDistanceConfig": {
+      "distanceMethod": "DataAttribute"
+    }
   },
   {
-    "title": "hierarchical-single",
-    "clustering_alg": "Hierarchical",
-    "num_clusters": "10",
-    "linkage": "single"
+    "identifier": "hierarchical-single",
+    "clusteringAlgorithm": "Hierarchical",
+    "clusteringConfig": {
+      "num_clusters": "10",
+      "linkage": "single"
+    },
+    "modelDistanceConfig": {
+      "distanceMethod": "DataAttribute"
+    }
   },
   {
-    "title": "hierarchical-upgma",
-    "clustering_alg": "Hierarchical",
-    "num_clusters": "10",
-    "linkage": "upgma"
+    "identifier": "hierarchical-upgma",
+    "clusteringAlgorithm": "Hierarchical",
+    "clusteringConfig": {
+      "num_clusters": "10",
+      "linkage": "upgma"
+    },
+    "modelDistanceConfig": {
+      "distanceMethod": "DataAttribute"
+    }
   },
   {
-    "title": "hierarchical-wpgma",
-    "clustering_alg": "Hierarchical",
-    "num_clusters": "10",
-    "linkage": "wpgma"
+    "identifier": "hierarchical-wpgma",
+    "clusteringAlgorithm": "Hierarchical",
+    "clusteringConfig": {
+      "num_clusters": "10",
+      "linkage": "wpgma"
+    },
+    "modelDistanceConfig": {
+      "distanceMethod": "DataAttribute"
+    }
   }
 ]

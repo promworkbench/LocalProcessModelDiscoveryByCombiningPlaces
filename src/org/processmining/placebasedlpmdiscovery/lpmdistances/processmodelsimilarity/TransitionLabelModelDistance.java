@@ -1,6 +1,7 @@
-package org.processmining.placebasedlpmdiscovery.lpmdistances;
+package org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity;
 
 import com.google.common.collect.Sets;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistance;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 
