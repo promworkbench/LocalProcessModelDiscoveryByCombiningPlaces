@@ -13,17 +13,6 @@ import java.util.Map;
 public class GroupingConfigDeserializer implements JsonDeserializer<GroupingConfig> {
     @Override
     public GroupingConfig deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-        JsonObject jsonObject = json.getAsJsonObject();
-
-        Gson gson = new Gson();
-        Map<String, Object> clusteringConfig = gson.fromJson(
-                jsonObject.get("clusteringConfig"),
-                new TypeToken<Map<String, Object>>(){}.getType());
-
-        return new DefaultGroupingConfig(
-                jsonObject.get("identifier").getAsString(),
-                ClusteringAlgorithm.valueOf(jsonObject.get("clusteringAlgorithm").getAsString()),
-                clusteringConfig,
-                context.deserialize(jsonObject.get("modelDistanceConfig"), ModelDistanceConfig.class));
+        return context.deserialize(json, DefaultGroupingConfig.class);
     }
 }
