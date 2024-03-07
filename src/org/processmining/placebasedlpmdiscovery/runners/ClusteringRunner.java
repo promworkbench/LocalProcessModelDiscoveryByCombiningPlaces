@@ -12,11 +12,9 @@ import org.apache.commons.csv.CSVPrinter;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.InputModule;
 import org.processmining.placebasedlpmdiscovery.Main;
-import org.processmining.placebasedlpmdiscovery.grouping.DefaultGroupingConfig;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingConfig;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingController;
 import org.processmining.placebasedlpmdiscovery.grouping.serialization.GroupingConfigDeserializer;
-import org.processmining.placebasedlpmdiscovery.grouping.serialization.GroupingConfigInstanceCreator;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.dependencyinjection.LPMDistancesDependencyInjectionModule;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.serialization.ModelDistanceConfigDeserializer;
@@ -28,7 +26,6 @@ import org.processmining.placebasedlpmdiscovery.model.exporting.importers.JsonIm
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.utils.Constants;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 import org.python.google.common.reflect.TypeToken;
 

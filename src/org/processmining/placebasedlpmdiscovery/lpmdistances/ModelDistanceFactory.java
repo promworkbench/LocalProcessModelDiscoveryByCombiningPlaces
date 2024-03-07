@@ -5,6 +5,8 @@ import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.Data
 import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistanceFactory;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.MixedModelDistance;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.MixedModelDistanceConfig;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.precomputed.PrecomputedFromFileModelDistance;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.precomputed.PrecomputedFromFileModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity.NodeMatchingModelDistance;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity.ProcessModelSimilarityDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity.TransitionLabelModelDistance;
@@ -27,6 +29,8 @@ public class ModelDistanceFactory {
                 if (!(distanceConfig instanceof MixedModelDistanceConfig))
                     throw new IllegalStateException("The distance method does not pass on the distance config.");
                 return this.getMixedModelDistance((MixedModelDistanceConfig) distanceConfig);
+            case "Precomputed":
+                return new PrecomputedFromFileModelDistance((PrecomputedFromFileModelDistanceConfig) distanceConfig);
         }
         throw new IllegalArgumentException("The Distance Method " + distanceConfig.getDistanceMethod() + " is illegal.");
     }
