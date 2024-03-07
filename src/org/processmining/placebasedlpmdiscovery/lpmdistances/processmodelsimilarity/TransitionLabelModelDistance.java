@@ -22,7 +22,7 @@ public class TransitionLabelModelDistance implements ModelDistance {
     public double[][] calculatePairwiseDistance(List<LocalProcessModel> lpms) {
         double[][] distances = new double[lpms.size()][lpms.size()];
         for (int i = 0; i < lpms.size(); ++i) {
-            for (int j = 0; j < lpms.size(); ++i) {
+            for (int j = 0; j < lpms.size(); ++j) {
                 distances[i][j] = this.calculateDistance(lpms.get(i), lpms.get(j));
             }
         }
