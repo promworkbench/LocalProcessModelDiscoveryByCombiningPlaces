@@ -10,10 +10,10 @@ import java.util.Collection;
 
 public class StandardLPMDiscoveryResult implements LPMDiscoveryResult {
 
-    private final MainFPGrowthLPMTree resTree;
+    private final transient MainFPGrowthLPMTree resTree;
     private Collection<LocalProcessModel> lpms;
 
-    private LPMDiscoveryInput input;
+    private transient LPMDiscoveryInput input;
 
     public StandardLPMDiscoveryResult(MainFPGrowthLPMTree resTree) {
         this.resTree = resTree;
@@ -49,6 +49,6 @@ public class StandardLPMDiscoveryResult implements LPMDiscoveryResult {
 
     @Override
     public void export(Exporter<LPMDiscoveryResult> exporter, OutputStream os) {
-        throw new NotImplementedException("This export is still not implemented");
+        exporter.export(this, os);
     }
 }

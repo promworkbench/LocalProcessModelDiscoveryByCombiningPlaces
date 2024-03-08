@@ -1,0 +1,15 @@
+[
+  {
+    "runnerInput": {
+      "inputs": {
+        "eventlog": ".\\data\\bpi2012_res10939.xes",
+        "places": ".\\data\\bpi2012_res10939.json"
+      }
+    },
+    "runnerOutput": {
+      "outputs": {
+        "lpms": ".\\data\\bpi2012_res10939_lpms.json"
+      }
+    }
+  }
+]

@@ -10,8 +10,6 @@ import com.google.inject.Injector;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.processmining.placebasedlpmdiscovery.InputModule;
-import org.processmining.placebasedlpmdiscovery.grouping.GroupingConfig;
-import org.processmining.placebasedlpmdiscovery.grouping.serialization.GroupingConfigDeserializer;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.results.FromFileLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceController;
@@ -19,9 +17,9 @@ import org.processmining.placebasedlpmdiscovery.lpmdistances.dependencyinjection
 import org.processmining.placebasedlpmdiscovery.lpmdistances.serialization.ModelDistanceConfigDeserializer;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.runners.RunnerInput;
-import org.processmining.placebasedlpmdiscovery.runners.RunnerOutput;
-import org.processmining.placebasedlpmdiscovery.runners.serialization.RunnerInputDeserializer;
+import org.processmining.placebasedlpmdiscovery.runners.io.RunnerInput;
+import org.processmining.placebasedlpmdiscovery.runners.io.RunnerOutput;
+import org.processmining.placebasedlpmdiscovery.runners.serialization.RunnerInputAdapter;
 import org.processmining.placebasedlpmdiscovery.runners.serialization.RunnerOutputDeserializer;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 import org.python.google.common.reflect.TypeToken;
@@ -29,6 +27,8 @@ import org.python.google.common.reflect.TypeToken;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,8 +73,11 @@ public class DistanceComputationRunner {
         }
 
         Table<String, String, Double> distanceTable = tableBuilder.build();
-        CSVPrinter csvPrinter = CSVFormat.DEFAULT.print(System.out);
-        csvPrinter.printRecords(lpms.stream().map(LocalProcessModel::getShortString).collect(Collectors.toList()));
+        CSVPrinter csvPrinter = CSVFormat.DEFAULT
+                .builder()
+                .setHeader(lpms.stream().map(LocalProcessModel::getShortString).toArray(String[]::new))
+                .build()
+                .print(Paths.get(filePath), StandardCharsets.UTF_8);
         csvPrinter.printRecords(distanceTable.rowMap().entrySet()
                 .stream().map(entry -> ImmutableList.builder()
                         .add(entry.getKey())
@@ -86,7 +89,7 @@ public class DistanceComputationRunner {
     private static List<DistanceRunnerConfig> readConfig(String configPath) throws FileNotFoundException {
         GsonBuilder gsonBuilder = new GsonBuilder()
                 .registerTypeAdapter(ModelDistanceConfig.class, new ModelDistanceConfigDeserializer())
-                .registerTypeAdapter(RunnerInput.class, new RunnerInputDeserializer())
+                .registerTypeAdapter(RunnerInput.class, new RunnerInputAdapter())
                 .registerTypeAdapter(RunnerOutput.class, new RunnerOutputDeserializer());
 
         Gson gson = gsonBuilder.create();

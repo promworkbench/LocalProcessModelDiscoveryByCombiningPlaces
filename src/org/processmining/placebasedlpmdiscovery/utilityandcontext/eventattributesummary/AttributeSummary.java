@@ -83,5 +83,9 @@ public abstract class AttributeSummary<T, C extends XAttribute> {
         return this.representationFeatures;
     }
 
+    public Class<C> getAttributeClass() {
+        return attributeClass;
+    }
+
     public abstract boolean acceptValue(XAttribute attribute);
 }

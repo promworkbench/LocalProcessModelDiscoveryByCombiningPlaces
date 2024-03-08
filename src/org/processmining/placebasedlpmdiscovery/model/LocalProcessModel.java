@@ -19,7 +19,7 @@ public class LocalProcessModel implements Serializable, TextDescribable {
     private final Set<Place> places;
     private final Map<String, Transition> transitions; // label -> transition map
     private final Set<Arc> arcs;
-    private transient LPMAdditionalInfo additionalInfo;
+    private LPMAdditionalInfo additionalInfo;
 
     public LocalProcessModel() {
         this.id = UUID.randomUUID().toString();

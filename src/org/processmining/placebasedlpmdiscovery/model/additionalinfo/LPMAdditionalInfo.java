@@ -80,4 +80,5 @@ public class LPMAdditionalInfo implements Serializable {
     public void setGroupsInfo(GroupsInfo groupsInfo) {
         this.groupsInfo = groupsInfo;
     }
+
 }

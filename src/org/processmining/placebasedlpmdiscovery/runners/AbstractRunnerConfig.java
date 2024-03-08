@@ -1,8 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.runners;
 
-import org.processmining.placebasedlpmdiscovery.runners.RunnerConfig;
-import org.processmining.placebasedlpmdiscovery.runners.RunnerInput;
-import org.processmining.placebasedlpmdiscovery.runners.RunnerOutput;
+import org.processmining.placebasedlpmdiscovery.runners.io.RunnerInput;
+import org.processmining.placebasedlpmdiscovery.runners.io.RunnerOutput;
 
 public abstract class AbstractRunnerConfig implements RunnerConfig {
 

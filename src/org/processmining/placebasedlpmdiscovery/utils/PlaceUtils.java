@@ -12,14 +12,19 @@ import org.processmining.models.semantics.petrinet.Marking;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.Passage;
+import org.processmining.placebasedlpmdiscovery.model.exporting.importers.ImporterFactory;
+import org.processmining.placebasedlpmdiscovery.model.exporting.importers.JsonImporter;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.converters.place.PetriNetPlaceConverter;
 import org.processmining.plugins.pnml.base.FullPnmlElementFactory;
 import org.processmining.plugins.pnml.base.Pnml;
 import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 import org.xmlpull.v1.XmlPullParserFactory;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -259,7 +264,17 @@ public class PlaceUtils {
         return converter.convert(acceptingPetriNet);
     }
 
-    public static Set<Place> extractPlaceNets(String petriNetFileName) throws Exception {
+    public static Set<Place> extractPlaceNets(String placeNetsInputFilePath) throws Exception {
+        if (placeNetsInputFilePath.endsWith("pnml")) {
+            Petrinet net = extractPetriNet(placeNetsInputFilePath);
+            return PlaceUtils.getPlacesFromPetriNet(net);
+        } else {
+            JsonImporter<PlaceSet> importer = ImporterFactory.createPlaceSetJsonImporter();
+            return importer.read(PlaceSet.class, Files.newInputStream(Paths.get(placeNetsInputFilePath))).getElements();
+        }
+    }
+
+    private static Petrinet extractPetriNet(String petriNetFileName) throws XmlPullParserException, IOException {
         FullPnmlElementFactory pnmlFactory = new FullPnmlElementFactory();
         Petrinet net = PetrinetFactory.newPetrinet("place nets");
 
@@ -289,8 +304,7 @@ public class PlaceUtils {
             GraphLayoutConnection layout = new GraphLayoutConnection(net);
             pnml.convertToNet(net, marking, layout);
         }
-
-        return PlaceUtils.getPlacesFromPetriNet(net);
+        return net;
     }
 
     /**
