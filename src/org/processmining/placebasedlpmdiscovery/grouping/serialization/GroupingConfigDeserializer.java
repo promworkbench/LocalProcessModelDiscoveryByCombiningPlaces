@@ -1,14 +1,13 @@
 package org.processmining.placebasedlpmdiscovery.grouping.serialization;
 
-import com.google.gson.*;
-import org.processmining.placebasedlpmdiscovery.grouping.ClusteringAlgorithm;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import org.processmining.placebasedlpmdiscovery.grouping.DefaultGroupingConfig;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingConfig;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
-import org.python.google.common.reflect.TypeToken;
 
 import java.lang.reflect.Type;
-import java.util.Map;
 
 public class GroupingConfigDeserializer implements JsonDeserializer<GroupingConfig> {
     @Override

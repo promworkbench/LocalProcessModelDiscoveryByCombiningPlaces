@@ -1,5 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.lpmdistances.precomputed;
 
+import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
 
 public class PrecomputedFromFileModelDistanceConfig implements ModelDistanceConfig {
@@ -8,6 +9,7 @@ public class PrecomputedFromFileModelDistanceConfig implements ModelDistanceConf
 
     private final String filename;
 
+    @Inject
     public PrecomputedFromFileModelDistanceConfig(String filename) {
         this.filename = filename;
     }

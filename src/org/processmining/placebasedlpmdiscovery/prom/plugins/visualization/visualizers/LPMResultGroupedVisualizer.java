@@ -7,14 +7,14 @@ import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.placebasedlpmdiscovery.grouping.DefaultGroupingConfig;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingConfig;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingController;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.grouped.GroupedLPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.grouped.GroupingProperty;
-import org.processmining.placebasedlpmdiscovery.runners.ClusteringRunner;
+import org.processmining.placebasedlpmdiscovery.runners.clustering.ClusteringRunner;
+import org.processmining.placebasedlpmdiscovery.runners.io.RunnerInput;
+import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
 import javax.swing.*;
-import java.util.HashMap;
 
 
 @Plugin(name = "@1 Visualize LPM Result in Groups",
@@ -105,7 +105,7 @@ public class LPMResultGroupedVisualizer {
         if (property.equals(GroupingProperty.Clustering)) {
             GroupingConfig groupingConfig = new DefaultGroupingConfig();
             GroupingController groupingController = ClusteringRunner
-                    .getGroupingController(result.getInput().getLog(), groupingConfig);
+                    .getGroupingController(groupingConfig, result.getInput().getLog());
             groupingController.groupLPMs(result.getAllLPMs(), groupingConfig);
         }
         GroupedLPMResult grouped = new GroupedLPMResult(result.getAllLPMs(), property);

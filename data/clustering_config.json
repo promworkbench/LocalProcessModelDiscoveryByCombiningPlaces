@@ -1,46 +1,26 @@
 [
   {
-    "identifier": "hierarchical-complete",
-    "clusteringAlgorithm": "Hierarchical",
-    "clusteringConfig": {
-      "num_clusters": "10",
-      "linkage": "complete"
+    "runnerInput": {
+      "inputs": {
+        "eventlog": ".\\data\\bpi2012_res10939.xes",
+        "lpms": ".\\data\\bpi2012_res10939_lpms.json"
+      }
     },
-    "modelDistanceConfig": {
-      "distanceMethod": "DataAttribute"
-    }
-  },
-  {
-    "identifier": "hierarchical-single",
-    "clusteringAlgorithm": "Hierarchical",
-    "clusteringConfig": {
-      "num_clusters": "10",
-      "linkage": "single"
+    "runnerOutput": {
+      "outputs": {
+        "clustering": ".\\data\\bpi2012_res10939_clustering.csv"
+      }
     },
-    "modelDistanceConfig": {
-      "distanceMethod": "DataAttribute"
-    }
-  },
-  {
-    "identifier": "hierarchical-upgma",
-    "clusteringAlgorithm": "Hierarchical",
     "clusteringConfig": {
-      "num_clusters": "10",
-      "linkage": "upgma"
-    },
-    "modelDistanceConfig": {
-      "distanceMethod": "DataAttribute"
-    }
-  },
-  {
-    "identifier": "hierarchical-wpgma",
-    "clusteringAlgorithm": "Hierarchical",
-    "clusteringConfig": {
-      "num_clusters": "10",
-      "linkage": "wpgma"
-    },
-    "modelDistanceConfig": {
-      "distanceMethod": "DataAttribute"
+      "identifier": "hierarchical-complete",
+      "clusteringAlgorithm": "Hierarchical",
+      "clusteringConfig": {
+        "num_clusters": "10",
+        "linkage": "complete"
+      },
+      "modelDistanceConfig": {
+        "distanceMethod": "DataAttribute"
+      }
     }
   }
 ]
