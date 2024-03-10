@@ -20,4 +20,12 @@ public class DistanceRunnerConfig extends AbstractRunnerConfig {
         return this.modelDistanceConfig;
     }
 
+    @Override
+    public String toString() {
+        return "DistanceRunnerConfig{" +
+                "modelDistanceConfig=" + modelDistanceConfig +
+                ", runnerInput=" + runnerInput +
+                ", runnerOutput=" + runnerOutput +
+                '}';
+    }
 }

@@ -36,7 +36,10 @@ import java.util.stream.Collectors;
 public class DistanceComputationRunner {
 
     public static void main(String[] args) throws Exception {
-        if (args.length != 1) return;
+        if (args.length != 1) {
+            System.out.println("No config file specified.");
+            return;
+        }
 
         String configPath = args[0];
 
@@ -48,17 +51,24 @@ public class DistanceComputationRunner {
         List<DistanceRunnerConfig> runnerConfigs = readConfig(configPath);
 
         for (DistanceRunnerConfig config : runnerConfigs) {
+            System.out.println(config);
             Injector injector = Guice.createInjector(
                     new InputModule(LogUtils
                             .readLogFromFile(config.getInput().get(RunnerInput.EVENT_LOG))),
                     new LPMDistancesDependencyInjectionModule(config.getModelDistanceConfig())
             );
 
+            System.out.println("Injector initialized");
             LPMDiscoveryResult result = new FromFileLPMDiscoveryResult(config.getInput().get(RunnerInput.LPMS));
             List<LocalProcessModel> lpms = new ArrayList<>(result.getAllLPMs());
 
+            System.out.println("LPMs imported");
+
             ModelDistanceController modelDistanceController = injector.getInstance(ModelDistanceController.class);
             double[][] distances = modelDistanceController.getDistanceMatrix(lpms);
+
+            System.out.println("Distances computed");
+
             writeDistances(config.getOutput().get(RunnerOutput.DISTANCE), lpms, distances);
         }
     }

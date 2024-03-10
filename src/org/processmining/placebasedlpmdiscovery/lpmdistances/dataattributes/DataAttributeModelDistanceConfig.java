@@ -9,4 +9,9 @@ public class DataAttributeModelDistanceConfig implements ModelDistanceConfig {
     public String getDistanceMethod() {
         return METHOD;
     }
+
+    @Override
+    public String toString() {
+        return METHOD;
+    }
 }

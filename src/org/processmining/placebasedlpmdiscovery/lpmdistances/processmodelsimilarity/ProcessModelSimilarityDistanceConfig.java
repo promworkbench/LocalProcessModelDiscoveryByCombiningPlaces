@@ -20,4 +20,11 @@ public class ProcessModelSimilarityDistanceConfig implements ModelDistanceConfig
     public ProcessModelSimilarityMeasure getProcessModelSimilarityMeasure() {
         return this.processModelSimilarityMeasure;
     }
+
+    @Override
+    public String toString() {
+        return "ProcessModelSimilarityDistanceConfig{" +
+                "processModelSimilarityMeasure=" + processModelSimilarityMeasure +
+                '}';
+    }
 }

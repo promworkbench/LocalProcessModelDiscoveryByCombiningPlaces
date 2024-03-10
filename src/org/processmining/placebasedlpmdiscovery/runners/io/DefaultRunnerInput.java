@@ -13,4 +13,11 @@ public class DefaultRunnerInput implements RunnerInput {
     public String get(String key) {
         return inputs.get(key);
     }
+
+    @Override
+    public String toString() {
+        return "DefaultRunnerInput{" +
+                "inputs=" + inputs +
+                '}';
+    }
 }

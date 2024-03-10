@@ -33,10 +33,11 @@ public class PrecomputedNodeMatchingModelDistance extends NodeMatchingModelDista
 
         // compute optimal matching
         HungarianAlgorithm hungarianAlgorithm = new HungarianAlgorithm(costMatrix);
-        int[][] assignments = hungarianAlgorithm.findOptimalAssignment();
+//        int[][] assignments = hungarianAlgorithm.findOptimalAssignment();
+        int[] assignments = hungarianAlgorithm.execute();
         double totalCost = 0;
         for (int i = 0; i < assignments.length; ++i) {
-            int iAssignment = assignments[i][1];
+            int iAssignment = assignments[i];
             if (iAssignment == -1) {
                 continue;
             }

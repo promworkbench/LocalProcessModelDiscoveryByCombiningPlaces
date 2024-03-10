@@ -26,10 +26,19 @@ public class NodeMatchingModelDistance implements ModelDistance {
 
         // compute optimal matching
         HungarianAlgorithm hungarianAlgorithm = new HungarianAlgorithm(costMatrix);
-        int[][] assignments = hungarianAlgorithm.findOptimalAssignment();
+//        int[][] assignments = hungarianAlgorithm.findOptimalAssignment();
+//        double totalCost = 0;
+//        for (int i = 0; i < assignments.length; ++i) {
+//            int iAssignment = assignments[i][1];
+//            if (iAssignment == -1) {
+//                continue;
+//            }
+//            totalCost += costMatrix[i][iAssignment];
+//        }
+        int[] assignments = hungarianAlgorithm.execute();
         double totalCost = 0;
         for (int i = 0; i < assignments.length; ++i) {
-            int iAssignment = assignments[i][1];
+            int iAssignment = assignments[i];
             if (iAssignment == -1) {
                 continue;
             }
@@ -43,7 +52,7 @@ public class NodeMatchingModelDistance implements ModelDistance {
     public double[][] calculatePairwiseDistance(List<LocalProcessModel> lpms) {
         double[][] distances = new double[lpms.size()][lpms.size()];
         for (int i = 0; i < lpms.size(); ++i) {
-            for (int j = 0; j < lpms.size(); ++i) {
+            for (int j = 0; j < lpms.size(); ++j) {
                 distances[i][j] = this.calculateDistance(lpms.get(i), lpms.get(j));
             }
         }

@@ -12,4 +12,11 @@ public class DefaultRunnerOutput implements RunnerOutput {
     public String get(String key) {
         return outputs.get(key);
     }
+
+    @Override
+    public String toString() {
+        return "DefaultRunnerOutput{" +
+                "outputs=" + outputs +
+                '}';
+    }
 }
