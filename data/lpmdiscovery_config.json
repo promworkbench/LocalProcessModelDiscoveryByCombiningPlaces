@@ -2,13 +2,13 @@
   {
     "runnerInput": {
       "inputs": {
-        "eventlog": ".\\data\\bpi2012_res10939.xes",
-        "places": ".\\data\\bpi2012_res10939.json"
+        "eventlog": "C:\\Users\\peeva\\My\\research\\resources\\quick_input\\RTFM.xes",
+        "places": "C:\\Users\\peeva\\My\\research\\resources\\quick_input\\RTFM.pnml"
       }
     },
     "runnerOutput": {
       "outputs": {
-        "lpms": ".\\data\\bpi2012_res10939_lpms.json"
+        "lpms": "C:\\Users\\peeva\\My\\research\\resources\\quick_input\\RTFM.json"
       }
     }
   }
