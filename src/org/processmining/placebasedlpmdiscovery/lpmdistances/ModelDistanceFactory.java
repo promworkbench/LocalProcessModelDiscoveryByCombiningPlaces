@@ -7,9 +7,7 @@ import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.MixedModelDis
 import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.MixedModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.precomputed.PrecomputedFromFileModelDistance;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.precomputed.PrecomputedFromFileModelDistanceConfig;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity.NodeMatchingModelDistance;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity.ProcessModelSimilarityDistanceConfig;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity.TransitionLabelModelDistance;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity.*;
 
 public class ModelDistanceFactory {
 
@@ -41,6 +39,10 @@ public class ModelDistanceFactory {
                 return new NodeMatchingModelDistance();
             case TransitionLabel:
                 return new TransitionLabelModelDistance();
+            case TraceMatching:
+                return new TraceMatchingModelDistance();
+            case EFOverlap:
+                return new EFOverlapModelDistance();
         }
         throw new IllegalArgumentException("The Process Model Similarity Measure " + distanceConfig.getDistanceMethod()
                 + " is illegal.");

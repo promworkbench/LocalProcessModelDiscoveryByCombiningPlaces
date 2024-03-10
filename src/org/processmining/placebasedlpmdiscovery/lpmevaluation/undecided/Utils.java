@@ -4,7 +4,9 @@ import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.framework.connections.ConnectionCannotBeObtained;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.models.connections.GraphLayoutConnection;
+import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.plugins.pnml.base.FullPnmlElementFactory;
 import org.processmining.plugins.pnml.base.Pnml;
@@ -12,7 +14,10 @@ import org.processmining.plugins.pnml.base.PnmlElementFactory;
 
 import java.io.*;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 public class Utils {
 
@@ -108,5 +113,10 @@ public class Utils {
         }
 
         return exportAcceptingPetriNetToOutputStream(apn, layout);
+    }
+
+    public static Map<String, Integer> getStringsToIntegerMap(Set<String> strings) {
+        AtomicInteger ai = new AtomicInteger(0);
+        return strings.stream().collect(Collectors.toMap(s -> s, s -> ai.getAndIncrement()));
     }
 }

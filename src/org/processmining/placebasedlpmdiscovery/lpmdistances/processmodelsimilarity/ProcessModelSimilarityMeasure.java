@@ -2,5 +2,7 @@ package org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimila
 
 public enum ProcessModelSimilarityMeasure {
     NodeMatching,
-    TransitionLabel
+    TransitionLabel,
+    TraceMatching,
+    EFOverlap
 }

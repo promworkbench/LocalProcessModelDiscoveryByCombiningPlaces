@@ -26,15 +26,6 @@ public class NodeMatchingModelDistance implements ModelDistance {
 
         // compute optimal matching
         HungarianAlgorithm hungarianAlgorithm = new HungarianAlgorithm(costMatrix);
-//        int[][] assignments = hungarianAlgorithm.findOptimalAssignment();
-//        double totalCost = 0;
-//        for (int i = 0; i < assignments.length; ++i) {
-//            int iAssignment = assignments[i][1];
-//            if (iAssignment == -1) {
-//                continue;
-//            }
-//            totalCost += costMatrix[i][iAssignment];
-//        }
         int[] assignments = hungarianAlgorithm.execute();
         double totalCost = 0;
         for (int i = 0; i < assignments.length; ++i) {

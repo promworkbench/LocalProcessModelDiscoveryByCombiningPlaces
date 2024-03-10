@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.replayer;
 
 import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.undecided.Utils;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 
@@ -195,24 +196,5 @@ public class Replayer {
         }
 
         return paths;
-
-
     }
-    //    public static Set<List<String>> findAllPaths(int pathLengthLimit, LocalProcessModel lpm) {
-//        if (lpm.getPlaces().size() > 1)
-//            throw new NotImplementedException();
-//
-//        Place place = lpm.getPlaces().iterator().next();
-//        Set<List<String>> paths = new HashSet<>();
-//
-//        for (Transition trIn : place.getInputTransitions())
-//            for (Transition trOut : place.getOutputTransitions()) {
-//                List<String> path = new ArrayList<>();
-//                path.add(trIn.getLabel());
-//                path.add(trOut.getLabel());
-//                paths.add(path);
-//            }
-//
-//        return paths;
-//    }
 }
