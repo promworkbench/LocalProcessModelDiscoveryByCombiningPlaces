@@ -53,14 +53,14 @@ public class ContinuousAttributeSummary extends RangeAttributeSummary<Double, XA
         this.representationFeatures.put(AttributeSummary.MAX, Math.max(max, value));
 
         // sum
-        double sum = (double) this.representationFeatures.getOrDefault(AttributeSummary.SUM, 0);
+        double sum = (double) this.representationFeatures.getOrDefault(AttributeSummary.SUM, 0.0);
         this.representationFeatures.put(AttributeSummary.SUM, sum += value);
 
         // mean
         this.representationFeatures.put(AttributeSummary.MEAN, sum / count);
 
         // median (running median algorithm)
-        double median = (double) this.representationFeatures.getOrDefault(AttributeSummary.MEDIAN, 0);
+        double median = (double) this.representationFeatures.getOrDefault(AttributeSummary.MEDIAN, 0.0);
         this.representationFeatures.put(AttributeSummary.MEDIAN, median + (value - median) / count);
     }
 
