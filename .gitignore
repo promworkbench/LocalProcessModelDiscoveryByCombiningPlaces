@@ -104,3 +104,7 @@ fabric.properties
 *.iml
 
 doc/
+
+src/resources/
+
+src/META-INF/
