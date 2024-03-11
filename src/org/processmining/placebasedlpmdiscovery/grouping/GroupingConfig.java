@@ -8,7 +8,7 @@ public interface GroupingConfig {
 
     ClusteringAlgorithm getClusteringAlgorithm();
 
-    Map<String, Object> getClusteringConfig();
+    Map<String, String> getClusteringConfig();
 
     ModelDistanceConfig getModelDistanceConfig();
 

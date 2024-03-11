@@ -83,17 +83,18 @@ public class DistanceComputationRunner {
         }
 
         Table<String, String, Double> distanceTable = tableBuilder.build();
-        CSVPrinter csvPrinter = CSVFormat.DEFAULT
+        try (CSVPrinter csvPrinter = CSVFormat.DEFAULT
                 .builder()
                 .setHeader(lpms.stream().map(LocalProcessModel::getShortString).toArray(String[]::new))
                 .build()
-                .print(Paths.get(filePath), StandardCharsets.UTF_8);
-        csvPrinter.printRecords(distanceTable.rowMap().entrySet()
-                .stream().map(entry -> ImmutableList.builder()
-                        .add(entry.getKey())
-                        .addAll(entry.getValue().values())
-                        .build())
-                .collect(Collectors.toList()));
+                .print(Paths.get(filePath), StandardCharsets.UTF_8)) {
+            csvPrinter.printRecords(distanceTable.rowMap().entrySet()
+                    .stream().map(entry -> ImmutableList.builder()
+                            .add(entry.getKey())
+                            .addAll(entry.getValue().values())
+                            .build())
+                    .collect(Collectors.toList()));
+        }
     }
 
     private static List<DistanceRunnerConfig> readConfig(String configPath) throws FileNotFoundException {

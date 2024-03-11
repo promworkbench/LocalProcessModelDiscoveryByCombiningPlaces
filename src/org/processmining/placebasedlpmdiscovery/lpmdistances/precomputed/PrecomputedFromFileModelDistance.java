@@ -38,8 +38,8 @@ public class PrecomputedFromFileModelDistance implements ModelDistance {
                 .limit(rowList.size() - 1)
                 .collect(Collectors.toMap(ind -> rowList.get(0)[ind], ind -> ind));
         distance = new double[rowList.size() - 1][rowList.size() - 1];
-        for (int i = 1; i < rowList.size(); i++) {
-            distance[i] = Arrays.stream(Arrays.copyOfRange(rowList.get(i), 1, rowList.size()))
+        for (int i = 0; i < rowList.size() - 1; i++) {
+            distance[i] = Arrays.stream(Arrays.copyOfRange(rowList.get(i+1), 1, rowList.size()))
                     .mapToDouble(Double::valueOf).toArray();
         }
     }

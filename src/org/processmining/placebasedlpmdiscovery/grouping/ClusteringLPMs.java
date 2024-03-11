@@ -15,7 +15,7 @@ public class ClusteringLPMs {
     public static int[] cluster(List<LocalProcessModel> lpms,
                                 double[][] proximity,
                                 ClusteringAlgorithm clusteringAlgorithm,
-                                Map<String, Object> config) {
+                                Map<String, String> config) {
         if (clusteringAlgorithm.equals(ClusteringAlgorithm.Hierarchical)) {
             return hierarchical(lpms, proximity, config);
         } else if (clusteringAlgorithm.equals(ClusteringAlgorithm.KMedoids)) {
@@ -32,13 +32,13 @@ public class ClusteringLPMs {
 
     private static int[] hierarchical(List<LocalProcessModel> lpms,
                                       double[][] proximity,
-                                      Map<String, Object> config) {
+                                      Map<String, String> config) {
 
-        HierarchicalClustering hc = HierarchicalClustering.fit(getLinkage((String) config.get("linkage"), proximity));
+        HierarchicalClustering hc = HierarchicalClustering.fit(getLinkage(config.get("linkage"), proximity));
         if (config.containsKey("num_clusters")) {
-            return hc.partition(Integer.parseInt((String) config.get("num_clusters")));
+            return hc.partition(Integer.parseInt(config.get("num_clusters")));
         } else if (config.containsKey("height")) {
-            return hc.partition((double) config.get("height"));
+            return hc.partition(Double.parseDouble(config.get("height")));
         }
         throw new IllegalStateException("Neither num_clusters nor height is defined.");
     }
@@ -59,7 +59,7 @@ public class ClusteringLPMs {
 
     private static int[] kmedoids(List<LocalProcessModel> lpms,
                                   double[][] proximity,
-                                  Map<String, Object> config) {
+                                  Map<String, String> config) {
         AtomicInteger counter = new AtomicInteger(0);
         Map<LocalProcessModel, Integer> lpmIndexMap = lpms.stream()
                 .collect(Collectors.toMap(lpm -> lpm, lpm -> counter.getAndIncrement()));
@@ -68,11 +68,11 @@ public class ClusteringLPMs {
                 .run(20, () -> CLARANS.fit(
                         lpms.toArray(new LocalProcessModel[0]),
                         (lpm1, lpm2) -> proximity[lpmIndexMap.get(lpm1)][lpmIndexMap.get(lpm2)],
-                        (int) config.get("num_clusters")));
+                        Integer.parseInt(config.get("num_clusters"))));
         return clarans.y;
     }
 
-    private static int[] dbscan(List<LocalProcessModel> lpms, double[][] proximity, Map<String, Object> config) {
+    private static int[] dbscan(List<LocalProcessModel> lpms, double[][] proximity, Map<String, String> config) {
         AtomicInteger counter = new AtomicInteger(0);
         Map<LocalProcessModel, Integer> lpmIndexMap = lpms.stream()
                 .collect(Collectors.toMap(lpm -> lpm, lpm -> counter.getAndIncrement()));
@@ -80,17 +80,18 @@ public class ClusteringLPMs {
         DBSCAN<LocalProcessModel> dbscan = DBSCAN.fit(
                 lpms.toArray(new LocalProcessModel[0]),
                 (lpm1, lpm2) -> proximity[lpmIndexMap.get(lpm1)][lpmIndexMap.get(lpm2)],
-                (int) config.get("min_pts"),
-                (double) config.get("radius"));
+                Integer.parseInt(config.get("min_pts")),
+                Double.parseDouble(config.get("radius")));
         return dbscan.y;
     }
 
-    private static int[] spectral(List<LocalProcessModel> lpms, double[][] proximity, Map<String, Object> config) {
-        SpectralClustering spectral = SpectralClustering.fit(Matrix.of(proximity), (int) config.get("num_clusters"));
+    private static int[] spectral(List<LocalProcessModel> lpms, double[][] proximity, Map<String, String> config) {
+        SpectralClustering spectral = SpectralClustering.fit(
+                Matrix.of(proximity), Integer.parseInt(config.get("num_clusters")));
         return spectral.y;
     }
 
-    private static int[] minentropy(List<LocalProcessModel> lpms, double[][] proximity, Map<String, Object> config) {
+    private static int[] minentropy(List<LocalProcessModel> lpms, double[][] proximity, Map<String, String> config) {
         AtomicInteger counter = new AtomicInteger(0);
         Map<LocalProcessModel, Integer> lpmIndexMap = lpms.stream()
                 .collect(Collectors.toMap(lpm -> lpm, lpm -> counter.getAndIncrement()));
@@ -99,8 +100,8 @@ public class ClusteringLPMs {
                 .run(20, () -> MEC.fit(
                         lpms.toArray(new LocalProcessModel[0]),
                         (lpm1, lpm2) -> proximity[lpmIndexMap.get(lpm1)][lpmIndexMap.get(lpm2)],
-                        (int) config.get("num_clusters"),
-                        (double) config.get("radius")));
+                        Integer.parseInt(config.get("num_clusters")),
+                        Double.parseDouble(config.get("radius"))));
         return mec.y;
     }
 }

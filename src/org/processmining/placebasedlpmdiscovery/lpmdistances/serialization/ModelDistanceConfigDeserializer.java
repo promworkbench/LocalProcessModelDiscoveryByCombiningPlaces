@@ -4,6 +4,7 @@ import com.google.gson.*;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.MixedModelDistanceConfig;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.precomputed.PrecomputedFromFileModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity.ProcessModelSimilarityDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity.ProcessModelSimilarityMeasure;
 
@@ -21,6 +22,8 @@ public class ModelDistanceConfigDeserializer implements JsonDeserializer<ModelDi
                         .valueOf(jsonObject.get("processModelSimilarityMeasure").getAsString()));
             case MixedModelDistanceConfig.METHOD:
                 return new MixedModelDistanceConfig();
+            case PrecomputedFromFileModelDistanceConfig.METHOD:
+                return context.deserialize(json, PrecomputedFromFileModelDistanceConfig.class);
         }
         throw new JsonParseException("The distance config " + jsonObject.get("distanceMethod").getAsString() + "does not exist");
     }

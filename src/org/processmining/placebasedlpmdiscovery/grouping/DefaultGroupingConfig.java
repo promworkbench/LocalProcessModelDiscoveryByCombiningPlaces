@@ -12,13 +12,13 @@ public class DefaultGroupingConfig implements GroupingConfig {
 
     private final String identifier;
     private final ClusteringAlgorithm clusteringAlgorithm;
-    private final Map<String, Object> clusteringConfig;
+    private final Map<String, String> clusteringConfig;
     private final ModelDistanceConfig modelDistanceConfig;
 
     public DefaultGroupingConfig() {
         this("hierarchical-complete-10",
                 ClusteringAlgorithm.Hierarchical,
-                Stream.of(new AbstractMap.SimpleEntry<>("num_clusters", 10),
+                Stream.of(new AbstractMap.SimpleEntry<>("num_clusters", "10"),
                                 new AbstractMap.SimpleEntry<>("linkage", "complete"))
                         .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
                 new DataAttributeModelDistanceConfig()
@@ -27,7 +27,7 @@ public class DefaultGroupingConfig implements GroupingConfig {
 
     public DefaultGroupingConfig(String identifier,
                                  ClusteringAlgorithm clusteringAlgorithm,
-                                 Map<String, Object> clusteringConfig,
+                                 Map<String, String> clusteringConfig,
                                  ModelDistanceConfig modelDistanceConfig) {
         this.identifier = identifier;
         this.clusteringAlgorithm = clusteringAlgorithm;
@@ -41,7 +41,7 @@ public class DefaultGroupingConfig implements GroupingConfig {
     }
 
     @Override
-    public Map<String, Object> getClusteringConfig() {
+    public Map<String, String> getClusteringConfig() {
         return this.clusteringConfig;
     }
 

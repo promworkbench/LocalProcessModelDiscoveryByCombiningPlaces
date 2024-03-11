@@ -90,17 +90,18 @@ public class ClusteringRunner {
         }
 
         Table<String, String, Integer> clusteringTable = tableBuilder.build();
-        CSVPrinter csvPrinter = CSVFormat.DEFAULT
+        try (CSVPrinter csvPrinter = CSVFormat.DEFAULT
                 .builder()
-                .setHeader(new String[] {"LPM", config.getClusteringConfig().getIdentifier()})
+                .setHeader(new String[]{"LPM", config.getClusteringConfig().getIdentifier()})
                 .build()
-                .print(Paths.get(config.getOutput().get(RunnerOutput.CLUSTERING)), StandardCharsets.UTF_8);
-        csvPrinter.printRecords(clusteringTable.rowMap().entrySet()
-                .stream().map(entry -> ImmutableList.builder()
-                        .add(entry.getKey())
-                        .addAll(entry.getValue().values())
-                        .build())
-                .collect(Collectors.toList()));
+                .print(Paths.get(config.getOutput().get(RunnerOutput.CLUSTERING)), StandardCharsets.UTF_8)) {
+            csvPrinter.printRecords(clusteringTable.rowMap().entrySet()
+                    .stream().map(entry -> ImmutableList.builder()
+                            .add(entry.getKey())
+                            .addAll(entry.getValue().values())
+                            .build())
+                    .collect(Collectors.toList()));
+        }
     }
 
     private static List<ClusteringRunnerConfig> readConfig(String configPath) throws FileNotFoundException {

@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
 
 public class TraceMatchingModelDistance implements ModelDistance {
     private static double calculateTraceMatchingDistance(List<List<Integer>> paths1, List<List<Integer>> paths2) {
+        if (paths1.isEmpty() || paths2.isEmpty()) {
+            return 1;
+        }
         LevenshteinDistance levDist = new LevenshteinDistance();
         double[][] costMatrix = new double[paths1.size()][paths2.size()];
         for (int i = 0; i < paths1.size(); ++i) {

@@ -8,10 +8,11 @@ public class PrecomputedFromFileModelDistanceConfig implements ModelDistanceConf
     public static final String METHOD = "Precomputed";
 
     private final String filename;
+    private final ModelDistanceConfig originalConfig;
 
-    @Inject
-    public PrecomputedFromFileModelDistanceConfig(String filename) {
+    public PrecomputedFromFileModelDistanceConfig(String filename, ModelDistanceConfig originalConfig) {
         this.filename = filename;
+        this.originalConfig = originalConfig;
     }
 
     @Override
