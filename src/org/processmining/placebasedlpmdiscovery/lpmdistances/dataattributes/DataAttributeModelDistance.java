@@ -99,6 +99,18 @@ public abstract class DataAttributeModelDistance implements ModelDistance {
                         this.literalValuesOrder.put(attributeKey, featureKeys);
                     }
                 }
+                if (defaultAttributeSummary instanceof LiteralAttributeSummary) {
+                    featureKeys = this.literalValuesOrder.get(attributeKey);
+
+                    if (featureKeys == null) {
+                        featureKeys = new ArrayList<>(
+                                this.attributeSummaryController
+                                        .computeEventAttributeSummary(this.log, attributeKey)
+                                        .getRepresentationFeatures()
+                                        .keySet());
+                        this.literalValuesOrder.put(attributeKey, featureKeys);
+                    }
+                }
                 // sort representation features keys such that for each vector the same order is used
                 Collections.sort(featureKeys);
 

@@ -2,14 +2,10 @@ package org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattribut
 
 import org.deckfour.xes.model.XAttribute;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public abstract class AttributeSummary<T, C extends XAttribute> {
-
-    protected static final String TRUE = "true";
-    protected static final String FALSE = "false";
     public static final String MIN = "min";
     public static final String MAX = "max";
     public static final String COUNT = "count";
@@ -31,7 +27,7 @@ public abstract class AttributeSummary<T, C extends XAttribute> {
     public AttributeSummary(String key, boolean completeList) {
         this.key = key;
         this.completeList = completeList;
-        this.representationFeatures = new HashMap<>();
+        initializeRepresentationFeatures();
         this.setAttributeClass();
     }
 
@@ -61,9 +57,9 @@ public abstract class AttributeSummary<T, C extends XAttribute> {
 
 //    public abstract void summarize();
 
-    protected abstract void computeRepresentationFeatures();
+    protected abstract void initializeRepresentationFeatures();
 
-    protected abstract void computeRepresentationFeaturesIfEmpty();
+    protected abstract void computeRepresentationFeatures();
 
     public Map<String, Number> getRepresentationFeatures() {
         // if we do not keep the complete list of values, the representation features are already computed
@@ -72,7 +68,7 @@ public abstract class AttributeSummary<T, C extends XAttribute> {
         }
         // if there is no values return some default representation features
         if (this.values.isEmpty()) {
-            this.computeRepresentationFeaturesIfEmpty();
+            this.initializeRepresentationFeatures();
         }
 
         // if first computation or there is a change

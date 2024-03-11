@@ -70,26 +70,28 @@ public class ContinuousAttributeSummary extends RangeAttributeSummary<Double, XA
     }
 
     @Override
+    protected void initializeRepresentationFeatures() {
+        this.representationFeatures = new HashMap<>();
+        this.representationFeatures.put(AttributeSummary.MIN, 0.0);
+        this.representationFeatures.put(AttributeSummary.MAX, 0.0);
+        this.representationFeatures.put(AttributeSummary.MEAN, 0.0);
+        this.representationFeatures.put(AttributeSummary.SUM, 0.0);
+        this.representationFeatures.put(AttributeSummary.MEDIAN, 0.0);
+        this.representationFeatures.put(AttributeSummary.COUNT, 0);
+    }
+
+    @Override
     protected void computeRepresentationFeatures() {
         this.representationFeatures = new HashMap<>();
-        this.representationFeatures.put("Min", this.values.stream().min(Double::compareTo).orElse(Double.NaN));
-        this.representationFeatures.put("Max", this.values.stream().max(Double::compareTo).orElse(Double.NaN));
-        this.representationFeatures.put("Mean", this.values.stream().mapToDouble(v -> v).average().orElse(Double.NaN));
-        this.representationFeatures.put("Sum", this.values.stream().mapToDouble(v -> v).sum());
+        this.representationFeatures.put(AttributeSummary.MIN, this.values.stream().min(Double::compareTo).orElse(Double.NaN));
+        this.representationFeatures.put(AttributeSummary.MAX, this.values.stream().max(Double::compareTo).orElse(Double.NaN));
+        this.representationFeatures.put(AttributeSummary.MEAN, this.values.stream().mapToDouble(v -> v).average().orElse(Double.NaN));
+        this.representationFeatures.put(AttributeSummary.SUM, this.values.stream().mapToDouble(v -> v).sum());
+        this.representationFeatures.put(AttributeSummary.COUNT, this.values.size());
 
         double median = this.values.size() % 2 == 0 ?
                 this.values.stream().mapToDouble(v -> v).sorted().skip(this.values.size() / 2 - 1).limit(2).average().orElse(Double.NaN) :
                 this.values.stream().mapToDouble(v -> v).sorted().skip(this.values.size() / 2).findFirst().orElse(Double.NaN);
-        this.representationFeatures.put("Median", median);
-    }
-
-    @Override
-    protected void computeRepresentationFeaturesIfEmpty() {
-        this.representationFeatures = new HashMap<>();
-        this.representationFeatures.put("Min", Double.MIN_VALUE);
-        this.representationFeatures.put("Max", Double.MIN_VALUE);
-        this.representationFeatures.put("Mean", Double.MIN_VALUE);
-        this.representationFeatures.put("Sum", Double.MIN_VALUE);
-        this.representationFeatures.put("Median", Double.MIN_VALUE);
+        this.representationFeatures.put(AttributeSummary.MEDIAN, median);
     }
 }

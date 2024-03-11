@@ -69,27 +69,29 @@ public class DiscreteAttributeSummary extends RangeAttributeSummary<Long, XAttri
     }
 
     @Override
+    protected void initializeRepresentationFeatures() {
+        this.representationFeatures = new HashMap<>();
+        this.representationFeatures.put(AttributeSummary.MIN, 0L);
+        this.representationFeatures.put(AttributeSummary.MAX, 0L);
+        this.representationFeatures.put(AttributeSummary.MEAN, 0L);
+        this.representationFeatures.put(AttributeSummary.SUM, 0L);
+        this.representationFeatures.put(AttributeSummary.MEDIAN, 0L);
+        this.representationFeatures.put(AttributeSummary.COUNT, 0);
+    }
+
+    @Override
     protected void computeRepresentationFeatures() {
         this.representationFeatures = new HashMap<>();
-        this.representationFeatures.put("Min", this.values.stream().min(Long::compareTo).orElse(Long.MIN_VALUE));
-        this.representationFeatures.put("Max", this.values.stream().max(Long::compareTo).orElse(Long.MAX_VALUE));
-        this.representationFeatures.put("Mean", this.values.stream().mapToLong(v -> v).average().orElse(Long.MIN_VALUE));
-        this.representationFeatures.put("Sum", this.values.stream().mapToLong(v -> v).sum());
+        this.representationFeatures.put(AttributeSummary.MIN, this.values.stream().min(Long::compareTo).orElse(Long.MIN_VALUE));
+        this.representationFeatures.put(AttributeSummary.MAX, this.values.stream().max(Long::compareTo).orElse(Long.MAX_VALUE));
+        this.representationFeatures.put(AttributeSummary.MEAN, this.values.stream().mapToLong(v -> v).average().orElse(Long.MIN_VALUE));
+        this.representationFeatures.put(AttributeSummary.SUM, this.values.stream().mapToLong(v -> v).sum());
+        this.representationFeatures.put(AttributeSummary.COUNT, this.values.size());
 
         double median =
                 this.values.size() % 2 == 0 ?
                 this.values.stream().mapToLong(v -> v).sorted().skip(this.values.size() / 2 - 1).limit(2).average().orElse(Long.MIN_VALUE) :
                 this.values.stream().mapToLong(v -> v).sorted().skip(this.values.size() / 2).findFirst().orElse(Long.MIN_VALUE);
-        this.representationFeatures.put("Median", median);
-    }
-
-    @Override
-    protected void computeRepresentationFeaturesIfEmpty() {
-        this.representationFeatures = new HashMap<>();
-        this.representationFeatures.put("Min", Long.MIN_VALUE);
-        this.representationFeatures.put("Max", Long.MIN_VALUE);
-        this.representationFeatures.put("Mean", Long.MIN_VALUE);
-        this.representationFeatures.put("Sum", Long.MIN_VALUE);
-        this.representationFeatures.put("Median", Long.MIN_VALUE);
+        this.representationFeatures.put(AttributeSummary.MEDIAN, median);
     }
 }
