@@ -6,10 +6,9 @@ public abstract class SimpleEvaluationResult implements LPMEvaluationResult {
 
     private static final long serialVersionUID = 8123973260828398630L;
     private final LPMEvaluationResultId id;
-    protected transient LocalProcessModel lpm;
+//    protected transient LocalProcessModel lpm;
 
-    public SimpleEvaluationResult(LocalProcessModel lpm, LPMEvaluationResultId id) {
-        this.lpm = lpm;
+    public SimpleEvaluationResult(LPMEvaluationResultId id) {
         this.id = id;
     }
 

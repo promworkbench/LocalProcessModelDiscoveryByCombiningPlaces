@@ -5,15 +5,16 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEval
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class TransitionCoverageEvaluationResult extends SimpleEvaluationResult {
     private static final long serialVersionUID = 3899013599519921214L;
 
     private final Map<String, Integer> transitionCountMap;
     private final Map<String, Integer> transitionTotalCounts;
+
+    private final Set<String> allTransitions;
 
     /**
      * denotes the calculated transition coverage given the two maps
@@ -25,9 +26,14 @@ public class TransitionCoverageEvaluationResult extends SimpleEvaluationResult {
     private boolean updated;
 
     public TransitionCoverageEvaluationResult(LocalProcessModel lpm) {
-        super(lpm, StandardLPMEvaluationResultId.TransitionCoverageEvaluationResult);
+        super(StandardLPMEvaluationResultId.TransitionCoverageEvaluationResult);
         this.transitionCountMap = new HashMap<>();
         this.transitionTotalCounts = new HashMap<>();
+        this.allTransitions = lpm.getTransitions()
+                .stream()
+                .filter(tr -> !tr.isInvisible())
+                .map(Transition::getLabel)
+                .collect(Collectors.toSet());
     }
 
     /**
@@ -55,13 +61,11 @@ public class TransitionCoverageEvaluationResult extends SimpleEvaluationResult {
         if (updated) {
             double sum = 0;
             int countTr = 0;
-            for (Transition tr : lpm.getTransitions()) {
-                if (!tr.isInvisible()) {
-                    int count = transitionCountMap.getOrDefault(tr.getLabel(), 0);
-                    int total = transitionTotalCounts.getOrDefault(tr.getLabel(), 0);
-                    countTr++;
-                    sum += total != 0 ? count * 1.0 / total : 0;
-                }
+            for (String tr : this.allTransitions) {
+                int count = transitionCountMap.getOrDefault(tr, 0);
+                int total = transitionTotalCounts.getOrDefault(tr, 0);
+                countTr++;
+                sum += total != 0 ? count * 1.0 / total : 0;
             }
             updated = false;
             score = countTr == 0 ? 0 : sum / countTr;

@@ -12,16 +12,18 @@ public class PassageRepetitionEvaluationResult extends SimpleEvaluationResult {
     private static final long serialVersionUID = -13763990802711904L;
 
     private final Map<Passage, Integer> passageRepetitionMap;
+    private final int maxPassageRepetition;
     private double result;
 
     public PassageRepetitionEvaluationResult(LocalProcessModel lpm, Map<Passage, Integer> passageRepetitionMap) {
-        super(lpm, StandardLPMEvaluationResultId.PassageRepetitionEvaluationResult);
+        super(StandardLPMEvaluationResultId.PassageRepetitionEvaluationResult);
         this.passageRepetitionMap = passageRepetitionMap;
+        this.maxPassageRepetition = lpm.getPlaces().size();
         this.result = -1;
     }
 
     private void calculateResult() {
-        int max = passageRepetitionMap.size() * this.lpm.getPlaces().size();
+        int max = passageRepetitionMap.size() * this.maxPassageRepetition;
         int min = passageRepetitionMap.size();
         int actual = passageRepetitionMap.values().stream().mapToInt(x -> x).sum();
 

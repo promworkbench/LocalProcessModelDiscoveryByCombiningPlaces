@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
 import java.util.HashMap;
@@ -10,11 +10,11 @@ import java.util.Objects;
 
 public class TraceSupportEvaluationResult extends SimpleEvaluationResult {
 
-    private int totalTraceCount;
     private final Map<Integer, Integer> coveredTraces;
+    private int totalTraceCount;
 
     public TraceSupportEvaluationResult(LocalProcessModel lpm) {
-        super(lpm, StandardLPMEvaluationResultId.TraceSupportEvaluationResult);
+        super(StandardLPMEvaluationResultId.TraceSupportEvaluationResult);
         this.coveredTraces = new HashMap<>();
     }
 
