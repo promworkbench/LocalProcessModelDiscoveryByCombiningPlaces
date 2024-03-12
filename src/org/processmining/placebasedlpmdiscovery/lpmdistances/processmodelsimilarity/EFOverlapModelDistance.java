@@ -61,6 +61,10 @@ public class EFOverlapModelDistance implements ModelDistance {
     }
 
     private static double calculateEfOverlapDistance(List<List<Integer>> paths1, List<List<Integer>> paths2) {
+        if (paths1.isEmpty() || paths2.isEmpty()) {
+            return 1;
+        }
+
         Set<String> ef1 = new HashSet<>();
         for (List<Integer> path : paths1) {
             for (int i = 0; i < path.size(); ++i) {
