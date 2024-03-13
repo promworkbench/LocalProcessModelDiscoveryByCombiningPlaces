@@ -17,20 +17,17 @@ import org.processmining.placebasedlpmdiscovery.runners.io.RunnerInput;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerOutput;
 import org.processmining.placebasedlpmdiscovery.runners.serialization.RunnerInputAdapter;
 import org.processmining.placebasedlpmdiscovery.runners.serialization.RunnerOutputDeserializer;
-import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 import org.python.google.common.reflect.TypeToken;
 
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class DefaultLogAndPetriNetRunner {
+public class LPMDiscoveryRunner {
 
     public static void main(String[] args) throws Exception {
         if (args.length != 1) return;

@@ -3,7 +3,7 @@ package org.processmining.placebasedlpmdiscovery.model.serializable.grouped;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
 public class ClusteringLPMResultGroup extends LPMResultGroup {
-    private String groupingKey;
+    private final String groupingKey;
 
     public ClusteringLPMResultGroup(String clusteringKey) {
         this.groupingKey = clusteringKey;

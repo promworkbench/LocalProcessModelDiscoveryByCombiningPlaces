@@ -16,7 +16,7 @@ public class DefaultGroupingConfig implements GroupingConfig {
     private final ModelDistanceConfig modelDistanceConfig;
 
     public DefaultGroupingConfig() {
-        this("hierarchical-complete-10",
+        this("default",
                 ClusteringAlgorithm.Hierarchical,
                 Stream.of(new AbstractMap.SimpleEntry<>("num_clusters", "10"),
                                 new AbstractMap.SimpleEntry<>("linkage", "complete"))
