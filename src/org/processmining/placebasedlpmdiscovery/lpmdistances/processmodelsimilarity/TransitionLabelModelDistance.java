@@ -15,7 +15,7 @@ public class TransitionLabelModelDistance implements ModelDistance {
         Set<String> lpm1Labels = lpm1.getTransitions().stream().map(Transition::getLabel).collect(Collectors.toSet());
         Set<String> lpm2Labels = lpm2.getTransitions().stream().map(Transition::getLabel).collect(Collectors.toSet());
         int intersectionSize = Sets.intersection(lpm1Labels, lpm2Labels).size();
-        return  2.0 * intersectionSize / (lpm1Labels.size() + lpm2Labels.size());
+        return  1 - 2.0 * intersectionSize / (lpm1Labels.size() + lpm2Labels.size());
     }
 
     @Override
