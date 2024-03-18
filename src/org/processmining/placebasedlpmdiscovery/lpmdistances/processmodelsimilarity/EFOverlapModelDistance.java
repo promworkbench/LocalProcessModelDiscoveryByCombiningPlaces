@@ -60,7 +60,7 @@ public class EFOverlapModelDistance implements ModelDistance {
         return distances;
     }
 
-    private static double calculateEfOverlapDistance(List<List<Integer>> paths1, List<List<Integer>> paths2) {
+    private double calculateEfOverlapDistance(List<List<Integer>> paths1, List<List<Integer>> paths2) {
         if (paths1.isEmpty() || paths2.isEmpty()) {
             return 1;
         }

@@ -47,6 +47,8 @@ public class ModelDistanceFactory {
                 return new TraceMatchingModelDistance();
             case EFOverlap:
                 return new EFOverlapModelDistance();
+            case GED:
+                return new GEDModelDistances();
         }
         throw new IllegalArgumentException("The Process Model Similarity Measure " + distanceConfig.getDistanceMethod()
                 + " is illegal.");

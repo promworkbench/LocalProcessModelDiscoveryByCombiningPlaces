@@ -4,5 +4,6 @@ public enum ProcessModelSimilarityMeasure {
     NodeMatching,
     TransitionLabel,
     TraceMatching,
-    EFOverlap
+    EFOverlap,
+    GED
 }
