@@ -21,7 +21,7 @@ public class ModelDistanceConfigDeserializer implements JsonDeserializer<ModelDi
                 return new ProcessModelSimilarityDistanceConfig(ProcessModelSimilarityMeasure
                         .valueOf(jsonObject.get("processModelSimilarityMeasure").getAsString()));
             case MixedModelDistanceConfig.METHOD:
-                return new MixedModelDistanceConfig();
+                return context.deserialize(json, MixedModelDistanceConfig.class);
             case PrecomputedFromFileModelDistanceConfig.METHOD:
                 return context.deserialize(json, PrecomputedFromFileModelDistanceConfig.class);
         }

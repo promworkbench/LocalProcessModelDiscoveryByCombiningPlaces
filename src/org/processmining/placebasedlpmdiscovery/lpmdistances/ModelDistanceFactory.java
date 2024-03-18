@@ -5,9 +5,13 @@ import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.Data
 import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistanceFactory;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.MixedModelDistance;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.MixedModelDistanceConfig;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.WeightedModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.precomputed.PrecomputedFromFileModelDistance;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.precomputed.PrecomputedFromFileModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity.*;
+
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ModelDistanceFactory {
 
@@ -49,7 +53,14 @@ public class ModelDistanceFactory {
     }
 
     private ModelDistance getMixedModelDistance(MixedModelDistanceConfig distanceConfig) {
-        return new MixedModelDistance(distanceConfig.getModelDistanceWeightPairs());
+        Map<String, Double> weights = distanceConfig.getModelDistanceWeightPairs().stream()
+                .collect(Collectors.toMap(WeightedModelDistanceConfig::getKey, WeightedModelDistanceConfig::getWeight));
+        Map<String, ModelDistance> distances = distanceConfig.getModelDistanceWeightPairs().stream()
+                .collect(Collectors.toMap(
+                        WeightedModelDistanceConfig::getKey,
+                        wdist -> this.getModelDistance(wdist.getDistanceConfig())));
+
+        return new MixedModelDistance(weights, distances);
     }
 
 }

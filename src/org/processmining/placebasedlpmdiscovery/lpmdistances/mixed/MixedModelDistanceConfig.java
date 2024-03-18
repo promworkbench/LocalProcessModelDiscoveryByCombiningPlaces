@@ -9,12 +9,19 @@ import java.util.List;
 public class MixedModelDistanceConfig implements ModelDistanceConfig {
 
     public static final String METHOD = "Mixed";
+
+    private final List<WeightedModelDistanceConfig> includedDistancesConfigs;
+
+    public MixedModelDistanceConfig(List<WeightedModelDistanceConfig> includedDistancesConfigs) {
+        this.includedDistancesConfigs = includedDistancesConfigs;
+    }
+
     @Override
     public String getDistanceMethod() {
         return METHOD;
     }
 
-    public List<Pair<ModelDistance, Double>> getModelDistanceWeightPairs() {
-        return null;
+    public List<WeightedModelDistanceConfig> getModelDistanceWeightPairs() {
+        return includedDistancesConfigs;
     }
 }
