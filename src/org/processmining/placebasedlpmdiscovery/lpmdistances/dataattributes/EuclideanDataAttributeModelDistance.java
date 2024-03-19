@@ -1,23 +1,24 @@
 package org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes;
 
 import com.google.inject.Inject;
-import org.deckfour.xes.model.XLog;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistance;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import smile.math.distance.EuclideanDistance;
 
 import java.util.List;
 
 public class EuclideanDataAttributeModelDistance extends DataAttributeModelDistance {
+
     @Inject
-    public EuclideanDataAttributeModelDistance(XLog log) {
-        super(log);
+    public EuclideanDataAttributeModelDistance(DataAttributeVectorExtractor dataAttrVecExtractor) {
+        super(dataAttrVecExtractor);
     }
 
     @Override
     public double calculateDistance(LocalProcessModel lpm1, LocalProcessModel lpm2) {
         EuclideanDistance euclidean = new EuclideanDistance();
-        return euclidean.d(this.convertLPMToFeatureVector(lpm1), this.convertLPMToFeatureVector(lpm2));
+        return euclidean.d(
+                this.dataAttrVecExtractor.convertLPMToFeatureVector(lpm1),
+                this.dataAttrVecExtractor.convertLPMToFeatureVector(lpm2));
     }
 
     @Override
@@ -25,7 +26,7 @@ public class EuclideanDataAttributeModelDistance extends DataAttributeModelDista
         EuclideanDistance euclidean = new EuclideanDistance();
         double[][] distances = new double[lpms.size()][lpms.size()];
 
-        List<double[]> vectors = this.convertToVectors(lpms);
+        List<double[]> vectors = this.dataAttrVecExtractor.convertToVectors(lpms);
         for (int i = 0; i < vectors.size() - 1; ++i) {
             for (int j = i; j < vectors.size(); ++j) {
                 distances[i][j] = euclidean.d(vectors.get(i), vectors.get(j));
