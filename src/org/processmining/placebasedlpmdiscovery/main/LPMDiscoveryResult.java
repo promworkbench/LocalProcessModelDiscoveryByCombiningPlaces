@@ -21,4 +21,6 @@ public interface LPMDiscoveryResult extends Exportable<LPMDiscoveryResult> {
     void setInput(LPMDiscoveryInput input);
     
     LPMDiscoveryConfig getConfig();
+
+    void keep(int lpmCount);
 }

@@ -1,12 +1,16 @@
 package org.processmining.placebasedlpmdiscovery.main;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.Exporter;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTree;
 
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 public class StandardLPMDiscoveryResult implements LPMDiscoveryResult {
 
@@ -45,6 +49,16 @@ public class StandardLPMDiscoveryResult implements LPMDiscoveryResult {
     @Override
     public LPMDiscoveryConfig getConfig() {
         throw new NotImplementedException("Still not implemented.");
+    }
+
+    @Override
+    public void keep(int lpmCount) {
+        this.lpms = getAllLPMs().stream().sorted(
+                Comparator.comparingDouble(lpm -> lpm.getAdditionalInfo().getEvaluationResult(
+                        StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+                        FittingWindowsEvaluationResult.class).getResult()))
+                .collect(Collectors.toList())
+                .subList(0, Math.min(getAllLPMs().size(), lpmCount));
     }
 
     @Override

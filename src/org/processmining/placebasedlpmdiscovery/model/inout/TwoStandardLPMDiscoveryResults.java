@@ -46,6 +46,11 @@ public class TwoStandardLPMDiscoveryResults implements MultipleLPMDiscoveryResul
     }
 
     @Override
+    public void keep(int lpmCount) {
+        resMap.values().forEach(lpmRes -> lpmRes.keep(lpmCount));
+    }
+
+    @Override
     public Map<String, LPMDiscoveryResult> getResults() {
         return resMap;
     }

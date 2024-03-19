@@ -82,6 +82,7 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
             this.runningContext.getAnalyzer().logCountPlacesUsed(places.size());
 
             result = this.lpmCombination.combine(places, parameters.getLpmCount());
+            result.keep(parameters.getLpmCount());
             result.setInput(this.runningContext.getInput());
 
             this.runningContext.getAnalyzer().logAllLpmDiscovered(result.getAllLPMs().size());

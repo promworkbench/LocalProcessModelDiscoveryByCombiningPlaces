@@ -45,6 +45,11 @@ public class FromFileLPMDiscoveryResult implements LPMDiscoveryResult {
     }
 
     @Override
+    public void keep(int lpmCount) {
+        this.lpmResult.keep(lpmCount);
+    }
+
+    @Override
     public void export(Exporter<LPMDiscoveryResult> exporter, OutputStream os) {
         this.lpmResult.export(exporter, os);
     }
