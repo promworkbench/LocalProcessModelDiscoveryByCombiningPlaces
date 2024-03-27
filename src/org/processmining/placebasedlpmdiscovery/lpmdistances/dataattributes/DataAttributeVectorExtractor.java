@@ -39,6 +39,10 @@ public class DataAttributeVectorExtractor {
      */
     private final Map<String, List<String>> literalValuesOrder;
 
+    private int vectorSize;
+    private int[] vectorStructure;
+    private List<String> positionMapping;
+
     @Inject
     public DataAttributeVectorExtractor(XLog log) {
         this.log = log;
@@ -50,15 +54,81 @@ public class DataAttributeVectorExtractor {
         Collections.sort(this.eventAttributeKeysOrder);
 
         this.literalValuesOrder = new HashMap<>();
+        initVectorStructureInfo();
     }
 
     public List<double[]> convertToVectors(List<LocalProcessModel> lpms) {
-        List<double[]> lpmVectors = new ArrayList<>();
+        List<double[]> orLpmVectors = new ArrayList<>();
+        double[] maxVector = new double[this.vectorSize];
+        Arrays.fill(maxVector, Double.MIN_VALUE);
+        double[] minVector = new double[this.vectorSize];
+        Arrays.fill(minVector, Double.MAX_VALUE);
+
+        // compute original vectors and min and max vectors
         for (LocalProcessModel lpm : lpms) {
             double[] featureVector = this.convertLPMToFeatureVector(lpm);
-            lpmVectors.add(featureVector);
+            for (int i = 0; i < vectorSize; ++i) {
+                maxVector[i] = Math.max(maxVector[i], featureVector[i]);
+                minVector[i] = Math.min(minVector[i], featureVector[i]);
+            }
+            orLpmVectors.add(featureVector);
         }
-        return lpmVectors;
+
+        // normalize using min max and vector size
+        List<double[]> minMaxNormLPMVectors = new ArrayList<>();
+        int ind = 0;
+        for (double[] vec : orLpmVectors) {
+            for (int i = 0; i < vec.length; ++i) {
+                vec[i] = (vec[i] - minVector[i]) / (maxVector[i] - minVector[i]); // min-max
+                int attrSize = i < this.vectorStructure[ind] ?
+                        ind == 0 ? this.vectorStructure[ind] : this.vectorStructure[ind] - this.vectorStructure[ind-1] :
+                        this.vectorStructure[++ind] - this.vectorStructure[ind-1];
+                vec[i] = vec[i] / attrSize; //vector size
+            }
+            minMaxNormLPMVectors.add(vec);
+        }
+
+        // normalize using size of representation features
+
+        return minMaxNormLPMVectors;
+    }
+
+    private void initVectorStructureInfo() {
+        this.vectorSize = 0;
+        this.vectorStructure = new int[eventAttributeKeysOrder.size()];
+        this.positionMapping = new ArrayList<>();
+        int index = 0;
+        for (String attributeKey : eventAttributeKeysOrder) {
+            AttributeSummary<?, ?> defaultAttributeSummary =
+                    this.defaultEventAttributeSummaries.getAttributeSummaryForAttributeKey(attributeKey)
+                            .orElseThrow(() -> new IllegalStateException("There is an attribute key for which" +
+                                    " there is not summary although the possible keys were extracted from the " +
+                                    "initially computed summaries."));
+
+            // get representation features for that attribute
+            Map<String, Number> representationFeatures = defaultAttributeSummary
+                    .getRepresentationFeatures();
+            List<String> featureKeys = new ArrayList<>(representationFeatures.keySet());
+
+            if (defaultAttributeSummary instanceof LiteralAttributeSummary) {
+                featureKeys = this.literalValuesOrder.get(attributeKey);
+
+                if (featureKeys == null) {
+                    featureKeys = new ArrayList<>(
+                            this.attributeSummaryController
+                                    .computeEventAttributeSummary(this.log, attributeKey)
+                                    .getRepresentationFeatures()
+                                    .keySet());
+                    this.literalValuesOrder.put(attributeKey, featureKeys);
+                }
+            }
+            // sort representation features keys such that for each vector the same order is used
+            Collections.sort(featureKeys);
+            this.positionMapping.addAll(featureKeys.stream().map(key -> attributeKey + "-" + key).collect(Collectors.toList()));
+            this.vectorStructure[index] = featureKeys.size() + (index == 0 ? 0 : this.vectorStructure[index-1]);
+            index++;
+            this.vectorSize += featureKeys.size();
+        }
     }
 
     public double[] convertLPMToFeatureVector(LocalProcessModel lpm) {
@@ -125,20 +195,6 @@ public class DataAttributeVectorExtractor {
     }
 
     public List<String> getPositionMapping() {
-        List<String> positionMappings = new ArrayList<>();
-        for (String attr : eventAttributeKeysOrder) {
-            List<String> featureKeys;
-            AttributeSummary<?,?> attributeSummary = defaultEventAttributeSummaries
-                    .getAttributeSummaryForAttributeKey(attr)
-                    .orElseThrow(() -> new RuntimeException("An attribute is missing"));
-            if (attributeSummary instanceof LiteralAttributeSummary) {
-                featureKeys = this.literalValuesOrder.get(attr);
-            }
-            else {
-                featureKeys = new ArrayList<>(attributeSummary.getRepresentationFeatures().keySet());
-            }
-            positionMappings.addAll(featureKeys.stream().map(key -> attr + "-" + key).collect(Collectors.toList()));
-        }
-        return positionMappings;
+        return positionMapping;
     }
 }

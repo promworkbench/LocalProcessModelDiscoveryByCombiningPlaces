@@ -24,8 +24,11 @@ public class AttributeSummaryController {
     }
 
     public void initializeAttributeSummaryStorage(AttributeCollectorResult result, XAttribute attribute) {
-        result.getAttributeValues()
-                .put(attribute.getKey(), EventAttributeSummaryFactory.getEventAttributeSummary(attribute, false));
+        AttributeSummary<?,?> attrSummary = EventAttributeSummaryFactory.getEventAttributeSummary(attribute, false);
+        if (attrSummary != null) {
+            result.getAttributeValues()
+                    .put(attribute.getKey(), attrSummary);
+        }
     }
 
     /**
@@ -38,7 +41,9 @@ public class AttributeSummaryController {
         AttributeSummary<?,?> summary = result.getAttributeValues().get(attribute.getKey());
         if (summary == null) {
             summary = EventAttributeSummaryFactory.getEventAttributeSummary(attribute, false);
-            result.getAttributeValues().put(attribute.getKey(), summary);
+            if (summary != null) {
+                result.getAttributeValues().put(attribute.getKey(), summary);
+            }
         }
         summary.addValue(attribute);
     }
@@ -71,7 +76,9 @@ public class AttributeSummaryController {
                 if (attributeSummary == null) {
                     attributeSummary = EventAttributeSummaryFactory.getEventAttributeSummary(attribute, false);
                 }
-                attributeSummary.addValue(attribute);
+                if (attributeSummary != null) {
+                    attributeSummary.addValue(attribute);
+                }
             }
         }
 

@@ -17,7 +17,8 @@ public class EventAttributeSummaryFactory {
         } else if (attribute.getClass().equals(XAttributeBooleanImpl.class)) {
             return new BooleanAttributeSummary(attribute.getKey(), completeList);
         } else {
-            throw new UnsupportedOperationException("Creating summary for the attribute type: " + attribute.getClass() + " is currently not supported");
+            return null;
+//            throw new UnsupportedOperationException("Creating summary for the attribute type: " + attribute.getClass() + " is currently not supported");
         }
     }
 }

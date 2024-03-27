@@ -44,8 +44,8 @@ public class LPMDiscoveryRunner {
             XLog log = LogUtils.readLogFromFile(config.getInput().get("eventlog"));
 
             PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log));
-            parameters.setLpmCount(Integer.MAX_VALUE);
-            parameters.getPlaceChooserParameters().setPlaceLimit(100);
+            parameters.setLpmCount(300);
+            parameters.getPlaceChooserParameters().setPlaceLimit(30);
 
             LPMDiscoveryBuilder builder = Main.createDefaultBuilder(
                     log,

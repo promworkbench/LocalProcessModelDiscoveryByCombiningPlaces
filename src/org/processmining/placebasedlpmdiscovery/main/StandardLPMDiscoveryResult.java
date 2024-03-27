@@ -31,7 +31,11 @@ public class StandardLPMDiscoveryResult implements LPMDiscoveryResult {
     @Override
     public Collection<LocalProcessModel> getAllLPMs() {
         if (lpms == null) {
-            lpms = resTree.getLPMs(Integer.MAX_VALUE);
+            lpms = resTree.getLPMs(Integer.MAX_VALUE).stream().sorted(
+                            Comparator.comparingDouble(lpm -> lpm.getAdditionalInfo().getEvaluationResult(
+                                    StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+                                    FittingWindowsEvaluationResult.class).getResult()))
+                    .collect(Collectors.toList());
         }
         return lpms;
     }

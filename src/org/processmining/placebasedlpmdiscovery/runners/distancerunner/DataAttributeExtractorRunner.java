@@ -27,9 +27,9 @@ import java.util.stream.Collectors;
 public class DataAttributeExtractorRunner {
     public static void main(String[] args) throws Exception {
         extractDataVectors(
-                LogUtils.readLogFromFile("./data/sepsis.xes"),
-                new FromFileLPMDiscoveryResult("./data/sepsis_lpms.json"),
-                "./data/sepsis_datavectors.csv");
+                LogUtils.readLogFromFile("./data/bpi2012res10939.xes"),
+                new FromFileLPMDiscoveryResult("./data/bpi2012res10939_lpms.json"),
+                "./data/bpi2012res10939_datavectors.csv");
     }
 
     private static void extractDataVectors(XLog log, LPMDiscoveryResult lpmResult, String output) throws IOException {
