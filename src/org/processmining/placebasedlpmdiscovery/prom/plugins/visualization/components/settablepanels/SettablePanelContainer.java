@@ -1,4 +1,6 @@
-package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
+package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels;
+
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.ComponentId;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -72,5 +74,14 @@ public class SettablePanelContainer extends JPanel {
 
     public void setComponentId(ComponentId componentId) {
         this.componentId = componentId;
+    }
+
+    public void setContent(JPanel content) {
+        this.content = content;
+        this.add(this.content);
+    }
+
+    public JPanel getContent() {
+        return this.content;
     }
 }

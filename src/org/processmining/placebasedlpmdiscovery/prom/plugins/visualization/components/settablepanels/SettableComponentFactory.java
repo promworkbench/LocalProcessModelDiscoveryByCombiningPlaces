@@ -1,10 +1,11 @@
-package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
+package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels;
 
 import org.processmining.framework.util.ui.widgets.ProMTable;
 import org.processmining.placebasedlpmdiscovery.analysis.statistics.LogStatistics;
 import org.processmining.placebasedlpmdiscovery.analysis.statistics.Statistics;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.ComponentId;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

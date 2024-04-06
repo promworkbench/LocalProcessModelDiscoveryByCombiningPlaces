@@ -8,6 +8,7 @@ import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.main.MultipleLPMDiscoveryResults;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.DefaultLPMDiscoveryResultComponent;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.MultipleLPMDiscoveryResultComponent;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelFactory;
 import org.processmining.placebasedlpmdiscovery.view.controllers.DefaultLPMDiscoveryResultViewController;
 import org.processmining.placebasedlpmdiscovery.view.controllers.DefaultMultipleLPMDiscoveryResultsViewController;
 import org.processmining.placebasedlpmdiscovery.view.controllers.LPMDiscoveryResultViewController;
@@ -30,7 +31,7 @@ public class LPMDiscoveryResultVisualizer {
     @PluginVariant(requiredParameterLabels = {0})
     public JComponent visualize(UIPluginContext context, LPMDiscoveryResult result) {
 
-        DefaultLPMDiscoveryResultComponent view = new DefaultLPMDiscoveryResultComponent(context);
+        DefaultLPMDiscoveryResultComponent view = new DefaultLPMDiscoveryResultComponent(context, new SettablePanelFactory());
         DefaultLPMDiscoveryResultViewModel model = new DefaultLPMDiscoveryResultViewModel(result);
 
         LPMDiscoveryResultViewController controller =

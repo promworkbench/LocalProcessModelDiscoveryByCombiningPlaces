@@ -9,7 +9,7 @@ public class ComponentId {
         TableComponent,
         LPMVisualizer,
         LogStatistics,
-        BasicLPMEvalMetrics
+        Clustering, BasicLPMEvalMetrics
     }
 
     private final Type type;
