@@ -50,47 +50,6 @@ public class ComponentFactory {
         return df.format(result);
     }
 
-    public static JComponent getComplexEvaluationResultComponent(Collection<LPMEvaluationResult> results) {
-        JComponent component = new JPanel();
-        component.setPreferredSize(new Dimension(100, 50));
-        component.setLayout(new BoxLayout(component, BoxLayout.Y_AXIS));
-
-        Object[][] rowData = results
-                .stream()
-                .map(res -> {
-                    if (res.getResult() == res.getNormalizedResult())
-                        return Collections.singletonList(new Pair<>(res.getId().name(), res.getResult()));
-                    else
-                        return new ArrayList<>(Arrays.asList(
-                                new Pair<>(res.getId().name(), res.getResult()),
-                                new Pair<>(res.getId().name() + " - Normalized", res.getNormalizedResult())
-                        ));
-                })
-                .flatMap(Collection::stream).map(pair -> new Object[]{pair.getFirst(), pair.getSecond()})
-                .toArray(Object[][]::new);
-
-        Object[] columns = new String[]{"Measure", "Value"};
-        JTable jt = new JTable(rowData, columns);
-        JScrollPane js = new JScrollPane(jt);
-        component.add(js);
-
-//        JButton btn = new JButton("Add Formula");
-//        component.add(btn);
-
-        return component;
-
-//        JPanel panel = new JPanel();
-//        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-//
-//        for (LPMEvaluationResult result : results) {
-//            panel.add(ComponentFactory.getLPMEvaluationResultComponent(result));
-//        }
-//        panel.add(getjLabel("Aggregate Result:    " +
-//                getEvaluationTextResult(new EvaluationResultAggregateOperation().aggregate(results))));
-//
-//        return panel;
-    }
-
     private static JPanel getCoveredPassages(PassageCoverageEvaluationResult evaluationResult) {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));

@@ -10,9 +10,9 @@
             <artifact pattern="https://github.com/promworkbench/Releases/raw/main/Packages/[module]/[revision]/[artifact]-[revision].[ext]" />
         </url>
         <url name="prom-libs">
-            <ivy pattern="https://svn.win.tue.nl/repos/prom/Libraries/[module]/[revision]/ivy.xml" />
-            <artifact pattern="https://svn.win.tue.nl/repos/prom/Libraries/[module]/[revision]/[artifact]-[revision].[ext]" />
-            <artifact pattern="https://svn.win.tue.nl/repos/prom/Libraries/[module]/[revision]/[artifact]_[revision].[ext]" />
+            <ivy pattern="https://github.com/promworkbench/Releases/raw/main/Libraries/[module]/[revision]/ivy.xml" />
+            <artifact pattern="https://github.com/promworkbench/Releases/raw/main/Libraries/[module]/[revision]/[artifact]-[revision].[ext]" />
+            <artifact pattern="https://github.com/promworkbench/Releases/raw/main/Libraries/[module]/[revision]/[artifact]_[revision].[ext]" />
         </url>
         <ibiblio name="maven2" m2compatible="true"/>
 <!--        <ibiblio name="jitpack" m2compatible="true" root="https://jitpack.io"/>-->

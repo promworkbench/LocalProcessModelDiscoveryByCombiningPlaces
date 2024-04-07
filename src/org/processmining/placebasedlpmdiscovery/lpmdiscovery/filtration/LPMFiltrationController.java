@@ -1,17 +1,10 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration;
 
 import org.processmining.placebasedlpmdiscovery.RunningContext;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.EvaluatorHub;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluator;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorFactory;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMEvaluator;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.AbstractEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.NeedsEvaluationLPMFilter;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
-import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
 
 import java.util.*;
 
@@ -61,7 +54,7 @@ public class LPMFiltrationController {
                 if (lpm.getAdditionalInfo().getEvaluationResult(
                         needsEvaluationLPMFilter.getEvaluationId().name(),
                         LPMEvaluationResult.class) == null)
-                    lpm.getAdditionalInfo().addEvaluationResult(
+                    lpm.getAdditionalInfo().addCollectorResult(
                             needsEvaluationLPMFilter.getEvaluationId().name(),
                             this.runningContext.getLpmEvaluationController()
                                     .evaluate(needsEvaluationLPMFilter.getEvaluatorId().name(), lpm));

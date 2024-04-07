@@ -9,7 +9,7 @@ import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.E
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.HeuristicMinerPlaceDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.InductiveMinerPlaceDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.PlaceDiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummary;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummary;
 
 import java.util.*;
 
@@ -34,7 +34,7 @@ public class PlaceBasedLPMDiscoveryParameters {
     private long timeLimit;
 
     // event attribute summary
-    private final Map<String, EventAttributeSummary<?,?>> eventAttributeSummary;
+    private final Map<String, AttributeSummary<?,?>> eventAttributeSummary;
 
     public PlaceBasedLPMDiscoveryParameters(EventLog log) {
         this.placeDiscoveryAlgorithmId = PlaceDiscoveryAlgorithmId.ESTMiner;
@@ -125,7 +125,7 @@ public class PlaceBasedLPMDiscoveryParameters {
         return placeChooserParameters;
     }
 
-    public Map<String, EventAttributeSummary<?,?>> getEventAttributeSummary() {
+    public Map<String, AttributeSummary<?,?>> getEventAttributeSummary() {
         return eventAttributeSummary;
     }
 

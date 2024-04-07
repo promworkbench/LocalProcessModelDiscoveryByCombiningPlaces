@@ -13,6 +13,9 @@ import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -49,8 +52,18 @@ public class LogUtils {
      * @return object of type XLog that contains the event log from the file
      */
     public static XLog readLogFromFile(File file) throws Exception {
+        return readLogFromFile(Files.newInputStream(file.toPath()));
+    }
+
+    /**
+     * Reads an event log from an input stream
+     *
+     * @param is: the input stream containing the event log
+     * @return object of type XLog that contains the event log from the input stream
+     */
+    public static XLog readLogFromFile(InputStream is) throws Exception {
         XesXmlParser parser = new XesXmlParser();
-        return parser.parse(file).get(0);
+        return parser.parse(is).get(0);
     }
 
     /**

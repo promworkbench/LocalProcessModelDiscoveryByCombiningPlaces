@@ -1,6 +1,5 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.results;
 
-public interface LPMEvaluationResultId {
+public interface LPMEvaluationResultId extends LPMCollectorResultId {
 
-    String name();
 }

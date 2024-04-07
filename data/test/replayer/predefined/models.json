@@ -1,0 +1,1554 @@
+{
+  "elements": [
+    {
+      "id": "667189e0-7c93-4a43-bd65-282b95470562",
+      "places": [
+        {
+          "id": "f5082a68-6dca-4507-9d95-3142d7a1b290",
+          "inputTransitions": [
+            {
+              "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+              "label": "x",
+              "invisible": false
+            },
+            {
+              "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+              "label": "y",
+              "invisible": false
+            }
+          ],
+          "outputTransitions": [
+            {
+              "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+              "label": "d",
+              "invisible": false
+            }
+          ],
+          "numTokens": 0,
+          "isFinal": false,
+          "additionalInfo": {
+            "passageUsage": [
+              [
+                {
+                  "inTr": "y",
+                  "outTr": "d"
+                },
+                2
+              ],
+              [
+                {
+                  "inTr": "x",
+                  "outTr": "d"
+                },
+                6
+              ]
+            ]
+          }
+        },
+        {
+          "id": "1dc33e3d-4e9f-4fe3-82af-bd7fb93829a6",
+          "inputTransitions": [
+            {
+              "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+              "label": "b",
+              "invisible": false
+            }
+          ],
+          "outputTransitions": [
+            {
+              "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+              "label": "x",
+              "invisible": false
+            },
+            {
+              "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+              "label": "y",
+              "invisible": false
+            }
+          ],
+          "numTokens": 0,
+          "isFinal": false,
+          "additionalInfo": {
+            "passageUsage": [
+              [
+                {
+                  "inTr": "b",
+                  "outTr": "x"
+                },
+                7
+              ],
+              [
+                {
+                  "inTr": "b",
+                  "outTr": "y"
+                },
+                2
+              ]
+            ]
+          }
+        }
+      ],
+      "transitions": {
+        "b": {
+          "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+          "label": "b",
+          "invisible": false
+        },
+        "d": {
+          "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+          "label": "d",
+          "invisible": false
+        },
+        "x": {
+          "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+          "label": "x",
+          "invisible": false
+        },
+        "y": {
+          "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+          "label": "y",
+          "invisible": false
+        }
+      },
+      "arcs": [
+        {
+          "place": {
+            "id": "f5082a68-6dca-4507-9d95-3142d7a1b290",
+            "inputTransitions": [
+              {
+                "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+                "label": "x",
+                "invisible": false
+              },
+              {
+                "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+                "label": "y",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+                "label": "d",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "y",
+                    "outTr": "d"
+                  },
+                  2
+                ],
+                [
+                  {
+                    "inTr": "x",
+                    "outTr": "d"
+                  },
+                  6
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+            "label": "x",
+            "invisible": false
+          },
+          "input": true
+        },
+        {
+          "place": {
+            "id": "1dc33e3d-4e9f-4fe3-82af-bd7fb93829a6",
+            "inputTransitions": [
+              {
+                "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+                "label": "b",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+                "label": "x",
+                "invisible": false
+              },
+              {
+                "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+                "label": "y",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "b",
+                    "outTr": "x"
+                  },
+                  7
+                ],
+                [
+                  {
+                    "inTr": "b",
+                    "outTr": "y"
+                  },
+                  2
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+            "label": "y",
+            "invisible": false
+          },
+          "input": false
+        },
+        {
+          "place": {
+            "id": "1dc33e3d-4e9f-4fe3-82af-bd7fb93829a6",
+            "inputTransitions": [
+              {
+                "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+                "label": "b",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+                "label": "x",
+                "invisible": false
+              },
+              {
+                "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+                "label": "y",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "b",
+                    "outTr": "x"
+                  },
+                  7
+                ],
+                [
+                  {
+                    "inTr": "b",
+                    "outTr": "y"
+                  },
+                  2
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+            "label": "b",
+            "invisible": false
+          },
+          "input": true
+        },
+        {
+          "place": {
+            "id": "f5082a68-6dca-4507-9d95-3142d7a1b290",
+            "inputTransitions": [
+              {
+                "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+                "label": "x",
+                "invisible": false
+              },
+              {
+                "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+                "label": "y",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+                "label": "d",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "y",
+                    "outTr": "d"
+                  },
+                  2
+                ],
+                [
+                  {
+                    "inTr": "x",
+                    "outTr": "d"
+                  },
+                  6
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+            "label": "d",
+            "invisible": false
+          },
+          "input": false
+        },
+        {
+          "place": {
+            "id": "f5082a68-6dca-4507-9d95-3142d7a1b290",
+            "inputTransitions": [
+              {
+                "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+                "label": "x",
+                "invisible": false
+              },
+              {
+                "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+                "label": "y",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+                "label": "d",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "y",
+                    "outTr": "d"
+                  },
+                  2
+                ],
+                [
+                  {
+                    "inTr": "x",
+                    "outTr": "d"
+                  },
+                  6
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+            "label": "y",
+            "invisible": false
+          },
+          "input": true
+        },
+        {
+          "place": {
+            "id": "1dc33e3d-4e9f-4fe3-82af-bd7fb93829a6",
+            "inputTransitions": [
+              {
+                "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+                "label": "b",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+                "label": "x",
+                "invisible": false
+              },
+              {
+                "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+                "label": "y",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "b",
+                    "outTr": "x"
+                  },
+                  7
+                ],
+                [
+                  {
+                    "inTr": "b",
+                    "outTr": "y"
+                  },
+                  2
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+            "label": "x",
+            "invisible": false
+          },
+          "input": false
+        }
+      ]
+    },
+    {
+      "id": "04a4d561-d2e5-4bce-bd91-e459cb20ddc7",
+      "places": [
+        {
+          "id": "d3690722-9696-491b-ba4e-24ebc0e1ffe6",
+          "inputTransitions": [
+            {
+              "id": "b67370b9-ee79-4a26-8160-316cc09f21d3",
+              "label": "s",
+              "invisible": false
+            },
+            {
+              "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+              "label": "d",
+              "invisible": false
+            }
+          ],
+          "outputTransitions": [
+            {
+              "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+              "label": "b",
+              "invisible": false
+            },
+            {
+              "id": "11e780e2-6230-40fe-b9a1-5641b3ec1870",
+              "label": "e",
+              "invisible": false
+            }
+          ],
+          "numTokens": 0,
+          "isFinal": false,
+          "additionalInfo": {
+            "passageUsage": [
+              [
+                {
+                  "inTr": "s",
+                  "outTr": "b"
+                },
+                3
+              ],
+              [
+                {
+                  "inTr": "d",
+                  "outTr": "e"
+                },
+                3
+              ],
+              [
+                {
+                  "inTr": "s",
+                  "outTr": "e"
+                },
+                0
+              ],
+              [
+                {
+                  "inTr": "d",
+                  "outTr": "b"
+                },
+                5
+              ]
+            ]
+          }
+        },
+        {
+          "id": "f5082a68-6dca-4507-9d95-3142d7a1b290",
+          "inputTransitions": [
+            {
+              "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+              "label": "x",
+              "invisible": false
+            },
+            {
+              "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+              "label": "y",
+              "invisible": false
+            }
+          ],
+          "outputTransitions": [
+            {
+              "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+              "label": "d",
+              "invisible": false
+            }
+          ],
+          "numTokens": 0,
+          "isFinal": false,
+          "additionalInfo": {
+            "passageUsage": [
+              [
+                {
+                  "inTr": "y",
+                  "outTr": "d"
+                },
+                2
+              ],
+              [
+                {
+                  "inTr": "x",
+                  "outTr": "d"
+                },
+                6
+              ]
+            ]
+          }
+        }
+      ],
+      "transitions": {
+        "b": {
+          "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+          "label": "b",
+          "invisible": false
+        },
+        "s": {
+          "id": "b67370b9-ee79-4a26-8160-316cc09f21d3",
+          "label": "s",
+          "invisible": false
+        },
+        "d": {
+          "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+          "label": "d",
+          "invisible": false
+        },
+        "e": {
+          "id": "11e780e2-6230-40fe-b9a1-5641b3ec1870",
+          "label": "e",
+          "invisible": false
+        },
+        "x": {
+          "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+          "label": "x",
+          "invisible": false
+        },
+        "y": {
+          "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+          "label": "y",
+          "invisible": false
+        }
+      },
+      "arcs": [
+        {
+          "place": {
+            "id": "f5082a68-6dca-4507-9d95-3142d7a1b290",
+            "inputTransitions": [
+              {
+                "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+                "label": "x",
+                "invisible": false
+              },
+              {
+                "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+                "label": "y",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+                "label": "d",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "y",
+                    "outTr": "d"
+                  },
+                  2
+                ],
+                [
+                  {
+                    "inTr": "x",
+                    "outTr": "d"
+                  },
+                  6
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+            "label": "x",
+            "invisible": false
+          },
+          "input": true
+        },
+        {
+          "place": {
+            "id": "f5082a68-6dca-4507-9d95-3142d7a1b290",
+            "inputTransitions": [
+              {
+                "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+                "label": "x",
+                "invisible": false
+              },
+              {
+                "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+                "label": "y",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+                "label": "d",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "y",
+                    "outTr": "d"
+                  },
+                  2
+                ],
+                [
+                  {
+                    "inTr": "x",
+                    "outTr": "d"
+                  },
+                  6
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+            "label": "d",
+            "invisible": false
+          },
+          "input": false
+        },
+        {
+          "place": {
+            "id": "d3690722-9696-491b-ba4e-24ebc0e1ffe6",
+            "inputTransitions": [
+              {
+                "id": "b67370b9-ee79-4a26-8160-316cc09f21d3",
+                "label": "s",
+                "invisible": false
+              },
+              {
+                "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+                "label": "d",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+                "label": "b",
+                "invisible": false
+              },
+              {
+                "id": "11e780e2-6230-40fe-b9a1-5641b3ec1870",
+                "label": "e",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "s",
+                    "outTr": "b"
+                  },
+                  3
+                ],
+                [
+                  {
+                    "inTr": "d",
+                    "outTr": "e"
+                  },
+                  3
+                ],
+                [
+                  {
+                    "inTr": "s",
+                    "outTr": "e"
+                  },
+                  0
+                ],
+                [
+                  {
+                    "inTr": "d",
+                    "outTr": "b"
+                  },
+                  5
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "b67370b9-ee79-4a26-8160-316cc09f21d3",
+            "label": "s",
+            "invisible": false
+          },
+          "input": true
+        },
+        {
+          "place": {
+            "id": "f5082a68-6dca-4507-9d95-3142d7a1b290",
+            "inputTransitions": [
+              {
+                "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+                "label": "x",
+                "invisible": false
+              },
+              {
+                "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+                "label": "y",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+                "label": "d",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "y",
+                    "outTr": "d"
+                  },
+                  2
+                ],
+                [
+                  {
+                    "inTr": "x",
+                    "outTr": "d"
+                  },
+                  6
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+            "label": "y",
+            "invisible": false
+          },
+          "input": true
+        },
+        {
+          "place": {
+            "id": "d3690722-9696-491b-ba4e-24ebc0e1ffe6",
+            "inputTransitions": [
+              {
+                "id": "b67370b9-ee79-4a26-8160-316cc09f21d3",
+                "label": "s",
+                "invisible": false
+              },
+              {
+                "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+                "label": "d",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+                "label": "b",
+                "invisible": false
+              },
+              {
+                "id": "11e780e2-6230-40fe-b9a1-5641b3ec1870",
+                "label": "e",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "s",
+                    "outTr": "b"
+                  },
+                  3
+                ],
+                [
+                  {
+                    "inTr": "d",
+                    "outTr": "e"
+                  },
+                  3
+                ],
+                [
+                  {
+                    "inTr": "s",
+                    "outTr": "e"
+                  },
+                  0
+                ],
+                [
+                  {
+                    "inTr": "d",
+                    "outTr": "b"
+                  },
+                  5
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+            "label": "b",
+            "invisible": false
+          },
+          "input": false
+        },
+        {
+          "place": {
+            "id": "d3690722-9696-491b-ba4e-24ebc0e1ffe6",
+            "inputTransitions": [
+              {
+                "id": "b67370b9-ee79-4a26-8160-316cc09f21d3",
+                "label": "s",
+                "invisible": false
+              },
+              {
+                "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+                "label": "d",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+                "label": "b",
+                "invisible": false
+              },
+              {
+                "id": "11e780e2-6230-40fe-b9a1-5641b3ec1870",
+                "label": "e",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "s",
+                    "outTr": "b"
+                  },
+                  3
+                ],
+                [
+                  {
+                    "inTr": "d",
+                    "outTr": "e"
+                  },
+                  3
+                ],
+                [
+                  {
+                    "inTr": "s",
+                    "outTr": "e"
+                  },
+                  0
+                ],
+                [
+                  {
+                    "inTr": "d",
+                    "outTr": "b"
+                  },
+                  5
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+            "label": "d",
+            "invisible": false
+          },
+          "input": true
+        },
+        {
+          "place": {
+            "id": "d3690722-9696-491b-ba4e-24ebc0e1ffe6",
+            "inputTransitions": [
+              {
+                "id": "b67370b9-ee79-4a26-8160-316cc09f21d3",
+                "label": "s",
+                "invisible": false
+              },
+              {
+                "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+                "label": "d",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+                "label": "b",
+                "invisible": false
+              },
+              {
+                "id": "11e780e2-6230-40fe-b9a1-5641b3ec1870",
+                "label": "e",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "s",
+                    "outTr": "b"
+                  },
+                  3
+                ],
+                [
+                  {
+                    "inTr": "d",
+                    "outTr": "e"
+                  },
+                  3
+                ],
+                [
+                  {
+                    "inTr": "s",
+                    "outTr": "e"
+                  },
+                  0
+                ],
+                [
+                  {
+                    "inTr": "d",
+                    "outTr": "b"
+                  },
+                  5
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "11e780e2-6230-40fe-b9a1-5641b3ec1870",
+            "label": "e",
+            "invisible": false
+          },
+          "input": false
+        }
+      ]
+    },
+    {
+      "id": "6775c28d-1c39-42e8-8a59-7131f0b2e094",
+      "places": [
+        {
+          "id": "d3690722-9696-491b-ba4e-24ebc0e1ffe6",
+          "inputTransitions": [
+            {
+              "id": "b67370b9-ee79-4a26-8160-316cc09f21d3",
+              "label": "s",
+              "invisible": false
+            },
+            {
+              "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+              "label": "d",
+              "invisible": false
+            }
+          ],
+          "outputTransitions": [
+            {
+              "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+              "label": "b",
+              "invisible": false
+            },
+            {
+              "id": "11e780e2-6230-40fe-b9a1-5641b3ec1870",
+              "label": "e",
+              "invisible": false
+            }
+          ],
+          "numTokens": 0,
+          "isFinal": false,
+          "additionalInfo": {
+            "passageUsage": [
+              [
+                {
+                  "inTr": "s",
+                  "outTr": "b"
+                },
+                3
+              ],
+              [
+                {
+                  "inTr": "d",
+                  "outTr": "e"
+                },
+                3
+              ],
+              [
+                {
+                  "inTr": "s",
+                  "outTr": "e"
+                },
+                0
+              ],
+              [
+                {
+                  "inTr": "d",
+                  "outTr": "b"
+                },
+                5
+              ]
+            ]
+          }
+        },
+        {
+          "id": "1dc33e3d-4e9f-4fe3-82af-bd7fb93829a6",
+          "inputTransitions": [
+            {
+              "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+              "label": "b",
+              "invisible": false
+            }
+          ],
+          "outputTransitions": [
+            {
+              "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+              "label": "x",
+              "invisible": false
+            },
+            {
+              "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+              "label": "y",
+              "invisible": false
+            }
+          ],
+          "numTokens": 0,
+          "isFinal": false,
+          "additionalInfo": {
+            "passageUsage": [
+              [
+                {
+                  "inTr": "b",
+                  "outTr": "x"
+                },
+                7
+              ],
+              [
+                {
+                  "inTr": "b",
+                  "outTr": "y"
+                },
+                2
+              ]
+            ]
+          }
+        }
+      ],
+      "transitions": {
+        "b": {
+          "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+          "label": "b",
+          "invisible": false
+        },
+        "s": {
+          "id": "b67370b9-ee79-4a26-8160-316cc09f21d3",
+          "label": "s",
+          "invisible": false
+        },
+        "d": {
+          "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+          "label": "d",
+          "invisible": false
+        },
+        "e": {
+          "id": "11e780e2-6230-40fe-b9a1-5641b3ec1870",
+          "label": "e",
+          "invisible": false
+        },
+        "x": {
+          "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+          "label": "x",
+          "invisible": false
+        },
+        "y": {
+          "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+          "label": "y",
+          "invisible": false
+        }
+      },
+      "arcs": [
+        {
+          "place": {
+            "id": "d3690722-9696-491b-ba4e-24ebc0e1ffe6",
+            "inputTransitions": [
+              {
+                "id": "b67370b9-ee79-4a26-8160-316cc09f21d3",
+                "label": "s",
+                "invisible": false
+              },
+              {
+                "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+                "label": "d",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+                "label": "b",
+                "invisible": false
+              },
+              {
+                "id": "11e780e2-6230-40fe-b9a1-5641b3ec1870",
+                "label": "e",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "s",
+                    "outTr": "b"
+                  },
+                  3
+                ],
+                [
+                  {
+                    "inTr": "d",
+                    "outTr": "e"
+                  },
+                  3
+                ],
+                [
+                  {
+                    "inTr": "s",
+                    "outTr": "e"
+                  },
+                  0
+                ],
+                [
+                  {
+                    "inTr": "d",
+                    "outTr": "b"
+                  },
+                  5
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "11e780e2-6230-40fe-b9a1-5641b3ec1870",
+            "label": "e",
+            "invisible": false
+          },
+          "input": false
+        },
+        {
+          "place": {
+            "id": "1dc33e3d-4e9f-4fe3-82af-bd7fb93829a6",
+            "inputTransitions": [
+              {
+                "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+                "label": "b",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+                "label": "x",
+                "invisible": false
+              },
+              {
+                "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+                "label": "y",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "b",
+                    "outTr": "x"
+                  },
+                  7
+                ],
+                [
+                  {
+                    "inTr": "b",
+                    "outTr": "y"
+                  },
+                  2
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+            "label": "x",
+            "invisible": false
+          },
+          "input": false
+        },
+        {
+          "place": {
+            "id": "d3690722-9696-491b-ba4e-24ebc0e1ffe6",
+            "inputTransitions": [
+              {
+                "id": "b67370b9-ee79-4a26-8160-316cc09f21d3",
+                "label": "s",
+                "invisible": false
+              },
+              {
+                "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+                "label": "d",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+                "label": "b",
+                "invisible": false
+              },
+              {
+                "id": "11e780e2-6230-40fe-b9a1-5641b3ec1870",
+                "label": "e",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "s",
+                    "outTr": "b"
+                  },
+                  3
+                ],
+                [
+                  {
+                    "inTr": "d",
+                    "outTr": "e"
+                  },
+                  3
+                ],
+                [
+                  {
+                    "inTr": "s",
+                    "outTr": "e"
+                  },
+                  0
+                ],
+                [
+                  {
+                    "inTr": "d",
+                    "outTr": "b"
+                  },
+                  5
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+            "label": "b",
+            "invisible": false
+          },
+          "input": false
+        },
+        {
+          "place": {
+            "id": "d3690722-9696-491b-ba4e-24ebc0e1ffe6",
+            "inputTransitions": [
+              {
+                "id": "b67370b9-ee79-4a26-8160-316cc09f21d3",
+                "label": "s",
+                "invisible": false
+              },
+              {
+                "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+                "label": "d",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+                "label": "b",
+                "invisible": false
+              },
+              {
+                "id": "11e780e2-6230-40fe-b9a1-5641b3ec1870",
+                "label": "e",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "s",
+                    "outTr": "b"
+                  },
+                  3
+                ],
+                [
+                  {
+                    "inTr": "d",
+                    "outTr": "e"
+                  },
+                  3
+                ],
+                [
+                  {
+                    "inTr": "s",
+                    "outTr": "e"
+                  },
+                  0
+                ],
+                [
+                  {
+                    "inTr": "d",
+                    "outTr": "b"
+                  },
+                  5
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "b67370b9-ee79-4a26-8160-316cc09f21d3",
+            "label": "s",
+            "invisible": false
+          },
+          "input": true
+        },
+        {
+          "place": {
+            "id": "d3690722-9696-491b-ba4e-24ebc0e1ffe6",
+            "inputTransitions": [
+              {
+                "id": "b67370b9-ee79-4a26-8160-316cc09f21d3",
+                "label": "s",
+                "invisible": false
+              },
+              {
+                "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+                "label": "d",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+                "label": "b",
+                "invisible": false
+              },
+              {
+                "id": "11e780e2-6230-40fe-b9a1-5641b3ec1870",
+                "label": "e",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "s",
+                    "outTr": "b"
+                  },
+                  3
+                ],
+                [
+                  {
+                    "inTr": "d",
+                    "outTr": "e"
+                  },
+                  3
+                ],
+                [
+                  {
+                    "inTr": "s",
+                    "outTr": "e"
+                  },
+                  0
+                ],
+                [
+                  {
+                    "inTr": "d",
+                    "outTr": "b"
+                  },
+                  5
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "46f5355c-eac3-493a-8236-3a12284d68a2",
+            "label": "d",
+            "invisible": false
+          },
+          "input": true
+        },
+        {
+          "place": {
+            "id": "1dc33e3d-4e9f-4fe3-82af-bd7fb93829a6",
+            "inputTransitions": [
+              {
+                "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+                "label": "b",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+                "label": "x",
+                "invisible": false
+              },
+              {
+                "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+                "label": "y",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "b",
+                    "outTr": "x"
+                  },
+                  7
+                ],
+                [
+                  {
+                    "inTr": "b",
+                    "outTr": "y"
+                  },
+                  2
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+            "label": "y",
+            "invisible": false
+          },
+          "input": false
+        },
+        {
+          "place": {
+            "id": "1dc33e3d-4e9f-4fe3-82af-bd7fb93829a6",
+            "inputTransitions": [
+              {
+                "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+                "label": "b",
+                "invisible": false
+              }
+            ],
+            "outputTransitions": [
+              {
+                "id": "4e9cf102-041e-4167-b32e-2333e89780ef",
+                "label": "x",
+                "invisible": false
+              },
+              {
+                "id": "750ab46e-485b-4c65-8876-284a8a563d0f",
+                "label": "y",
+                "invisible": false
+              }
+            ],
+            "numTokens": 0,
+            "isFinal": false,
+            "additionalInfo": {
+              "passageUsage": [
+                [
+                  {
+                    "inTr": "b",
+                    "outTr": "x"
+                  },
+                  7
+                ],
+                [
+                  {
+                    "inTr": "b",
+                    "outTr": "y"
+                  },
+                  2
+                ]
+              ]
+            }
+          },
+          "transition": {
+            "id": "8f85295f-8e85-4803-b230-e7b7ce0635b8",
+            "label": "b",
+            "invisible": false
+          },
+          "input": true
+        }
+      ]
+    }
+  ],
+  "sorted": false
+}

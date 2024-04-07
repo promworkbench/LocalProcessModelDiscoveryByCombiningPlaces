@@ -12,4 +12,21 @@ public class Constants {
             public static final Color TransparentColor = new Color(0f, 0f, 0f, 0f);
         }
     }
+
+    public static class Grouping {
+
+        public static class Config {
+            public static final String CLUSTERING_ALG = "clustering_alg";
+            public static final String IDENTIFIER = "identifier";
+            public static final String DISTANCE_CONFIG = "distance_config";
+        }
+    }
+
+    public static class ModelDistance {
+
+        public static class Config {
+
+            public static final String DISTANCE_METHOD = "distance_method";
+        }
+    }
 }

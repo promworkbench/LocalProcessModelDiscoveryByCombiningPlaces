@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.comp
 
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.math3.util.Pair;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelContainer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,10 +64,10 @@ public class BaseLPMDiscoveryResultComponent extends JComponent {
                 c.gridx = i % 3;
                 c.gridy = 2;
             }
+            container.setPreferredSize(new Dimension(100,50));
             this.settablePanels.put(new Pair<>(c.gridx, c.gridy), container);
             container.add(new JLabel(c.gridx + "," + c.gridy));
             this.add(container, c);
         }
     }
-
 }

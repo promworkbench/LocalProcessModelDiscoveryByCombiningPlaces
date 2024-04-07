@@ -13,7 +13,6 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluat
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventCoverageEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.undecided.Utils;
 import org.processmining.placebasedlpmdiscovery.model.Arc;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
@@ -26,10 +25,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.file.Files;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -69,6 +66,48 @@ public class LocalProcessModelUtils {
                     .collect(Collectors.toSet());
             replayable.addConstraint(p.getId(), p.getNumTokens(), outputTransitionIds, inputTransitionIds);
         }
+
+        return replayable;
+    }
+
+    public static ReplayableLocalProcessModel convertToReplayableWithInitialMarking(
+            LocalProcessModel lpm, Map<String, Integer> labelMap) {
+        Set<Integer> transitionsMapped = lpm.getTransitions()
+                .stream()
+                .map(t -> labelMap.get(t.getLabel()))
+                .collect(Collectors.toSet());
+        Set<Integer> invisibleTransitions = lpm.getTransitions()
+                .stream()
+                .filter(Transition::isInvisible)
+                .map(t -> labelMap.get(t.getLabel()))
+                .collect(Collectors.toSet());
+
+        ReplayableLocalProcessModel replayable = new ReplayableLocalProcessModel(transitionsMapped, invisibleTransitions);
+        for (Place p : lpm.getPlaces()) {
+            Set<Integer> inputTransitionIds = p.getInputTransitions()
+                    .stream()
+                    .map(t -> labelMap.get(t.getLabel()))
+                    .collect(Collectors.toSet());
+            Set<Integer> outputTransitionIds = p.getOutputTransitions()
+                    .stream()
+                    .map(t -> labelMap.get(t.getLabel()))
+                    .collect(Collectors.toSet());
+            replayable.addConstraint(p.getId(), p.getNumTokens(), outputTransitionIds, inputTransitionIds);
+        }
+
+        // adding initial marking
+        Set<Integer> unconstrainedTransitions = replayable.getEnabledTransitions();
+        replayable.addConstraint(UUID.randomUUID().toString(), 1, unconstrainedTransitions, new HashSet<>());
+
+//        for (Place p : lpm.getPlaces()) {
+//            Set<Transition> pUnconstrainedTransitions = p.getInputTransitions().stream()
+//                    .filter(t -> unconstrainedTransitions.contains(labelMap.get(t.getLabel())))
+//                    .collect(Collectors.toSet());
+//            Set<Transition> pConstrainedTransitions = p.getInputTransitions().stream()
+//                    .filter(t -> !unconstrainedTransitions.contains(labelMap.get(t.getLabel())))
+//                    .collect(Collectors.toSet());
+//
+//        }
 
         return replayable;
     }
@@ -270,7 +309,7 @@ public class LocalProcessModelUtils {
                 csvWriter.write(String.valueOf(lpm.getAdditionalInfo()
                         .getEvaluationResult(id.name(), LPMEvaluationResult.class).getResult()));
             }
-            csvWriter.write(String.valueOf(aggregateOperation.aggregate(lpm.getAdditionalInfo().getEvalResults().values())));
+            csvWriter.write(String.valueOf(aggregateOperation.aggregate(lpm.getAdditionalInfo().getEvaluationResults().values())));
             csvWriter.endRecord();
         }
         // add csv file to zip
@@ -284,5 +323,10 @@ public class LocalProcessModelUtils {
         out.putNextEntry(e);
         out.write(content);
         out.closeEntry();
+    }
+
+    public static Map<String, Integer> getTransitionLabelToIntegerMap(LocalProcessModel lpm) {
+        AtomicInteger ai = new AtomicInteger(0);
+        return lpm.getTransitions().stream().collect(Collectors.toMap(Transition::getLabel, t -> ai.getAndIncrement()));
     }
 }

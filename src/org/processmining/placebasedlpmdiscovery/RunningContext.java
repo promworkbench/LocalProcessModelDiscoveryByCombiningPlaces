@@ -1,8 +1,11 @@
 package org.processmining.placebasedlpmdiscovery;
 
+import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.Analyzer;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
+import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryInput;
+import org.processmining.placebasedlpmdiscovery.main.StandardLPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterSubject;
 
 public class RunningContext {
@@ -11,6 +14,11 @@ public class RunningContext {
     private LPMEvaluationController lpmEvaluationController;
     private InterrupterSubject interrupterSubject;
     private Analyzer analyzer;
+    private LPMDiscoveryInput input;
+
+    public RunningContext(XLog log) {
+        this.input = new StandardLPMDiscoveryInput(log);
+    }
 
     public void setLpmFiltrationController(LPMFiltrationController lpmFiltrationController) {
         this.lpmFiltrationController = lpmFiltrationController;
@@ -42,5 +50,9 @@ public class RunningContext {
 
     public void setAnalyzer(Analyzer analyzer) {
         this.analyzer = analyzer;
+    }
+
+    public LPMDiscoveryInput getInput() {
+        return input;
     }
 }

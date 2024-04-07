@@ -1,5 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.model.inout;
 
+import org.apache.commons.lang.NotImplementedException;
+import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryConfig;
+import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.main.MultipleLPMDiscoveryResults;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
@@ -11,6 +14,7 @@ import java.util.*;
 public class TwoStandardLPMDiscoveryResults implements MultipleLPMDiscoveryResults {
 
     private final Map<String, LPMDiscoveryResult> resMap;
+    private LPMDiscoveryInput input;
 
     public TwoStandardLPMDiscoveryResults(LPMDiscoveryResult res1, LPMDiscoveryResult res2) {
         this.resMap = new HashMap<>();
@@ -24,6 +28,26 @@ public class TwoStandardLPMDiscoveryResults implements MultipleLPMDiscoveryResul
         all.addAll(resMap.get("Set 1").getAllLPMs());
         all.addAll(resMap.get("Set 2").getAllLPMs());
         return all;
+    }
+
+    @Override
+    public LPMDiscoveryInput getInput() {
+        return input;
+    }
+
+    @Override
+    public void setInput(LPMDiscoveryInput input) {
+        this.input = input;
+    }
+
+    @Override
+    public LPMDiscoveryConfig getConfig() {
+        throw new NotImplementedException("Still not implemented.");
+    }
+
+    @Override
+    public void keep(int lpmCount) {
+        resMap.values().forEach(lpmRes -> lpmRes.keep(lpmCount));
     }
 
     @Override

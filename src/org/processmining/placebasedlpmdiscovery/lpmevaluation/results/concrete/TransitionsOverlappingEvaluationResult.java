@@ -10,7 +10,7 @@ public class TransitionsOverlappingEvaluationResult extends SimpleEvaluationResu
     private double overlappingScore;
 
     public TransitionsOverlappingEvaluationResult(LocalProcessModel lpm) {
-        super(lpm, StandardLPMEvaluationResultId.TransitionOverlappingEvaluationResult);
+        super(StandardLPMEvaluationResultId.TransitionOverlappingEvaluationResult);
     }
 
     public void setOverlappingScore(double overlappingScore) {

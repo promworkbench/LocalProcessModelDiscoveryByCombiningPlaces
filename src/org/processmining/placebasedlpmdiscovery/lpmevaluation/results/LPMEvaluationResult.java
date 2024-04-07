@@ -2,11 +2,10 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.results;
 
 import java.io.Serializable;
 
-public interface LPMEvaluationResult extends Serializable, Cloneable {
+public interface LPMEvaluationResult extends LPMCollectorResult {
 
     double getResult();
 
     double getNormalizedResult();
 
-    LPMEvaluationResultId getId();
 }

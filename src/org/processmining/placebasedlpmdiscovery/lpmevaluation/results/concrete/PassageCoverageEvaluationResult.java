@@ -17,12 +17,12 @@ public class PassageCoverageEvaluationResult extends SimpleEvaluationResult {
     private Set<String> allPossiblePassages;
 
     public PassageCoverageEvaluationResult(LocalProcessModel lpm) {
-        super(lpm, StandardLPMEvaluationResultId.PassageCoverageEvaluationResult);
+        super(StandardLPMEvaluationResultId.PassageCoverageEvaluationResult);
         this.coveredPassages = new HashSet<>();
-        initializePossiblePassages();
+        initializePossiblePassages(lpm);
     }
 
-    private void initializePossiblePassages() {
+    private void initializePossiblePassages(LocalProcessModel lpm) {
         this.allPossiblePassages = LocalProcessModelUtils.getPossiblePassages(lpm);
     }
 

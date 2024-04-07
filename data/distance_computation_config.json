@@ -1,0 +1,35 @@
+[
+  {
+    "runnerInput": {
+      "inputs": {
+        "eventlog": ".\\data\\bpi2012_res10939.xes",
+        "lpms": ".\\data\\bpi2012_res10939_lpms.json"
+      }
+    },
+    "runnerOutput": {
+      "outputs": {
+        "distance": ".\\data\\bpi2012_res10939_distance.csv"
+      }
+    },
+    "modelDistanceConfig": {
+      "distanceMethod": "ProcessModelSimilarity",
+      "processModelSimilarityMeasure": "TransitionLabel"
+    }
+  },
+  {
+    "runnerInput": {
+      "inputs": {
+        "eventlog": ".\\data\\bpi2012_res10939.xes",
+        "lpms": ".\\data\\bpi2012_res10939_lpms.json"
+      }
+    },
+    "runnerOutput": {
+      "outputs": {
+        "distance": ".\\data\\bpi2012_res10939_distance.csv"
+      }
+    },
+    "modelDistanceConfig": {
+      "distanceMethod": "DataAttribute"
+    }
+  }
+]

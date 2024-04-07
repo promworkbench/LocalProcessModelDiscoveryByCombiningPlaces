@@ -4,9 +4,15 @@ import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.Visualizer;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
-import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
+import org.processmining.placebasedlpmdiscovery.grouping.DefaultGroupingConfig;
+import org.processmining.placebasedlpmdiscovery.grouping.GroupingConfig;
+import org.processmining.placebasedlpmdiscovery.grouping.GroupingController;
+import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.grouped.GroupedLPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.grouped.GroupingProperty;
+import org.processmining.placebasedlpmdiscovery.runners.clustering.ClusteringRunner;
+import org.processmining.placebasedlpmdiscovery.runners.io.RunnerInput;
+import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
 import javax.swing.*;
 
@@ -19,7 +25,7 @@ import javax.swing.*;
 public class LPMResultGroupedVisualizer {
 
     @PluginVariant(requiredParameterLabels = {0})
-    public JComponent visualize(UIPluginContext context, LPMResult result) {
+    public JComponent visualize(UIPluginContext context, LPMDiscoveryResult result) {
 //        JComponent component = new JPanel();
 //        component.setLayout(new GridBagLayout());
 //        GridBagConstraints gbc = new GridBagConstraints();
@@ -96,7 +102,13 @@ public class LPMResultGroupedVisualizer {
 
         GroupingProperty property = showChooseGroupingPropertyDialog(new JFrame());
         // TODO: See whether you don't have to do this if it has already be done
-        GroupedLPMResult grouped = new GroupedLPMResult(result, property);
+        if (property.equals(GroupingProperty.Clustering)) {
+            GroupingConfig groupingConfig = new DefaultGroupingConfig();
+            GroupingController groupingController = ClusteringRunner
+                    .getGroupingController(groupingConfig, result.getInput().getLog());
+            groupingController.groupLPMs(result.getAllLPMs(), groupingConfig);
+        }
+        GroupedLPMResult grouped = new GroupedLPMResult(result.getAllLPMs(), property);
 
         // tabbed pane where the local process models are shown
         JTabbedPane tabbedPane = new JTabbedPane();
@@ -113,7 +125,7 @@ public class LPMResultGroupedVisualizer {
                         JOptionPane.PLAIN_MESSAGE,
                         null,
                         GroupingProperty.values(),
-                        GroupingProperty.WindowCoverage);
+                        GroupingProperty.Clustering);
     }
 
     private void refreshTabbedPane(JTabbedPane tabbedPane, UIPluginContext context, int start, int end, GroupedLPMResult result) {

@@ -1,0 +1,26 @@
+[
+  {
+    "runnerInput": {
+      "inputs": {
+        "eventlog": ".\\data\\bpi2012_res10939.xes",
+        "lpms": ".\\data\\bpi2012_res10939_lpms.json"
+      }
+    },
+    "runnerOutput": {
+      "outputs": {
+        "clustering": ".\\data\\bpi2012_res10939_clustering.csv"
+      }
+    },
+    "clusteringConfig": {
+      "identifier": "hierarchical-complete",
+      "clusteringAlgorithm": "Hierarchical",
+      "clusteringConfig": {
+        "num_clusters": "10",
+        "linkage": "complete"
+      },
+      "modelDistanceConfig": {
+        "distanceMethod": "DataAttribute"
+      }
+    }
+  }
+]

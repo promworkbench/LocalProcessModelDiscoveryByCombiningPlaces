@@ -95,6 +95,10 @@
 		<!--ivy:retrieve pattern="lib/[artifact]-[revision].[ext]" conf="lib" type="jar,bundle" sync="true" /-->
 	</target>
 
+	<target name="report">
+		<ivy:report conf="compile"/>
+	</target>
+
 	<target name="javadoc">
 		<echo message="[build] Creating javadoc" />
 		<javadoc packagenames="**" classpathref="classpath" useexternalfile="true" defaultexcludes="yes" destdir="${doc}" author="true" version="true" verbose="false" use="true" windowtitle="${project}">

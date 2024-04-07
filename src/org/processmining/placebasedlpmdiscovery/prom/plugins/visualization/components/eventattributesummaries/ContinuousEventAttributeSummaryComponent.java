@@ -1,16 +1,16 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.eventattributesummaries;
 
 import org.processmining.framework.util.ui.widgets.ProMTextField;
-import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.ContinuousEventAttributeSummary;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.ContinuousAttributeSummary;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class ContinuousEventAttributeSummaryComponent extends EventAttributeSummaryComponent<ContinuousEventAttributeSummary> {
+public class ContinuousEventAttributeSummaryComponent extends EventAttributeSummaryComponent<ContinuousAttributeSummary> {
 
-    public ContinuousEventAttributeSummaryComponent(ContinuousEventAttributeSummary model) {
+    public ContinuousEventAttributeSummaryComponent(ContinuousAttributeSummary model) {
         super(model);
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         this.setBackground(new Color(60, 60, 60, 160));

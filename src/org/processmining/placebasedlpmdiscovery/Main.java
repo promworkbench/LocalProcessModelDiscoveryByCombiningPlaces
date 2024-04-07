@@ -15,9 +15,9 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lp
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilterId;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMEvaluatorFactory;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMCollectorFactory;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMCollectorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.concrete.EventCoverageEvaluator;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.main.StandardLPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
@@ -33,7 +33,7 @@ public class Main {
         LPMDiscoveryBuilder builder = new StandardLPMDiscoveryBuilder();
 
         // set running context
-        RunningContext runningContext = new RunningContext();
+        RunningContext runningContext = new RunningContext(log);
         setupStandardBase(log, parameters, builder, runningContext);
 
         // set place discovery
@@ -61,7 +61,7 @@ public class Main {
         LPMDiscoveryBuilder builder = new StandardLPMDiscoveryBuilder();
 
         // set running context
-        RunningContext runningContext = new RunningContext();
+        RunningContext runningContext = new RunningContext(log);
         setupStandardBase(log, parameters, builder, runningContext);
 
         // set place discovery
@@ -89,7 +89,7 @@ public class Main {
         LPMDiscoveryBuilder builder = new StandardLPMDiscoveryBuilder();
 
         // set running context
-        RunningContext runningContext = new RunningContext();
+        RunningContext runningContext = new RunningContext(log);
         setupStandardBase(log, parameters, builder, runningContext);
 
         // set place discovery
@@ -127,18 +127,20 @@ public class Main {
         builder.setEvaluationController(evaluationController);
 
         // add evaluators
-        LPMEvaluatorFactory evaluatorFactory = new LPMEvaluatorFactory();
+        LPMCollectorFactory evaluatorFactory = new LPMCollectorFactory();
         evaluationController.setEvaluatorFactory(evaluatorFactory);
-        builder.registerLPMWindowEvaluator(StandardLPMEvaluatorId.PassageCoverageEvaluator.name(),
+        builder.registerLPMWindowCollector(StandardLPMEvaluatorId.PassageCoverageEvaluator.name(),
                 evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.PassageCoverageEvaluator));
-        builder.registerLPMWindowEvaluator(StandardLPMEvaluatorId.FittingWindowEvaluator.name(),
+        builder.registerLPMWindowCollector(StandardLPMEvaluatorId.FittingWindowEvaluator.name(),
                 evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.FittingWindowEvaluator));
-        builder.registerLPMWindowEvaluator(StandardLPMEvaluatorId.TransitionCoverageEvaluator.name(),
+        builder.registerLPMWindowCollector(StandardLPMEvaluatorId.TransitionCoverageEvaluator.name(),
                 evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.TransitionCoverageEvaluator));
-        builder.registerLPMWindowEvaluator(StandardLPMEvaluatorId.TraceSupportCountEvaluator.name(),
+        builder.registerLPMWindowCollector(StandardLPMEvaluatorId.TraceSupportCountEvaluator.name(),
                 evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.TraceSupportCountEvaluator));
-        builder.registerLPMWindowEvaluator(StandardLPMEvaluatorId.EventCoverageEvaluator.name(),
+        builder.registerLPMWindowCollector(StandardLPMEvaluatorId.EventCoverageEvaluator.name(),
                 evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.EventCoverageEvaluator));
+        builder.registerLPMWindowCollector(StandardLPMCollectorId.EventAttributeCollector.name(),
+                evaluatorFactory.getWindowEvaluator(StandardLPMCollectorId.EventAttributeCollector));
 
         // set filters
         LPMFilterParameters filterParameters = parameters.getLpmFilterParameters();

@@ -6,7 +6,7 @@ import org.deckfour.xes.factory.XFactoryNaiveImpl;
 import org.deckfour.xes.model.*;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.IntegerMappedLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.extra.AbstractActivityMapping;
-import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummary;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummary;
 
 import java.util.*;
 
@@ -14,9 +14,9 @@ public class ContextWindowLog {
 
     private final IntegerMappedLog integerMappedActivityLog;
     private final IntegerMappedLog integerMappedTraceVariantLog;
-    private final Map<String, EventAttributeSummary<?,?>> context;
+    private final Map<String, AttributeSummary<?,?>> context;
 
-    public ContextWindowLog(XLog log, Map<String, EventAttributeSummary<?,?>> attributeSummary) {
+    public ContextWindowLog(XLog log, Map<String, AttributeSummary<?,?>> attributeSummary) {
         this.context = attributeSummary;
         XLog contextLog = createContextLog(log);
         this.integerMappedTraceVariantLog = new IntegerMappedLog(contextLog);

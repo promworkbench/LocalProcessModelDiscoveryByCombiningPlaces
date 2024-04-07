@@ -13,6 +13,7 @@ import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.InteractiveL
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.BaseLPMDiscoveryResultComponent;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.DefaultLPMDiscoveryResultComponent;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelFactory;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 import org.processmining.placebasedlpmdiscovery.view.controllers.DefaultLPMDiscoveryResultViewController;
@@ -51,7 +52,7 @@ public class MainGUI extends JFrame {
         return new BaseLPMDiscoveryResultComponent(5);
     }
     private BaseLPMDiscoveryResultComponent getDummyDefaultView() throws Exception {
-        DefaultLPMDiscoveryResultComponent view = new DefaultLPMDiscoveryResultComponent(getDummyContext());
+        DefaultLPMDiscoveryResultComponent view = new DefaultLPMDiscoveryResultComponent(getDummyContext(), new SettablePanelFactory());
         DefaultLPMDiscoveryResultViewModel model = new DefaultLPMDiscoveryResultViewModel(getDummyResult());
 
         LPMDiscoveryResultViewController controller =

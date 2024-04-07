@@ -8,6 +8,8 @@ import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAddition
 import org.processmining.placebasedlpmdiscovery.model.exporting.gson.deserializers.LPMAdditionalInfoDeserializer;
 import org.processmining.placebasedlpmdiscovery.model.exporting.gson.deserializers.LPMEvaluationResultIdDeserializer;
 import org.processmining.placebasedlpmdiscovery.model.exporting.gson.instancecreators.PairInstanceCreator;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummary;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.serialization.AttributeSummaryAdapter;
 
 import java.io.*;
 
@@ -18,6 +20,7 @@ public class JsonImporter<T> implements Importer<T> {
         GsonBuilder gsonBuilder = new GsonBuilder()
                 .registerTypeAdapter(LPMAdditionalInfo.class, new LPMAdditionalInfoDeserializer())
                 .registerTypeAdapter(LPMEvaluationResultId.class, new LPMEvaluationResultIdDeserializer())
+                .registerTypeAdapter(AttributeSummary.class, new AttributeSummaryAdapter())
                 .registerTypeAdapter(Pair.class, new PairInstanceCreator());
         Gson gson = gsonBuilder.create();
         try(InputStreamReader reader = new InputStreamReader(is)) {

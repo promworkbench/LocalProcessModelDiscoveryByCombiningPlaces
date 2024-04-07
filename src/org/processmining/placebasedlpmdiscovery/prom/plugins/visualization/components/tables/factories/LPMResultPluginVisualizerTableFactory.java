@@ -6,9 +6,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEval
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
-import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.CustomObjectTableModel;
-import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 
 import javax.swing.*;
 import java.text.DecimalFormat;
@@ -62,7 +60,7 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
                         df.format(getResultOrDefault(lpm, StandardLPMEvaluationResultId.PassageCoverageEvaluationResult)),
                         df.format(getResultOrDefault(lpm, StandardLPMEvaluationResultId.PassageRepetitionEvaluationResult)),
                         df.format(getResultOrDefault(lpm, StandardLPMEvaluationResultId.TraceSupportEvaluationResult)),
-                        df.format(new EvaluationResultAggregateOperation().aggregate(lpm.getAdditionalInfo().getEvalResults().values()))
+                        df.format(new EvaluationResultAggregateOperation().aggregate(lpm.getAdditionalInfo().getEvaluationResults().values()))
                 });
     }
 

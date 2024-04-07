@@ -1,8 +1,9 @@
 package org.processmining.placebasedlpmdiscovery.model.serializable.grouped;
 
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableList;
+
+import java.util.Collection;
 
 public class GroupedLPMResult extends SerializableList<LPMResultGroup> {
 
@@ -10,25 +11,25 @@ public class GroupedLPMResult extends SerializableList<LPMResultGroup> {
 
     private GroupingProperty property;
 
-    public GroupedLPMResult(LPMResult result, GroupingProperty property) {
+    public GroupedLPMResult(Collection<LocalProcessModel> lpms, GroupingProperty property) {
         super();
         this.property = property;
-        for (LocalProcessModel lpm : result.getElements()) {
+        for (LocalProcessModel lpm : lpms) {
             this.add(lpm);
         }
     }
 
     public boolean add(LocalProcessModel lpm) {
-        boolean added;
+        boolean added = false;
         for (LPMResultGroup group : this.elements) {
-            added = group.add(lpm);
-            if (added)
-                return true;
+            added = added || group.add(lpm);
+        }
+        if (!added) {
+            LPMResultGroup group = this.createGroup(this.property);
+            group.add(lpm);
+            add(group);
         }
 
-        LPMResultGroup group = this.createGroup(this.property);
-        group.add(lpm);
-        add(group);
         return true;
     }
 
@@ -37,6 +38,8 @@ public class GroupedLPMResult extends SerializableList<LPMResultGroup> {
             return new SameActivityLPMResultGroup();
         } else if (property == GroupingProperty.WindowCoverage) {
             return new WindowCoverageLPMResultGroup();
+        } else if (property == GroupingProperty.Clustering) {
+            return new ClusteringLPMResultGroup("default");
         }
         throw new IllegalArgumentException();
     }

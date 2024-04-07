@@ -6,7 +6,8 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMEvaluator;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMCollector;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscovery;
@@ -32,7 +33,7 @@ public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
     private LPMEvaluationController evaluationController;
     private LPMFiltrationController filtrationController;
 
-    private Map<String, WindowLPMEvaluator<?>> windowEvaluators;
+    private Map<String, WindowLPMCollector<?>> windowEvaluators;
     private Collection<LPMFilter> lpmFilters;
 
     public StandardLPMDiscoveryBuilder() {
@@ -93,11 +94,11 @@ public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
     }
 
     @Override
-    public void registerLPMWindowEvaluator(String name, WindowLPMEvaluator<? extends LPMEvaluationResult> windowEvaluator) {
+    public void registerLPMWindowCollector(String name, WindowLPMCollector<? extends LPMCollectorResult> windowCollector) {
         if (this.windowEvaluators.containsKey(name)) {
             throw new IllegalArgumentException("An evaluator with the same name is already existing.");
         }
-        this.windowEvaluators.put(name, windowEvaluator);
+        this.windowEvaluators.put(name, windowCollector);
     }
 
     @Override

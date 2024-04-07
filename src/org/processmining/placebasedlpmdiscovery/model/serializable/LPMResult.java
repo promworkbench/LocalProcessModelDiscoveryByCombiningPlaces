@@ -1,5 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.model.serializable;
 
+import org.apache.commons.lang.NotImplementedException;
+import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryConfig;
+import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.main.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
@@ -11,6 +14,8 @@ import java.io.OutputStream;
 
 public class LPMResult extends SerializableList<LocalProcessModel> implements LPMDiscoveryResult {
     private static final long serialVersionUID = 9159252267279978544L;
+
+    private LPMDiscoveryInput input;
 
     public LPMResult() {
 
@@ -29,5 +34,20 @@ public class LPMResult extends SerializableList<LocalProcessModel> implements LP
     @Override
     public Collection<LocalProcessModel> getAllLPMs() {
         return this.elements;
+    }
+
+    @Override
+    public LPMDiscoveryInput getInput() {
+        return this.input;
+    }
+
+    @Override
+    public void setInput(LPMDiscoveryInput input) {
+        this.input = input;
+    }
+
+    @Override
+    public LPMDiscoveryConfig getConfig() {
+        throw new NotImplementedException("Still not implemented.");
     }
 }

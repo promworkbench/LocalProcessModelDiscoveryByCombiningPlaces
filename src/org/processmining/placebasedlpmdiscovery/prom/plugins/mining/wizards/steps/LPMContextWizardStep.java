@@ -4,11 +4,12 @@ import org.deckfour.xes.model.XLog;
 import org.processmining.framework.util.ui.widgets.ProMComboCheckBox;
 import org.processmining.framework.util.ui.widgets.ProMPropertiesPanel;
 import org.processmining.framework.util.ui.wizard.ProMWizardStep;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventAttributeCollectorResult;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.eventattributesummaries.EventAttributeSummaryComponent;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.eventattributesummaries.EventAttributeSummaryComponentFactory;
-import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummary;
-import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.EventAttributeSummaryController;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummary;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummaryController;
 
 import javax.swing.*;
 import java.awt.event.ItemEvent;
@@ -26,18 +27,20 @@ public class LPMContextWizardStep extends ProMPropertiesPanel implements ProMWiz
         super(TITLE);
 
         this.lastSelected = new HashSet<>();
-        EventAttributeSummaryController attributeController = new EventAttributeSummaryController(log);
+        AttributeSummaryController attributeSummaryController = new AttributeSummaryController();
+        EventAttributeCollectorResult attributeSummaryResult = attributeSummaryController.computeEventAttributeSummary(log);
 
         this.components = new HashMap<>();
-        for (String key : attributeController.getAttributeKeys()) {
-            EventAttributeSummary<?,?> eventAttributeSummary = attributeController.getEventAttributeSummaryForAttributeKey(key);
+        for (String key : attributeSummaryResult.getAttributeKeys()) {
+            AttributeSummary<?,?> attributeSummary = attributeSummaryResult
+                    .getAttributeSummaryForAttributeKey(key).get();
             this.components.put(
                     key,
-                    EventAttributeSummaryComponentFactory.getComponentForEventAttributeSummary(eventAttributeSummary)
+                    EventAttributeSummaryComponentFactory.getComponentForEventAttributeSummary(attributeSummary)
             );
         }
 
-        ProMComboCheckBox attributes = new ProMComboCheckBox(attributeController.getAttributeKeys().toArray(new String[0]), false);
+        ProMComboCheckBox attributes = new ProMComboCheckBox(attributeSummaryResult.getAttributeKeys().toArray(new String[0]), false);
         addProperty("Attribute Selection", attributes);
         attributes.addItemListener(new ItemListener() {
             @Override

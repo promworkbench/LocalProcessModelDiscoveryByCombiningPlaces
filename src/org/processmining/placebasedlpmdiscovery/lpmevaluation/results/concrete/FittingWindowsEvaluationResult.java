@@ -20,7 +20,7 @@ public class FittingWindowsEvaluationResult extends SimpleEvaluationResult {
 
 
     public FittingWindowsEvaluationResult(LocalProcessModel lpm) {
-        super(lpm, StandardLPMEvaluationResultId.FittingWindowsEvaluationResult);
+        super(StandardLPMEvaluationResultId.FittingWindowsEvaluationResult);
         this.count = 0;
         this.total = 0;
         this.coveredWindowsHash = 0;

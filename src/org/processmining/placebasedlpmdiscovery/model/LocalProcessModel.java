@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery.model;
 import org.processmining.models.graphbased.NodeID;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
 
+import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;

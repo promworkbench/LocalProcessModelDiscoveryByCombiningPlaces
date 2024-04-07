@@ -245,6 +245,15 @@ public class ReplayableLocalProcessModel {
         return true;
     }
 
+    public Set<Integer> getEnabledTransitions() {
+        Set<Integer> enabledTransitions = new HashSet<>();
+        for (Integer tr : this.transitions) {
+            if (this.canFire(tr))
+                enabledTransitions.add(tr);
+        }
+        return enabledTransitions;
+    }
+
     public Set<Integer> getEnabledInvisible() {
         Set<Integer> invisibleEnabled = new HashSet<>();
         for (Integer invisibleTr : this.invisibleTransitions) {

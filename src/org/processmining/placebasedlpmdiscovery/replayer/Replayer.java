@@ -2,10 +2,12 @@ package org.processmining.placebasedlpmdiscovery.replayer;
 
 import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.undecided.Utils;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Replayer {
 
@@ -155,21 +157,44 @@ public class Replayer {
 
     // TODO: Make one normal replay where the sequence is a list of strings
 
-    //    public static Set<List<String>> findAllPaths(int pathLengthLimit, LocalProcessModel lpm) {
-//        if (lpm.getPlaces().size() > 1)
-//            throw new NotImplementedException();
-//
-//        Place place = lpm.getPlaces().iterator().next();
-//        Set<List<String>> paths = new HashSet<>();
-//
-//        for (Transition trIn : place.getInputTransitions())
-//            for (Transition trOut : place.getOutputTransitions()) {
-//                List<String> path = new ArrayList<>();
-//                path.add(trIn.getLabel());
-//                path.add(trOut.getLabel());
-//                paths.add(path);
-//            }
-//
-//        return paths;
-//    }
+    public static Set<List<String>> findAllPaths(int pathLengthLimit, LocalProcessModel lpm) {
+        Set<List<String>> paths = new HashSet<>();
+
+        Map<String, Integer> transitionLabelToIntegerMap = LocalProcessModelUtils.getTransitionLabelToIntegerMap(lpm);
+        Map<Integer, String> integerToTransitionLabelMap = transitionLabelToIntegerMap.entrySet().stream()
+                .collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
+        ReplayableLocalProcessModel rlpm = LocalProcessModelUtils.convertToReplayableWithInitialMarking(
+                lpm, transitionLabelToIntegerMap);
+        Set<Integer> unconstrainedTransitions = rlpm.getEnabledTransitions();
+
+        Queue<ReplayableLocalProcessModel> queue = new LinkedList<>();
+        queue.add(rlpm);
+        while (!queue.isEmpty()) {
+            // poll the next lpm to be processed
+            ReplayableLocalProcessModel current = queue.poll();
+
+            // if empty and has fired add it to possible paths
+            if (current.isEmptyMarking() && !current.getFiringSequence().isEmpty()) {
+                paths.add(current.getFiringSequence().stream().map(integerToTransitionLabelMap::get).collect(Collectors.toList()));
+                continue;
+            }
+
+            // if the maximum path length limit is achieved don't continue with replay
+            if (current.getFiringSequence().size() >= pathLengthLimit) {
+                continue;
+            }
+
+            for (Integer tr : current.getEnabledTransitions()) {
+                // unconstrained transitions can fire once
+                if (unconstrainedTransitions.contains(tr) && current.getFiringSequence().contains(tr)) {
+                    continue;
+                }
+                ReplayableLocalProcessModel copy = new ReplayableLocalProcessModel(current);
+                copy.fire(tr);
+                queue.add(copy);
+            }
+        }
+
+        return paths;
+    }
 }

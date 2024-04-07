@@ -278,9 +278,6 @@ public class LPMTreeBuilder extends Interruptible {
 
     private Map<Place, Integer> getPlacePriorityMap() {
         // TODO: should be replaced with some real ordering
-        AtomicInteger counter = new AtomicInteger(1);
-        return this.places
-                .stream()
-                .collect(Collectors.toMap(p -> p, p -> counter.getAndIncrement()));
+        return PlaceUtils.mapPlacesToIndices(this.places);
     }
 }
