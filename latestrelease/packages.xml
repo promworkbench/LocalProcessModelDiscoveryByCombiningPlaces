@@ -1,0 +1,17 @@
+
+					<packages>
+						<package name="LocalProcessModelDiscoveryByCombiningPlaces" version="6.14.9" os="all" url="LocalProcessModelDiscoveryByCombiningPlaces/LocalProcessModelDiscoveryByCombiningPlaces-6.14.9-all.zip" desc="LocalProcessModelDiscoveryByCombiningPlaces" org="RWTH Aachen" license="GPL" author="Viki Peeva" auto="false" hasPlugins="true" logo="prom_subtitle_hat_300.png">
+				    	<dependency org="prom" name="ProM-Plugins" rev="latest" changing="true" transitive="true" />
+    	<dependency org="prom" name="BasicUtils" rev="latest" changing="true" transitive="true" />
+    	<dependency org="prom" name="Widgets" rev="latest" changing="true" transitive="true" />
+		<dependency org="prom" name="Log" rev="latest" changing="true" transitive="true"/>
+		<dependency org="prom" name="PetriNets" rev="latest" changing="true" transitive="true"/>
+		<dependency org="prom" name="EfficientSTMiner" rev="latest" changing="true" transitive="true"/>
+		<dependency org="prom" name="InductiveMiner" rev="latest" changing="true" transitive="true"/>
+		<dependency org="prom" name="HeuristicsMiner" rev="latest" changing="true" transitive="true"/>
+		<dependency org="prom" name="AcceptingPetriNetRedundantPlacesReductor" rev="latest" changing="true"	transitive="true"/>
+		<dependency org="prom" name="AcceptingPetriNetClassicalReductor" rev="latest" changing="true" transitive="true"/>
+
+						</package>
+					</packages>
+				
