@@ -8,6 +8,8 @@ import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilar
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.util.Objects;
 
@@ -48,9 +50,37 @@ public class LPMSimilaritySetupPanel extends JPanel {
             case "Data Attributes":
                 return getDistMethodSetupPanelForDataAttributes();
             case "Mixed":
-                return new JLabel("Mixed");
+                return getDistMethodSetupPanelForMixed();
         }
         throw new IllegalArgumentException("The distance method " + distMethod + " is unknown.");
+    }
+
+    private JPanel getDistMethodSetupPanelForMixed() {
+        JPanel mixedPanel = new JPanel();
+        mixedPanel.setLayout(new BoxLayout(mixedPanel, BoxLayout.Y_AXIS));
+
+        // add additional measure
+        JPanel addMeasurePanel = new JPanel();
+        addMeasurePanel.setLayout(new BoxLayout(addMeasurePanel, BoxLayout.X_AXIS));
+        addMeasurePanel.add(new JLabel("Measure"));
+        JComboBox<String> measureComboBox = new JComboBox<>(new String[]{"Model Similarity", "Data Attributes"});
+        addMeasurePanel.add(measureComboBox);
+        addMeasurePanel.add(new JLabel("Weight"));
+        JTextField txtWeight = new JTextField("1");
+        addMeasurePanel.add(txtWeight);
+        JButton btnAddMeasure = new JButton("Add");
+        btnAddMeasure.addActionListener(e -> {
+            // TODO: on click add it in the formula and in the individual measures
+        });
+        addMeasurePanel.add(btnAddMeasure);
+        mixedPanel.add(addMeasurePanel);
+
+        // show the complete formula
+
+        // setup of the individual measures
+
+
+        return mixedPanel;
     }
 
     private JPanel getDistMethodSetupPanelForDataAttributes() {
