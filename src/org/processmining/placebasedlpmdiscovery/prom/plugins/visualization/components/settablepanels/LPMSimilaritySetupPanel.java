@@ -1,5 +1,10 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels;
 
+import csplugins.id.mapping.ui.CheckComboBox;
+import org.processmining.framework.util.ui.widgets.ProMCheckBoxWithComboBox;
+import org.processmining.framework.util.ui.widgets.ProMComboCheckBox;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity.ProcessModelSimilarityMeasure;
+
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -39,13 +44,37 @@ public class LPMSimilaritySetupPanel extends JPanel {
     private Component getDistMethodParametersView(String distMethod) {
         switch (distMethod) {
             case "Model Similarity":
-                return new JLabel("Model Similarity");
+                return getDistMethodSetupPanelForModelSimilarity();
             case "Data Attributes":
-                return new JLabel("Data Attributes");
+                return getDistMethodSetupPanelForDataAttributes();
             case "Mixed":
                 return new JLabel("Mixed");
         }
         throw new IllegalArgumentException("The distance method " + distMethod + " is unknown.");
+    }
+
+    private JPanel getDistMethodSetupPanelForDataAttributes() {
+        JPanel dataAttrPanel = new JPanel();
+        dataAttrPanel.setLayout(new BoxLayout(dataAttrPanel, BoxLayout.X_AXIS));
+        dataAttrPanel.add(new JLabel("Data Attributes:"));
+        dataAttrPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+        CheckComboBox dataAttrComboBox = new CheckComboBox(
+                new String[]{"Attr1", "Attr2", "Attr3"}, true);
+        dataAttrPanel.add(dataAttrComboBox);
+        return dataAttrPanel;
+    }
+
+    private JPanel getDistMethodSetupPanelForModelSimilarity() {
+        JPanel modelSimPanel = new JPanel();
+        modelSimPanel.setLayout(new BoxLayout(modelSimPanel, BoxLayout.X_AXIS));
+        modelSimPanel.add(new JLabel("Model Similarity:"));
+        modelSimPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+        JComboBox<ProcessModelSimilarityMeasure> modelSimComboBox = new JComboBox<>(ProcessModelSimilarityMeasure.values());
+        modelSimComboBox.addItemListener(e -> {
+            // TODO: setup the chosen similarity measure in the model
+        });
+        modelSimPanel.add(modelSimComboBox);
+        return modelSimPanel;
     }
 
     private void distanceMethodChanged(String distMethod) {
