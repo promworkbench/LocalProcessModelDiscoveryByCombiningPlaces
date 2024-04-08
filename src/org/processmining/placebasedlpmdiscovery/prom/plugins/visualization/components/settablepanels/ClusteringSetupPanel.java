@@ -13,7 +13,8 @@ public class ClusteringSetupPanel extends JPanel {
     private final JComponent clustAlgParam;
 
     public ClusteringSetupPanel() {
-        this.setLayout(new BorderLayout());
+        this.setLayout(new BorderLayout(5, 10));
+        this.setBorder(new TitledBorder("Clustering Setup"));
 
         // the clustering algorithm chooser
         JPanel clustAlgPanel = new JPanel();
@@ -33,8 +34,16 @@ public class ClusteringSetupPanel extends JPanel {
         this.clustAlgParam = new JPanel();
         this.clustAlgParam.setPreferredSize(new Dimension(200, 100));
         this.clustAlgParam.setBorder(new TitledBorder("Parameters"));
-        setClusteringAlgorithmParametersView((ClusteringAlgorithm) Objects.requireNonNull(clustAlgComboBox.getSelectedItem()));
+        this.clustAlgParam.add(getClusteringAlgorithmParametersView(
+                (ClusteringAlgorithm) Objects.requireNonNull(clustAlgComboBox.getSelectedItem())));
         this.add(this.clustAlgParam, BorderLayout.CENTER);
+
+        // running clustering
+        JButton btnRunClust = new JButton("Run Clustering");
+        btnRunClust.addActionListener(e -> {
+            // TODO: call the clustering and show results
+        });
+        this.add(btnRunClust, BorderLayout.PAGE_END);
     }
 
     private void clusteringAlgorithmChanged(ClusteringAlgorithm algorithm) {
@@ -42,29 +51,24 @@ public class ClusteringSetupPanel extends JPanel {
         if (this.clustAlgParam.getComponents().length > 0) {
             this.clustAlgParam.remove(0);
         }
-
-        setClusteringAlgorithmParametersView(algorithm);
+        this.clustAlgParam.add(getClusteringAlgorithmParametersView(algorithm));
+        this.revalidate();
     }
 
-    private void setClusteringAlgorithmParametersView(ClusteringAlgorithm algorithm) {
+    private Component getClusteringAlgorithmParametersView(ClusteringAlgorithm algorithm) {
         switch (algorithm) {
             case Hierarchical:
-                this.clustAlgParam.add(getParameterPanelForHierarchicalClust());
-                break;
+                return getParameterPanelForHierarchicalClust();
             case KMedoids:
-                this.clustAlgParam.add(new JLabel("KMedoids"));
-                break;
+                return new JLabel("KMedoids");
             case DBSCAN:
-                this.clustAlgParam.add(new JLabel("DBSCAN"));
-                break;
+                return new JLabel("DBSCAN");
             case Spectral:
-                this.clustAlgParam.add(new JLabel("Spectral"));
-                break;
+                return new JLabel("Spectral");
             case MinEntropy:
-                this.clustAlgParam.add(new JLabel("MinEntropy"));
-                break;
+                return new JLabel("MinEntropy");
         }
-        this.revalidate();
+        throw new IllegalArgumentException("The clustering algorithm " + algorithm + " is unknown.");
     }
 
     private JPanel getParameterPanelForHierarchicalClust() {
