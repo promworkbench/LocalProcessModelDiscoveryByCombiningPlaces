@@ -10,8 +10,8 @@ public class SettablePanelFactory {
         switch (type) {
             case BasicLPMEvalMetrics:
                 return new ComplexEvaluationResultPanel();
-            case Clustering:
-                return new ClusteringSetupPanel();
+            case Grouping:
+                return new GroupingSetupPanel();
         }
         throw new IllegalArgumentException("The component type " + type + " is not supported.");
     }

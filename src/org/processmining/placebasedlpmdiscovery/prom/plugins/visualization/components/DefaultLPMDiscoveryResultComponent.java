@@ -1,6 +1,5 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
 
-import com.google.inject.Inject;
 import org.apache.commons.math3.util.Pair;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.ComplexEvaluationResultPanel;
@@ -33,8 +32,8 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
         container.setContent(this.settablePanelFactory.getSettablePanel(ComponentId.Type.BasicLPMEvalMetrics));
 
         container = this.settablePanels.get(new Pair<>(2, 1));
-        container.setComponentId(new ComponentId(ComponentId.Type.Clustering));
-        container.setContent(this.settablePanelFactory.getSettablePanel(ComponentId.Type.Clustering));
+        container.setComponentId(new ComponentId(ComponentId.Type.Grouping));
+        container.setContent(this.settablePanelFactory.getSettablePanel(ComponentId.Type.Grouping));
     }
 
     @Override

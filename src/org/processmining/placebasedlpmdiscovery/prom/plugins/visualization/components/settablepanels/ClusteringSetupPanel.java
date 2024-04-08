@@ -1,17 +1,11 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels;
 
 import org.processmining.placebasedlpmdiscovery.grouping.ClusteringAlgorithm;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.utils.TextFieldIntFilter;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.text.PlainDocument;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.Objects;
 
 public class ClusteringSetupPanel extends JPanel {
@@ -78,21 +72,7 @@ public class ClusteringSetupPanel extends JPanel {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         // set num clusters or height
-        JPanel numClustersPanel = new JPanel();
-        numClustersPanel.setLayout(new BoxLayout(numClustersPanel, BoxLayout.X_AXIS));
-        JRadioButton btnNumClusters = new JRadioButton("Num Clusters");
-        JRadioButton btnHeight = new JRadioButton("Height");
-        ButtonGroup btnGroup = new ButtonGroup();
-        btnGroup.add(btnNumClusters);
-        btnGroup.add(btnHeight);
-
-        JTextField txtNumClusters = new JTextField();
-        JTextField txtHeight = new JTextField();
-
-        numClustersPanel.add(btnNumClusters);
-        numClustersPanel.add(txtNumClusters);
-        numClustersPanel.add(btnHeight);
-        numClustersPanel.add(txtHeight);
+        JPanel numClustersPanel = getNumClustersPanelHierarchical();
         panel.add(numClustersPanel);
 
         // set linkage
@@ -105,5 +85,44 @@ public class ClusteringSetupPanel extends JPanel {
         panel.add(linkagePanel);
 
         return panel;
+    }
+
+    private static JPanel getNumClustersPanelHierarchical() {
+        JPanel numClustersPanel = new JPanel();
+        numClustersPanel.setLayout(new BoxLayout(numClustersPanel, BoxLayout.X_AXIS));
+
+        // create buttons
+        JRadioButton btnNumClusters = new JRadioButton("Num Clusters");
+        JRadioButton btnHeight = new JRadioButton("Height");
+        ButtonGroup btnGroup = new ButtonGroup();
+        btnGroup.add(btnNumClusters);
+        btnGroup.add(btnHeight);
+
+        // create text fields
+        JTextField txtNumClusters = new JTextField("30");
+        txtNumClusters.setPreferredSize(new Dimension(50, txtNumClusters.getSize().height));
+        JTextField txtHeight = new JTextField("0.3");
+        txtHeight.setPreferredSize(new Dimension(50, txtHeight.getSize().height));
+
+        // selection action
+        btnNumClusters.addActionListener(e -> {
+            txtHeight.setEnabled(false);
+            txtNumClusters.setEnabled(true);
+        });
+        btnHeight.addActionListener(e -> {
+            txtHeight.setEnabled(true);
+            txtNumClusters.setEnabled(false);
+        });
+
+        // initial setup
+        btnNumClusters.setSelected(true);
+        txtHeight.setEnabled(false);
+
+        // add everything to the panel
+        numClustersPanel.add(btnNumClusters);
+        numClustersPanel.add(txtNumClusters);
+        numClustersPanel.add(btnHeight);
+        numClustersPanel.add(txtHeight);
+        return numClustersPanel;
     }
 }

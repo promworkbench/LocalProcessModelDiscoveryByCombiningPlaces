@@ -9,7 +9,10 @@ public class ComponentId {
         TableComponent,
         LPMVisualizer,
         LogStatistics,
-        Clustering, BasicLPMEvalMetrics
+        Grouping,
+        Clustering,
+        LPMSimilarity,
+        BasicLPMEvalMetrics
     }
 
     private final Type type;
