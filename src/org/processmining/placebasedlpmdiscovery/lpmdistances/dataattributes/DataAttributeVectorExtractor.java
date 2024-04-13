@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes;
 
 import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import org.apache.commons.lang3.ArrayUtils;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
@@ -31,7 +32,7 @@ public class DataAttributeVectorExtractor {
      * Ordered attribute keys for all possible event attributes in the event log. The order is important so that for
      * all LPMs the feature representation vector should have the features in the correct order.
      */
-    private final List<String> eventAttributeKeysOrder;
+    private List<String> eventAttributeKeysOrder;
 
     /**
      * For all literal attributes we need the full list of values to build vectors of the same dimension. Since not all
@@ -40,7 +41,7 @@ public class DataAttributeVectorExtractor {
     private final Map<String, List<String>> literalValuesOrder;
 
     private int vectorSize;
-    private int[] vectorStructure;
+    private int[] vectorStructure; // the vector structures stores for each attribute how many features are extracted and is used in normalization
     private List<String> positionMapping;
 
     @Inject
@@ -54,6 +55,11 @@ public class DataAttributeVectorExtractor {
         Collections.sort(this.eventAttributeKeysOrder);
 
         this.literalValuesOrder = new HashMap<>();
+        initVectorStructureInfo();
+    }
+
+    public void chooseSubsetOfAttributes(Collection<String> attributes) {
+        this.eventAttributeKeysOrder = this.eventAttributeKeysOrder.stream().filter(attributes::contains).collect(Collectors.toList());
         initVectorStructureInfo();
     }
 
@@ -124,6 +130,7 @@ public class DataAttributeVectorExtractor {
             }
             // sort representation features keys such that for each vector the same order is used
             Collections.sort(featureKeys);
+            // for each position set the attribute and feature key
             this.positionMapping.addAll(featureKeys.stream().map(key -> attributeKey + "-" + key).collect(Collectors.toList()));
             this.vectorStructure[index] = featureKeys.size() + (index == 0 ? 0 : this.vectorStructure[index-1]);
             index++;

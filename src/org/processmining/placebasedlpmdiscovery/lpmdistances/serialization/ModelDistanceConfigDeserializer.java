@@ -7,8 +7,11 @@ import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.MixedModelDis
 import org.processmining.placebasedlpmdiscovery.lpmdistances.precomputed.PrecomputedFromFileModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity.ProcessModelSimilarityDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity.ProcessModelSimilarityMeasure;
+import org.python.google.common.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.HashSet;
+import java.util.List;
 
 public class ModelDistanceConfigDeserializer implements JsonDeserializer<ModelDistanceConfig> {
     @Override
@@ -16,7 +19,11 @@ public class ModelDistanceConfigDeserializer implements JsonDeserializer<ModelDi
         JsonObject jsonObject = json.getAsJsonObject();
         switch (jsonObject.get("distanceMethod").getAsString()) {
             case DataAttributeModelDistanceConfig.METHOD:
-                return new DataAttributeModelDistanceConfig();
+                DataAttributeModelDistanceConfig config = new DataAttributeModelDistanceConfig();
+                config.setAttributes(
+                        new HashSet<>(context.deserialize(jsonObject.get("attributes"),
+                        new TypeToken<List<String>>(){}.getType())));
+                return config;
             case ProcessModelSimilarityDistanceConfig.METHOD:
                 return new ProcessModelSimilarityDistanceConfig(ProcessModelSimilarityMeasure
                         .valueOf(jsonObject.get("processModelSimilarityMeasure").getAsString()));
