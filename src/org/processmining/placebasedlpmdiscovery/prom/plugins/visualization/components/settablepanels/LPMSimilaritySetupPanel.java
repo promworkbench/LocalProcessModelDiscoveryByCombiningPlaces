@@ -5,7 +5,10 @@ import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilar
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.util.Objects;
 
@@ -23,11 +26,6 @@ public class LPMSimilaritySetupPanel extends JPanel {
         distMethodPanel.add(new JLabel("Distance Extraction Method:"));
         distMethodPanel.add(Box.createRigidArea(new Dimension(5, 0)));
         JComboBox<String> distMethodComboBox = new JComboBox<>(new String[] {"Model Similarity", "Data Attributes", "Mixed"});
-        distMethodComboBox.addItemListener(e -> {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                distanceMethodChanged((String) e.getItem());
-            }
-        });
         distMethodPanel.add(distMethodComboBox);
         this.add(distMethodPanel, BorderLayout.PAGE_START);
 
@@ -35,7 +33,13 @@ public class LPMSimilaritySetupPanel extends JPanel {
         this.distMethodParam = new JPanel();
         this.distMethodParam.setPreferredSize(new Dimension(200, 100));
         this.distMethodParam.setBorder(new TitledBorder("Parameters"));
-        distanceMethodChanged((String) Objects.requireNonNull(distMethodComboBox.getSelectedItem()));
+
+        distMethodComboBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                distanceMethodChanged((String) e.getItem(), this.distMethodParam);
+            }
+        });
+        distanceMethodChanged((String) Objects.requireNonNull(distMethodComboBox.getSelectedItem()), this.distMethodParam);
         this.add(this.distMethodParam, BorderLayout.CENTER);
     }
 
@@ -52,6 +56,72 @@ public class LPMSimilaritySetupPanel extends JPanel {
     }
 
     private JPanel getDistMethodSetupPanelForMixed() {
+        JPanel mixedPanel = new JPanel();
+        mixedPanel.setLayout(new BorderLayout());
+
+        // table where measures are shown
+        DefaultTableModel measuresTableModel = new DefaultTableModel(new Object[] { "Measure", "Weight" }, 0);
+        JTable measuresTable = new JTable(measuresTableModel);
+        JScrollPane js = new JScrollPane(measuresTable,
+                ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
+                ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        js.setPreferredSize(new Dimension(260, 200));
+        mixedPanel.add(js, BorderLayout.CENTER);
+
+        // button palette for add, remove, and edit
+        JPanel btnPanel = new JPanel();
+        btnPanel.setLayout(new BoxLayout(btnPanel, BoxLayout.X_AXIS));
+        JButton addBtn = new JButton("Add");
+        addBtn.addActionListener(e -> {
+            getAddDistMeasureInMixedFrame().setVisible(true);
+        });
+        btnPanel.add(addBtn);
+
+        JButton editBtn = new JButton("Edit");
+        btnPanel.add(editBtn);
+
+        JButton removeBtn = new JButton("Remove");
+        btnPanel.add(removeBtn);
+
+        mixedPanel.add(btnPanel, BorderLayout.PAGE_END);
+
+        return mixedPanel;
+    }
+
+    private JFrame getAddDistMeasureInMixedFrame() {
+        JFrame frame = new JFrame();
+        JPanel content = new JPanel();
+
+        content.setLayout(new BorderLayout(10, 0));
+        content.setBorder(new TitledBorder("Mixed Part Measure Setup"));
+
+        // the distance extraction method chooser
+        JPanel distMethodPanel = new JPanel();
+        distMethodPanel.setLayout(new BoxLayout(distMethodPanel, BoxLayout.X_AXIS));
+        distMethodPanel.add(new JLabel("Distance Extraction Method:"));
+        distMethodPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+        JComboBox<String> distMethodComboBox = new JComboBox<>(new String[] {"Model Similarity", "Data Attributes", "Mixed"});
+        distMethodPanel.add(distMethodComboBox);
+        content.add(distMethodPanel, BorderLayout.PAGE_START);
+
+        // the distance method parameter setup panel
+        JPanel distMethodParam = new JPanel();
+        distMethodParam.setPreferredSize(new Dimension(200, 100));
+        distMethodParam.setBorder(new TitledBorder("Parameters"));
+
+        distMethodComboBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                distanceMethodChanged((String) e.getItem(), this.distMethodParam);
+            }
+        });
+        distanceMethodChanged((String) Objects.requireNonNull(distMethodComboBox.getSelectedItem()), this.distMethodParam);
+        content.add(this.distMethodParam, BorderLayout.CENTER);
+
+        frame.add(content);
+        return frame;
+    }
+
+    private JPanel getDistMethodSetupPanelForMixed1() {
         JPanel mixedPanel = new JPanel();
 //        mixedPanel.setLayout(new BoxLayout(mixedPanel, BoxLayout.Y_AXIS));
         mixedPanel.setLayout(new BorderLayout(0, 5));
@@ -108,35 +178,10 @@ public class LPMSimilaritySetupPanel extends JPanel {
 
         // show the complete formula
         JTextArea txtFormula = new JTextArea();
-//        txtFormula.setPreferredSize(new Dimension(400, 100));
+        txtFormula.setPreferredSize(new Dimension(400, 100));
         mixedPanel.add(txtFormula, BorderLayout.CENTER);
 
         return mixedPanel;
-    }
-
-    private static void setCustomTabFeel(JTabbedPane tabPane, String title) {
-        int index = tabPane.indexOfTab(title);
-        JPanel pnlTab = new JPanel();
-        pnlTab.setLayout(new BoxLayout(pnlTab, BoxLayout.X_AXIS));
-        pnlTab.setOpaque(false);
-        JLabel lblTitle = new JLabel(title);
-        JButton btnClose = new JButton("x");
-        btnClose.setOpaque(false);
-        btnClose.setContentAreaFilled(false);
-        btnClose.setBorderPainted(false);
-
-//        GridBagConstraints gbc = new GridBagConstraints();
-//        gbc.gridx = 0;
-//        gbc.gridy = 0;
-//        gbc.weightx = 1;
-
-        pnlTab.add(lblTitle);
-
-//        gbc.gridx++;
-//        gbc.weightx = 0;
-        pnlTab.add(btnClose);
-
-        tabPane.setTabComponentAt(index, pnlTab);
     }
 
     private JPanel getDistMethodSetupPanelForDataAttributes() {
@@ -163,12 +208,12 @@ public class LPMSimilaritySetupPanel extends JPanel {
         return modelSimPanel;
     }
 
-    private void distanceMethodChanged(String distMethod) {
-        if (this.distMethodParam.getComponents().length > 0) {
-            this.distMethodParam.remove(0);
+    private void distanceMethodChanged(String distMethod, JComponent container) {
+        if (container.getComponents().length > 0) {
+            container.remove(0);
         }
-        this.distMethodParam.setBorder(new TitledBorder(distMethod));
-        this.distMethodParam.add(getDistMethodParametersView(distMethod));
-        this.revalidate();
+        container.setBorder(new TitledBorder(distMethod));
+        container.add(getDistMethodParametersView(distMethod));
+        container.revalidate();
     }
 }
