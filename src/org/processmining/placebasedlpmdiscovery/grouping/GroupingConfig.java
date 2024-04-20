@@ -5,10 +5,7 @@ import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig
 import java.util.Map;
 
 public interface GroupingConfig {
-
-    ClusteringAlgorithm getClusteringAlgorithm();
-
-    Map<String, String> getClusteringConfig();
+    ClusteringConfig getClusteringConfig();
 
     ModelDistanceConfig getModelDistanceConfig();
 

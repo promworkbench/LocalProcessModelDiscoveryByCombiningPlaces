@@ -3,7 +3,6 @@ package org.processmining.placebasedlpmdiscovery.grouping;
 import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceController;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,8 +23,8 @@ public class GroupingController {
         int[] membership = ClusteringLPMs.cluster(
                 lpmList,
                 modelDistanceController.getDistanceMatrix(lpmList),
-                config.getClusteringAlgorithm(),
-                config.getClusteringConfig());
+                config.getClusteringConfig().getClusteringAlgorithm(),
+                config.getClusteringConfig().getClusteringParam());
 
         for (int i = 0; i < lpmList.size(); ++i) {
             lpmList.get(i).getAdditionalInfo().getGroupsInfo()
