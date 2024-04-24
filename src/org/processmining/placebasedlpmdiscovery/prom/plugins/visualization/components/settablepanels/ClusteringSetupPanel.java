@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels;
 
 import org.processmining.placebasedlpmdiscovery.grouping.ClusteringAlgorithm;
+import org.processmining.placebasedlpmdiscovery.grouping.ClusteringConfig;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -12,7 +13,7 @@ public class ClusteringSetupPanel extends JPanel {
 
     private final JComponent clustAlgParam;
 
-    public ClusteringSetupPanel() {
+    public ClusteringSetupPanel(ClusteringConfig clusteringConfig) {
         this.setLayout(new BorderLayout(5, 10));
         this.setBorder(new TitledBorder("Clustering Setup"));
 

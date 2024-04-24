@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels;
 
 import csplugins.id.mapping.ui.CheckComboBox;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity.ProcessModelSimilarityMeasure;
 
 import javax.swing.*;
@@ -14,9 +15,13 @@ import java.util.Objects;
 
 public class LPMSimilaritySetupPanel extends JPanel {
 
+    private ModelDistanceConfig distanceConfig;
+
     private final JPanel distMethodParam;
 
-    public LPMSimilaritySetupPanel() {
+    public LPMSimilaritySetupPanel(ModelDistanceConfig distanceConfig) {
+        this.distanceConfig = distanceConfig;
+
         this.setLayout(new BorderLayout(10, 0));
         this.setBorder(new TitledBorder("LPM Similarity Measure Setup"));
 
