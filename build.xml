@@ -34,24 +34,25 @@
 
 	<target name="download-ivy" unless="offline">
 
-		<mkdir dir="${ivy.jar.dir}"/>
-		<!-- download Ivy from web site so that it can be used even without any special installation -->
-		<get src="https://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
-			 dest="${ivy.jar.file}" usetimestamp="true"/>
+	    <mkdir dir="${ivy.jar.dir}"/>
+	    <!-- download Ivy from web site so that it can be used even without any special installation -->
+	    <get src="https://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+	         dest="${ivy.jar.file}" usetimestamp="true"/>
 	</target>
 
 	<target name="init-ivy" depends="download-ivy">
-		<!-- try to load ivy here from ivy home, in case the user has not already dropped
-             it into ant's lib dir (note that the latter copy will always take precedence).
-             We will not fail as long as local lib dir exists (it may be empty) and
-             ivy is in at least one of ant's lib dir or the local lib dir. -->
-		<path id="ivy.lib.path">
-			<fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+	    <!-- try to load ivy here from ivy home, in case the user has not already dropped
+	         it into ant's lib dir (note that the latter copy will always take precedence).
+	         We will not fail as long as local lib dir exists (it may be empty) and
+	         ivy is in at least one of ant's lib dir or the local lib dir. -->
+	    <path id="ivy.lib.path">
+	        <fileset dir="${ivy.jar.dir}" includes="*.jar"/>
 
-		</path>
-		<taskdef resource="org/apache/ivy/ant/antlib.xml"
-				 uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path" />
+	    </path>
+	    <taskdef resource="org/apache/ivy/ant/antlib.xml"
+	             uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path" />
 	</target>
+
 	<!-- Compilation macro
 		 This Macro compiles the sources is one ${src}-... folder.
 	 The sources are compiled into the ${build} folder.
@@ -63,8 +64,8 @@
 		<fileset dir=".">
 			<include name="ivy/**/*.jar" />
 			<include name="lib/**/*.jar" />
-<!--			<include name="stdlib/**/*.jar" />-->
-<!--			<include name="packagelib/**/*.jar" />-->
+			<!--include name="stdlib/**/*.jar" />
+			<include name="packagelib/**/*.jar" /-->
 		</fileset>
 	</path>
 
@@ -125,9 +126,9 @@
 		<!--ivy:retrieve pattern="lib/[artifact]-[revision].[ext]" conf="lib" type="jar,bundle" sync="true" /-->
 	</target>
 
-	<target name="report">
-		<ivy:report conf="compile"/>
-	</target>
+<!--	<target name="report">-->
+<!--		<ivy:report conf="compile"/>-->
+<!--	</target>-->
 
 	<target name="javadoc">
 		<echo message="[build] Creating javadoc" />
@@ -159,9 +160,9 @@
 				<fileset dir="${release}" includes="${project}-*-${os}.zip" />
 			</delete>
 			<zip destfile="${release}/${project}-${version}-${os}.zip">
-<!--				<zipfileset dir="${lib}" prefix="lib">-->
-<!--					<include name="**" />-->
-<!--				</zipfileset>-->
+				<!--zipfileset dir="${lib}" prefix="lib">
+					<include name="**" />
+				</zipfileset-->
 				<zipfileset dir="${dist}" prefix="">
 					<include name="${project}.jar" />
 				</zipfileset>
@@ -170,10 +171,10 @@
 			<delete includeEmptyDirs="true" quiet="true">
 				<fileset dir="${release}/lib" includes="**/*" />
 			</delete>
-<!--			<mkdir dir="${release}/lib" />-->
-<!--			<copy todir="${release}/lib" overwrite="true">-->
-<!--				<fileset dir="${lib}" />-->
-<!--			</copy>-->
+			<!--mkdir dir="${release}/lib" />
+			<copy todir="${release}/lib" overwrite="true">
+				<fileset dir="${lib}" />
+			</copy-->
 			<exec executable="grep">
 				<redirector output="ivypack.xml" />
 				<arg value="&lt;dependency .*org=&quot;prom&quot; " />
