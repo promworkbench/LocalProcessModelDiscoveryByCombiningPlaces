@@ -1,5 +1,6 @@
-package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels;
+package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.lpmsimilarity;
 
+import com.google.inject.Inject;
 import csplugins.id.mapping.ui.CheckComboBox;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity.ProcessModelSimilarityMeasure;
@@ -11,16 +12,21 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
+import java.util.Map;
 import java.util.Objects;
 
 public class LPMSimilaritySetupPanel extends JPanel {
 
+    private Map<String, JPanel> similaritySetupPanelMap;
     private ModelDistanceConfig distanceConfig;
 
     private final JPanel distMethodParam;
 
-    public LPMSimilaritySetupPanel(ModelDistanceConfig distanceConfig) {
+    @Inject
+    public LPMSimilaritySetupPanel(ModelDistanceConfig distanceConfig,
+                                   Map<String, JPanel> similaritySetupPanelMap) {
         this.distanceConfig = distanceConfig;
+        this.similaritySetupPanelMap = similaritySetupPanelMap;
 
         this.setLayout(new BorderLayout(10, 0));
         this.setBorder(new TitledBorder("LPM Similarity Measure Setup"));
@@ -53,7 +59,7 @@ public class LPMSimilaritySetupPanel extends JPanel {
             case "Model Similarity":
                 return getDistMethodSetupPanelForModelSimilarity();
             case "Data Attributes":
-                return getDistMethodSetupPanelForDataAttributes();
+                return similaritySetupPanelMap.get(distMethod); //getDistMethodSetupPanelForDataAttributes();
             case "Mixed":
                 return getDistMethodSetupPanelForMixed();
         }
