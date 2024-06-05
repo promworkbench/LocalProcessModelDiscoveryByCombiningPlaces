@@ -12,7 +12,6 @@ import org.processmining.models.jgraph.ProMJGraphVisualizer;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventCoverageEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.ComponentFactory;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 
 import javax.swing.*;
