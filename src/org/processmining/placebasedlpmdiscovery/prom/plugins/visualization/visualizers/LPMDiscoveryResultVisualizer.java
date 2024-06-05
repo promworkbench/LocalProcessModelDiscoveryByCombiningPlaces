@@ -1,25 +1,19 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.Visualizer;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.dependencyinjection.LPMDiscoveryResultGuiceModule;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
-import org.processmining.placebasedlpmdiscovery.main.MultipleLPMDiscoveryResults;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.DefaultLPMDiscoveryResultComponent;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.MultipleLPMDiscoveryResultComponent;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelFactory;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.dependencyinjection.PromViewGuiceModule;
 import org.processmining.placebasedlpmdiscovery.view.controllers.DefaultLPMDiscoveryResultViewController;
-import org.processmining.placebasedlpmdiscovery.view.controllers.DefaultMultipleLPMDiscoveryResultsViewController;
-import org.processmining.placebasedlpmdiscovery.view.controllers.LPMDiscoveryResultViewController;
-import org.processmining.placebasedlpmdiscovery.view.controllers.MultipleLPMDiscoveryResultsViewController;
 import org.processmining.placebasedlpmdiscovery.view.models.DefaultLPMDiscoveryResultViewModel;
-import org.processmining.placebasedlpmdiscovery.view.models.DefaultMultipleLPMDiscoveryResultsViewModel;
-import org.processmining.placebasedlpmdiscovery.view.models.MultipleLPMDiscoveryResultsViewModel;
 
 import javax.swing.*;
-import javax.swing.border.LineBorder;
-import java.awt.*;
 
 @Plugin(name = "@0 Visualize LPM Discovery Result",
         returnLabels = {"Visualized LPM Discovery Result"},
@@ -31,15 +25,16 @@ public class LPMDiscoveryResultVisualizer {
     @PluginVariant(requiredParameterLabels = {0})
     public JComponent visualize(UIPluginContext context, LPMDiscoveryResult result) {
 
-        DefaultLPMDiscoveryResultComponent view = new DefaultLPMDiscoveryResultComponent(context, new SettablePanelFactory());
-        DefaultLPMDiscoveryResultViewModel model = new DefaultLPMDiscoveryResultViewModel(result);
+        Injector injector = Guice.createInjector(new PromViewGuiceModule(), new LPMDiscoveryResultGuiceModule(result));
 
-        LPMDiscoveryResultViewController controller =
-                new DefaultLPMDiscoveryResultViewController(view, model);
+//        DefaultLPMDiscoveryResultViewModel model = new DefaultLPMDiscoveryResultViewModel(result);
+//        DefaultLPMDiscoveryResultComponent view = new DefaultLPMDiscoveryResultComponent()
 
-        view.setListener(controller);
-        view.display(model);
+        DefaultLPMDiscoveryResultViewController controller =
+                injector.getInstance(DefaultLPMDiscoveryResultViewController.class);
 
-        return view;
+        controller.getView().display(controller.getModel());
+
+        return controller.getView();
     }
 }

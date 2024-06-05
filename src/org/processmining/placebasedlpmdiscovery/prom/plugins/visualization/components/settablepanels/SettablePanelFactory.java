@@ -4,15 +4,7 @@ import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.compo
 
 import javax.swing.*;
 
-public class SettablePanelFactory {
+public interface SettablePanelFactory {
 
-    public JPanel getSettablePanel(ComponentId.Type type) {
-        switch (type) {
-            case BasicLPMEvalMetrics:
-                return new ComplexEvaluationResultPanel();
-            case Grouping:
-                return new GroupingSetupPanel();
-        }
-        throw new IllegalArgumentException("The component type " + type + " is not supported.");
-    }
+    JPanel getSettablePanel(ComponentId.Type type);
 }

@@ -1,5 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.view.models;
 
+import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
@@ -10,6 +11,7 @@ public class DefaultLPMDiscoveryResultViewModel implements LPMDiscoveryResultVie
     private final LPMDiscoveryResult result;
     private LocalProcessModel selectedLPM;
 
+    @Inject
     public DefaultLPMDiscoveryResultViewModel(LPMDiscoveryResult result) {
         this.result = result;
     }

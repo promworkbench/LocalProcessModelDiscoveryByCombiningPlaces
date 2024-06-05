@@ -1,24 +1,25 @@
 package org.processmining.placebasedlpmdiscovery.runners.GUI;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.deckfour.xes.model.XLog;
 import org.processmining.contexts.cli.CLIContext;
 import org.processmining.contexts.cli.CLIPluginContext;
 import org.processmining.framework.plugin.PluginContext;
+import org.processmining.placebasedlpmdiscovery.InputModule;
 import org.processmining.placebasedlpmdiscovery.Main;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.dependencyinjection.LPMDiscoveryResultGuiceModule;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.InteractiveLPMsDiscovery;
+import org.processmining.placebasedlpmdiscovery.prom.dependencyinjection.PromGuiceModule;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.BaseLPMDiscoveryResultComponent;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.DefaultLPMDiscoveryResultComponent;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelFactory;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 import org.processmining.placebasedlpmdiscovery.view.controllers.DefaultLPMDiscoveryResultViewController;
 import org.processmining.placebasedlpmdiscovery.view.controllers.LPMDiscoveryResultViewController;
-import org.processmining.placebasedlpmdiscovery.view.models.DefaultLPMDiscoveryResultViewModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -43,25 +44,32 @@ public class MainGUI extends JFrame {
         setContentPane(contentPane);
     }
 
-    private InteractiveLPMsDiscovery getDummyDiscovery() throws Exception {
-        XLog log = getDummyLog();
-        return new InteractiveLPMsDiscovery(getDummyContext(), new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log)), log);
-    }
+
+//    private InteractiveLPMsDiscovery getDummyDiscovery() throws Exception {
+//        XLog log = getDummyLog();
+//        return new InteractiveLPMsDiscovery(getDummyContext(), new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log)), log);
+//    }
 
     private BaseLPMDiscoveryResultComponent getDummyBaseView() {
         return new BaseLPMDiscoveryResultComponent(5);
     }
+
     private BaseLPMDiscoveryResultComponent getDummyDefaultView() throws Exception {
-        DefaultLPMDiscoveryResultComponent view = new DefaultLPMDiscoveryResultComponent(getDummyContext(), new SettablePanelFactory());
-        DefaultLPMDiscoveryResultViewModel model = new DefaultLPMDiscoveryResultViewModel(getDummyResult());
+        Injector guice = Guice.createInjector(
+                new PromGuiceModule(getDummyContext()),
+                new InputModule(getDummyLog()),
+                new LPMDiscoveryResultGuiceModule(getDummyResult()));
+//        LPMDiscoveryResultView view = guice.getInstance(LPMDiscoveryResultView.class);
+//        new DefaultLPMDiscoveryResultComponent(getDummyContext(), new SettablePanelFactory());
+//        LPMDiscoveryResultViewModel model = guice.getInstance(LPMDiscoveryResultViewModel.class);
+//        new DefaultLPMDiscoveryResultViewModel(getDummyResult());
 
-        LPMDiscoveryResultViewController controller =
-                new DefaultLPMDiscoveryResultViewController(view, model);
+        LPMDiscoveryResultViewController controller = guice.getInstance(LPMDiscoveryResultViewController.class);
+//                new DefaultLPMDiscoveryResultViewController(view, model);
 
-        view.setListener(controller);
-        view.display(model);
+        controller.getView().display(controller.getModel());
 
-        return view;
+        return ((DefaultLPMDiscoveryResultViewController) controller).getView();
     }
 
     private PluginContext getDummyContext() {

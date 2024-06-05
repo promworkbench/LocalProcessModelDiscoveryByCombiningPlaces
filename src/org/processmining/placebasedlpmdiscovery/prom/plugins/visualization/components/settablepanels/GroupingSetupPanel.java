@@ -1,5 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels;
 
+import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingConfig;
 
 import javax.swing.*;
@@ -9,9 +10,12 @@ import java.awt.event.ActionListener;
 
 public class GroupingSetupPanel extends JPanel implements ActionListener {
 
-    private GroupingConfig groupingConfig;
+    private final GroupingConfig groupingConfig;
 
-    public GroupingSetupPanel() {
+    @Inject
+    public GroupingSetupPanel(GroupingConfig groupingConfig) {
+        this.groupingConfig = groupingConfig;
+
         this.setLayout(new BorderLayout());
 
         JPanel setupPanels = new JPanel();

@@ -1,5 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import org.apache.commons.math3.util.Pair;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.ComplexEvaluationResultPanel;
@@ -13,15 +15,18 @@ import org.processmining.placebasedlpmdiscovery.view.views.LPMDiscoveryResultVie
 
 public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultComponent implements LPMDiscoveryResultView {
 
-    private final PluginContext context;
 
+    private PluginContext context;
     private LPMDiscoveryResultViewListener listener;
-    private final SettablePanelFactory settablePanelFactory;
+    private SettablePanelFactory settablePanelFactory;
 
-    public DefaultLPMDiscoveryResultComponent(PluginContext context, SettablePanelFactory settablePanelFactory) {
+    @Inject
+    public DefaultLPMDiscoveryResultComponent(PluginContext context,
+                                              SettablePanelFactory settablePanelFactory) {
         super(3);
         this.context = context;
         this.settablePanelFactory = settablePanelFactory;
+        this.listener = listener;
 
         createDefaultPanels();
     }
@@ -37,6 +42,7 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
     }
 
     @Override
+    @Inject
     public void setListener(LPMDiscoveryResultViewController listener) {
         this.listener = listener;
     }

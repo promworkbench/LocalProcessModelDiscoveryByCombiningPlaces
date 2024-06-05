@@ -34,6 +34,7 @@
 		<dependency org="com.google.code.gson" name="gson" rev="2.8.9"/>
 		<dependency org="com.google.inject" name="guice" rev="4.0" />
 		<dependency org="com.google.inject.extensions" name="guice-assistedinject" rev="4.0" />
+		<dependency org="com.google.inject.extensions" name="guice-multibindings" rev="4.0" />
 		<dependency org="com.github.haifengl" name="smile-core" rev="3.0.2"/>
 <!--		<dependency org="com.github.beamline" name="simple-pnml" rev="0.0.2"/>-->
     	<!-- dependency conf="lib->default" org="org.reflections" name="reflections" rev="0.9.10" /-->
