@@ -26,7 +26,7 @@ public class MixedLPMSimilaritySetupPanel extends JPanel {
         JScrollPane js = new JScrollPane(measuresTable,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        js.setPreferredSize(new Dimension(260, 200));
+        js.setPreferredSize(new Dimension(260, 150));
         this.add(js, BorderLayout.CENTER);
 
         // button palette for add, remove, and edit
