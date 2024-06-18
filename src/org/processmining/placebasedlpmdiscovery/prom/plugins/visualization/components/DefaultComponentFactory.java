@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageCoverageEvaluationResult;
 
@@ -10,16 +11,16 @@ import java.util.Map;
 
 public class DefaultComponentFactory implements ComponentFactory {
 
-    private final Map<LPMDViewComponentType, LPMDViewComponent> lpmdViewComponentMap;
+    private final Map<LPMDViewComponentType, Provider<LPMDViewComponent>> lpmdViewComponentMap;
 
     @Inject
-    public DefaultComponentFactory(Map<LPMDViewComponentType, LPMDViewComponent> lpmdViewComponentMap) {
+    public DefaultComponentFactory(Map<LPMDViewComponentType, Provider<LPMDViewComponent>> lpmdViewComponentMap) {
         this.lpmdViewComponentMap = lpmdViewComponentMap;
     }
 
     @Override
     public LPMDViewComponent create(LPMDViewComponentType lpmdViewComponentType) {
-        return lpmdViewComponentMap.get(lpmdViewComponentType);
+        return lpmdViewComponentMap.get(lpmdViewComponentType).get();
     }
 
 //    private static JPanel getWindowsEvaluationResultComponent(FittingWindowsEvaluationResult result) {

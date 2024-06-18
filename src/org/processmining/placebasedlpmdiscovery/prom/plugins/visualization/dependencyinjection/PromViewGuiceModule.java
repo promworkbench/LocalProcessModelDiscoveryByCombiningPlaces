@@ -3,8 +3,6 @@ package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.depe
 import com.google.inject.AbstractModule;
 import com.google.inject.multibindings.MapBinder;
 import org.processmining.placebasedlpmdiscovery.grouping.dependencyinjection.GroupingGuiceModule;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistance;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.*;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.ComplexEvaluationResultPanel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.DefaultSettablePanelFactory;

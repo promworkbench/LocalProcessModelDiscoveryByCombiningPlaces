@@ -49,6 +49,7 @@ public class MixedLPMSimilaritySetupPanel extends JPanel {
 
     private JFrame getAddDistMeasureInMixedFrame() {
         JFrame frame = new JFrame();
+        frame.setSize(new Dimension(500, 350));
 
         LPMDViewComponent component = this.componentFactory.create(LPMDViewComponentType.LPMSimilarityChooser);
         frame.add(component.getComponent());
