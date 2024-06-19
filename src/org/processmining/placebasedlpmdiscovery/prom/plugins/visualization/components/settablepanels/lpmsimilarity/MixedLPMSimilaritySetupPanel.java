@@ -8,7 +8,8 @@ import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommu
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.datalisteners.DataListenerVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataTypeVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataVM;
-import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.MixedModelDistanceAddDistanceEmittableDataVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.lpmdistances.MixedModelDistanceAddDistanceEmittableDataVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.lpmdistances.MixedModelDistanceRemoveDistanceEmittableDataVM;
 import org.processmining.placebasedlpmdiscovery.view.model.lpmdistances.MixedModelDistanceVM;
 
 import javax.swing.*;
@@ -24,6 +25,7 @@ public class MixedLPMSimilaritySetupPanel extends JPanel implements DataListener
     private final MixedModelDistanceVM model;
 
     private final DefaultTableModel measuresTableModel;
+    private final JTable measuresTable;
     private JFrame addModelDistanceFrame;
 
     @Inject
@@ -32,13 +34,15 @@ public class MixedLPMSimilaritySetupPanel extends JPanel implements DataListener
         this.componentFactory = componentFactory;
 
         this.dc.registerDataListener(this, EmittableDataTypeVM.MixedModelDistanceAddDistanceVM);
+        this.dc.registerDataListener(this, EmittableDataTypeVM.MixedModelDistanceRemoveDistanceVM);
+
         this.model = new MixedModelDistanceVM();
 
         this.setLayout(new BorderLayout());
 
         // table where measures are shown
         this.measuresTableModel = new DefaultTableModel(new Object[]{"Measure", "Weight"}, 0);
-        JTable measuresTable = new JTable(measuresTableModel);
+        this.measuresTable = new JTable(measuresTableModel);
         JScrollPane js = new JScrollPane(measuresTable,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
                 ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
@@ -56,6 +60,11 @@ public class MixedLPMSimilaritySetupPanel extends JPanel implements DataListener
         btnPanel.add(addBtn);
 
         JButton removeBtn = new JButton("Remove");
+        removeBtn.addActionListener(e -> {
+            dc.emit(new MixedModelDistanceRemoveDistanceEmittableDataVM(
+                    (String) measuresTableModel.getValueAt(measuresTable.getSelectedRow(), 0),
+                    measuresTable.getSelectedRow()));
+        });
         btnPanel.add(removeBtn);
 
         this.add(btnPanel, BorderLayout.PAGE_END);
@@ -106,6 +115,10 @@ public class MixedLPMSimilaritySetupPanel extends JPanel implements DataListener
             this.measuresTableModel.addRow(new Object[]{cData.getName(), cData.getWeight()});
             this.addModelDistanceFrame.dispatchEvent(
                     new WindowEvent(this.addModelDistanceFrame, WindowEvent.WINDOW_CLOSING));
+        } else if (data.getType().equals(EmittableDataTypeVM.MixedModelDistanceRemoveDistanceVM)) {
+            MixedModelDistanceRemoveDistanceEmittableDataVM cData = (MixedModelDistanceRemoveDistanceEmittableDataVM) data;
+            this.model.removeDistance(cData.getKey());
+            this.measuresTableModel.removeRow(cData.getIndex());
         }
     }
 }
