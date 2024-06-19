@@ -38,13 +38,6 @@ public class ClusteringSetupPanel extends JPanel {
         this.clustAlgParam.add(getClusteringAlgorithmParametersView(
                 (ClusteringAlgorithm) Objects.requireNonNull(clustAlgComboBox.getSelectedItem())));
         this.add(this.clustAlgParam, BorderLayout.CENTER);
-
-        // running clustering
-        JButton btnRunClust = new JButton("Run Clustering");
-        btnRunClust.addActionListener(e -> {
-            // TODO: call the clustering and show results
-        });
-        this.add(btnRunClust, BorderLayout.PAGE_END);
     }
 
     private void clusteringAlgorithmChanged(ClusteringAlgorithm algorithm) {
