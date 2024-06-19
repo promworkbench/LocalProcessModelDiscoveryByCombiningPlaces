@@ -55,9 +55,6 @@ public class MixedLPMSimilaritySetupPanel extends JPanel implements DataListener
         });
         btnPanel.add(addBtn);
 
-        JButton editBtn = new JButton("Edit");
-        btnPanel.add(editBtn);
-
         JButton removeBtn = new JButton("Remove");
         btnPanel.add(removeBtn);
 
