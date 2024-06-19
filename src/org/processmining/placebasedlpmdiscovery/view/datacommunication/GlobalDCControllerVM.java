@@ -23,7 +23,7 @@ public class GlobalDCControllerVM implements DataCommunicationControllerVM {
         registeredDL.put(dataType, registeredDLForType);
     }
 
-    public void receiveEmittableData(EmittableDataVM data) {
+    public void emit(EmittableDataVM data) {
         Collection<DataListenerVM> registeredDLForType = this.registeredDL.getOrDefault(data.getType(), new HashSet<>());
         for (DataListenerVM dl : registeredDLForType) {
             dl.receive(data);

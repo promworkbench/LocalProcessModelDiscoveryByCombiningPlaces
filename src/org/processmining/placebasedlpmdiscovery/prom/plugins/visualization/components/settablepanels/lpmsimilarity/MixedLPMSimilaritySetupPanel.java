@@ -1,32 +1,43 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.lpmsimilarity;
 
 import com.google.inject.Inject;
-import org.processmining.placebasedlpmdiscovery.datacommunication.datalisteners.DataListener;
-import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.EmittableData;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.ComponentFactory;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.LPMDViewComponent;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.LPMDViewComponentType;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommunicationControllerVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.datalisteners.DataListenerVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataTypeVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.MixedModelDistanceAddDistanceEmittableDataVM;
 import org.processmining.placebasedlpmdiscovery.view.model.lpmdistances.MixedModelDistanceVM;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.WindowEvent;
 import java.util.UUID;
 
-public class MixedLPMSimilaritySetupPanel extends JPanel implements DataListener {
+public class MixedLPMSimilaritySetupPanel extends JPanel implements DataListenerVM {
 
+    private final DataCommunicationControllerVM dc;
     private final ComponentFactory componentFactory;
-    private MixedModelDistanceVM model;
+    private final MixedModelDistanceVM model;
+
+    private final DefaultTableModel measuresTableModel;
+    private JFrame addModelDistanceFrame;
 
     @Inject
-    public MixedLPMSimilaritySetupPanel(ComponentFactory componentFactory) {
+    public MixedLPMSimilaritySetupPanel(DataCommunicationControllerVM dc, ComponentFactory componentFactory) {
+        this.dc = dc;
         this.componentFactory = componentFactory;
 
+        this.dc.registerDataListener(this, EmittableDataTypeVM.MixedModelDistanceAddDistanceVM);
+        this.model = new MixedModelDistanceVM();
 
         this.setLayout(new BorderLayout());
 
         // table where measures are shown
-        DefaultTableModel measuresTableModel = new DefaultTableModel(new Object[]{"Measure", "Weight"}, 0);
+        this.measuresTableModel = new DefaultTableModel(new Object[]{"Measure", "Weight"}, 0);
         JTable measuresTable = new JTable(measuresTableModel);
         JScrollPane js = new JScrollPane(measuresTable,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -39,7 +50,8 @@ public class MixedLPMSimilaritySetupPanel extends JPanel implements DataListener
         btnPanel.setLayout(new BoxLayout(btnPanel, BoxLayout.X_AXIS));
         JButton addBtn = new JButton("Add");
         addBtn.addActionListener(e -> {
-            getAddDistMeasureInMixedFrame().setVisible(true);
+            initAddDistMeasureInMixedFrame();
+            this.addModelDistanceFrame.setVisible(true);
         });
         btnPanel.add(addBtn);
 
@@ -52,11 +64,11 @@ public class MixedLPMSimilaritySetupPanel extends JPanel implements DataListener
         this.add(btnPanel, BorderLayout.PAGE_END);
     }
 
-    private JFrame getAddDistMeasureInMixedFrame() {
-        JFrame frame = new JFrame();
-        frame.setTitle("LPM Similarity Measure Setup");
-        frame.setSize(new Dimension(500, 350));
-        frame.setLayout(new BorderLayout(5, 5));
+    private void initAddDistMeasureInMixedFrame() {
+        this.addModelDistanceFrame = new JFrame();
+        addModelDistanceFrame.setTitle("LPM Similarity Measure Setup");
+        addModelDistanceFrame.setSize(new Dimension(500, 350));
+        addModelDistanceFrame.setLayout(new BorderLayout(5, 5));
 
         // name and weight
         JPanel pnlNameAndWeight = new JPanel();
@@ -74,25 +86,29 @@ public class MixedLPMSimilaritySetupPanel extends JPanel implements DataListener
         txtWeight.setPreferredSize(new Dimension(150, txtWeight.getPreferredSize().height));
         pnlWeight.add(txtWeight);
         pnlNameAndWeight.add(pnlWeight, BorderLayout.LINE_END);
-        frame.add(pnlNameAndWeight, BorderLayout.PAGE_START);
+        addModelDistanceFrame.add(pnlNameAndWeight, BorderLayout.PAGE_START);
 
         // similarity selection
         LPMDViewComponent component = this.componentFactory.create(LPMDViewComponentType.LPMSimilarityChooser);
-        frame.add(component.getComponent(), BorderLayout.CENTER);
+        addModelDistanceFrame.add(component.getComponent(), BorderLayout.CENTER);
 
         // add button
         JButton btnAdd = new JButton("Add");
         btnAdd.addActionListener(e -> {
-            model.addDistance(txtName.getText(), Double.parseDouble(txtWeight.getText()), component.getModel());
-            revalidate();
+            dc.emit(new MixedModelDistanceAddDistanceEmittableDataVM(
+                    txtName.getText(), Double.parseDouble(txtWeight.getText()), component.getModel()));
         });
-        frame.add(btnAdd, BorderLayout.PAGE_END);
-
-        return frame;
+        addModelDistanceFrame.add(btnAdd, BorderLayout.PAGE_END);
     }
 
     @Override
-    public void receive(EmittableData data) {
-
+    public void receive(EmittableDataVM data) {
+        if (data.getType().equals(EmittableDataTypeVM.MixedModelDistanceAddDistanceVM)) {
+            MixedModelDistanceAddDistanceEmittableDataVM cData = (MixedModelDistanceAddDistanceEmittableDataVM) data;
+            this.model.addDistance(cData.getName(), cData.getWeight(), cData.getModel());
+            this.measuresTableModel.addRow(new Object[]{cData.getName(), cData.getWeight()});
+            this.addModelDistanceFrame.dispatchEvent(
+                    new WindowEvent(this.addModelDistanceFrame, WindowEvent.WINDOW_CLOSING));
+        }
     }
 }

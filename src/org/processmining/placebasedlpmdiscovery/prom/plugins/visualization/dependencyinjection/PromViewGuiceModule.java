@@ -14,6 +14,7 @@ import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.compo
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.lpmsimilarity.ModelSimilarityLPMSimilaritySetupPanel;
 import org.processmining.placebasedlpmdiscovery.view.controllers.DefaultLPMDiscoveryResultViewController;
 import org.processmining.placebasedlpmdiscovery.view.controllers.LPMDiscoveryResultViewController;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.dependencyinjection.DataCommunicationGuiceModuleVM;
 
 import javax.swing.*;
 
@@ -21,6 +22,7 @@ public class PromViewGuiceModule extends AbstractModule {
     @Override
     protected void configure() {
         install(new GroupingGuiceModule());
+        install(new DataCommunicationGuiceModuleVM());
 
         MapBinder<ComponentId.Type, JPanel> mapBinderSettablePanels = MapBinder.newMapBinder(binder(),
                 ComponentId.Type.class, JPanel.class);
