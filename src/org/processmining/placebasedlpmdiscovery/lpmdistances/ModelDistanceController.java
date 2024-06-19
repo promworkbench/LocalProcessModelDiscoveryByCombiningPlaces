@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
 import java.util.List;
-import java.util.Map;
 
 public class ModelDistanceController {
 

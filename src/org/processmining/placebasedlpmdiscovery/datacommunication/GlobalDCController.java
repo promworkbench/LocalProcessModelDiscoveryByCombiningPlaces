@@ -17,13 +17,13 @@ public class GlobalDCController implements DataCommunicationController {
         this.registeredDL = new HashMap<>();
     }
 
-    void registerDataListener(DataListener dataListener, EmittableDataType dataType) {
+    public void registerDataListener(DataListener dataListener, EmittableDataType dataType) {
         Collection<DataListener> registeredDLForType = this.registeredDL.getOrDefault(dataType, new HashSet<>());
         registeredDLForType.add(dataListener);
         registeredDL.put(dataType, registeredDLForType);
     }
 
-    void receiveEmittableData(EmittableData data) {
+    public void receiveEmittableData(EmittableData data) {
         Collection<DataListener> registeredDLForType = this.registeredDL.getOrDefault(data.getType(), new HashSet<>());
         for (DataListener dl : registeredDLForType) {
             dl.receive(data);

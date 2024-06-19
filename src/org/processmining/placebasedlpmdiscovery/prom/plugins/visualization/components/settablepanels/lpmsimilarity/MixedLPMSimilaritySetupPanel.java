@@ -1,28 +1,32 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.lpmsimilarity;
 
 import com.google.inject.Inject;
+import org.processmining.placebasedlpmdiscovery.datacommunication.datalisteners.DataListener;
+import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.EmittableData;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.ComponentFactory;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.LPMDViewComponent;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.LPMDViewComponentType;
+import org.processmining.placebasedlpmdiscovery.view.model.lpmdistances.MixedModelDistanceVM;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.UUID;
 
-public class MixedLPMSimilaritySetupPanel extends JPanel {
+public class MixedLPMSimilaritySetupPanel extends JPanel implements DataListener {
 
     private final ComponentFactory componentFactory;
+    private MixedModelDistanceVM model;
 
     @Inject
     public MixedLPMSimilaritySetupPanel(ComponentFactory componentFactory) {
-        this. componentFactory = componentFactory;
+        this.componentFactory = componentFactory;
 
 
         this.setLayout(new BorderLayout());
 
         // table where measures are shown
-        DefaultTableModel measuresTableModel = new DefaultTableModel(new Object[] { "Measure", "Weight" }, 0);
+        DefaultTableModel measuresTableModel = new DefaultTableModel(new Object[]{"Measure", "Weight"}, 0);
         JTable measuresTable = new JTable(measuresTableModel);
         JScrollPane js = new JScrollPane(measuresTable,
                 ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -78,8 +82,17 @@ public class MixedLPMSimilaritySetupPanel extends JPanel {
 
         // add button
         JButton btnAdd = new JButton("Add");
+        btnAdd.addActionListener(e -> {
+            model.addDistance(txtName.getText(), Double.parseDouble(txtWeight.getText()), component.getModel());
+            revalidate();
+        });
         frame.add(btnAdd, BorderLayout.PAGE_END);
 
         return frame;
+    }
+
+    @Override
+    public void receive(EmittableData data) {
+
     }
 }

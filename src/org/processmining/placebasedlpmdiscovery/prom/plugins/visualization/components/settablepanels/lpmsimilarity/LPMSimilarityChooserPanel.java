@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.comp
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.LPMDViewComponent;
+import org.processmining.placebasedlpmdiscovery.view.model.lpmdistances.ModelDistanceVM;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -70,5 +71,10 @@ public class LPMSimilarityChooserPanel extends JPanel implements LPMDViewCompone
     @Override
     public Component getComponent() {
         return this;
+    }
+
+    @Override
+    public ModelDistanceVM getModel() {
+        return null;
     }
 }
