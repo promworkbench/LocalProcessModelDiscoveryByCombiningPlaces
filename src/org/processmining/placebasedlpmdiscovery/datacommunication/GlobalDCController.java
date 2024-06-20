@@ -23,7 +23,7 @@ public class GlobalDCController implements DataCommunicationController {
         registeredDL.put(dataType, registeredDLForType);
     }
 
-    public void receiveEmittableData(EmittableData data) {
+    public void emit(EmittableData data) {
         Collection<DataListener> registeredDLForType = this.registeredDL.getOrDefault(data.getType(), new HashSet<>());
         for (DataListener dl : registeredDLForType) {
             dl.receive(data);

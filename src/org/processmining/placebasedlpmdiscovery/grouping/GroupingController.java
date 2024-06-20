@@ -1,6 +1,10 @@
 package org.processmining.placebasedlpmdiscovery.grouping;
 
 import com.google.inject.Inject;
+import org.processmining.placebasedlpmdiscovery.datacommunication.datalisteners.DataListener;
+import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.EmittableData;
+import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.EmittableDataType;
+import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.RunLPMGroupingEmittableData;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceController;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
@@ -8,12 +12,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class GroupingController {
+public class GroupingController implements DataListener {
 
     private final ModelDistanceController modelDistanceController;
 
     @Inject
-    public GroupingController(ModelDistanceController modelDistanceController) {
+    public GroupingController(
+            ModelDistanceController modelDistanceController) {
         this.modelDistanceController = modelDistanceController;
     }
 
@@ -32,4 +37,16 @@ public class GroupingController {
         }
     }
 
+    @Override
+    public void receive(EmittableData data) {
+        if (data.getType().equals(EmittableDataType.RunLPMGrouping)) {
+            RunLPMGroupingEmittableData cData = (RunLPMGroupingEmittableData) data;
+            GroupingConfig config = new DefaultGroupingConfig(
+                    cData.getIdentifier(),
+                    new DefaultClusteringConfig(cData.getClusteringAlgorithm(), cData.getClusteringParameters()),
+                    cData.getModelDistanceConfig()
+            );
+            this.groupLPMs(cData.getLPMs(), config);
+        }
+    }
 }

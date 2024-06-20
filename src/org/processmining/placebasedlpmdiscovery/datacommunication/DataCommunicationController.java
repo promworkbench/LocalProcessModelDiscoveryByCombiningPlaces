@@ -8,5 +8,5 @@ public interface DataCommunicationController {
 
     void registerDataListener(DataListener dataListener, EmittableDataType dataType);
 
-    void receiveEmittableData(EmittableData data);
+    void emit(EmittableData data);
 }
