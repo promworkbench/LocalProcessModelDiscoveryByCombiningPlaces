@@ -1,6 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.main;
 
 import org.processmining.placebasedlpmdiscovery.RunningContext;
+import org.processmining.placebasedlpmdiscovery.datacommunication.DataCommunicationController;
+import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.LPMSetDiscoveredEmittableData;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationController;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterSubject;
@@ -64,7 +66,8 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
         try {
             // analyze log
             this.runningContext.getAnalyzer().logAnalyzer.analyze(parameters.getLpmCombinationParameters().getLpmProximity());
-//            LEFRMatrix lefrMatrix = this.runningContext.getAnalyzer().logAnalyzer.getLEFRMatrix(parameters.getLpmCombinationParameters().getLpmProximity());
+//            LEFRMatrix lefrMatrix = this.runningContext.getAnalyzer().logAnalyzer.getLEFRMatrix(parameters
+//            .getLpmCombinationParameters().getLpmProximity());
 
             // discover places
             Set<Place> places = this.placeDiscovery.getPlaces().getPlaces();
@@ -91,7 +94,8 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 //            if (result.size() > 0) {
 //                // normalize the fitting windows score
 //                double max = result.highestScoringElement((LocalProcessModel lpm) -> lpm.getAdditionalInfo()
-//                                .getEvaluationResult(StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
+//                                .getEvaluationResult(StandardLPMEvaluationResultId.FittingWindowsEvaluationResult
+//                                .name(),
 //                                        FittingWindowsEvaluationResult.class).getResult())
 //                        .getAdditionalInfo().getEvaluationResult(
 //                                StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),

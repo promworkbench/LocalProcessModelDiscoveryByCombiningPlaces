@@ -8,7 +8,6 @@ import org.processmining.contexts.cli.CLIPluginContext;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.InputModule;
 import org.processmining.placebasedlpmdiscovery.Main;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.dependencyinjection.LPMDiscoveryResultGuiceModule;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
@@ -16,6 +15,8 @@ import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.prom.dependencyinjection.PromGuiceModule;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.BaseLPMDiscoveryResultComponent;
+import org.processmining.placebasedlpmdiscovery.service.dependencyinjection.ServiceGuiceModule;
+import org.processmining.placebasedlpmdiscovery.service.lpmdiscovery.LPMDiscoveryService;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 import org.processmining.placebasedlpmdiscovery.view.controllers.DefaultLPMDiscoveryResultViewController;
@@ -47,7 +48,8 @@ public class MainGUI extends JFrame {
 
 //    private InteractiveLPMsDiscovery getDummyDiscovery() throws Exception {
 //        XLog log = getDummyLog();
-//        return new InteractiveLPMsDiscovery(getDummyContext(), new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log)), log);
+//        return new InteractiveLPMsDiscovery(getDummyContext(), new PlaceBasedLPMDiscoveryParameters(new XLogWrapper
+//        (log)), log);
 //    }
 
     private BaseLPMDiscoveryResultComponent getDummyBaseView() {
@@ -55,17 +57,20 @@ public class MainGUI extends JFrame {
     }
 
     private BaseLPMDiscoveryResultComponent getDummyDefaultView() throws Exception {
-        Injector guice = Guice.createInjector(
-                new PromGuiceModule(getDummyContext()),
-                new InputModule(getDummyLog()),
-                new LPMDiscoveryResultGuiceModule(getDummyResult()));
+        Injector guice = Guice.createInjector(new PromGuiceModule(getDummyContext()), new InputModule(getDummyLog()),
+                new ServiceGuiceModule()
+//                new LPMDiscoveryResultGuiceModule(getDummyResult())
+        );
 //        LPMDiscoveryResultView view = guice.getInstance(LPMDiscoveryResultView.class);
 //        new DefaultLPMDiscoveryResultComponent(getDummyContext(), new SettablePanelFactory());
 //        LPMDiscoveryResultViewModel model = guice.getInstance(LPMDiscoveryResultViewModel.class);
 //        new DefaultLPMDiscoveryResultViewModel(getDummyResult());
 
+        LPMDiscoveryService lpmDiscoveryService = guice.getInstance(LPMDiscoveryService.class);
         LPMDiscoveryResultViewController controller = guice.getInstance(LPMDiscoveryResultViewController.class);
 //                new DefaultLPMDiscoveryResultViewController(view, model);
+        lpmDiscoveryService.runLPMDiscovery(getDummyLog(),
+                new PlaceSet(PlaceUtils.extractPlaceNets("data/artificialBig.pnml")));
 
         controller.getView().display(controller.getModel());
 
@@ -83,10 +88,7 @@ public class MainGUI extends JFrame {
     private LPMDiscoveryResult getDummyResult() throws Exception {
         XLog log = getDummyLog();
         Set<Place> places = PlaceUtils.extractPlaceNets("data/artificialBig.pnml");
-        return Main.createDefaultBuilder(
-                log,
-                new PlaceSet(places),
-                new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log))
-        ).build().run();
+        return Main.createDefaultBuilder(log, new PlaceSet(places),
+                new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log))).build().run();
     }
 }

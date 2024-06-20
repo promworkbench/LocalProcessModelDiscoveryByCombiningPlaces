@@ -1,5 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.datacommunication;
 
+import com.google.inject.Singleton;
 import org.processmining.placebasedlpmdiscovery.datacommunication.datalisteners.DataListener;
 import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.EmittableData;
 import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.EmittableDataType;
@@ -9,6 +10,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+@Singleton
 public class GlobalDCController implements DataCommunicationController {
 
     private final Map<EmittableDataType, Collection<DataListener>> registeredDL;

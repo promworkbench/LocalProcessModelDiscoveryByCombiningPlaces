@@ -1,5 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.service.lpms;
 
+import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.datacommunication.DataCommunicationController;
 import org.processmining.placebasedlpmdiscovery.datacommunication.datalisteners.DataListener;
 import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.EmittableData;
@@ -11,6 +12,7 @@ public class DeafaultLPMSetService implements LPMSetService, DataListener {
 
     private LPMDiscoveryResult originalLPMSet;
 
+    @Inject
     public DeafaultLPMSetService(DataCommunicationController dc) {
         dc.registerDataListener(this, EmittableDataType.LPMSetDiscovered);
     }
