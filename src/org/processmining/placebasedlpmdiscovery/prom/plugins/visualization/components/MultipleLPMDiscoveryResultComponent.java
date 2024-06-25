@@ -62,6 +62,11 @@ public class MultipleLPMDiscoveryResultComponent extends JComponent implements M
         updateTable(model);
     }
 
+    @Override
+    public JComponent getComponent() {
+        return this;
+    }
+
     private void updateTable(MultipleLPMDiscoveryResultsViewModel model) {
         // if in the visualizer component there is an LPM drawn
         if (tablePanel.getComponents().length >= 1)

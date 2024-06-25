@@ -2,5 +2,5 @@ package org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata
 
 public enum EmittableDataType {
 
-    RunLPMGrouping, LPMSetDiscovered, LPMOccurred
+    RunLPMGrouping, LPMSetDiscovered, LPMGroupingFinished, LPMOccurred
 }

@@ -13,6 +13,8 @@ import org.processmining.placebasedlpmdiscovery.view.listeners.LPMDiscoveryResul
 import org.processmining.placebasedlpmdiscovery.view.models.LPMDiscoveryResultViewModel;
 import org.processmining.placebasedlpmdiscovery.view.views.LPMDiscoveryResultView;
 
+import javax.swing.*;
+
 public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultComponent implements LPMDiscoveryResultView {
 
 
@@ -53,6 +55,11 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
                 this.context, model.getLPMs(), new LPMResultPluginVisualizerTableFactory(), this.listener));
 
         displaySelectedLPM(model);
+    }
+
+    @Override
+    public JComponent getComponent() {
+        return this;
     }
 
     public void displaySelectedLPM(LPMDiscoveryResultViewModel model) {

@@ -55,7 +55,7 @@ public class DistanceComputationRunner {
             Injector injector = Guice.createInjector(
                     new InputModule(LogUtils
                             .readLogFromFile(config.getInput().get(RunnerInput.EVENT_LOG))),
-                    new LPMDistancesDependencyInjectionModule(config.getModelDistanceConfig())
+                    new LPMDistancesDependencyInjectionModule()
             );
 
             System.out.println("Injector initialized");

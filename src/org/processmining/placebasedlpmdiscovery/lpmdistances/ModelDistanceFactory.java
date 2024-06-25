@@ -15,8 +15,12 @@ import java.util.stream.Collectors;
 
 public class ModelDistanceFactory {
 
+    private final DataAttributeModelDistanceFactory dataAttributeModelDistanceFactory;
+
     @Inject
-    private DataAttributeModelDistanceFactory dataAttributeModelDistanceFactory;
+    public ModelDistanceFactory(DataAttributeModelDistanceFactory dataAttributeModelDistanceFactory) {
+        this.dataAttributeModelDistanceFactory = dataAttributeModelDistanceFactory;
+    }
 
     @Inject
     public ModelDistance getModelDistance(ModelDistanceConfig distanceConfig) {
