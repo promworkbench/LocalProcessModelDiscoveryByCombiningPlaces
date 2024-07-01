@@ -28,7 +28,6 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
         super(3);
         this.context = context;
         this.settablePanelFactory = settablePanelFactory;
-        this.listener = listener;
 
         createDefaultPanels();
     }
