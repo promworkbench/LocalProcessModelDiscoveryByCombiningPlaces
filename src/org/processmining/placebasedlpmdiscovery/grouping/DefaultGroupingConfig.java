@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 
 public class DefaultGroupingConfig implements GroupingConfig {
 
-    private final String identifier;
+    private String identifier;
     private final ClusteringConfig clusteringConfig;
     private final ModelDistanceConfig modelDistanceConfig;
 
@@ -39,5 +39,10 @@ public class DefaultGroupingConfig implements GroupingConfig {
     @Override
     public String getIdentifier() {
         return this.identifier;
+    }
+
+    @Override
+    public void setIdentifier(String id) {
+        this.identifier = id;
     }
 }

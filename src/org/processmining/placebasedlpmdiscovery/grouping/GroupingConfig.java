@@ -10,4 +10,6 @@ public interface GroupingConfig {
     ModelDistanceConfig getModelDistanceConfig();
 
     String getIdentifier();
+
+    void setIdentifier(String id);
 }

@@ -10,6 +10,7 @@ import org.processmining.placebasedlpmdiscovery.service.lpms.LPMSetService;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommunicationControllerVM;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 
 public class GroupingSetupPanel extends JPanel {
@@ -24,6 +25,15 @@ public class GroupingSetupPanel extends JPanel {
 
         this.setLayout(new BorderLayout());
 
+        JPanel clustIdPanel = new JPanel();
+        clustIdPanel.setBorder(new TitledBorder("Clustering Id"));
+        clustIdPanel.setLayout(new BoxLayout(clustIdPanel, BoxLayout.X_AXIS));
+//        clustIdPanel.add(new JLabel("Clustering Id:"));
+//        clustIdPanel.add(Box.createRigidArea(new Dimension(5, 0)));
+        JTextField txtClustId = new JTextField("default");
+        clustIdPanel.add(txtClustId);
+        this.add(clustIdPanel, BorderLayout.PAGE_START);
+
         JPanel setupPanels = new JPanel();
         setupPanels.setLayout(new GridLayout(1, 2));
         LPMDViewComponent lpmSimilarityPanel =
@@ -36,6 +46,7 @@ public class GroupingSetupPanel extends JPanel {
         JButton btnCluster = new JButton("Run Clustering");
         btnCluster.addActionListener(e -> {
 //            dc.emit(new BlockViewEmittableDataVM("Clustering is running"));
+            groupingConfig.setIdentifier(txtClustId.getText());
             groupingController.groupLPMs(lpmSetService.getLPMSet().getAllLPMs(), groupingConfig);
 //            dc.emit(new RunLPMGroupingEmittableData(groupingConfig.getIdentifier(),
 //                    groupingConfig.getClusteringConfig().getClusteringAlgorithm(),
