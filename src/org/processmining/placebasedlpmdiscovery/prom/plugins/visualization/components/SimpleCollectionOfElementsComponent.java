@@ -13,7 +13,9 @@ import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.compo
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.AbstractPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers.LocalProcessModelVisualizer;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers.PlaceVisualizer;
+import org.processmining.placebasedlpmdiscovery.view.components.LPMDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.components.LPMSetDisplayComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.lpmdisplay.LPMPetriNetComponent;
 import org.processmining.placebasedlpmdiscovery.view.listeners.NewElementSelectedListener;
 import org.processmining.plugins.utils.ProvidedObjectHelper;
 
@@ -77,12 +79,11 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
             visualizerComponent.remove(0); // remove it
 
         if (selectedObject instanceof LocalProcessModel) {
-            // create the visualizer
-            LocalProcessModelVisualizer visualizer = new LocalProcessModelVisualizer();
-            // add visualization for the newly selected LPM
+            // add Petri net component for the newly selected LPM
             LocalProcessModel lpm = (LocalProcessModel) selectedObject;
+            LPMDisplayComponent lpmDisplayComponent = new LPMPetriNetComponent(lpm);
             visualizerComponent.add(
-                    visualizer.visualize(context, lpm),
+                    lpmDisplayComponent.getComponent(),
                     BorderLayout.CENTER);
         }
 
