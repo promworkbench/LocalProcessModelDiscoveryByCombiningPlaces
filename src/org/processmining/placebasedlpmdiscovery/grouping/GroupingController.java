@@ -9,6 +9,7 @@ import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.
 import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.RunLPMGroupingEmittableData;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceController;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.serializable.grouped.GroupingProperty;
 
 import java.util.ArrayList;
 import java.util.Collection;

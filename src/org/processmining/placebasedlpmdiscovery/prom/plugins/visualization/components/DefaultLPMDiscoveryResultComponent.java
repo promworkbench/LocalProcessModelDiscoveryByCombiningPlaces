@@ -1,33 +1,41 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
 
 import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
 import org.apache.commons.math3.util.Pair;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.ComplexEvaluationResultPanel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelContainer;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelFactory;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.LPMResultPluginVisualizerTableFactory;
+import org.processmining.placebasedlpmdiscovery.view.components.LPMSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.controllers.LPMDiscoveryResultViewController;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.datalisteners.DataListenerVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataTypeVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.componentchange.LPMSetDisplayComponentChangeEmittableDataVM;
 import org.processmining.placebasedlpmdiscovery.view.listeners.LPMDiscoveryResultViewListener;
+import org.processmining.placebasedlpmdiscovery.view.models.DefaultLPMDiscoveryResultViewModel;
 import org.processmining.placebasedlpmdiscovery.view.models.LPMDiscoveryResultViewModel;
 import org.processmining.placebasedlpmdiscovery.view.views.LPMDiscoveryResultView;
 
 import javax.swing.*;
 
-public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultComponent implements LPMDiscoveryResultView {
+public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultComponent implements LPMDiscoveryResultView, DataListenerVM {
 
 
     private PluginContext context;
     private LPMDiscoveryResultViewListener listener;
     private SettablePanelFactory settablePanelFactory;
+    private final DefaultLPMDiscoveryResultViewModel model;
 
     @Inject
     public DefaultLPMDiscoveryResultComponent(PluginContext context,
-                                              SettablePanelFactory settablePanelFactory) {
+                                              SettablePanelFactory settablePanelFactory,
+                                              DefaultLPMDiscoveryResultViewModel model) {
         super(3);
         this.context = context;
         this.settablePanelFactory = settablePanelFactory;
+        this.model = model;
 
         createDefaultPanels();
     }
@@ -50,8 +58,9 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
 
     @Override
     public void display(LPMDiscoveryResultViewModel model) {
-        this.tablePanel.add(new SimpleCollectionOfElementsComponent<>(
-                this.context, model.getLPMs(), new LPMResultPluginVisualizerTableFactory(), this.listener));
+        LPMSetDisplayComponent lpmSetDisplayComponent = new SimpleCollectionOfElementsComponent<>(
+                this.context, model.getLPMs(), new LPMResultPluginVisualizerTableFactory(), this.listener);
+        this.tablePanel.add(lpmSetDisplayComponent.getComponent());
 
         displaySelectedLPM(model);
     }
@@ -78,6 +87,22 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
             if (container.getComponentId().getType().equals(ComponentId.Type.BasicLPMEvalMetrics)) {
                 ((ComplexEvaluationResultPanel) container.getContent()).setModel(model.getSelectedLPM().getAdditionalInfo().getEvaluationResults());
             }
+        }
+    }
+
+    @Override
+    public void receive(EmittableDataVM data) {
+        if (data.getType().equals(EmittableDataTypeVM.LPMSetDisplayComponentChange)) {
+            LPMSetDisplayComponentChangeEmittableDataVM cData = (LPMSetDisplayComponentChangeEmittableDataVM) data;
+            this.setLPMSetDisplayComponent(cData.getComponentType());
+        }
+    }
+
+    private void setLPMSetDisplayComponent(LPMSetDisplayComponent.Type componentType) {
+        if (componentType.equals(LPMSetDisplayComponent.Type.Default)) {
+            this.display(this.model);
+        } else if (componentType.equals(LPMSetDisplayComponent.Type.Grouped)) {
+
         }
     }
 }

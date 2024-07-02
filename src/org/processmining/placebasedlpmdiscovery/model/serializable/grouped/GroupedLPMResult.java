@@ -9,11 +9,17 @@ public class GroupedLPMResult extends SerializableList<LPMResultGroup> {
 
     private static final long serialVersionUID = 6600828346790284313L;
 
-    private GroupingProperty property;
+    private final GroupingProperty property;
+    private final String key;
 
     public GroupedLPMResult(Collection<LocalProcessModel> lpms, GroupingProperty property) {
+        this(lpms, property, "default");
+    }
+
+    public GroupedLPMResult(Collection<LocalProcessModel> lpms,GroupingProperty property, String groupingKey) {
         super();
         this.property = property;
+        this.key = groupingKey;
         for (LocalProcessModel lpm : lpms) {
             this.add(lpm);
         }
@@ -25,7 +31,7 @@ public class GroupedLPMResult extends SerializableList<LPMResultGroup> {
             added = added || group.add(lpm);
         }
         if (!added) {
-            LPMResultGroup group = this.createGroup(this.property);
+            LPMResultGroup group = createGroup();
             group.add(lpm);
             add(group);
         }
@@ -33,13 +39,13 @@ public class GroupedLPMResult extends SerializableList<LPMResultGroup> {
         return true;
     }
 
-    private LPMResultGroup createGroup(GroupingProperty property) {
+    private LPMResultGroup createGroup() {
         if (property == GroupingProperty.SameActivities) {
             return new SameActivityLPMResultGroup();
         } else if (property == GroupingProperty.WindowCoverage) {
             return new WindowCoverageLPMResultGroup();
         } else if (property == GroupingProperty.Clustering) {
-            return new ClusteringLPMResultGroup("default");
+            return new ClusteringLPMResultGroup(key);
         }
         throw new IllegalArgumentException();
     }

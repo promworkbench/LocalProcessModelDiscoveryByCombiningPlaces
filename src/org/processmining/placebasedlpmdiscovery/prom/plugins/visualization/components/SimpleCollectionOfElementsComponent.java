@@ -13,6 +13,7 @@ import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.compo
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.AbstractPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers.LocalProcessModelVisualizer;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers.PlaceVisualizer;
+import org.processmining.placebasedlpmdiscovery.view.components.LPMSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.listeners.NewElementSelectedListener;
 import org.processmining.plugins.utils.ProvidedObjectHelper;
 
@@ -22,7 +23,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Serializable>
-        extends JComponent implements TableListener<T>, ComponentListener {
+        extends JComponent implements TableListener<T>, ComponentListener, LPMSetDisplayComponent {
 
     private final PluginContext context;
     private final Collection<T> result;
@@ -119,5 +120,10 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
     public void componentExpansion(ComponentId componentId, boolean expanded) {
         // change visibility of lpm container
 //        this.visualizerComponent.setVisible(!expanded);
+    }
+
+    @Override
+    public JComponent getComponent() {
+        return this;
     }
 }

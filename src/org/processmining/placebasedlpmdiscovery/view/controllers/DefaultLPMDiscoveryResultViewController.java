@@ -6,13 +6,18 @@ import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.
 import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.EmittableDataType;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.DefaultLPMDiscoveryResultComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.LPMSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommunicationControllerVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataTypeVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.componentchange.LPMSetDisplayComponentChangeEmittableDataVM;
 import org.processmining.placebasedlpmdiscovery.view.models.DefaultLPMDiscoveryResultViewModel;
 import org.processmining.placebasedlpmdiscovery.view.models.LPMDiscoveryResultViewModel;
-import org.processmining.placebasedlpmdiscovery.view.views.LPMDiscoveryResultView;
 
 public class DefaultLPMDiscoveryResultViewController implements LPMDiscoveryResultViewController {
+
+    private final DataCommunicationController dc;
+    private final DataCommunicationControllerVM dcVM;
 
     private final DefaultLPMDiscoveryResultComponent view;
     private final DefaultLPMDiscoveryResultViewModel model;
@@ -20,14 +25,19 @@ public class DefaultLPMDiscoveryResultViewController implements LPMDiscoveryResu
     @Inject
     public DefaultLPMDiscoveryResultViewController(DataCommunicationController dc, DataCommunicationControllerVM dcVM,
             DefaultLPMDiscoveryResultViewModel model, DefaultLPMDiscoveryResultComponent view) {
+        this.dc = dc;
+        this.dcVM = dcVM;
+
         this.view = view;
         this.model = model;
 
-        registerListeners(dc, dcVM);
+        registerListeners();
     }
 
-    private void registerListeners(DataCommunicationController dc, DataCommunicationControllerVM dcVM) {
-        dc.registerDataListener(this, EmittableDataType.LPMGroupingFinished);
+    private void registerListeners() {
+        this.dc.registerDataListener(this, EmittableDataType.LPMGroupingFinished);
+
+        this.dcVM.registerDataListener(this.view, EmittableDataTypeVM.LPMSetDisplayComponentChange);
     }
 
     @Override
@@ -49,7 +59,7 @@ public class DefaultLPMDiscoveryResultViewController implements LPMDiscoveryResu
     @Override
     public void receive(EmittableData data) {
         if (data.getType().equals(EmittableDataType.LPMGroupingFinished)) {
-
+            this.dcVM.emit(new LPMSetDisplayComponentChangeEmittableDataVM(LPMSetDisplayComponent.Type.Grouped));
         }
     }
 

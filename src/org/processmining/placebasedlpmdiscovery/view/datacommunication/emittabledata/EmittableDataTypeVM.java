@@ -3,5 +3,5 @@ package org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabl
 public enum EmittableDataTypeVM {
 
     MixedModelDistanceAddDistanceVM,
-    MixedModelDistanceRemoveDistanceVM
+    LPMSetDisplayComponentChange, MixedModelDistanceRemoveDistanceVM
 }
