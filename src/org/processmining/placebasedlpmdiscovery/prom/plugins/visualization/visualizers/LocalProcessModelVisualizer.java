@@ -25,7 +25,7 @@ public class LocalProcessModelVisualizer {
     @Visualizer
     @PluginVariant(requiredParameterLabels = {0})
     public JComponent visualize(PluginContext context, LocalProcessModel lpm) {
-        LPMDisplayComponent lpmDisplayComponent = new LPMPetriNetComponent(lpm, context);
+        LPMDisplayComponent lpmDisplayComponent = new LPMPetriNetComponent(lpm);
         return lpmDisplayComponent.getComponent();
     }
 

@@ -1,8 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.view.components.lpmdisplay;
 
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
-import org.processmining.acceptingpetrinetclassicalreductor.plugins.ReduceUsingMurataRulesPlugin;
-import org.processmining.framework.plugin.PluginContext;
+import org.processmining.acceptingpetrinetclassicalreductor.algorithms.ReduceUsingMurataRulesAlgorithm;
+import org.processmining.acceptingpetrinetclassicalreductor.parameters.ReduceUsingMurataRulesParameters;
 import org.processmining.models.graphbased.AttributeMap;
 import org.processmining.models.graphbased.ViewSpecificAttributeMap;
 import org.processmining.models.jgraph.ProMJGraphVisualizer;
@@ -16,27 +16,22 @@ import javax.swing.*;
 
 public class LPMPetriNetComponent extends JComponent implements LPMDisplayComponent {
 
-    public LPMPetriNetComponent(LocalProcessModel lpm, PluginContext context) {
+    public LPMPetriNetComponent(LocalProcessModel lpm) {
         AcceptingPetriNet net = LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
+        ReduceUsingMurataRulesAlgorithm reduceMurataAlg = new ReduceUsingMurataRulesAlgorithm();
+        AcceptingPetriNet reducedNet = reduceMurataAlg.apply(null, net, new ReduceUsingMurataRulesParameters());
+
         ViewSpecificAttributeMap map = new ViewSpecificAttributeMap();
-
-        ReduceUsingMurataRulesPlugin reductorPlugin = new ReduceUsingMurataRulesPlugin();
-        net = reductorPlugin.runDefault(context, net);
-
-        for (org.processmining.models.graphbased.directed.petrinet.elements.Transition t : net.getNet().getTransitions()) {
+        for (org.processmining.models.graphbased.directed.petrinet.elements.Transition t :
+                reducedNet.getNet().getTransitions()) {
             if (!t.isInvisible()) {
                 String label = getLabel(t.getLabel(), lpm);
                 map.putViewSpecific(t, AttributeMap.LABEL, label);
-
-//                map.putViewSpecific(t, AttributeMap.EXTRALABELS, new String[]{""+lpm.getCount(t)});
-//                map.putViewSpecific(t, AttributeMap.EXTRALABELPOSITIONS, new Point2D[]{new Point2D.Double(10, 10)});
             }
         }
 
-        JComponent component = new JPanel();
-        component.setLayout(new BoxLayout(component, BoxLayout.X_AXIS));
-//        component.add((new CustomAcceptingPetriNetVisualizer()).visualize(context, net));
-        component.add(ProMJGraphVisualizer.instance().visualizeGraph(context, net.getNet(), map));
+        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        this.add(ProMJGraphVisualizer.instance().visualizeGraphWithoutRememberingLayout(net.getNet(), map));
     }
 
     private String getLabel(String trLabel, LocalProcessModel lpm) {
