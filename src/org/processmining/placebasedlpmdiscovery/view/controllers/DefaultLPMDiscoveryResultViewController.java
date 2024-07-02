@@ -6,7 +6,7 @@ import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.
 import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.EmittableDataType;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.DefaultLPMDiscoveryResultComponent;
-import org.processmining.placebasedlpmdiscovery.view.components.LPMSetDisplayComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommunicationControllerVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataTypeVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataVM;

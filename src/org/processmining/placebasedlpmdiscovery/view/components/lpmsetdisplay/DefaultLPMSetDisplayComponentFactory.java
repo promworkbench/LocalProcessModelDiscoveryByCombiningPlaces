@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.SimpleCollectionOfElementsComponent;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.PluginVisualizerTableFactory;
-import org.processmining.placebasedlpmdiscovery.view.components.LPMSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.listeners.NewElementSelectedListener;
 
 import java.util.Collection;

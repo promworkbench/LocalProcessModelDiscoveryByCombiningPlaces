@@ -1,6 +1,5 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
 
-import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
@@ -10,12 +9,10 @@ import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.TableComposition;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.TableListener;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.AbstractPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.PluginVisualizerTableFactory;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers.LocalProcessModelVisualizer;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers.PlaceVisualizer;
 import org.processmining.placebasedlpmdiscovery.view.components.LPMDisplayComponent;
-import org.processmining.placebasedlpmdiscovery.view.components.LPMSetDisplayComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.components.lpmdisplay.LPMPetriNetComponent;
 import org.processmining.placebasedlpmdiscovery.view.components.placesetdisplay.PlaceSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.listeners.NewElementSelectedListener;

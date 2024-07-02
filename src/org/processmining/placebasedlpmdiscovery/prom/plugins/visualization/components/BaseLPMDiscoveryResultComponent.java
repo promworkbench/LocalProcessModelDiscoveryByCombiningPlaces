@@ -3,7 +3,6 @@ package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.comp
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelContainer;
-import org.processmining.placebasedlpmdiscovery.view.components.LPMSetDisplayComponent;
 
 import javax.swing.*;
 import java.awt.*;

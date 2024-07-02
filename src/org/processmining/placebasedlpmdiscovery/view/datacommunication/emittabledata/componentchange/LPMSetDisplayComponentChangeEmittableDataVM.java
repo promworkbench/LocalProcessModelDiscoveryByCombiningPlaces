@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.componentchange;
 
-import org.processmining.placebasedlpmdiscovery.view.components.LPMSetDisplayComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataTypeVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataVM;
 

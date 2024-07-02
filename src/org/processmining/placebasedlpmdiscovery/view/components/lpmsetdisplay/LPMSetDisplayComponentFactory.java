@@ -1,7 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay;
 
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.view.components.LPMSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.listeners.NewElementSelectedListener;
 
 import java.util.Collection;

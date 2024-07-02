@@ -1,12 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay;
 
-import com.google.inject.Inject;
-import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.grouped.GroupedLPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.grouped.GroupingProperty;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers.LPMResultVisualizer;
-import org.processmining.placebasedlpmdiscovery.view.components.LPMSetDisplayComponent;
 
 import javax.swing.*;
 import java.awt.*;
