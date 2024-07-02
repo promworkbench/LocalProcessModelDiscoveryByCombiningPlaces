@@ -1,11 +1,15 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.Visualizer;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.placebasedlpmdiscovery.main.MultipleLPMDiscoveryResults;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.MultipleLPMDiscoveryResultComponent;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.dependencyinjection.PromViewGuiceModule;
+import org.processmining.placebasedlpmdiscovery.view.components.ComponentFactory;
 import org.processmining.placebasedlpmdiscovery.view.controllers.DefaultMultipleLPMDiscoveryResultsViewController;
 import org.processmining.placebasedlpmdiscovery.view.controllers.MultipleLPMDiscoveryResultsViewController;
 import org.processmining.placebasedlpmdiscovery.view.models.DefaultMultipleLPMDiscoveryResultsViewModel;
@@ -24,7 +28,10 @@ public class MultipleLPMDiscoveryResultsVisualizer {
     @PluginVariant(requiredParameterLabels = {0})
     public JComponent visualize(UIPluginContext context, MultipleLPMDiscoveryResults result) {
 
-        MultipleLPMDiscoveryResultComponent view = new MultipleLPMDiscoveryResultComponent(context);
+        Injector guice = Guice.createInjector(new PromViewGuiceModule());
+        ComponentFactory componentFactory = guice.getInstance(ComponentFactory.class);
+
+        MultipleLPMDiscoveryResultComponent view = new MultipleLPMDiscoveryResultComponent(componentFactory);
         MultipleLPMDiscoveryResultsViewModel model = new DefaultMultipleLPMDiscoveryResultsViewModel(result);
 
         MultipleLPMDiscoveryResultsViewController controller =

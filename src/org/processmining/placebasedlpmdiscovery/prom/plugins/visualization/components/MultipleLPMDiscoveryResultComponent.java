@@ -1,8 +1,11 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
 
+import com.google.inject.Inject;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.controlcomponents.TwoLPMDiscoveryResultsComparisonComponent;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.LPMResultPluginVisualizerTableFactory;
+import org.processmining.placebasedlpmdiscovery.view.components.ComponentFactory;
+import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponentType;
 import org.processmining.placebasedlpmdiscovery.view.controllers.MultipleLPMDiscoveryResultsViewController;
 import org.processmining.placebasedlpmdiscovery.view.listeners.MultipleLPMDiscoveryResultsViewListener;
 import org.processmining.placebasedlpmdiscovery.view.models.MultipleLPMDiscoveryResultsViewModel;
@@ -13,15 +16,16 @@ import java.awt.*;
 
 public class MultipleLPMDiscoveryResultComponent extends JComponent implements MultipleLPMDiscoveryResultsView {
 
-    private final UIPluginContext context;
+    private final ComponentFactory componentFactory;
     private MultipleLPMDiscoveryResultsViewListener listener;
     private boolean setupFinished;
 
     // sub-components
     private JComponent tablePanel;
 
-    public MultipleLPMDiscoveryResultComponent(UIPluginContext context) {
-        this.context = context;
+    @Inject
+    public MultipleLPMDiscoveryResultComponent(ComponentFactory componentFactory) {
+        this.componentFactory = componentFactory;
     }
 
     private void initView() {
@@ -73,11 +77,8 @@ public class MultipleLPMDiscoveryResultComponent extends JComponent implements M
             tablePanel.remove(0); // remove it
 
         tablePanel.add(
-                new SimpleCollectionOfElementsComponent<>(
-                        context,
-                        model.getLPMs(),
-                        new LPMResultPluginVisualizerTableFactory(),
-                        lpm -> {}),
+                this.componentFactory.createLPMSetDisplayComponent(LPMSetDisplayComponentType.SimpleLPMsCollection,
+                        model.getLPMs()).getComponent(),
                 BorderLayout.CENTER);
 
         tablePanel.revalidate();
