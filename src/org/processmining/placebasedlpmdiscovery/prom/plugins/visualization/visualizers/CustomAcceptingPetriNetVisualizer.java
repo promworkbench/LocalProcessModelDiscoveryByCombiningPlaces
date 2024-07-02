@@ -10,6 +10,7 @@ import org.processmining.models.graphbased.ViewSpecificAttributeMap;
 import org.processmining.models.graphbased.directed.petrinet.elements.Place;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.models.jgraph.ProMJGraphVisualizer;
+import org.processmining.models.jgraph.visualization.ProMJGraphPanel;
 import org.processmining.models.semantics.petrinet.Marking;
 
 import javax.swing.*;
@@ -25,6 +26,10 @@ public class CustomAcceptingPetriNetVisualizer {
     @Visualizer
     @PluginVariant(requiredParameterLabels = {0})
     public JComponent visualize(PluginContext context, AcceptingPetriNet net) {
+        return createProMJGraphPanel(net);
+    }
+
+    public ProMJGraphPanel createProMJGraphPanel(AcceptingPetriNet net) {
         ViewSpecificAttributeMap map = new ViewSpecificAttributeMap();
         for (Place place : net.getInitialMarking().baseSet()) {
             map.putViewSpecific(place, AttributeMap.FILLCOLOR, new Color(127, 0, 0));
@@ -45,6 +50,6 @@ public class CustomAcceptingPetriNetVisualizer {
             }
         }
 
-        return ProMJGraphVisualizer.instance().visualizeGraph(context, net.getNet(), map);
+        return ProMJGraphVisualizer.instance().visualizeGraphWithoutRememberingLayout(net.getNet(), map);
     }
 }

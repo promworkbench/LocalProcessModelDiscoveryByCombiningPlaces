@@ -93,7 +93,7 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
             // add visualization for the newly selected Place
             Place place = (Place) selectedObject;
             visualizerComponent.add(
-                    visualizer.visualize(context, place),
+                    visualizer.createPlaceNetDisplayComponent(place),
                     BorderLayout.CENTER);
         }
 
