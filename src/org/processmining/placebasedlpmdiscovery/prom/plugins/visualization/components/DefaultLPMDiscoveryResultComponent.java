@@ -97,7 +97,7 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
 
     @Override
     public void receive(EmittableDataVM data) {
-        if (data.getType().equals(EmittableDataTypeVM.LPMSetDisplayComponentChange)) {
+        if (data.getType().equals(EmittableDataTypeVM.LPMSetDisplayComponentChangeVM)) {
             LPMSetDisplayComponentChangeEmittableDataVM cData = (LPMSetDisplayComponentChangeEmittableDataVM) data;
             this.setLPMSetDisplayComponent(cData.getComponentType());
         }

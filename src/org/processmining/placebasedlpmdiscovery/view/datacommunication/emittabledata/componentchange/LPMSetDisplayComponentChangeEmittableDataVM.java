@@ -16,6 +16,6 @@ public class LPMSetDisplayComponentChangeEmittableDataVM implements EmittableDat
 
     @Override
     public EmittableDataTypeVM getType() {
-        return EmittableDataTypeVM.LPMSetDisplayComponentChange;
+        return EmittableDataTypeVM.LPMSetDisplayComponentChangeVM;
     }
 }
