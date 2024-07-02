@@ -53,6 +53,9 @@ public class ClusteringLPMs {
                 return new UPGMALinkage(proximity);
             case "wpgma":
                 return new WPGMALinkage(proximity);
+            case "ward":
+                return new WardLinkage(proximity);
+
         }
         throw new IllegalStateException("No such linkage is supported.");
     }
