@@ -13,6 +13,8 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLP
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventCoverageEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
+import org.processmining.placebasedlpmdiscovery.view.components.LPMDisplayComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.lpmdisplay.LPMPetriNetComponent;
 
 import javax.swing.*;
 
@@ -23,41 +25,9 @@ public class LocalProcessModelVisualizer {
     @Visualizer
     @PluginVariant(requiredParameterLabels = {0})
     public JComponent visualize(PluginContext context, LocalProcessModel lpm) {
-        if (lpm == null)
-            throw new IllegalArgumentException("The local process model to be visualized should not be null: " + lpm);
-        AcceptingPetriNet net = LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
-        ViewSpecificAttributeMap map = new ViewSpecificAttributeMap();
-
-        ReduceUsingMurataRulesPlugin reductorPlugin = new ReduceUsingMurataRulesPlugin();
-        net = reductorPlugin.runDefault(context, net);
-
-        for (org.processmining.models.graphbased.directed.petrinet.elements.Transition t : net.getNet().getTransitions()) {
-            if (!t.isInvisible()) {
-                String label = getLabel(t.getLabel(), lpm);
-                map.putViewSpecific(t, AttributeMap.LABEL, label);
-
-//                map.putViewSpecific(t, AttributeMap.EXTRALABELS, new String[]{""+lpm.getCount(t)});
-//                map.putViewSpecific(t, AttributeMap.EXTRALABELPOSITIONS, new Point2D[]{new Point2D.Double(10, 10)});
-            }
-        }
-
-        JComponent component = new JPanel();
-        component.setLayout(new BoxLayout(component, BoxLayout.X_AXIS));
-//        component.add((new CustomAcceptingPetriNetVisualizer()).visualize(context, net));
-        component.add(ProMJGraphVisualizer.instance().visualizeGraph(context, net.getNet(), map));
-
-//        JComponent evalComponent = ComponentFactory.getComplexEvaluationResultComponent(
-//                lpm.getAdditionalInfo().getEvalResults().values());
-//        component.add(evalComponent);
-        return component;
+        LPMDisplayComponent lpmDisplayComponent = new LPMPetriNetComponent(lpm, context);
+        return lpmDisplayComponent.getComponent();
     }
 
-    private String getLabel(String trLabel, LocalProcessModel lpm) {
-        EventCoverageEvaluationResult res = lpm.getAdditionalInfo()
-                .getEvaluationResult(StandardLPMEvaluationResultId.EventCoverageEvaluationResult.name(),
-                        EventCoverageEvaluationResult.class);
 
-        return res == null ? trLabel : trLabel + ": " + System.lineSeparator() +
-                res.getCoveredEventsCount(trLabel) + "/" + res.getEventCountPerActivity().get(trLabel);
-    }
 }
