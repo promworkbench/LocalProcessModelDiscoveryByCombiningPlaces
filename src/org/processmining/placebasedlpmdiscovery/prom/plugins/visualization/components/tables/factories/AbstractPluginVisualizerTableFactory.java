@@ -1,7 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories;
 
 import org.processmining.placebasedlpmdiscovery.model.TextDescribable;
-import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.CustomObjectTableModel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.GenericTextDescribableTableComponent;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.TableListener;
@@ -14,12 +13,13 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 
-public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescribable & Serializable> {
+public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescribable & Serializable> implements PluginVisualizerTableFactory<T> {
 
     protected GenericTextDescribableTableComponent<T> table;
 
     protected TableListener<T> listener;
 
+    @Override
     public GenericTextDescribableTableComponent<T> getPluginVisualizerTable(Collection<T> result, TableListener<T> listener) {
         this.listener = listener;
 

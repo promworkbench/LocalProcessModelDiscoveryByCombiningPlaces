@@ -1,8 +1,10 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.dependencyinjection;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import org.processmining.placebasedlpmdiscovery.grouping.dependencyinjection.GroupingGuiceModule;
+import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.*;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.ComplexEvaluationResultPanel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.DefaultSettablePanelFactory;
@@ -12,9 +14,12 @@ import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.compo
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.lpmsimilarity.LPMSimilarityChooserPanel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.lpmsimilarity.MixedLPMSimilaritySetupPanel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.lpmsimilarity.ModelSimilarityLPMSimilaritySetupPanel;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.LPMResultPluginVisualizerTableFactory;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.PluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.view.controllers.DefaultLPMDiscoveryResultViewController;
 import org.processmining.placebasedlpmdiscovery.view.controllers.LPMDiscoveryResultViewController;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.dependencyinjection.DataCommunicationGuiceModuleVM;
+import org.processmining.placebasedlpmdiscovery.view.dependencyinjection.ViewGuiceModule;
 
 import javax.swing.*;
 
@@ -23,6 +28,7 @@ public class PromViewGuiceModule extends AbstractModule {
     protected void configure() {
         install(new GroupingGuiceModule());
         install(new DataCommunicationGuiceModuleVM());
+        install(new ViewGuiceModule());
 
         MapBinder<ComponentId.Type, JPanel> mapBinderSettablePanels = MapBinder.newMapBinder(binder(),
                 ComponentId.Type.class, JPanel.class);

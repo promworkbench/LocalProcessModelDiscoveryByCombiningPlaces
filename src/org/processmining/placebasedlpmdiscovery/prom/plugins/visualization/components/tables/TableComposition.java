@@ -5,6 +5,7 @@ import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableC
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.ComponentId;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.ICommunicativePanel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.AbstractPluginVisualizerTableFactory;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.PluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.utils.RegexConverter;
 
 import javax.swing.*;
@@ -18,11 +19,11 @@ public class TableComposition<T extends TextDescribable & Serializable> extends 
 
     private final ComponentId componentId;
     private final Collection<T> result;
-    private final AbstractPluginVisualizerTableFactory<T> tableFactory;
+    private final PluginVisualizerTableFactory<T> tableFactory;
     private final TableListener<T> controller;
 
     public TableComposition(Collection<T> result,
-                            AbstractPluginVisualizerTableFactory<T> tableFactory,
+                            PluginVisualizerTableFactory<T> tableFactory,
                             TableListener<T> controller) {
         this.componentId = new ComponentId(ComponentId.Type.TableComponent);
         this.result = result;

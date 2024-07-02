@@ -11,6 +11,7 @@ import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableC
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.TableComposition;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.TableListener;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.AbstractPluginVisualizerTableFactory;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.PluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers.LocalProcessModelVisualizer;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers.PlaceVisualizer;
 import org.processmining.placebasedlpmdiscovery.view.components.LPMDisplayComponent;
@@ -29,14 +30,14 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
 
     private final PluginContext context;
     private final Collection<T> result;
-    private final AbstractPluginVisualizerTableFactory<T> tableFactory;
+    private final PluginVisualizerTableFactory<T> tableFactory;
     private final NewElementSelectedListener<T> newElementSelectedListener;
 
     private JComponent visualizerComponent;
 
     public SimpleCollectionOfElementsComponent(PluginContext context,
                                                Collection<T> result,
-                                               AbstractPluginVisualizerTableFactory<T> tableFactory,
+                                               PluginVisualizerTableFactory<T> tableFactory,
                                                NewElementSelectedListener<T> newElementSelectedListener) {
         this.context = context;
         this.result = result;

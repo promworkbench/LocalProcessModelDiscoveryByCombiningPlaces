@@ -5,10 +5,14 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLP
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.TextDescribable;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.CustomObjectTableModel;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.GenericTextDescribableTableComponent;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.TableListener;
 
 import javax.swing.*;
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Iterator;

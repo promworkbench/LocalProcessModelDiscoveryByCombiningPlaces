@@ -7,7 +7,9 @@ import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.compo
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelContainer;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelFactory;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.LPMResultPluginVisualizerTableFactory;
+import org.processmining.placebasedlpmdiscovery.view.components.ComponentFactory;
 import org.processmining.placebasedlpmdiscovery.view.components.LPMSetDisplayComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponentType;
 import org.processmining.placebasedlpmdiscovery.view.controllers.LPMDiscoveryResultViewController;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.datalisteners.DataListenerVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataTypeVM;
@@ -25,16 +27,19 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
 
     private PluginContext context;
     private LPMDiscoveryResultViewListener listener;
-    private SettablePanelFactory settablePanelFactory;
+    private final SettablePanelFactory settablePanelFactory;
+    private final ComponentFactory componentFactory;
     private final DefaultLPMDiscoveryResultViewModel model;
 
     @Inject
     public DefaultLPMDiscoveryResultComponent(PluginContext context,
                                               SettablePanelFactory settablePanelFactory,
+                                              ComponentFactory componentFactory,
                                               DefaultLPMDiscoveryResultViewModel model) {
         super(3);
         this.context = context;
         this.settablePanelFactory = settablePanelFactory;
+        this.componentFactory = componentFactory;
         this.model = model;
 
         createDefaultPanels();
@@ -58,8 +63,9 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
 
     @Override
     public void display(LPMDiscoveryResultViewModel model) {
-        LPMSetDisplayComponent lpmSetDisplayComponent = new SimpleCollectionOfElementsComponent<>(
-                this.context, model.getLPMs(), new LPMResultPluginVisualizerTableFactory(), this.listener);
+        LPMSetDisplayComponent lpmSetDisplayComponent =
+                this.componentFactory.createLPMSetDisplayComponent(LPMSetDisplayComponentType.SimpleLPMsCollection,
+                        model.getLPMs(), this.listener);
         this.tablePanel.add(lpmSetDisplayComponent.getComponent());
 
         displaySelectedLPM(model);
