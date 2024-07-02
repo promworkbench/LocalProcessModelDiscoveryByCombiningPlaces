@@ -17,6 +17,7 @@ import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visua
 import org.processmining.placebasedlpmdiscovery.view.components.LPMDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.components.LPMSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.components.lpmdisplay.LPMPetriNetComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.placesetdisplay.PlaceSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.listeners.NewElementSelectedListener;
 import org.processmining.plugins.utils.ProvidedObjectHelper;
 
@@ -26,7 +27,7 @@ import java.io.Serializable;
 import java.util.Collection;
 
 public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Serializable>
-        extends JComponent implements TableListener<T>, ComponentListener, LPMSetDisplayComponent {
+        extends JComponent implements TableListener<T>, ComponentListener, LPMSetDisplayComponent, PlaceSetDisplayComponent {
 
     private final PluginContext context;
     private final Collection<T> result;
