@@ -1,22 +1,20 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
 
-import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.TextDescribable;
-import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
-import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.TableComposition;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.TableListener;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.PluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers.PlaceVisualizer;
 import org.processmining.placebasedlpmdiscovery.view.components.LPMDisplayComponent;
-import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.components.lpmdisplay.LPMPetriNetComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.components.placesetdisplay.PlaceSetDisplayComponent;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommunicationControllerVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.export.ExportRequestedEmittableDataVM;
 import org.processmining.placebasedlpmdiscovery.view.listeners.NewElementSelectedListener;
-import org.processmining.plugins.utils.ProvidedObjectHelper;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,23 +22,24 @@ import java.io.Serializable;
 import java.util.Collection;
 
 public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Serializable>
-        extends JComponent implements TableListener<T>, ComponentListener, LPMSetDisplayComponent, PlaceSetDisplayComponent {
-
-    private final PluginContext context;
+        extends JComponent implements TableListener<T>, ComponentListener, LPMSetDisplayComponent,
+        PlaceSetDisplayComponent {
     private final Collection<T> result;
     private final PluginVisualizerTableFactory<T> tableFactory;
     private final NewElementSelectedListener<T> newElementSelectedListener;
 
+    private final DataCommunicationControllerVM dcVM;
+
     private JComponent visualizerComponent;
 
-    public SimpleCollectionOfElementsComponent(PluginContext context,
-                                               Collection<T> result,
+    public SimpleCollectionOfElementsComponent(Collection<T> result,
                                                PluginVisualizerTableFactory<T> tableFactory,
-                                               NewElementSelectedListener<T> newElementSelectedListener) {
-        this.context = context;
+                                               NewElementSelectedListener<T> newElementSelectedListener,
+                                               DataCommunicationControllerVM dcVM) {
         this.result = result;
         this.tableFactory = tableFactory;
         this.newElementSelectedListener = newElementSelectedListener;
+        this.dcVM = dcVM;
         init();
     }
 
@@ -101,19 +100,7 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
 
     @Override
     public void export(SerializableCollection<T> collection) {
-        if (collection instanceof LPMResult) {
-            LPMResult lpmResult = (LPMResult) collection;
-            context.getProvidedObjectManager()
-                    .createProvidedObject("Collection exported from LPM Discovery plugin", lpmResult, LPMResult.class, context);
-            ProvidedObjectHelper.setFavorite(context, lpmResult);
-        }
-
-        if (collection instanceof PlaceSet) {
-            PlaceSet places = (PlaceSet) collection;
-            context.getProvidedObjectManager()
-                    .createProvidedObject("Collection exported from LPM Discovery plugin", places, PlaceSet.class, context);
-            ProvidedObjectHelper.setFavorite(context, places);
-        }
+        this.dcVM.emit(new ExportRequestedEmittableDataVM(collection));
     }
 
     @Override
