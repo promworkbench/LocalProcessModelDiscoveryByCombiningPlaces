@@ -23,20 +23,16 @@ import javax.swing.*;
 
 public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultComponent implements LPMDiscoveryResultView, DataListenerVM {
 
-
-    private PluginContext context;
     private LPMDiscoveryResultViewListener listener;
     private final SettablePanelFactory settablePanelFactory;
     private final ComponentFactory componentFactory;
     private final DefaultLPMDiscoveryResultViewModel model;
 
     @Inject
-    public DefaultLPMDiscoveryResultComponent(PluginContext context,
-                                              SettablePanelFactory settablePanelFactory,
+    public DefaultLPMDiscoveryResultComponent(SettablePanelFactory settablePanelFactory,
                                               ComponentFactory componentFactory,
                                               DefaultLPMDiscoveryResultViewModel model) {
         super(3);
-        this.context = context;
         this.settablePanelFactory = settablePanelFactory;
         this.componentFactory = componentFactory;
         this.model = model;
