@@ -98,10 +98,17 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
         }
     }
 
-    private void setLPMSetDisplayComponent(LPMSetDisplayComponent.Type componentType) {
-        if (componentType.equals(LPMSetDisplayComponent.Type.Default)) {
+    private void setLPMSetDisplayComponent(LPMSetDisplayComponentType componentType) {
+        if (componentType.equals(LPMSetDisplayComponentType.SimpleLPMsCollection)) {
             this.display(this.model);
-        } else if (componentType.equals(LPMSetDisplayComponent.Type.Grouped)) {
+        } else if (componentType.equals(LPMSetDisplayComponentType.GroupedLPMs)) {
+//            if (this.lpmSetDisplayPanel.getComponents().length > 0) {
+//                this.lpmSetDisplayPanel.remove(0);
+//            }
+//            LPMSetDisplayComponent lpmSetDisplayComponent =
+//                    this.componentFactory.createLPMSetDisplayComponent(LPMSetDisplayComponentType.GroupedLPMs,
+//                            model.getLPMs(), this.listener);
+//            this.lpmSetDisplayPanel.add(lpmSetDisplayComponent.getComponent());
         }
     }
 }
