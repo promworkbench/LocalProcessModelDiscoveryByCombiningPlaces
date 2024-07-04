@@ -102,17 +102,19 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
     }
 
     private void setLPMSetDisplayComponent(LPMSetDisplayComponentType componentType, Map<String, Object> parameters) {
+        if (this.lpmSetDisplayPanel.getComponents().length > 0) {
+            this.lpmSetDisplayPanel.remove(0);
+        }
+
         if (componentType.equals(LPMSetDisplayComponentType.SimpleLPMsCollection)) {
             this.display(this.model);
         } else if (componentType.equals(LPMSetDisplayComponentType.GroupedLPMs)) {
-            if (this.lpmSetDisplayPanel.getComponents().length > 0) {
-                this.lpmSetDisplayPanel.remove(0);
-            }
             LPMSetDisplayComponent lpmSetDisplayComponent =
                     this.componentFactory.createLPMSetDisplayComponent(LPMSetDisplayComponentType.GroupedLPMs,
                             model.getLPMs(), this.listener, Collections.singletonMap("identifier",
                                     parameters.get("identifier")));
             this.lpmSetDisplayPanel.add(lpmSetDisplayComponent.getComponent());
         }
+        this.revalidate();
     }
 }

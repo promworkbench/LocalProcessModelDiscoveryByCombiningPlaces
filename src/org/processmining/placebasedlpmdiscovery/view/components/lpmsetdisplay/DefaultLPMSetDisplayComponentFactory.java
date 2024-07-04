@@ -37,7 +37,7 @@ public class DefaultLPMSetDisplayComponentFactory implements LPMSetDisplayCompon
         if (type.equals(LPMSetDisplayComponentType.SimpleLPMsCollection)) {
             return new SimpleCollectionOfElementsComponent<>(lpms, tableFactory, listener, dcVM);
         } else if (type.equals(LPMSetDisplayComponentType.GroupedLPMs)) {
-            return new GroupedLPMsComponent(lpms, (String) parameters.get("identifier"));
+            return new GroupedLPMsComponent(lpms, (String) parameters.get("identifier"), this);
         }
         throw new IllegalArgumentException("No implementation for type " + type.name());
     }
