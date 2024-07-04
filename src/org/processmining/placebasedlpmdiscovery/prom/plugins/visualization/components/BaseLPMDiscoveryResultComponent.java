@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class BaseLPMDiscoveryResultComponent extends JComponent {
 
-    protected JPanel lpmSetDisplayPanel;
+    protected JPanel lpmSetDisplayContainer;
     protected final Map<Pair<Integer, Integer>, SettablePanelContainer> settablePanels;
 
     public BaseLPMDiscoveryResultComponent(int countSettablePanels) {
@@ -22,10 +22,10 @@ public class BaseLPMDiscoveryResultComponent extends JComponent {
     }
 
     private void init(int countSettablePanels) {
-        // setting up table container
-        this.lpmSetDisplayPanel = new JPanel();
-        this.lpmSetDisplayPanel.setPreferredSize(new Dimension(50, 50));
-        this.lpmSetDisplayPanel.setLayout(new BorderLayout());
+        // setting up lpmSetDisplay panel
+        this.lpmSetDisplayContainer = new JPanel();
+        this.lpmSetDisplayContainer.setPreferredSize(new Dimension(50, 50));
+        this.lpmSetDisplayContainer.setLayout(new BorderLayout());
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
@@ -47,7 +47,7 @@ public class BaseLPMDiscoveryResultComponent extends JComponent {
         } else {
             throw new NotImplementedException("You can not have more than 5 panels.");
         }
-        this.add(this.lpmSetDisplayPanel, c);
+        this.add(this.lpmSetDisplayContainer, c);
 
         // setting up settable panels containers
         int countSettableContainers = countSettablePanels < 4 ? 3 : 5;

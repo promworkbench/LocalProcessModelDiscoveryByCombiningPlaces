@@ -19,6 +19,7 @@ import org.processmining.placebasedlpmdiscovery.view.models.LPMDiscoveryResultVi
 import org.processmining.placebasedlpmdiscovery.view.views.LPMDiscoveryResultView;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -63,7 +64,9 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
         LPMSetDisplayComponent lpmSetDisplayComponent =
                 this.componentFactory.createLPMSetDisplayComponent(LPMSetDisplayComponentType.SimpleLPMsCollection,
                         model.getLPMs(), this.listener, new HashMap<>());
-        this.lpmSetDisplayPanel.add(lpmSetDisplayComponent.getComponent());
+        this.lpmSetDisplayContainer.add(lpmSetDisplayComponent.getComponent());
+
+        this.lpmSetDisplayContainer.setBorder(new TitledBorder("Simple LPM Collection"));
 
         displaySelectedLPM(model);
     }
@@ -102,8 +105,8 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
     }
 
     private void setLPMSetDisplayComponent(LPMSetDisplayComponentType componentType, Map<String, Object> parameters) {
-        if (this.lpmSetDisplayPanel.getComponents().length > 0) {
-            this.lpmSetDisplayPanel.remove(0);
+        if (this.lpmSetDisplayContainer.getComponents().length > 0) {
+            this.lpmSetDisplayContainer.remove(0);
         }
 
         if (componentType.equals(LPMSetDisplayComponentType.SimpleLPMsCollection)) {
@@ -113,7 +116,8 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
                     this.componentFactory.createLPMSetDisplayComponent(LPMSetDisplayComponentType.GroupedLPMs,
                             model.getLPMs(), this.listener, Collections.singletonMap("identifier",
                                     parameters.get("identifier")));
-            this.lpmSetDisplayPanel.add(lpmSetDisplayComponent.getComponent());
+            this.lpmSetDisplayContainer.add(lpmSetDisplayComponent.getComponent());
+            this.lpmSetDisplayContainer.setBorder(new TitledBorder("Grouped LPMs"));
         }
         this.revalidate();
     }
