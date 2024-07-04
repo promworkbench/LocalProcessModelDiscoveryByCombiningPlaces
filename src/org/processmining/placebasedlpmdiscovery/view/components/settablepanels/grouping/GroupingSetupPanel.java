@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels;
+package org.processmining.placebasedlpmdiscovery.view.components.settablepanels.grouping;
 
 import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingConfig;

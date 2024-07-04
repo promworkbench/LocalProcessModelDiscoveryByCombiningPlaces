@@ -2,7 +2,6 @@ package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.comp
 
 import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.ComponentId;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.lpmsimilarity.LPMSimilarityChooserPanel;
 
 import javax.swing.*;
 import java.util.Map;

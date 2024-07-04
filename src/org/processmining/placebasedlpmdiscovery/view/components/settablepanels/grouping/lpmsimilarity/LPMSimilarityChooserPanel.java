@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.lpmsimilarity;
+package org.processmining.placebasedlpmdiscovery.view.components.settablepanels.grouping.lpmsimilarity;
 
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
@@ -57,12 +57,7 @@ public class LPMSimilarityChooserPanel extends JPanel implements LPMDViewCompone
     }
 
     private Component getDistMethodParametersView(String distMethod) {
-        switch (distMethod) {
-            case "Model Similarity":
-                return similaritySetupPanelMap.get(distMethod);
-            case "Data Attributes":
-                return similaritySetupPanelMap.get(distMethod); //getDistMethodSetupPanelForDataAttributes();
-            case "Mixed":
+        if (similaritySetupPanelMap.containsKey(distMethod)) {
                 return similaritySetupPanelMap.get(distMethod);
         }
         throw new IllegalArgumentException("The distance method " + distMethod + " is unknown.");
