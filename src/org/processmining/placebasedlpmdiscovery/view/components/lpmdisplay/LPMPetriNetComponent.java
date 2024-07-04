@@ -10,7 +10,6 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLP
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventCoverageEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
-import org.processmining.placebasedlpmdiscovery.view.components.LPMDisplayComponent;
 
 import javax.swing.*;
 

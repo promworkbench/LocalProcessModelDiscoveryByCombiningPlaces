@@ -8,7 +8,7 @@ import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.compo
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.TableListener;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.PluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers.PlaceVisualizer;
-import org.processmining.placebasedlpmdiscovery.view.components.LPMDisplayComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.lpmdisplay.LPMDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.components.lpmdisplay.LPMPetriNetComponent;
 import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.components.placesetdisplay.PlaceSetDisplayComponent;
