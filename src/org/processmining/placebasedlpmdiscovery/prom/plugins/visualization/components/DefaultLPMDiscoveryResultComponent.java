@@ -2,7 +2,6 @@ package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.comp
 
 import com.google.inject.Inject;
 import org.apache.commons.math3.util.Pair;
-import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.ComplexEvaluationResultPanel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelContainer;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelFactory;
@@ -61,7 +60,7 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
         LPMSetDisplayComponent lpmSetDisplayComponent =
                 this.componentFactory.createLPMSetDisplayComponent(LPMSetDisplayComponentType.SimpleLPMsCollection,
                         model.getLPMs(), this.listener);
-        this.tablePanel.add(lpmSetDisplayComponent.getComponent());
+        this.lpmSetDisplayPanel.add(lpmSetDisplayComponent.getComponent());
 
         displaySelectedLPM(model);
     }
@@ -103,7 +102,6 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
         if (componentType.equals(LPMSetDisplayComponent.Type.Default)) {
             this.display(this.model);
         } else if (componentType.equals(LPMSetDisplayComponent.Type.Grouped)) {
-
         }
     }
 }
