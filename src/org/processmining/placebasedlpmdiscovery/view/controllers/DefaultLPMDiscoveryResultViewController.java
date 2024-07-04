@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.datacommunication.DataCommunicationController;
 import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.EmittableData;
 import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.EmittableDataType;
+import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.LPMGroupingFinished;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.DefaultLPMDiscoveryResultComponent;
 import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponent;
@@ -14,6 +15,8 @@ import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittable
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.componentchange.LPMSetDisplayComponentChangeEmittableDataVM;
 import org.processmining.placebasedlpmdiscovery.view.models.DefaultLPMDiscoveryResultViewModel;
 import org.processmining.placebasedlpmdiscovery.view.models.LPMDiscoveryResultViewModel;
+
+import java.util.Collections;
 
 public class DefaultLPMDiscoveryResultViewController implements LPMDiscoveryResultViewController {
 
@@ -60,7 +63,9 @@ public class DefaultLPMDiscoveryResultViewController implements LPMDiscoveryResu
     @Override
     public void receive(EmittableData data) {
         if (data.getType().equals(EmittableDataType.LPMGroupingFinished)) {
-            this.dcVM.emit(new LPMSetDisplayComponentChangeEmittableDataVM(LPMSetDisplayComponentType.GroupedLPMs));
+            LPMGroupingFinished cData = (LPMGroupingFinished) data;
+            this.dcVM.emit(new LPMSetDisplayComponentChangeEmittableDataVM(LPMSetDisplayComponentType.GroupedLPMs,
+                    Collections.singletonMap("identifier", cData.getIdentifier())));
         }
     }
 

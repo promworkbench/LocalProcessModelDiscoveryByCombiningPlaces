@@ -17,6 +17,7 @@ import org.processmining.placebasedlpmdiscovery.view.components.ComponentFactory
 import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponentType;
 
 import javax.swing.*;
+import java.util.HashMap;
 
 
 @Plugin(name = "@0 Visualize LPM Result",
@@ -35,6 +36,6 @@ public class LPMResultVisualizer {
         ComponentFactory componentFactory = guice.getInstance(ComponentFactory.class);
 
         return componentFactory.createLPMSetDisplayComponent(LPMSetDisplayComponentType.SimpleLPMsCollection,
-                result.getAllLPMs()).getComponent();
+                result.getAllLPMs(), new HashMap<>()).getComponent();
     }
 }

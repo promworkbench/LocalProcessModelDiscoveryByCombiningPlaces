@@ -41,7 +41,7 @@ public class GroupingController implements DataListener {
                     .addGroupingProperty(config.getIdentifier(), membership[i]);
         }
 
-        this.dc.emit(new LPMGroupingFinished());
+        this.dc.emit(new LPMGroupingFinished(config.getIdentifier()));
     }
 
     @Override

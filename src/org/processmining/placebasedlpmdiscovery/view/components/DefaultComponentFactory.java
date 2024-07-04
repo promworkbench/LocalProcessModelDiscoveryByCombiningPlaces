@@ -12,6 +12,7 @@ import org.processmining.placebasedlpmdiscovery.view.components.placesetdisplay.
 import org.processmining.placebasedlpmdiscovery.view.listeners.NewElementSelectedListener;
 
 import java.util.Collection;
+import java.util.Map;
 
 public class DefaultComponentFactory implements ComponentFactory {
 
@@ -27,15 +28,17 @@ public class DefaultComponentFactory implements ComponentFactory {
 
     @Override
     public LPMSetDisplayComponent createLPMSetDisplayComponent(LPMSetDisplayComponentType type,
-                                                               Collection<LocalProcessModel> lpms) {
-        return this.lpmSetDisplayComponentFactory.createLPMSetDisplayComponent(type, lpms);
+                                                               Collection<LocalProcessModel> lpms,
+                                                               Map<String, Object> parameters) {
+        return this.lpmSetDisplayComponentFactory.createLPMSetDisplayComponent(type, lpms, parameters);
     }
 
     @Override
     public LPMSetDisplayComponent createLPMSetDisplayComponent(LPMSetDisplayComponentType type,
                                                                Collection<LocalProcessModel> lpms,
-                                                               NewElementSelectedListener<LocalProcessModel> listener) {
-        return this.lpmSetDisplayComponentFactory.createLPMSetDisplayComponent(type, lpms, listener);
+                                                               NewElementSelectedListener<LocalProcessModel> listener,
+                                                               Map<String, Object> parameters) {
+        return this.lpmSetDisplayComponentFactory.createLPMSetDisplayComponent(type, lpms, listener, parameters);
     }
 
     @Override

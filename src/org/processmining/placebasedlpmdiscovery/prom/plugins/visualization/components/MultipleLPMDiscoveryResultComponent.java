@@ -13,6 +13,7 @@ import org.processmining.placebasedlpmdiscovery.view.views.MultipleLPMDiscoveryR
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.HashMap;
 
 public class MultipleLPMDiscoveryResultComponent extends JComponent implements MultipleLPMDiscoveryResultsView {
 
@@ -78,7 +79,7 @@ public class MultipleLPMDiscoveryResultComponent extends JComponent implements M
 
         tablePanel.add(
                 this.componentFactory.createLPMSetDisplayComponent(LPMSetDisplayComponentType.SimpleLPMsCollection,
-                        model.getLPMs()).getComponent(),
+                        model.getLPMs(), new HashMap<>()).getComponent(),
                 BorderLayout.CENTER);
 
         tablePanel.revalidate();

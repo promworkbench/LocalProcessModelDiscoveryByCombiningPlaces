@@ -9,15 +9,18 @@ import org.processmining.placebasedlpmdiscovery.view.components.placesetdisplay.
 import org.processmining.placebasedlpmdiscovery.view.listeners.NewElementSelectedListener;
 
 import java.util.Collection;
+import java.util.Map;
 
 public interface ComponentFactory {
 
     LPMSetDisplayComponent createLPMSetDisplayComponent(LPMSetDisplayComponentType type,
-                                                        Collection<LocalProcessModel> lpms);
+                                                        Collection<LocalProcessModel> lpms,
+                                                        Map<String, Object> parameters);
 
     LPMSetDisplayComponent createLPMSetDisplayComponent(LPMSetDisplayComponentType type,
                                                         Collection<LocalProcessModel> lpms,
-                                                        NewElementSelectedListener<LocalProcessModel> listener);
+                                                        NewElementSelectedListener<LocalProcessModel> listener,
+                                                        Map<String, Object> parameters);
 
     PlaceSetDisplayComponent createPlaceSetDisplayComponent(PlaceSetDisplayComponentType type,
                                                             Collection<Place> places);
