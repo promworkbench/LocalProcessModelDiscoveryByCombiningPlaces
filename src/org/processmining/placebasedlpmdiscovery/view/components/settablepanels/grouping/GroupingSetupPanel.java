@@ -1,8 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.view.components.settablepanels.grouping;
 
 import com.google.inject.Inject;
-import org.processmining.placebasedlpmdiscovery.grouping.DefaultGroupingConfig;
-import org.processmining.placebasedlpmdiscovery.grouping.GroupingConfig;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingController;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingUtils;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.ComponentFactory;
@@ -13,6 +11,7 @@ import org.processmining.placebasedlpmdiscovery.view.components.configurationcom
 import org.processmining.placebasedlpmdiscovery.view.components.configurationcomponents.configurations.ViewConfiguration;
 import org.processmining.placebasedlpmdiscovery.view.components.configurationcomponents.configurations.grouping.ClusteringViewConfiguration;
 import org.processmining.placebasedlpmdiscovery.view.components.configurationcomponents.configurations.grouping.GroupingViewConfiguration;
+import org.processmining.placebasedlpmdiscovery.view.components.configurationcomponents.configurations.lpmsimilarity.LPMSimilarityViewConfiguration;
 import org.processmining.placebasedlpmdiscovery.view.components.settablepanels.grouping.clustering.ClusteringSetupPanel;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommunicationControllerVM;
 
@@ -24,6 +23,7 @@ public class GroupingSetupPanel extends JPanel implements ConfigurationComponent
     // components
     private JTextField txtClustId;
     private ClusteringSetupPanel clusteringPanel;
+    private ConfigurationComponent lpmSimilarityChooserPanel;
 
     @Inject
     public GroupingSetupPanel(DataCommunicationControllerVM dc, LPMSetService lpmSetService,
@@ -70,6 +70,7 @@ public class GroupingSetupPanel extends JPanel implements ConfigurationComponent
     @Override
     public ViewConfiguration getConfiguration() {
         return new GroupingViewConfiguration(txtClustId.getText(),
-                (ClusteringViewConfiguration) clusteringPanel.getConfiguration());
+                (ClusteringViewConfiguration) clusteringPanel.getConfiguration(),
+                (LPMSimilarityViewConfiguration) lpmSimilarityChooserPanel.getConfiguration());
     }
 }
