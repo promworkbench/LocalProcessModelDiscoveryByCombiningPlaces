@@ -36,7 +36,7 @@ public class PrecomputedFromFileModelDistance implements ModelDistance {
 
         this.lpmIds = Stream.iterate(0, x -> x + 1)
                 .limit(rowList.size() - 1)
-                .collect(Collectors.toMap(ind -> rowList.get(0)[ind], ind -> ind));
+                .collect(Collectors.toMap(ind -> rowList.get(0)[ind+1], ind -> ind));
         distance = new double[rowList.size() - 1][rowList.size() - 1];
         for (int i = 0; i < rowList.size() - 1; i++) {
             distance[i] = Arrays.stream(Arrays.copyOfRange(rowList.get(i+1), 1, rowList.size()))

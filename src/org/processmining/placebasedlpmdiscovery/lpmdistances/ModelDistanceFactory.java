@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmdistances;
 
 import com.google.inject.Inject;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistance;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistanceFactory;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.MixedModelDistance;
@@ -26,7 +27,7 @@ public class ModelDistanceFactory {
     public ModelDistance getModelDistance(ModelDistanceConfig distanceConfig) {
         switch (distanceConfig.getDistanceMethod()) {
             case DataAttributeModelDistanceConfig.METHOD:
-                return dataAttributeModelDistanceFactory.create();
+                return this.getDataAttributeDistance((DataAttributeModelDistanceConfig) distanceConfig);
             case ProcessModelSimilarityDistanceConfig.METHOD:
                 if (!(distanceConfig instanceof ProcessModelSimilarityDistanceConfig))
                     throw new IllegalStateException("The distance method does not pass on the distance config.");
@@ -39,6 +40,12 @@ public class ModelDistanceFactory {
                 return new PrecomputedFromFileModelDistance((PrecomputedFromFileModelDistanceConfig) distanceConfig);
         }
         throw new IllegalArgumentException("The Distance Method " + distanceConfig.getDistanceMethod() + " is illegal.");
+    }
+
+    private ModelDistance getDataAttributeDistance(DataAttributeModelDistanceConfig distanceConfig) {
+        DataAttributeModelDistance res = dataAttributeModelDistanceFactory.create();
+        res.setAttributes(distanceConfig.getAttributes());
+        return res;
     }
 
     private ModelDistance getProcessModelSimilarityDistance(ProcessModelSimilarityDistanceConfig distanceConfig) {

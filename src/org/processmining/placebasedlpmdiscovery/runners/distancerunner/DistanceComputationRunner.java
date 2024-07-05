@@ -9,6 +9,7 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.processmining.framework.util.ArrayUtils;
 import org.processmining.placebasedlpmdiscovery.InputModule;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.results.FromFileLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
@@ -85,7 +86,7 @@ public class DistanceComputationRunner {
         Table<String, String, Double> distanceTable = tableBuilder.build();
         try (CSVPrinter csvPrinter = CSVFormat.DEFAULT
                 .builder()
-                .setHeader(lpms.stream().map(LocalProcessModel::getShortString).toArray(String[]::new))
+                .setHeader(ArrayUtils.concatAll(new String[]{"LPM"}, lpms.stream().map(LocalProcessModel::getShortString).toArray(String[]::new)))
                 .build()
                 .print(Paths.get(filePath), StandardCharsets.UTF_8)) {
             csvPrinter.printRecords(distanceTable.rowMap().entrySet()
