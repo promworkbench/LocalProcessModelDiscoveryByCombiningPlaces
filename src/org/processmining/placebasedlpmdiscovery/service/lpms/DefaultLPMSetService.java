@@ -8,12 +8,12 @@ import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.
 import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.LPMSetDiscoveredEmittableData;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 
-public class DeafaultLPMSetService implements LPMSetService, DataListener {
+public class DefaultLPMSetService implements LPMSetService, DataListener {
 
     private LPMDiscoveryResult originalLPMSet;
 
     @Inject
-    public DeafaultLPMSetService(DataCommunicationController dc) {
+    public DefaultLPMSetService(DataCommunicationController dc) {
         dc.registerDataListener(this, EmittableDataType.LPMSetDiscovered);
     }
 

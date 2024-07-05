@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.view.components;
 
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.view.components.configurationcomponents.ConfigurationComponentFactory;
 import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponentType;
 import org.processmining.placebasedlpmdiscovery.view.components.placesetdisplay.PlaceSetDisplayComponent;
@@ -28,4 +29,6 @@ public interface ComponentFactory {
     PlaceSetDisplayComponent createPlaceSetDisplayComponent(PlaceSetDisplayComponentType type,
                                                             Collection<Place> places,
                                                             NewElementSelectedListener<Place> listener);
+
+    ConfigurationComponentFactory getConfigurationComponentFactory();
 }

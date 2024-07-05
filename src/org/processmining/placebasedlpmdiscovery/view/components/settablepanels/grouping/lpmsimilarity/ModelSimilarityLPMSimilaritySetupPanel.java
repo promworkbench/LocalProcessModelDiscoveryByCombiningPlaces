@@ -3,10 +3,14 @@ package org.processmining.placebasedlpmdiscovery.view.components.settablepanels.
 import org.processmining.placebasedlpmdiscovery.lpmdistances.processmodelsimilarity.ProcessModelSimilarityMeasure;
 import org.processmining.placebasedlpmdiscovery.view.components.configurationcomponents.configurations.SimpleMapViewConfiguration;
 import org.processmining.placebasedlpmdiscovery.view.components.configurationcomponents.configurations.ViewConfiguration;
+import org.processmining.placebasedlpmdiscovery.view.components.configurationcomponents.configurations.lpmsimilarity.LPMSimilarityViewConfiguration;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
 public class ModelSimilarityLPMSimilaritySetupPanel extends JPanel implements LPMSimilaritySetupComponent {
 
@@ -28,7 +32,9 @@ public class ModelSimilarityLPMSimilaritySetupPanel extends JPanel implements LP
 
     @Override
     public ViewConfiguration getConfiguration() {
-        return new SimpleMapViewConfiguration(Collections.singletonMap("modelSimilarity",
-                (String) this.modelSimComboBox.getSelectedItem()));
+        return new LPMSimilarityViewConfiguration(
+                "Model Similarity",
+                new SimpleMapViewConfiguration(Collections.singletonMap("modelSimilarity",
+                        Objects.requireNonNull(this.modelSimComboBox.getSelectedItem()).toString())));
     }
 }

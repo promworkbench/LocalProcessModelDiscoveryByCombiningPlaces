@@ -8,10 +8,7 @@ import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.compo
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.DefaultSettablePanelFactory;
 import org.processmining.placebasedlpmdiscovery.view.components.settablepanels.grouping.GroupingSetupPanel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelFactory;
-import org.processmining.placebasedlpmdiscovery.view.components.settablepanels.grouping.lpmsimilarity.DataAttributeLPMSimilaritySetupPanel;
-import org.processmining.placebasedlpmdiscovery.view.components.settablepanels.grouping.lpmsimilarity.LPMSimilarityChooserPanel;
-import org.processmining.placebasedlpmdiscovery.view.components.settablepanels.grouping.lpmsimilarity.MixedLPMSimilaritySetupPanel;
-import org.processmining.placebasedlpmdiscovery.view.components.settablepanels.grouping.lpmsimilarity.ModelSimilarityLPMSimilaritySetupPanel;
+import org.processmining.placebasedlpmdiscovery.view.components.settablepanels.grouping.lpmsimilarity.*;
 import org.processmining.placebasedlpmdiscovery.view.controllers.DefaultLPMDiscoveryResultViewController;
 import org.processmining.placebasedlpmdiscovery.view.controllers.LPMDiscoveryResultViewController;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.dependencyinjection.DataCommunicationGuiceModuleVM;
@@ -31,18 +28,10 @@ public class PromViewGuiceModule extends AbstractModule {
         mapBinderSettablePanels.addBinding(ComponentId.Type.BasicLPMEvalMetrics).to(ComplexEvaluationResultPanel.class);
         mapBinderSettablePanels.addBinding(ComponentId.Type.Grouping).to(GroupingSetupPanel.class);
 
-        MapBinder<String, JPanel> mapBinderLPMSimilaritySetupPanels = MapBinder.newMapBinder(binder(),
-                String.class, JPanel.class);
-        mapBinderLPMSimilaritySetupPanels.addBinding("Model Similarity")
-                .to(ModelSimilarityLPMSimilaritySetupPanel.class);
-        mapBinderLPMSimilaritySetupPanels.addBinding("Data Attributes")
-                .to(DataAttributeLPMSimilaritySetupPanel.class);
-        mapBinderLPMSimilaritySetupPanels.addBinding("Mixed")
-                .to(MixedLPMSimilaritySetupPanel.class);
-
         MapBinder<LPMDViewComponentType, LPMDViewComponent> mapBinderLPMDViewComponents =
                 MapBinder.newMapBinder(binder(), LPMDViewComponentType.class, LPMDViewComponent.class);
-        mapBinderLPMDViewComponents.addBinding(LPMDViewComponentType.LPMSimilarityChooser).to(LPMSimilarityChooserPanel.class);
+        mapBinderLPMDViewComponents
+                .addBinding(LPMDViewComponentType.LPMSimilarityChooser).to(LPMSimilarityChooserPanel.class);
 
 
         bind(ComponentFactory.class).to(DefaultComponentFactory.class);

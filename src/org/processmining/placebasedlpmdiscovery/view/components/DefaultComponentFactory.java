@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery.view.components;
 import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.view.components.configurationcomponents.ConfigurationComponentFactory;
 import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponentFactory;
 import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponentType;
@@ -18,12 +19,15 @@ public class DefaultComponentFactory implements ComponentFactory {
 
     private final LPMSetDisplayComponentFactory lpmSetDisplayComponentFactory;
     private final PlaceSetDisplayComponentFactory placeSetDisplayComponentFactory;
+    private final ConfigurationComponentFactory configurationComponentFactory;
 
     @Inject
     public DefaultComponentFactory(LPMSetDisplayComponentFactory lpmSetDisplayComponentFactory,
-                                   PlaceSetDisplayComponentFactory placeSetDisplayComponentFactory) {
+                                   PlaceSetDisplayComponentFactory placeSetDisplayComponentFactory,
+                                   ConfigurationComponentFactory configurationComponentFactory) {
         this.lpmSetDisplayComponentFactory = lpmSetDisplayComponentFactory;
         this.placeSetDisplayComponentFactory = placeSetDisplayComponentFactory;
+        this.configurationComponentFactory = configurationComponentFactory;
     }
 
     @Override
@@ -52,5 +56,10 @@ public class DefaultComponentFactory implements ComponentFactory {
                                                                    Collection<Place> places,
                                                                    NewElementSelectedListener<Place> listener) {
         return this.placeSetDisplayComponentFactory.createPlaceSetDisplayComponent(type, places, listener);
+    }
+
+    @Override
+    public ConfigurationComponentFactory getConfigurationComponentFactory() {
+        return this.configurationComponentFactory;
     }
 }

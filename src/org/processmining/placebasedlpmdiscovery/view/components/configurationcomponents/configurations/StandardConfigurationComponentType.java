@@ -1,0 +1,7 @@
+package org.processmining.placebasedlpmdiscovery.view.components.configurationcomponents.configurations;
+
+import org.processmining.placebasedlpmdiscovery.view.components.configurationcomponents.ConfigurationComponentType;
+
+public enum StandardConfigurationComponentType implements ConfigurationComponentType {
+    LPMSimilarityConfigurationComponent, GroupingConfigurationComponent,
+}

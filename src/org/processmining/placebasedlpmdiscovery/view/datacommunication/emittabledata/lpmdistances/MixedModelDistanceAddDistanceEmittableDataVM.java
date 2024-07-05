@@ -4,15 +4,18 @@ import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittable
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataVM;
 import org.processmining.placebasedlpmdiscovery.view.model.lpmdistances.ModelDistanceVM;
 
+import java.util.Map;
+
 public class MixedModelDistanceAddDistanceEmittableDataVM implements EmittableDataVM {
     private String name;
     private double weight;
-    private ModelDistanceVM model;
+    private Map<String, Object> modelDistanceConfig;
 
-    public MixedModelDistanceAddDistanceEmittableDataVM(String name, double weight, ModelDistanceVM model) {
+    public MixedModelDistanceAddDistanceEmittableDataVM(String name, double weight,
+                                                        Map<String, Object> modelDistanceConfig) {
         this.name = name;
         this.weight = weight;
-        this.model = model;
+        this.modelDistanceConfig = modelDistanceConfig;
     }
 
     public String getName() {
@@ -23,8 +26,8 @@ public class MixedModelDistanceAddDistanceEmittableDataVM implements EmittableDa
         return weight;
     }
 
-    public ModelDistanceVM getModel() {
-        return model;
+    public Map<String, Object> getModelDistanceConfig() {
+        return modelDistanceConfig;
     }
 
     @Override

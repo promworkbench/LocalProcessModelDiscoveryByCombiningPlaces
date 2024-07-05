@@ -1,5 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.view.components.configurationcomponents.configurations;
 
+import org.processmining.placebasedlpmdiscovery.view.components.configurationcomponents.configurations.lpmsimilarity.LPMSimilarityViewConfiguration;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 

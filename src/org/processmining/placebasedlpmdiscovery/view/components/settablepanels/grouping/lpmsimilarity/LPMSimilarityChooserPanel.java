@@ -1,8 +1,10 @@
 package org.processmining.placebasedlpmdiscovery.view.components.settablepanels.grouping.lpmsimilarity;
 
 import com.google.inject.Inject;
-import com.google.inject.assistedinject.Assisted;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.LPMDViewComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.configurationcomponents.ConfigurationComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.configurationcomponents.ConfigurationComponentFactory;
+import org.processmining.placebasedlpmdiscovery.view.components.configurationcomponents.configurations.ViewConfiguration;
 import org.processmining.placebasedlpmdiscovery.view.model.lpmdistances.ModelDistanceVM;
 
 import javax.swing.*;
@@ -12,14 +14,18 @@ import java.awt.event.ItemEvent;
 import java.util.Map;
 import java.util.Objects;
 
-public class LPMSimilarityChooserPanel extends JPanel implements LPMDViewComponent {
+public class LPMSimilarityChooserPanel extends JPanel implements LPMDViewComponent, ConfigurationComponent {
 
-    private final Map<String, JPanel> similaritySetupPanelMap;
-    private final JPanel distMethodParam;
+//    private final Map<String, LPMSimilaritySetupComponent> similaritySetupPanelMap;
+    private final ConfigurationComponentFactory componentFactory;
+
+    // components
+    private final JPanel distMethodParamContainer;
+    private LPMSimilaritySetupComponent distMethodParamComp;
 
     @Inject
-    public LPMSimilarityChooserPanel(Map<String, JPanel> similaritySetupPanelMap) {
-        this.similaritySetupPanelMap = similaritySetupPanelMap;
+    public LPMSimilarityChooserPanel(ConfigurationComponentFactory componentFactory) {
+        this.componentFactory = componentFactory;
 
         this.setLayout(new BorderLayout(10, 0));
         this.setBorder(new TitledBorder("LPM Similarity Chooser"));
@@ -29,42 +35,45 @@ public class LPMSimilarityChooserPanel extends JPanel implements LPMDViewCompone
         distMethodPanel.setLayout(new BoxLayout(distMethodPanel, BoxLayout.X_AXIS));
         distMethodPanel.add(new JLabel("Distance Extraction Method:"));
         distMethodPanel.add(Box.createRigidArea(new Dimension(5, 0)));
-        JComboBox<String> distMethodComboBox = new JComboBox<>(new String[]{"Model Similarity", "Data Attributes", "Mixed"});
+        JComboBox<String> distMethodComboBox = new JComboBox<>(
+                new String[]{"Model Similarity", "Data Attributes", "Mixed"});
+        distMethodComboBox.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                distanceMethodChanged((String) e.getItem());
+            }
+        });
         distMethodPanel.add(distMethodComboBox);
         this.add(distMethodPanel, BorderLayout.PAGE_START);
 
         // the distance method parameter setup panel
-        this.distMethodParam = new JPanel();
-        this.distMethodParam.setPreferredSize(new Dimension(200, 100));
-        this.distMethodParam.setBorder(new TitledBorder("Parameters"));
-
-        distMethodComboBox.addItemListener(e -> {
-            if (e.getStateChange() == ItemEvent.SELECTED) {
-                distanceMethodChanged((String) e.getItem(), this.distMethodParam);
-            }
-        });
-        distanceMethodChanged((String) Objects.requireNonNull(distMethodComboBox.getSelectedItem()), this.distMethodParam);
-        this.add(this.distMethodParam, BorderLayout.CENTER);
+        this.distMethodParamContainer = new JPanel();
+        this.distMethodParamContainer.setPreferredSize(new Dimension(200, 100));
+        this.distMethodParamContainer.setBorder(new TitledBorder("Parameters"));
+        distanceMethodChanged((String) Objects.requireNonNull(distMethodComboBox.getSelectedItem()));
+        this.add(this.distMethodParamContainer, BorderLayout.CENTER);
     }
 
-    private void distanceMethodChanged(String distMethod, JComponent container) {
-        if (container.getComponents().length > 0) {
-            container.remove(0);
+    private void distanceMethodChanged(String distMethod) {
+        if (this.distMethodParamContainer.getComponents().length > 0) {
+            this.distMethodParamContainer.remove(0);
         }
-        container.setBorder(new TitledBorder(distMethod));
-        container.add(getDistMethodParametersView(distMethod));
-        container.revalidate();
+        this.distMethodParamContainer.setBorder(new TitledBorder(distMethod));
+        this.distMethodParamComp = getDistMethodParametersView(distMethod);
+        this.distMethodParamContainer.add(this.distMethodParamComp.getComponent());
+        this.distMethodParamContainer.revalidate();
     }
 
-    private Component getDistMethodParametersView(String distMethod) {
-        if (similaritySetupPanelMap.containsKey(distMethod)) {
-                return similaritySetupPanelMap.get(distMethod);
-        }
-        throw new IllegalArgumentException("The distance method " + distMethod + " is unknown.");
+    private LPMSimilaritySetupComponent getDistMethodParametersView(String distMethod) {
+        return componentFactory.create(LPMSimilarityConfigurationComponentType.getEnum(distMethod));
     }
 
     @Override
-    public Component getComponent() {
+    public ViewConfiguration getConfiguration() {
+        return this.distMethodParamComp.getConfiguration();
+    }
+
+    @Override
+    public JComponent getComponent() {
         return this;
     }
 
