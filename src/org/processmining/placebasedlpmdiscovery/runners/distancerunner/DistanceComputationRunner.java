@@ -65,7 +65,7 @@ public class DistanceComputationRunner {
             System.out.println("LPMs imported");
 
             ModelDistanceController modelDistanceController = injector.getInstance(ModelDistanceController.class);
-            double[][] distances = modelDistanceController.getDistanceMatrix(lpms);
+            double[][] distances = modelDistanceController.getDistanceMatrix(lpms, config.getModelDistanceConfig());
 
             System.out.println("Distances computed");
 

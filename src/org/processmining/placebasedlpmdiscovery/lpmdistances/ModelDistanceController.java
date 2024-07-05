@@ -7,15 +7,16 @@ import java.util.List;
 
 public class ModelDistanceController {
 
-    private final ModelDistance modelDistance;
+    // services
+    private final ModelDistanceFactory modelDistanceFactory;
 
     @Inject
-    public ModelDistanceController(ModelDistanceFactory modelDistanceFactory,
-                                   ModelDistanceConfig modelDistanceConfig) {
-        this.modelDistance = modelDistanceFactory.getModelDistance(modelDistanceConfig);
+    public ModelDistanceController(ModelDistanceFactory modelDistanceFactory) {
+        this.modelDistanceFactory = modelDistanceFactory;
     }
 
-    public double[][] getDistanceMatrix(List<LocalProcessModel> lpmList) {
+    public double[][] getDistanceMatrix(List<LocalProcessModel> lpmList, ModelDistanceConfig modelDistanceConfig) {
+        ModelDistance modelDistance = this.modelDistanceFactory.getModelDistance(modelDistanceConfig);
         return modelDistance.calculatePairwiseDistance(lpmList);
     }
 }

@@ -33,7 +33,7 @@ public class GroupingController implements DataListener {
 
         int[] membership = ClusteringLPMs.cluster(
                 lpmList,
-                modelDistanceController.getDistanceMatrix(lpmList),
+                modelDistanceController.getDistanceMatrix(lpmList, config.getModelDistanceConfig()),
                 config.getClusteringConfig().getClusteringAlgorithm(),
                 config.getClusteringConfig().getClusteringParam());
 
