@@ -17,7 +17,7 @@ public class DefaultGroupingConfig implements GroupingConfig {
     public DefaultGroupingConfig() {
         this("default",
                 new DefaultClusteringConfig(),
-                new DataAttributeModelDistanceConfig());
+                new DataAttributeModelDistanceConfig(null));
     }
 
     public DefaultGroupingConfig(String identifier,

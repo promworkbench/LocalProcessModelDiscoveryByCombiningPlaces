@@ -19,10 +19,9 @@ public class ModelDistanceConfigDeserializer implements JsonDeserializer<ModelDi
         JsonObject jsonObject = json.getAsJsonObject();
         switch (jsonObject.get("distanceMethod").getAsString()) {
             case DataAttributeModelDistanceConfig.METHOD:
-                DataAttributeModelDistanceConfig config = new DataAttributeModelDistanceConfig();
-                config.setAttributes(
+                DataAttributeModelDistanceConfig config = new DataAttributeModelDistanceConfig(
                         new HashSet<>(context.deserialize(jsonObject.get("attributes"),
-                        new TypeToken<List<String>>(){}.getType())));
+                                new TypeToken<List<String>>(){}.getType())));
                 return config;
             case ProcessModelSimilarityDistanceConfig.METHOD:
                 return new ProcessModelSimilarityDistanceConfig(ProcessModelSimilarityMeasure

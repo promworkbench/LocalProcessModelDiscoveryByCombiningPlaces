@@ -12,6 +12,8 @@ import org.apache.commons.csv.CSVPrinter;
 import org.processmining.placebasedlpmdiscovery.InputModule;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.results.FromFileLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeVectorExtractor;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeVectorExtractorFactory;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.dependencyinjection.DataAttributeVectorExtractionDIModule;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerInput;
@@ -50,15 +52,18 @@ public class DataAttributeExtractorRunner {
             System.out.println(config);
             Injector injector = Guice.createInjector(
                     new InputModule(LogUtils
-                            .readLogFromFile(config.getInput().get(RunnerInput.EVENT_LOG)))
-//                    new DataAttributeVectorExtractionDIModule()
+                            .readLogFromFile(config.getInput().get(RunnerInput.EVENT_LOG))),
+                    new DataAttributeVectorExtractionDIModule()
             );
 
             LPMDiscoveryResult result = new FromFileLPMDiscoveryResult(config.getInput().get(RunnerInput.LPMS));
             List<LocalProcessModel> lpms = new ArrayList<>(result.getAllLPMs());
 
-            DataAttributeVectorExtractor vectorExtractor = injector.getInstance(DataAttributeVectorExtractor.class);
-            vectorExtractor.chooseSubsetOfAttributes(config.getAttributes());
+            DataAttributeVectorExtractorFactory vectorExtractorFactory =
+                    injector.getInstance(DataAttributeVectorExtractorFactory.class);
+            DataAttributeVectorExtractor vectorExtractor = vectorExtractorFactory.create(config.getAttributes());
+//            DataAttributeVectorExtractor vectorExtractor = injector.getInstance(DataAttributeVectorExtractor.class);
+//            vectorExtractor.chooseSubsetOfAttributes(config.getAttributes());
 
             writeVectors(config.getOutput().get(RunnerOutput.DATA_ATTRIBUTE_VECTORS),
                     lpms,

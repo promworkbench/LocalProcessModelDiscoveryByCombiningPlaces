@@ -10,6 +10,10 @@ public class DataAttributeModelDistanceConfig implements ModelDistanceConfig {
 
     private Collection<String> attributes;
 
+    public DataAttributeModelDistanceConfig(Collection<String> attributes) {
+        this.attributes = attributes;
+    }
+
     public Collection<String> getAttributes() {
         return attributes;
     }

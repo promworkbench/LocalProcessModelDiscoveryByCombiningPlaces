@@ -34,7 +34,8 @@ public class ModelSimilarityLPMSimilaritySetupPanel extends JPanel implements LP
     public ViewConfiguration getConfiguration() {
         return new LPMSimilarityViewConfiguration(
                 "Model Similarity",
-                new SimpleMapViewConfiguration(Collections.singletonMap("modelSimilarity",
-                        Objects.requireNonNull(this.modelSimComboBox.getSelectedItem()).toString())));
+                Collections.singletonMap(
+                        "modelSimilarity",
+                        Objects.requireNonNull(this.modelSimComboBox.getSelectedItem())));
     }
 }

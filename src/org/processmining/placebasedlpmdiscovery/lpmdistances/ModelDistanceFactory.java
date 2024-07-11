@@ -1,9 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmdistances;
 
 import com.google.inject.Inject;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistance;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistanceConfig;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistanceFactory;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.*;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.MixedModelDistance;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.MixedModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.WeightedModelDistanceConfig;
@@ -16,14 +14,13 @@ import java.util.stream.Collectors;
 
 public class ModelDistanceFactory {
 
-    private final DataAttributeModelDistanceFactory dataAttributeModelDistanceFactory;
+    private final DataAttributeVectorExtractorFactory dataAttributeVectorExtractorFactory;
 
     @Inject
-    public ModelDistanceFactory(DataAttributeModelDistanceFactory dataAttributeModelDistanceFactory) {
-        this.dataAttributeModelDistanceFactory = dataAttributeModelDistanceFactory;
+    public ModelDistanceFactory(DataAttributeVectorExtractorFactory dataAttributeVectorExtractorFactory) {
+        this.dataAttributeVectorExtractorFactory = dataAttributeVectorExtractorFactory;
     }
 
-    @Inject
     public ModelDistance getModelDistance(ModelDistanceConfig distanceConfig) {
         switch (distanceConfig.getDistanceMethod()) {
             case DataAttributeModelDistanceConfig.METHOD:
@@ -43,8 +40,9 @@ public class ModelDistanceFactory {
     }
 
     private ModelDistance getDataAttributeDistance(DataAttributeModelDistanceConfig distanceConfig) {
-        DataAttributeModelDistance res = dataAttributeModelDistanceFactory.create();
-        res.setAttributes(distanceConfig.getAttributes());
+        DataAttributeModelDistance res = new EuclideanDataAttributeModelDistance(
+                dataAttributeVectorExtractorFactory.create(distanceConfig.getAttributes())
+        );
         return res;
     }
 
