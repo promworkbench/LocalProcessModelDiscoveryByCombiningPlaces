@@ -1,18 +1,18 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories;
 
+import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.model.TextDescribable;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.CustomObjectTableModel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.GenericTextDescribableTableComponent;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.TableListener;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommunicationControllerVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.tableselection.NewLPMSelectedEmittableDataVM;
 
 import javax.swing.*;
-import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.Collection;
 import java.util.Iterator;
@@ -21,6 +21,13 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisualizerTableFactory<LocalProcessModel> {
+
+    private final DataCommunicationControllerVM dcVM;
+
+    @Inject
+    public LPMResultPluginVisualizerTableFactory(DataCommunicationControllerVM dcVM) {
+        this.dcVM = dcVM;
+    }
 
     private static double getResultOrDefault(LocalProcessModel lpm, LPMEvaluationResultId resultId) {
         SimpleEvaluationResult result = lpm.getAdditionalInfo()
@@ -81,5 +88,10 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
         });
         popupMenu.add(exportItem);
         return popupMenu;
+    }
+
+    @Override
+    protected void newSelection(LocalProcessModel selectedObject) {
+        this.dcVM.emit(new NewLPMSelectedEmittableDataVM(selectedObject));
     }
 }

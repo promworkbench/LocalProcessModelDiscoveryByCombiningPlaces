@@ -1,10 +1,13 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories;
 
+import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.CustomObjectTableModel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.GenericTextDescribableTableComponent;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommunicationControllerVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.tableselection.NewPlaceSelectedEmittableDataVM;
 
 import javax.swing.*;
 import java.util.Collection;
@@ -14,6 +17,13 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class PlaceSetPluginVisualizerTableFactory extends AbstractPluginVisualizerTableFactory<Place> {
+
+    private final DataCommunicationControllerVM dcVM;
+
+    @Inject
+    public PlaceSetPluginVisualizerTableFactory(DataCommunicationControllerVM dcVM) {
+        this.dcVM = dcVM;
+    }
 
     @Override
     protected Map<Integer, Place> getIndexObjectMap(Collection<Place> elements) {
@@ -48,6 +58,11 @@ public class PlaceSetPluginVisualizerTableFactory extends AbstractPluginVisualiz
         });
         popupMenu.add(exportItem);
         return popupMenu;
+    }
+
+    @Override
+    protected void newSelection(Place selectedObject) {
+        this.dcVM.emit(new NewPlaceSelectedEmittableDataVM(selectedObject));
     }
 
 }

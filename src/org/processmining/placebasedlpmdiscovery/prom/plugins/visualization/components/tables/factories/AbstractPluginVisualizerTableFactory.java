@@ -8,7 +8,6 @@ import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.compo
 
 import javax.swing.*;
 import javax.swing.table.TableRowSorter;
-import java.awt.event.MouseAdapter;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
@@ -56,6 +55,7 @@ public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescrib
             int selectedIndex = lsm.isSelectedIndex(e.getFirstIndex()) ?
                     e.getFirstIndex() : lsm.isSelectedIndex(e.getLastIndex()) ? e.getLastIndex() : 0;
             listener.newSelection(indexObjectMap.get(table.convertRowIndexToModel(selectedIndex)));
+//            this.newSelection(indexObjectMap.get(table.convertRowIndexToModel(selectedIndex)));
         });
 
         // select the first row in the beginning
@@ -69,5 +69,7 @@ public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescrib
     protected abstract CustomObjectTableModel<T> createTableModel(Map<Integer, T> indexObjectMap);
 
     protected abstract JPopupMenu getPopupMenu(GenericTextDescribableTableComponent<T> table);
+
+    protected abstract void newSelection(T selectedObject);
 
 }
