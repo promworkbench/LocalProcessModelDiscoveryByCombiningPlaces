@@ -4,6 +4,7 @@ import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.CustomObjectTableModel;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.GenericTextDescribableTableComponent;
 
 import javax.swing.*;
 import java.util.Collection;
@@ -35,7 +36,7 @@ public class PlaceSetPluginVisualizerTableFactory extends AbstractPluginVisualiz
     }
 
     @Override
-    protected JPopupMenu getPopupMenu() {
+    protected JPopupMenu getPopupMenu(GenericTextDescribableTableComponent<Place> table) {
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem exportItem = new JMenuItem("Export");
         exportItem.addActionListener(e -> {

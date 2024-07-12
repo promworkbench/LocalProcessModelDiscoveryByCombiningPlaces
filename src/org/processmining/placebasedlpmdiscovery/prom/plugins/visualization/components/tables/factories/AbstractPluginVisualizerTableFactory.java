@@ -16,8 +16,6 @@ import java.util.Map;
 
 public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescribable & Serializable> implements PluginVisualizerTableFactory<T> {
 
-    protected GenericTextDescribableTableComponent<T> table;
-
     protected TableListener<T> listener;
 
     @Override
@@ -26,7 +24,7 @@ public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescrib
 
         // create table
         Map<Integer, T> indexObjectMap = getIndexObjectMap(result);
-        table = new GenericTextDescribableTableComponent<>(indexObjectMap);
+        GenericTextDescribableTableComponent<T> table = new GenericTextDescribableTableComponent<>(indexObjectMap);
 
         // set table model
         CustomObjectTableModel<T> tableModel = createTableModel(indexObjectMap);
@@ -62,7 +60,7 @@ public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescrib
 
         // select the first row in the beginning
         table.changeSelection(0, 0, false, false);
-        table.setComponentPopupMenu(this.getPopupMenu());
+        table.setComponentPopupMenu(this.getPopupMenu(table));
         return table;
     }
 
@@ -70,6 +68,6 @@ public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescrib
 
     protected abstract CustomObjectTableModel<T> createTableModel(Map<Integer, T> indexObjectMap);
 
-    protected abstract JPopupMenu getPopupMenu();
+    protected abstract JPopupMenu getPopupMenu(GenericTextDescribableTableComponent<T> table);
 
 }

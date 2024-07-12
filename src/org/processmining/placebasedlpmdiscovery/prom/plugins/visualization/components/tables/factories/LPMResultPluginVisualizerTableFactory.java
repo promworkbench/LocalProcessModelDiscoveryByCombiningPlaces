@@ -69,7 +69,7 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
     }
 
     @Override
-    protected JPopupMenu getPopupMenu() {
+    protected JPopupMenu getPopupMenu(GenericTextDescribableTableComponent<LocalProcessModel> table) {
         JPopupMenu popupMenu = new JPopupMenu();
         JMenuItem exportItem = new JMenuItem("Export");
         exportItem.addActionListener(e -> {
