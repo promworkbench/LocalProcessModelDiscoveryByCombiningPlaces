@@ -30,8 +30,7 @@ public class PromViewGuiceModule extends AbstractModule {
 
         MapBinder<LPMDViewComponentType, LPMDViewComponent> mapBinderLPMDViewComponents =
                 MapBinder.newMapBinder(binder(), LPMDViewComponentType.class, LPMDViewComponent.class);
-        mapBinderLPMDViewComponents
-                .addBinding(LPMDViewComponentType.LPMSimilarityChooser).to(LPMSimilarityChooserPanel.class);
+//        mapBinderLPMDViewComponents.addBinding(LPMDViewComponentType.LPMSimilarityChooser).to(LPMSimilarityChooserPanel.class);
 
 
         bind(ComponentFactory.class).to(DefaultComponentFactory.class);

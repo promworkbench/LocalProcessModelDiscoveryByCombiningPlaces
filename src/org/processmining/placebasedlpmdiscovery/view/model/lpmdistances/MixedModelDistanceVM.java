@@ -27,4 +27,12 @@ public class MixedModelDistanceVM implements org.processmining.placebasedlpmdisc
         this.weights.remove(key);
         this.distances.remove(key);
     }
+
+    public Map<String, Double> getWeights() {
+        return weights;
+    }
+
+    public Map<String, Map<String, Object>> getDistances() {
+        return distances;
+    }
 }

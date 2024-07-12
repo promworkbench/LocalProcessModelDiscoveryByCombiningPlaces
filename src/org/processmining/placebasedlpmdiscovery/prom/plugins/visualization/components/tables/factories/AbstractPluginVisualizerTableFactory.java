@@ -8,6 +8,7 @@ import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.compo
 
 import javax.swing.*;
 import javax.swing.table.TableRowSorter;
+import java.awt.event.MouseAdapter;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
@@ -49,14 +50,16 @@ public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescrib
         // set the row selection to single row
         table.getSelectionModel().setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         // add selection listener
-        table.getSelectionModel().addListSelectionListener(listSelectionEvent -> {
-            if (listSelectionEvent.getValueIsAdjusting()) // if the value is adjusting
+        table.getSelectionModel().addListSelectionListener(e -> {
+            if (e.getValueIsAdjusting()) // if the value is adjusting
                 return; // don't do anything
 
-            if (table.getSelectedRowCount() == 1) {
-                listener.newSelection(indexObjectMap.get(table.convertRowIndexToModel(table.getSelectedRow())));
-            }
+            ListSelectionModel lsm = (ListSelectionModel)e.getSource();
+            int selectedIndex = lsm.isSelectedIndex(e.getFirstIndex()) ?
+                    e.getFirstIndex() : lsm.isSelectedIndex(e.getLastIndex()) ? e.getLastIndex() : 0;
+            listener.newSelection(indexObjectMap.get(table.convertRowIndexToModel(selectedIndex)));
         });
+
         // select the first row in the beginning
         table.changeSelection(0, 0, false, false);
         table.setComponentPopupMenu(this.getPopupMenu());

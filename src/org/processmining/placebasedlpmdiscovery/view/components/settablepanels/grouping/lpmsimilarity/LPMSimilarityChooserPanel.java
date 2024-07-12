@@ -14,7 +14,7 @@ import java.awt.event.ItemEvent;
 import java.util.Map;
 import java.util.Objects;
 
-public class LPMSimilarityChooserPanel extends JPanel implements LPMDViewComponent, ConfigurationComponent {
+public class LPMSimilarityChooserPanel extends JPanel implements ConfigurationComponent {
 
 //    private final Map<String, LPMSimilaritySetupComponent> similaritySetupPanelMap;
     private final ConfigurationComponentFactory componentFactory;
@@ -75,10 +75,5 @@ public class LPMSimilarityChooserPanel extends JPanel implements LPMDViewCompone
     @Override
     public JComponent getComponent() {
         return this;
-    }
-
-    @Override
-    public ModelDistanceVM getModel() {
-        return null;
     }
 }

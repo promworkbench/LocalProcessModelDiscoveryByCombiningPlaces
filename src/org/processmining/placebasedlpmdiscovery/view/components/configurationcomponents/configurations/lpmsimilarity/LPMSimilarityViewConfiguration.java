@@ -9,12 +9,17 @@ import java.util.Map;
 public class LPMSimilarityViewConfiguration implements ViewConfiguration {
 
     private final String lpmSimilarityType;
-    private final Map<String, Object> parameterConfiguration;
+    protected final Map<String, Object> parameterConfiguration;
 
     public LPMSimilarityViewConfiguration(String lpmSimilarityType,
                                           Map<String, Object> parameterConfiguration) {
         this.lpmSimilarityType = lpmSimilarityType;
         this.parameterConfiguration = parameterConfiguration;
+    }
+
+    public LPMSimilarityViewConfiguration(Map<String, Object> map) {
+        this.lpmSimilarityType = (String) map.get("type");
+        this.parameterConfiguration = (Map<String, Object>) map.get("parameters");
     }
 
     @Override
