@@ -1,11 +1,10 @@
-package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories;
+package org.processmining.placebasedlpmdiscovery.view.components.general.tables.factories;
 
 import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
-import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.CustomObjectTableModel;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.GenericTextDescribableTableComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.general.tables.CustomObjectTableModel;
+import org.processmining.placebasedlpmdiscovery.view.components.general.tables.GenericTextDescribableTableComponent;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommunicationControllerVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.tableselection.NewPlaceSelectedEmittableDataVM;
 

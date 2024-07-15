@@ -1,9 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
 
 import com.google.inject.Inject;
-import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.controlcomponents.TwoLPMDiscoveryResultsComparisonComponent;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.LPMResultPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.view.components.ComponentFactory;
 import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponentType;
 import org.processmining.placebasedlpmdiscovery.view.controllers.MultipleLPMDiscoveryResultsViewController;

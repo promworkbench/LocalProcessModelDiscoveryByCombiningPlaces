@@ -10,14 +10,11 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableList;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.SimpleCollectionOfElementsComponent;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.PlaceSetPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.dependencyinjection.PromViewGuiceModule;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.models.graphbased.ViewSpecificAttributeMap;
 import org.processmining.models.jgraph.ProMJGraphVisualizer;
 import org.processmining.placebasedlpmdiscovery.view.components.ComponentFactory;
-import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponentType;
 import org.processmining.placebasedlpmdiscovery.view.components.placesetdisplay.PlaceSetDisplayComponentType;
 
 import javax.swing.*;

@@ -17,8 +17,6 @@ import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.compo
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettableComponentFactory;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelContainer;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.WeirdComponentController;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.TableComposition;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.LPMResultPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.plugins.utils.ProvidedObjectHelper;
 

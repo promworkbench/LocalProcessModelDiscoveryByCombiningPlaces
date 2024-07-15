@@ -1,10 +1,10 @@
-package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories;
+package org.processmining.placebasedlpmdiscovery.view.components.general.tables.factories;
 
 import org.processmining.placebasedlpmdiscovery.model.TextDescribable;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.CustomObjectTableModel;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.GenericTextDescribableTableComponent;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.TableListener;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.VisibilityControllableTableColumnModel;
+import org.processmining.placebasedlpmdiscovery.view.components.general.tables.TableListener;
+import org.processmining.placebasedlpmdiscovery.view.components.general.tables.CustomObjectTableModel;
+import org.processmining.placebasedlpmdiscovery.view.components.general.tables.GenericTextDescribableTableComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.general.tables.VisibilityControllableTableColumnModel;
 
 import javax.swing.*;
 import javax.swing.table.TableRowSorter;

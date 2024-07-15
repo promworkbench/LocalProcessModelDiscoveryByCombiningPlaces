@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables;
+package org.processmining.placebasedlpmdiscovery.view.components.general.tables;
 
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumn;

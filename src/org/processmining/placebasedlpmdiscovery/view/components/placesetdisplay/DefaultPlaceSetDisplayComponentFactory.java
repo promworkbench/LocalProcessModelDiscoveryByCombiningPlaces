@@ -3,7 +3,7 @@ package org.processmining.placebasedlpmdiscovery.view.components.placesetdisplay
 import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.SimpleCollectionOfElementsComponent;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.PluginVisualizerTableFactory;
+import org.processmining.placebasedlpmdiscovery.view.components.general.tables.factories.PluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommunicationControllerVM;
 import org.processmining.placebasedlpmdiscovery.view.listeners.NewElementSelectedListener;
 

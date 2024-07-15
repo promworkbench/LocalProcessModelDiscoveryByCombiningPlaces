@@ -1,8 +1,8 @@
-package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories;
+package org.processmining.placebasedlpmdiscovery.view.components.general.tables.factories;
 
 import org.processmining.placebasedlpmdiscovery.model.TextDescribable;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.GenericTextDescribableTableComponent;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.TableListener;
+import org.processmining.placebasedlpmdiscovery.view.components.general.tables.TableListener;
+import org.processmining.placebasedlpmdiscovery.view.components.general.tables.GenericTextDescribableTableComponent;
 
 import java.io.Serializable;
 import java.util.Collection;

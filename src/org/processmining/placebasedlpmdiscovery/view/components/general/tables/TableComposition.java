@@ -1,11 +1,9 @@
-package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables;
+package org.processmining.placebasedlpmdiscovery.view.components.general.tables;
 
 import org.processmining.placebasedlpmdiscovery.model.TextDescribable;
-import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.ComponentId;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.ICommunicativePanel;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.AbstractPluginVisualizerTableFactory;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.PluginVisualizerTableFactory;
+import org.processmining.placebasedlpmdiscovery.view.components.general.tables.factories.PluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.utils.RegexConverter;
 
 import javax.swing.*;

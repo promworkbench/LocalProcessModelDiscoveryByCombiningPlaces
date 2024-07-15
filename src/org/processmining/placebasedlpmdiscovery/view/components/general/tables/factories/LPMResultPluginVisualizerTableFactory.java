@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories;
+package org.processmining.placebasedlpmdiscovery.view.components.general.tables.factories;
 
 import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
@@ -7,8 +7,8 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEval
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.CustomObjectTableModel;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.GenericTextDescribableTableComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.general.tables.CustomObjectTableModel;
+import org.processmining.placebasedlpmdiscovery.view.components.general.tables.GenericTextDescribableTableComponent;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommunicationControllerVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.tableselection.NewLPMSelectedEmittableDataVM;
 
