@@ -13,6 +13,7 @@ import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommu
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataTypeVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.componentchange.LPMSetDisplayComponentChangeEmittableDataVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.tableselection.NewLPMSelectedEmittableDataVM;
 import org.processmining.placebasedlpmdiscovery.view.models.DefaultLPMDiscoveryResultViewModel;
 import org.processmining.placebasedlpmdiscovery.view.models.LPMDiscoveryResultViewModel;
 
@@ -42,12 +43,7 @@ public class DefaultLPMDiscoveryResultViewController implements LPMDiscoveryResu
         this.dc.registerDataListener(this, EmittableDataType.LPMGroupingFinished);
 
         this.dcVM.registerDataListener(this.view, EmittableDataTypeVM.LPMSetDisplayComponentChangeVM);
-    }
-
-    @Override
-    public void newLPMSelected(LocalProcessModel lpm) {
-        this.model.setSelectedLPM(lpm);
-        this.view.displaySelectedLPM(this.model);
+        this.dcVM.registerDataListener(this, EmittableDataTypeVM.NewLPMSelectedVM);
     }
 
     @Override
@@ -71,6 +67,10 @@ public class DefaultLPMDiscoveryResultViewController implements LPMDiscoveryResu
 
     @Override
     public void receive(EmittableDataVM data) {
-
+        if (data.getType().equals(EmittableDataTypeVM.NewLPMSelectedVM)) {
+            NewLPMSelectedEmittableDataVM cData = (NewLPMSelectedEmittableDataVM) data;
+            this.model.setSelectedLPM(cData.getLpm());
+            this.view.displaySelectedLPM(this.model);
+        }
     }
 }

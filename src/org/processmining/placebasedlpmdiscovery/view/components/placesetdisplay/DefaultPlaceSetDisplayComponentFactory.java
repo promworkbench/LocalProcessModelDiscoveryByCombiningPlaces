@@ -23,8 +23,7 @@ public class DefaultPlaceSetDisplayComponentFactory implements PlaceSetDisplayCo
     @Override
     public PlaceSetDisplayComponent createPlaceSetDisplayComponent(PlaceSetDisplayComponentType type,
                                                                    Collection<Place> places) {
-        return createPlaceSetDisplayComponent(type, places, place -> {
-        });
+        return createPlaceSetDisplayComponent(type, places, null);
     }
 
     @Override

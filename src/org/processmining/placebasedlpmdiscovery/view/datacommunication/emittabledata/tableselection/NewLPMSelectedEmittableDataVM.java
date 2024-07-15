@@ -12,6 +12,10 @@ public class NewLPMSelectedEmittableDataVM implements EmittableDataVM {
         this.lpm = lpm;
     }
 
+    public LocalProcessModel getLpm() {
+        return lpm;
+    }
+
     @Override
     public EmittableDataTypeVM getType() {
         return EmittableDataTypeVM.NewLPMSelectedVM;

@@ -26,7 +26,7 @@ public class DefaultLPMSetDisplayComponentFactory implements LPMSetDisplayCompon
     public LPMSetDisplayComponent createLPMSetDisplayComponent(LPMSetDisplayComponentType type,
                                                                Collection<LocalProcessModel> lpms,
                                                                Map<String, Object> parameters) {
-        return createLPMSetDisplayComponent(type, lpms, lpm -> {}, parameters);
+        return createLPMSetDisplayComponent(type, lpms, null, parameters);
     }
 
     @Override

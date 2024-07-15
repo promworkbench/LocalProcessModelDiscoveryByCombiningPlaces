@@ -9,6 +9,11 @@ public class NewPlaceSelectedEmittableDataVM implements EmittableDataVM {
     public NewPlaceSelectedEmittableDataVM(Place place) {
         this.place = place;
     }
+
+    public Place getPlace() {
+        return place;
+    }
+
     @Override
     public EmittableDataTypeVM getType() {
         return EmittableDataTypeVM.NewPlaceSelectedVM;

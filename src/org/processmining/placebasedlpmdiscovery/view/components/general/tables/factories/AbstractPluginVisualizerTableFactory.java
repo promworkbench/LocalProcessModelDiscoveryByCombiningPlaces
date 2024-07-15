@@ -54,8 +54,8 @@ public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescrib
             ListSelectionModel lsm = (ListSelectionModel)e.getSource();
             int selectedIndex = lsm.isSelectedIndex(e.getFirstIndex()) ?
                     e.getFirstIndex() : lsm.isSelectedIndex(e.getLastIndex()) ? e.getLastIndex() : 0;
-            listener.newSelection(indexObjectMap.get(table.convertRowIndexToModel(selectedIndex)));
-//            this.newSelection(indexObjectMap.get(table.convertRowIndexToModel(selectedIndex)));
+//            listener.newSelection(indexObjectMap.get(table.convertRowIndexToModel(selectedIndex)));
+            this.newSelection(indexObjectMap.get(table.convertRowIndexToModel(selectedIndex)));
         });
 
         // select the first row in the beginning
