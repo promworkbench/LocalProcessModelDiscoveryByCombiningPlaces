@@ -11,6 +11,7 @@ import org.processmining.placebasedlpmdiscovery.view.components.general.tables.C
 import org.processmining.placebasedlpmdiscovery.view.components.general.tables.GenericTextDescribableTableComponent;
 import org.processmining.placebasedlpmdiscovery.view.components.general.tables.factories.AbstractPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommunicationControllerVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.export.ExportRequestedEmittableDataVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.tableselection.NewLPMSelectedEmittableDataVM;
 
 import javax.swing.*;
@@ -85,7 +86,7 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
             for (Integer ind : table.getSelectedRows()) {
                 res.add(table.getIndexMap().get(table.convertRowIndexToModel(ind)));
             }
-            this.listener.export(res);
+            this.dcVM.emit(new ExportRequestedEmittableDataVM(res));
         });
         popupMenu.add(exportItem);
         return popupMenu;

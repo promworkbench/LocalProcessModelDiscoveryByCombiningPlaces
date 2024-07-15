@@ -99,11 +99,6 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
     }
 
     @Override
-    public void export(SerializableCollection<T> collection) {
-        this.dcVM.emit(new ExportRequestedEmittableDataVM(collection));
-    }
-
-    @Override
     public void componentExpansion(ComponentId componentId, boolean expanded) {
         // change visibility of lpm container
 //        this.visualizerComponent.setVisible(!expanded);

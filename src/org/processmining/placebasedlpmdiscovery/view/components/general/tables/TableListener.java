@@ -8,6 +8,4 @@ import java.io.Serializable;
 public interface TableListener<T extends Serializable> extends ComponentListener {
 
     void newSelection(T selectedObject);
-
-    void export(SerializableCollection<T> collection);
 }
