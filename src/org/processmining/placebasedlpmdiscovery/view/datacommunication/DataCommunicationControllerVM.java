@@ -6,7 +6,7 @@ import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittable
 
 public interface DataCommunicationControllerVM {
 
-    void registerDataListener(DataListenerVM dataListenerVM, EmittableDataTypeVM dataType);
+    void registerDataListener(DataListenerVM dataListenerVM, String topic);
 
     void emit(EmittableDataVM data);
 }

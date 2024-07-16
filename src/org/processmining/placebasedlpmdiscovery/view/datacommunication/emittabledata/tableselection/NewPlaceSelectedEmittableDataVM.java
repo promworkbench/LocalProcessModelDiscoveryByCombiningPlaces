@@ -18,4 +18,9 @@ public class NewPlaceSelectedEmittableDataVM implements EmittableDataVM {
     public EmittableDataTypeVM getType() {
         return EmittableDataTypeVM.NewPlaceSelectedVM;
     }
+
+    @Override
+    public String getTopic() {
+        return this.getType().name();
+    }
 }

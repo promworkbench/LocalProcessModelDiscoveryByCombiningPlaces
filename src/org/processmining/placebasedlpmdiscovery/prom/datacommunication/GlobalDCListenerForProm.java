@@ -18,7 +18,7 @@ public class GlobalDCListenerForProm implements DataListenerVM {
     @Inject
     public GlobalDCListenerForProm(PluginContext context, DataCommunicationControllerVM dcVM) {
         this.context = context;
-        dcVM.registerDataListener(this, EmittableDataTypeVM.ExportRequestedVM);
+        dcVM.registerDataListener(this, EmittableDataTypeVM.ExportRequestedVM.name());
     }
 
     @Override

@@ -13,20 +13,20 @@ import java.util.Map;
 @Singleton
 public class GlobalDCControllerVM implements DataCommunicationControllerVM {
 
-    private final Map<EmittableDataTypeVM, Collection<DataListenerVM>> registeredDL;
+    private final Map<String, Collection<DataListenerVM>> registeredDL;
 
     public GlobalDCControllerVM() {
         this.registeredDL = new HashMap<>();
     }
 
-    public void registerDataListener(DataListenerVM dataListenerVM, EmittableDataTypeVM dataType) {
-        Collection<DataListenerVM> registeredDLForType = this.registeredDL.getOrDefault(dataType, new HashSet<>());
+    public void registerDataListener(DataListenerVM dataListenerVM, String topic) {
+        Collection<DataListenerVM> registeredDLForType = this.registeredDL.getOrDefault(topic, new HashSet<>());
         registeredDLForType.add(dataListenerVM);
-        registeredDL.put(dataType, registeredDLForType);
+        registeredDL.put(topic, registeredDLForType);
     }
 
     public void emit(EmittableDataVM data) {
-        Collection<DataListenerVM> registeredDLForType = this.registeredDL.getOrDefault(data.getType(), new HashSet<>());
+        Collection<DataListenerVM> registeredDLForType = this.registeredDL.getOrDefault(data.getTopic(), new HashSet<>());
         for (DataListenerVM dl : registeredDLForType) {
             dl.receive(data);
         }

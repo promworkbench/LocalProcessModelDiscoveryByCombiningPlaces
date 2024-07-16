@@ -24,4 +24,9 @@ public class MixedModelDistanceRemoveDistanceEmittableDataVM implements Emittabl
     public EmittableDataTypeVM getType() {
         return EmittableDataTypeVM.MixedModelDistanceRemoveDistanceVM;
     }
+
+    @Override
+    public String getTopic() {
+        return this.getType().name();
+    }
 }

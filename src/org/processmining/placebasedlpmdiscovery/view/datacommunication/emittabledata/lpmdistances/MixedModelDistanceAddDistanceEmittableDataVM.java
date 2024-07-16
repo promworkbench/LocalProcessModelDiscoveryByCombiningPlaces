@@ -34,4 +34,9 @@ public class MixedModelDistanceAddDistanceEmittableDataVM implements EmittableDa
     public EmittableDataTypeVM getType() {
         return EmittableDataTypeVM.MixedModelDistanceAddDistanceVM;
     }
+
+    @Override
+    public String getTopic() {
+        return this.getType().name();
+    }
 }

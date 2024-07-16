@@ -18,4 +18,9 @@ public class ExportRequestedEmittableDataVM implements EmittableDataVM {
     public EmittableDataTypeVM getType() {
         return EmittableDataTypeVM.ExportRequestedVM;
     }
+
+    @Override
+    public String getTopic() {
+        return getType().name();
+    }
 }

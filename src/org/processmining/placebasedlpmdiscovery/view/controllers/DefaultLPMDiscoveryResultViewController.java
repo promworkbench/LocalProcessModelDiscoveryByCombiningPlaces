@@ -42,8 +42,8 @@ public class DefaultLPMDiscoveryResultViewController implements LPMDiscoveryResu
     private void registerListeners() {
         this.dc.registerDataListener(this, EmittableDataType.LPMGroupingFinished);
 
-        this.dcVM.registerDataListener(this.view, EmittableDataTypeVM.LPMSetDisplayComponentChangeVM);
-        this.dcVM.registerDataListener(this, EmittableDataTypeVM.NewLPMSelectedVM);
+        this.dcVM.registerDataListener(this.view, EmittableDataTypeVM.LPMSetDisplayComponentChangeVM.name());
+        this.dcVM.registerDataListener(this, EmittableDataTypeVM.NewLPMSelectedVM.name());
     }
 
     @Override

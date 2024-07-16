@@ -21,4 +21,9 @@ public class NewLPMSelectedEmittableDataVM implements EmittableDataVM {
         return EmittableDataTypeVM.NewLPMSelectedVM;
     }
 
+    @Override
+    public String getTopic() {
+        return this.getType().name();
+    }
+
 }

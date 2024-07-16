@@ -43,8 +43,8 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
         this.tableFactory = tableFactory;
         this.newElementSelectedListener = newElementSelectedListener;
         this.dcVM = dcVM;
-        this.dcVM.registerDataListener(this, EmittableDataTypeVM.NewLPMSelectedVM);
-        this.dcVM.registerDataListener(this, EmittableDataTypeVM.NewPlaceSelectedVM);
+        this.dcVM.registerDataListener(this, EmittableDataTypeVM.NewLPMSelectedVM.name());
+        this.dcVM.registerDataListener(this, EmittableDataTypeVM.NewPlaceSelectedVM.name());
         init();
     }
 

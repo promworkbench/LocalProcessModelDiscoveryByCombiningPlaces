@@ -39,8 +39,8 @@ public class MixedLPMSimilaritySetupPanel extends JPanel implements DataListener
         this.dc = dc;
         this.componentFactory = componentFactory;
 
-        this.dc.registerDataListener(this, EmittableDataTypeVM.MixedModelDistanceAddDistanceVM);
-        this.dc.registerDataListener(this, EmittableDataTypeVM.MixedModelDistanceRemoveDistanceVM);
+        this.dc.registerDataListener(this, EmittableDataTypeVM.MixedModelDistanceAddDistanceVM.name());
+        this.dc.registerDataListener(this, EmittableDataTypeVM.MixedModelDistanceRemoveDistanceVM.name());
 
 //        this.model = new MixedModelDistanceVM();
         this.configuration = new MixedLPMSimilarityViewConfiguration();

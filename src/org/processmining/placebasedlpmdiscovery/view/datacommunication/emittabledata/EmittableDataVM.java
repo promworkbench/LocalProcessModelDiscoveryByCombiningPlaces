@@ -2,4 +2,6 @@ package org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabl
 
 public interface EmittableDataVM {
     EmittableDataTypeVM getType();
+
+    String getTopic();
 }
