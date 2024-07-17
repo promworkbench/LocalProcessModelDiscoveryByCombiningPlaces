@@ -7,6 +7,7 @@ import org.processmining.placebasedlpmdiscovery.view.components.general.tables.C
 import org.processmining.placebasedlpmdiscovery.view.components.general.tables.GenericTextDescribableTableComponent;
 import org.processmining.placebasedlpmdiscovery.view.components.general.tables.factories.AbstractPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommunicationControllerVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataTypeVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.export.ExportRequestedEmittableDataVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.tableselection.NewPlaceSelectedEmittableDataVM;
 
@@ -62,8 +63,10 @@ public class PlaceSetPluginVisualizerTableFactory extends AbstractPluginVisualiz
     }
 
     @Override
-    protected void newSelection(Place selectedObject) {
-        this.dcVM.emit(new NewPlaceSelectedEmittableDataVM(selectedObject));
+    protected void onNewSelection(Place selectedObject, String tableId) {
+        this.dcVM.emit(new NewPlaceSelectedEmittableDataVM(
+                String.join("/", EmittableDataTypeVM.NewPlaceSelectedVM.name(), tableId),
+                selectedObject));
     }
 
 }

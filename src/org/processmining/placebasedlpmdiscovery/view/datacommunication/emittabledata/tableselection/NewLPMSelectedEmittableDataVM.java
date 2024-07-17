@@ -6,9 +6,11 @@ import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittable
 
 public class NewLPMSelectedEmittableDataVM implements EmittableDataVM {
 
+    private final String topic;
     private LocalProcessModel lpm;
 
-    public NewLPMSelectedEmittableDataVM(LocalProcessModel lpm) {
+    public NewLPMSelectedEmittableDataVM(String topic, LocalProcessModel lpm) {
+        this.topic = topic;
         this.lpm = lpm;
     }
 
@@ -23,7 +25,7 @@ public class NewLPMSelectedEmittableDataVM implements EmittableDataVM {
 
     @Override
     public String getTopic() {
-        return this.getType().name();
+        return this.topic;
     }
 
 }

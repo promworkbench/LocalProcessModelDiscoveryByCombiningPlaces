@@ -55,11 +55,9 @@ public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescrib
             int selectedIndex = lsm.isSelectedIndex(e.getFirstIndex()) ?
                     e.getFirstIndex() : lsm.isSelectedIndex(e.getLastIndex()) ? e.getLastIndex() : 0;
 //            listener.newSelection(indexObjectMap.get(table.convertRowIndexToModel(selectedIndex)));
-            this.newSelection(indexObjectMap.get(table.convertRowIndexToModel(selectedIndex)));
+            this.onNewSelection(indexObjectMap.get(table.convertRowIndexToModel(selectedIndex)), table.getId());
         });
 
-        // select the first row in the beginning
-        table.changeSelection(0, 0, false, false);
         table.setComponentPopupMenu(this.getPopupMenu(table));
         return table;
     }
@@ -70,6 +68,6 @@ public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescrib
 
     protected abstract JPopupMenu getPopupMenu(GenericTextDescribableTableComponent<T> table);
 
-    protected abstract void newSelection(T selectedObject);
+    protected abstract void onNewSelection(T selectedObject, String tableId);
 
 }

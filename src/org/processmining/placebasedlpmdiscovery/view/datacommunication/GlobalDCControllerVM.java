@@ -5,10 +5,10 @@ import org.processmining.placebasedlpmdiscovery.view.datacommunication.dataliste
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataTypeVM;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Singleton
 public class GlobalDCControllerVM implements DataCommunicationControllerVM {
@@ -26,7 +26,12 @@ public class GlobalDCControllerVM implements DataCommunicationControllerVM {
     }
 
     public void emit(EmittableDataVM data) {
-        Collection<DataListenerVM> registeredDLForType = this.registeredDL.getOrDefault(data.getTopic(), new HashSet<>());
+        Set<String> matchingKeys = this.registeredDL.keySet()
+                .stream()
+                .filter(s -> Pattern.compile(s).matcher(data.getTopic()).find())
+                .collect(Collectors.toSet());
+        Collection<DataListenerVM> registeredDLForType = matchingKeys.
+                stream().map(this.registeredDL::get).flatMap(Collection::stream).collect(Collectors.toSet());
         for (DataListenerVM dl : registeredDLForType) {
             dl.receive(data);
         }

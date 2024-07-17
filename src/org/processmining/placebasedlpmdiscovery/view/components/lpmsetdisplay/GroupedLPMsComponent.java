@@ -1,20 +1,15 @@
 package org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay;
 
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.serializable.grouped.GroupedLPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.grouped.GroupingProperty;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers.LPMResultVisualizer;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.SimpleCollectionOfElementsComponent;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
-import org.processmining.placebasedlpmdiscovery.view.components.ComponentFactory;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Objects;
+import java.util.*;
+import java.util.List;
 
 public class GroupedLPMsComponent extends JComponent implements LPMSetDisplayComponent {
 
@@ -25,6 +20,7 @@ public class GroupedLPMsComponent extends JComponent implements LPMSetDisplayCom
 
     // components
     private final JTabbedPane groupsTabbedPane;
+    private List<SimpleCollectionOfElementsComponent<LocalProcessModel>> groupLPMCollectionComponents;
 
     public GroupedLPMsComponent(Collection<LocalProcessModel> lpms,
                                 String groupingKey,
@@ -63,14 +59,18 @@ public class GroupedLPMsComponent extends JComponent implements LPMSetDisplayCom
 
     private void refreshTabbedPane(JTabbedPane tabbedPane, int start, int end, GroupedLPMResult result) {
         tabbedPane.removeAll();
+        this.groupLPMCollectionComponents = new ArrayList<>();
         for (int index = start; index < end; index++) {
             String label = "Group " + (index + 1);
-            tabbedPane.add(label, this.lpmSetDisplayComponentFactory
-                    .createLPMSetDisplayComponent(
+            SimpleCollectionOfElementsComponent<LocalProcessModel> lpmSetDisplayComponent =
+                    (SimpleCollectionOfElementsComponent<LocalProcessModel>) this.lpmSetDisplayComponentFactory.createLPMSetDisplayComponent(
                             LPMSetDisplayComponentType.SimpleLPMsCollection,
                             result.getElement(index).getAllLPMs(),
-                            new HashMap<>())
-                    .getComponent());
+                            new HashMap<>());
+            this.groupLPMCollectionComponents.add(lpmSetDisplayComponent);
+            tabbedPane.add(label, lpmSetDisplayComponent.getComponent());
+            tabbedPane.addChangeListener(e -> {
+            });
         }
     }
 

@@ -7,12 +7,15 @@ import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.util.Map;
+import java.util.UUID;
 
 public class GenericTextDescribableTableComponent<T extends TextDescribable> extends JTable {
 
     private final Map<Integer, T> indexMap;
+    private final UUID id;
 
     public GenericTextDescribableTableComponent(Map<Integer, T> indexMap) {
+        this.id = UUID.randomUUID();
         this.indexMap = indexMap;
     }
 
@@ -43,5 +46,9 @@ public class GenericTextDescribableTableComponent<T extends TextDescribable> ext
         int ind = this.getRowSorter().convertRowIndexToModel(row);
         return this.indexMap.containsKey(ind) ?
                 this.indexMap.get(ind).getShortString() : null;
+    }
+
+    public String getId() {
+        return this.id.toString();
     }
 }
