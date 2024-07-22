@@ -9,6 +9,7 @@ import org.processmining.placebasedlpmdiscovery.view.components.ComponentFactory
 import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponent;
 import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponentType;
 import org.processmining.placebasedlpmdiscovery.view.controllers.LPMDiscoveryResultViewController;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommunicationControllerVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.datalisteners.DataListenerVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataTypeVM;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataVM;
@@ -32,10 +33,11 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
     private final DefaultLPMDiscoveryResultViewModel model;
 
     @Inject
-    public DefaultLPMDiscoveryResultComponent(SettablePanelFactory settablePanelFactory,
+    public DefaultLPMDiscoveryResultComponent(DataCommunicationControllerVM dcVM,
+                                              SettablePanelFactory settablePanelFactory,
                                               ComponentFactory componentFactory,
                                               DefaultLPMDiscoveryResultViewModel model) {
-        super(3);
+        super(dcVM, 3);
         this.settablePanelFactory = settablePanelFactory;
         this.componentFactory = componentFactory;
         this.model = model;
@@ -112,10 +114,11 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
         if (componentType.equals(LPMSetDisplayComponentType.SimpleLPMsCollection)) {
             this.display(this.model);
         } else if (componentType.equals(LPMSetDisplayComponentType.GroupedLPMs)) {
-            LPMSetDisplayComponent lpmSetDisplayComponent =
-                    this.componentFactory.createLPMSetDisplayComponent(LPMSetDisplayComponentType.GroupedLPMs,
-                            model.getLPMs(), this.listener, Collections.singletonMap("identifier",
-                                    parameters.get("identifier")));
+            LPMSetDisplayComponent lpmSetDisplayComponent = this.componentFactory.createLPMSetDisplayComponent(
+                    LPMSetDisplayComponentType.GroupedLPMs,
+                    model.getLPMs(),
+                    this.listener,
+                    Collections.singletonMap("identifier", parameters.get("identifier")));
             this.lpmSetDisplayContainer.add(lpmSetDisplayComponent.getComponent());
             this.lpmSetDisplayContainer.setBorder(new TitledBorder("Grouped LPMs"));
         }

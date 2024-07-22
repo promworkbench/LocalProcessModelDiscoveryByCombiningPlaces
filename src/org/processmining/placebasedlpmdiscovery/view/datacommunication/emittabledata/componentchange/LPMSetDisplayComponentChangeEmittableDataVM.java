@@ -9,6 +9,10 @@ import java.util.Map;
 
 public class LPMSetDisplayComponentChangeEmittableDataVM implements EmittableDataVM {
     private final LPMSetDisplayComponentType componentType;
+    /**
+     * Type: GroupedLPMs
+     *   identifier: string which clustering to display
+     */
     private final Map<String, Object> parameters;
     public LPMSetDisplayComponentChangeEmittableDataVM(LPMSetDisplayComponentType type, Map<String, Object> parameters) {
         this.componentType = type;

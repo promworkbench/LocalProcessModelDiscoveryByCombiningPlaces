@@ -3,18 +3,26 @@ package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.comp
 import org.apache.commons.lang.NotImplementedException;
 import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelContainer;
+import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponentType;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommunicationControllerVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.componentchange.LPMSetDisplayComponentChangeEmittableDataVM;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class BaseLPMDiscoveryResultComponent extends JComponent {
 
+    // services
+    protected final DataCommunicationControllerVM dcVM;
     protected JPanel lpmSetDisplayContainer;
     protected final Map<Pair<Integer, Integer>, SettablePanelContainer> settablePanels;
 
-    public BaseLPMDiscoveryResultComponent(int countSettablePanels) {
+    public BaseLPMDiscoveryResultComponent(DataCommunicationControllerVM dcVM, int countSettablePanels) {
+        this.dcVM = dcVM;
+
         this.setLayout(new GridBagLayout());
         this.settablePanels = new HashMap<>();
 
@@ -22,10 +30,31 @@ public class BaseLPMDiscoveryResultComponent extends JComponent {
     }
 
     private void init(int countSettablePanels) {
+        JPanel pnlLpmSetContainer = new JPanel();
+        pnlLpmSetContainer.setLayout(new BorderLayout());
+        pnlLpmSetContainer.setPreferredSize(new Dimension(50, 50));
+
+        // lpm set component chooser
+        JPanel pnlLpmSetChooser = new JPanel();
+        pnlLpmSetChooser.setLayout(new BoxLayout(pnlLpmSetChooser, BoxLayout.X_AXIS));
+        pnlLpmSetChooser.add(new JLabel("LPM Set Visualizer:"));
+        pnlLpmSetChooser.add(Box.createRigidArea(new Dimension(5, 0)));
+        JComboBox<LPMSetDisplayComponentType> cbxLpmSetDisplayComponent =
+                new JComboBox<>(LPMSetDisplayComponentType.values());
+        cbxLpmSetDisplayComponent.setSelectedItem(LPMSetDisplayComponentType.SimpleLPMsCollection);
+        cbxLpmSetDisplayComponent.addActionListener(e -> {
+            this.dcVM.emit(new LPMSetDisplayComponentChangeEmittableDataVM(
+                    (LPMSetDisplayComponentType) cbxLpmSetDisplayComponent.getSelectedItem(),
+                    Collections.singletonMap("identifier", "default")));
+        });
+        pnlLpmSetChooser.add(cbxLpmSetDisplayComponent);
+        pnlLpmSetContainer.add(pnlLpmSetChooser, BorderLayout.PAGE_START);
+
         // setting up lpmSetDisplay panel
         this.lpmSetDisplayContainer = new JPanel();
         this.lpmSetDisplayContainer.setPreferredSize(new Dimension(50, 50));
         this.lpmSetDisplayContainer.setLayout(new BorderLayout());
+        pnlLpmSetContainer.add(this.lpmSetDisplayContainer, BorderLayout.CENTER);
 
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.BOTH;
@@ -47,7 +76,7 @@ public class BaseLPMDiscoveryResultComponent extends JComponent {
         } else {
             throw new NotImplementedException("You can not have more than 5 panels.");
         }
-        this.add(this.lpmSetDisplayContainer, c);
+        this.add(pnlLpmSetContainer, c);
 
         // setting up settable panels containers
         int countSettableContainers = countSettablePanels < 4 ? 3 : 5;

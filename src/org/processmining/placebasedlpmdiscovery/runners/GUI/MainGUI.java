@@ -51,10 +51,10 @@ public class MainGUI extends JFrame {
 //        return new InteractiveLPMsDiscovery(getDummyContext(), new PlaceBasedLPMDiscoveryParameters(new XLogWrapper
 //        (log)), log);
 //    }
-
-    private BaseLPMDiscoveryResultComponent getDummyBaseView() {
-        return new BaseLPMDiscoveryResultComponent(5);
-    }
+//
+//    private BaseLPMDiscoveryResultComponent getDummyBaseView() {
+//        return new BaseLPMDiscoveryResultComponent(dcVM, 5);
+//    }
 
     private BaseLPMDiscoveryResultComponent getDummyDefaultView() throws Exception {
         Injector guice = Guice.createInjector(new PromGuiceModule(getDummyContext()), new InputModule(getDummyLog()),

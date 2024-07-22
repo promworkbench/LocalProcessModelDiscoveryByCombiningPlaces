@@ -31,13 +31,15 @@ public class GroupedLPMsComponent extends JComponent implements LPMSetDisplayCom
 
         this.setLayout(new BorderLayout(0, 10));
 
+        String[] groupIds = LocalProcessModelUtils.extractGroupIds(lpms).toArray(new String[]{});
+
         // header with parameters
         JPanel header = new JPanel();
         header.setLayout(new BoxLayout(header, BoxLayout.X_AXIS));
         header.add(new JLabel("Identifier:"));
         header.add(Box.createRigidArea(new Dimension(20, 0)));
         JComboBox<String> idComboBox =
-                new JComboBox<>(LocalProcessModelUtils.extractGroupIds(lpms).toArray(new String[]{}));
+                new JComboBox<>(groupIds);
         idComboBox.setSelectedItem(groupingKey);
         idComboBox.addActionListener(e -> {
             this.setContent(Objects.requireNonNull(idComboBox.getSelectedItem()).toString());
@@ -47,9 +49,12 @@ public class GroupedLPMsComponent extends JComponent implements LPMSetDisplayCom
 
         // tabbed pane where the local process model groups are shown
         this.groupsTabbedPane = new JTabbedPane();
-        this.add(this.groupsTabbedPane, BorderLayout.CENTER);
-
-        this.setContent(groupingKey);
+        if (Arrays.stream(groupIds).noneMatch(id -> id.equals(groupingKey))) {
+            this.add(new JLabel("No grouping for the given key."));
+        } else {
+            this.add(this.groupsTabbedPane, BorderLayout.CENTER);
+            this.setContent(groupingKey);
+        }
     }
 
     private void setContent(String groupingKey) {
