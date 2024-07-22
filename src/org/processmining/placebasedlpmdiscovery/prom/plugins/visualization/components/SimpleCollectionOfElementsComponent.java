@@ -58,7 +58,7 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
                 String.join("/", EmittableDataTypeVM.NewLPMSelectedVM.name(), tableComponent.getId()));
         this.dcVM.registerDataListener(this,
                 String.join("/", EmittableDataTypeVM.NewPlaceSelectedVM.name(), tableComponent.getId()));
-        tableComponent.selectRow(0);
+        tableComponent.reselect();
 
         // set the preferred dimension of the two containers
 //        int windowHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -89,10 +89,6 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
             // create the visualizer
             newPlaceSelected((Place) selectedObject);
         }
-    }
-
-    public void newSelection(int index) {
-        this.tableComponent.selectRow(index);
     }
 
     public void reselect() {

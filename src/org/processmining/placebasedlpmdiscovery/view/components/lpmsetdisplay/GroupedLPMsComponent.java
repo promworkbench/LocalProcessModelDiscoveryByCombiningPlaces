@@ -69,9 +69,10 @@ public class GroupedLPMsComponent extends JComponent implements LPMSetDisplayCom
                             new HashMap<>());
             this.groupLPMCollectionComponents.add(lpmSetDisplayComponent);
             tabbedPane.add(label, lpmSetDisplayComponent.getComponent());
-            tabbedPane.addChangeListener(e -> {
-            });
         }
+        tabbedPane.addChangeListener(e -> {
+            this.groupLPMCollectionComponents.get(tabbedPane.getSelectedIndex()).reselect();
+        });
     }
 
     @Override

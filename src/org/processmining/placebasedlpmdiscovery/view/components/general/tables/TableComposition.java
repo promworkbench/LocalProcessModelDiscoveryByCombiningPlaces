@@ -52,6 +52,7 @@ public class TableComposition<T extends TextDescribable & Serializable> extends 
                 String.join("/", EmittableDataTypeVM.NewLPMSelectedVM.name(), table.getId()));
         this.dcVM.registerDataListener(this,
                 String.join("/", EmittableDataTypeVM.NewPlaceSelectedVM.name(), table.getId()));
+        this.selectRow(0);
 
         JScrollPane scrollPane = new JScrollPane(table); // add the table in a scroll pane
 
@@ -92,7 +93,9 @@ public class TableComposition<T extends TextDescribable & Serializable> extends 
     }
 
     public void reselect() {
-        this.selectRow(this.table.getSelectedRow());
+        int row = this.table.getSelectedRow();
+        this.table.getSelectionModel().clearSelection();
+        this.selectRow(row);
     }
 
 

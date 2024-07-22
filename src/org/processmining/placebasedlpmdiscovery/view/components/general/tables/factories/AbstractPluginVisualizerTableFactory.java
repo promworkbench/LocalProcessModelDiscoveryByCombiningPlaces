@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.view.components.general.tables.factories;
 
 import org.processmining.placebasedlpmdiscovery.model.TextDescribable;
+import org.processmining.placebasedlpmdiscovery.view.OldJavaUtils;
 import org.processmining.placebasedlpmdiscovery.view.components.general.tables.TableListener;
 import org.processmining.placebasedlpmdiscovery.view.components.general.tables.CustomObjectTableModel;
 import org.processmining.placebasedlpmdiscovery.view.components.general.tables.GenericTextDescribableTableComponent;
@@ -52,10 +53,13 @@ public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescrib
                 return; // don't do anything
 
             ListSelectionModel lsm = (ListSelectionModel)e.getSource();
-            int selectedIndex = lsm.isSelectedIndex(e.getFirstIndex()) ?
-                    e.getFirstIndex() : lsm.isSelectedIndex(e.getLastIndex()) ? e.getLastIndex() : 0;
-//            listener.newSelection(indexObjectMap.get(table.convertRowIndexToModel(selectedIndex)));
-            this.onNewSelection(indexObjectMap.get(table.convertRowIndexToModel(selectedIndex)), table.getId());
+            int[] selectedIndices = OldJavaUtils.getSelectedIndices(lsm);
+
+            // at the moment only responsive for one selection
+            if (selectedIndices.length == 1) {
+                this.onNewSelection(
+                        indexObjectMap.get(table.convertRowIndexToModel(selectedIndices[0])), table.getId());
+            }
         });
 
         table.setComponentPopupMenu(this.getPopupMenu(table));
