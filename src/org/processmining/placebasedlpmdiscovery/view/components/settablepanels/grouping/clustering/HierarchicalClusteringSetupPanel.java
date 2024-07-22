@@ -24,6 +24,9 @@ public class HierarchicalClusteringSetupPanel extends JComponent implements Conf
         // set num clusters or height
         addNumClustersPanel();
 
+        // add empty space
+        this.add(Box.createRigidArea(new Dimension(0, 5)));
+
         // add linkage panel
         addLinkagePanel();
     }
@@ -36,6 +39,7 @@ public class HierarchicalClusteringSetupPanel extends JComponent implements Conf
         this.linkageComboBox = new JComboBox<>(new String[]{
                 "single", "complete", "wpgma", "upgma", "ward"});
         linkagePanel.add(linkageComboBox);
+        this.add(linkagePanel);
     }
 
     private void addNumClustersPanel() {
