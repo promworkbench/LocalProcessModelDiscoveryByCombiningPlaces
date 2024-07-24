@@ -5,13 +5,13 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
 import java.util.List;
 
-public class ModelDistanceController {
+public class DefaultModelDistanceService implements ModelDistanceService{
 
     // services
     private final ModelDistanceFactory modelDistanceFactory;
 
     @Inject
-    public ModelDistanceController(ModelDistanceFactory modelDistanceFactory) {
+    public DefaultModelDistanceService(ModelDistanceFactory modelDistanceFactory) {
         this.modelDistanceFactory = modelDistanceFactory;
     }
 

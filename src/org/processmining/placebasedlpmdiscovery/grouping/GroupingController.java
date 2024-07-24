@@ -7,41 +7,24 @@ import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.
 import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.EmittableDataType;
 import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.LPMGroupingFinished;
 import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.RunLPMGroupingEmittableData;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceController;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.model.serializable.grouped.GroupingProperty;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Map;
 
 public class GroupingController implements DataListener {
 
     private final DataCommunicationController dc;
-    private final ModelDistanceController modelDistanceController;
+    private final GroupingService groupingService;
 
     @Inject
-    public GroupingController(DataCommunicationController dc, ModelDistanceController modelDistanceController) {
+    public GroupingController(DataCommunicationController dc, GroupingService groupingService) {
         this.dc = dc;
-//        dc.registerDataListener(this, EmittableDataType.RunLPMGrouping);
-        this.modelDistanceController = modelDistanceController;
+        dc.registerDataListener(this, EmittableDataType.RunLPMGrouping);
+        this.groupingService = groupingService;
     }
 
     public void groupLPMs(Collection<LocalProcessModel> lpms, GroupingConfig config) {
-        List<LocalProcessModel> lpmList = new ArrayList<>(lpms);
-
-        int[] membership = ClusteringLPMs.cluster(
-                lpmList,
-                modelDistanceController.getDistanceMatrix(lpmList, config.getModelDistanceConfig()),
-                config.getClusteringConfig().getClusteringAlgorithm(),
-                config.getClusteringConfig().getClusteringParam());
-
-        for (int i = 0; i < lpmList.size(); ++i) {
-            lpmList.get(i).getAdditionalInfo().getGroupsInfo()
-                    .addGroupingProperty(config.getIdentifier(), membership[i]);
-        }
-
+        this.groupingService.groupLPMs(lpms, config);
         this.dc.emit(new LPMGroupingFinished(config.getIdentifier()));
     }
 
