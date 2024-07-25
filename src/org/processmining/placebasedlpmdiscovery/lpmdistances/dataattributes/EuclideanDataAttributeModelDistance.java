@@ -8,7 +8,6 @@ import java.util.List;
 
 public class EuclideanDataAttributeModelDistance extends DataAttributeModelDistance {
 
-    @Inject
     public EuclideanDataAttributeModelDistance(DataAttributeVectorExtractor dataAttrVecExtractor) {
         super(dataAttrVecExtractor);
     }

@@ -1,5 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.model.additionalinfo;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,5 +18,9 @@ public class GroupsInfo {
 
     public Integer getGroupingProperty(String groupingKey) {
         return this.groupingProperties.get(groupingKey);
+    }
+
+    public Collection<String> getGroupIdentifiers() {
+        return this.groupingProperties.keySet();
     }
 }

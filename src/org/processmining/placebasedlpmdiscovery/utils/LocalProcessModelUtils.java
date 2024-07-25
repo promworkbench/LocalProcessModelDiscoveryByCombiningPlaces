@@ -329,4 +329,12 @@ public class LocalProcessModelUtils {
         AtomicInteger ai = new AtomicInteger(0);
         return lpm.getTransitions().stream().collect(Collectors.toMap(Transition::getLabel, t -> ai.getAndIncrement()));
     }
+
+    public static Collection<String> extractGroupIds(Collection<LocalProcessModel> lpms) {
+        Collection<String> groupIds = new HashSet<>();
+        for (LocalProcessModel lpm : lpms) {
+            groupIds.addAll(lpm.getAdditionalInfo().getGroupsInfo().getGroupIdentifiers());
+        }
+        return groupIds;
+    }
 }

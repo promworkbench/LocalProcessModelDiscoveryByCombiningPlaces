@@ -1,24 +1,29 @@
 package org.processmining.placebasedlpmdiscovery.runners.GUI;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.deckfour.xes.model.XLog;
 import org.processmining.contexts.cli.CLIContext;
 import org.processmining.contexts.cli.CLIPluginContext;
 import org.processmining.framework.plugin.PluginContext;
+import org.processmining.placebasedlpmdiscovery.InputModule;
 import org.processmining.placebasedlpmdiscovery.Main;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.dependencyinjection.LPMDiscoveryGuiceModule;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.dependencyinjection.LPMDiscoveryResultGuiceModule;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.InteractiveLPMsDiscovery;
+import org.processmining.placebasedlpmdiscovery.prom.dependencyinjection.PromGuiceModule;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.BaseLPMDiscoveryResultComponent;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.DefaultLPMDiscoveryResultComponent;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelFactory;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.service.LPMDiscoveryService;
+import org.processmining.placebasedlpmdiscovery.service.dependencyinjection.ServiceGuiceModule;
+import org.processmining.placebasedlpmdiscovery.service.lpms.LPMSetService;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 import org.processmining.placebasedlpmdiscovery.view.controllers.DefaultLPMDiscoveryResultViewController;
 import org.processmining.placebasedlpmdiscovery.view.controllers.LPMDiscoveryResultViewController;
-import org.processmining.placebasedlpmdiscovery.view.models.DefaultLPMDiscoveryResultViewModel;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -43,25 +48,30 @@ public class MainGUI extends JFrame {
         setContentPane(contentPane);
     }
 
-    private InteractiveLPMsDiscovery getDummyDiscovery() throws Exception {
-        XLog log = getDummyLog();
-        return new InteractiveLPMsDiscovery(getDummyContext(), new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log)), log);
-    }
 
-    private BaseLPMDiscoveryResultComponent getDummyBaseView() {
-        return new BaseLPMDiscoveryResultComponent(5);
-    }
+//    private InteractiveLPMsDiscovery getDummyDiscovery() throws Exception {
+//        XLog log = getDummyLog();
+//        return new InteractiveLPMsDiscovery(getDummyContext(), new PlaceBasedLPMDiscoveryParameters(new XLogWrapper
+//        (log)), log);
+//    }
+//
+//    private BaseLPMDiscoveryResultComponent getDummyBaseView() {
+//        return new BaseLPMDiscoveryResultComponent(dcVM, 5);
+//    }
+
     private BaseLPMDiscoveryResultComponent getDummyDefaultView() throws Exception {
-        DefaultLPMDiscoveryResultComponent view = new DefaultLPMDiscoveryResultComponent(getDummyContext(), new SettablePanelFactory());
-        DefaultLPMDiscoveryResultViewModel model = new DefaultLPMDiscoveryResultViewModel(getDummyResult());
+        // discovery
+        Injector guice = Guice.createInjector(new InputModule(getDummyLog()), new LPMDiscoveryGuiceModule());
+        LPMDiscoveryService lpmDiscoveryService = guice.getInstance(LPMDiscoveryService.class);
+        LPMDiscoveryResult result = lpmDiscoveryService.runLPMDiscovery(getDummyLog(),
+                new PlaceSet(PlaceUtils.extractPlaceNets("data/bpi2012_res10939.json")));
 
-        LPMDiscoveryResultViewController controller =
-                new DefaultLPMDiscoveryResultViewController(view, model);
+        // visualization
+        guice = Guice.createInjector(new LPMDiscoveryResultGuiceModule(result), new PromGuiceModule(getDummyContext()));
+        LPMDiscoveryResultViewController controller = guice.getInstance(LPMDiscoveryResultViewController.class);
+        controller.getView().display(controller.getModel());
 
-        view.setListener(controller);
-        view.display(model);
-
-        return view;
+        return ((DefaultLPMDiscoveryResultViewController) controller).getView();
     }
 
     private PluginContext getDummyContext() {
@@ -69,16 +79,13 @@ public class MainGUI extends JFrame {
     }
 
     private XLog getDummyLog() throws Exception {
-        return LogUtils.readLogFromFile("data/artificialBig.xes");
+        return LogUtils.readLogFromFile("data/bpi2012_res10939.xes");
     }
 
     private LPMDiscoveryResult getDummyResult() throws Exception {
         XLog log = getDummyLog();
         Set<Place> places = PlaceUtils.extractPlaceNets("data/artificialBig.pnml");
-        return Main.createDefaultBuilder(
-                log,
-                new PlaceSet(places),
-                new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log))
-        ).build().run();
+        return Main.createDefaultBuilder(log, new PlaceSet(places),
+                new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log))).build().run();
     }
 }

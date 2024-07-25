@@ -1,18 +1,21 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.Visualizer;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
+import org.processmining.models.graphbased.ViewSpecificAttributeMap;
+import org.processmining.models.jgraph.ProMJGraphVisualizer;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableList;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.SimpleCollectionOfElementsComponent;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.PlaceSetPluginVisualizerTableFactory;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
-import org.processmining.models.graphbased.ViewSpecificAttributeMap;
-import org.processmining.models.jgraph.ProMJGraphVisualizer;
+import org.processmining.placebasedlpmdiscovery.view.components.ComponentFactory;
+import org.processmining.placebasedlpmdiscovery.view.components.placesetdisplay.PlaceSetDisplayComponentType;
+import org.processmining.placebasedlpmdiscovery.view.dependencyinjection.ViewGuiceModule;
 
 import javax.swing.*;
 
@@ -32,8 +35,14 @@ public class PlaceSetVisualizer {
         if (result.size() < 1)
             return new JPanel();
 
-        return new SimpleCollectionOfElementsComponent<>(
-                context, result.getElements(), new PlaceSetPluginVisualizerTableFactory(), place -> {});
+        Injector guice = Guice.createInjector(new ViewGuiceModule());
+        ComponentFactory componentFactory = guice.getInstance(ComponentFactory.class);
+
+        return componentFactory.createPlaceSetDisplayComponent(PlaceSetDisplayComponentType.SimplePlaceCollection,
+                result.getElements()).getComponent();
+//
+//        return componentFactory.createLPMSetDisplayComponent(LPMSetDisplayComponentType.SimpleLPMsCollection,
+//                result.getAllLPMs()).getComponent();
 
 
 //        JComponent component = new JPanel();
@@ -103,7 +112,8 @@ public class PlaceSetVisualizer {
 //        return component;
     }
 
-    private void refreshTabbedPane(JTabbedPane tabbedPane, UIPluginContext context, int start, int end, SerializableList<Place> result) {
+    private void refreshTabbedPane(JTabbedPane tabbedPane, UIPluginContext context, int start, int end,
+                                   SerializableList<Place> result) {
         tabbedPane.removeAll();
         for (int index = start - 1; index < end; index++) {
             String label = "Place " + (index + 1);

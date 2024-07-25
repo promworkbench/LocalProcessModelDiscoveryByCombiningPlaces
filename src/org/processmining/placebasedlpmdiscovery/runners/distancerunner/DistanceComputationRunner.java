@@ -9,10 +9,12 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
+import org.processmining.framework.util.ArrayUtils;
 import org.processmining.placebasedlpmdiscovery.InputModule;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.results.FromFileLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceController;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.DefaultModelDistanceService;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceService;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.dependencyinjection.LPMDistancesDependencyInjectionModule;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.serialization.ModelDistanceConfigDeserializer;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
@@ -55,7 +57,7 @@ public class DistanceComputationRunner {
             Injector injector = Guice.createInjector(
                     new InputModule(LogUtils
                             .readLogFromFile(config.getInput().get(RunnerInput.EVENT_LOG))),
-                    new LPMDistancesDependencyInjectionModule(config.getModelDistanceConfig())
+                    new LPMDistancesDependencyInjectionModule()
             );
 
             System.out.println("Injector initialized");
@@ -64,8 +66,8 @@ public class DistanceComputationRunner {
 
             System.out.println("LPMs imported");
 
-            ModelDistanceController modelDistanceController = injector.getInstance(ModelDistanceController.class);
-            double[][] distances = modelDistanceController.getDistanceMatrix(lpms);
+            ModelDistanceService modelDistanceService = injector.getInstance(ModelDistanceService.class);
+            double[][] distances = modelDistanceService.getDistanceMatrix(lpms, config.getModelDistanceConfig());
 
             System.out.println("Distances computed");
 
@@ -85,7 +87,7 @@ public class DistanceComputationRunner {
         Table<String, String, Double> distanceTable = tableBuilder.build();
         try (CSVPrinter csvPrinter = CSVFormat.DEFAULT
                 .builder()
-                .setHeader(lpms.stream().map(LocalProcessModel::getShortString).toArray(String[]::new))
+                .setHeader(ArrayUtils.concatAll(new String[]{"LPM"}, lpms.stream().map(LocalProcessModel::getShortString).toArray(String[]::new)))
                 .build()
                 .print(Paths.get(filePath), StandardCharsets.UTF_8)) {
             csvPrinter.printRecords(distanceTable.rowMap().entrySet()

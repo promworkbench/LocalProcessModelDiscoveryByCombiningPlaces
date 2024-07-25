@@ -10,40 +10,26 @@ import java.util.stream.Stream;
 
 public class DefaultGroupingConfig implements GroupingConfig {
 
-    private final String identifier;
-    private final ClusteringAlgorithm clusteringAlgorithm;
-    private final Map<String, String> clusteringConfig;
+    private String identifier;
+    private final ClusteringConfig clusteringConfig;
     private final ModelDistanceConfig modelDistanceConfig;
 
     public DefaultGroupingConfig() {
         this("default",
-                ClusteringAlgorithm.Hierarchical,
-                Stream.of(new AbstractMap.SimpleEntry<>("num_clusters", "10"),
-                                new AbstractMap.SimpleEntry<>("linkage", "complete"))
-                        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)),
-                new DataAttributeModelDistanceConfig()
-        );
+                new DefaultClusteringConfig(),
+                new DataAttributeModelDistanceConfig(null));
     }
 
     public DefaultGroupingConfig(String identifier,
-                                 ClusteringAlgorithm clusteringAlgorithm,
-                                 Map<String, String> clusteringConfig,
+                                 ClusteringConfig clusteringConfig,
                                  ModelDistanceConfig modelDistanceConfig) {
         this.identifier = identifier;
-        this.clusteringAlgorithm = clusteringAlgorithm;
         this.clusteringConfig = clusteringConfig;
         this.modelDistanceConfig = modelDistanceConfig;
     }
 
     @Override
-    public ClusteringAlgorithm getClusteringAlgorithm() {
-        return this.clusteringAlgorithm;
-    }
-
-    @Override
-    public Map<String, String> getClusteringConfig() {
-        return this.clusteringConfig;
-    }
+    public ClusteringConfig getClusteringConfig() { return this.clusteringConfig; }
 
     @Override
     public ModelDistanceConfig getModelDistanceConfig() {
@@ -53,5 +39,10 @@ public class DefaultGroupingConfig implements GroupingConfig {
     @Override
     public String getIdentifier() {
         return this.identifier;
+    }
+
+    @Override
+    public void setIdentifier(String id) {
+        this.identifier = id;
     }
 }

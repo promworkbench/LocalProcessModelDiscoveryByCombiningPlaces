@@ -19,7 +19,8 @@
         "linkage": "complete"
       },
       "modelDistanceConfig": {
-        "distanceMethod": "DataAttribute"
+        "distanceMethod": "DataAttribute",
+        "attributes": ["time:timestamp"]
       }
     }
   }

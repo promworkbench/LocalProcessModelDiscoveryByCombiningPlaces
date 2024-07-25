@@ -1,44 +1,49 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components;
 
-import org.processmining.contexts.uitopia.UIPluginContext;
-import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.TextDescribable;
-import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
-import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
-import org.processmining.placebasedlpmdiscovery.model.serializable.SerializableCollection;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.TableComposition;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.TableListener;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.factories.AbstractPluginVisualizerTableFactory;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers.LocalProcessModelVisualizer;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.visualizers.PlaceVisualizer;
+import org.processmining.placebasedlpmdiscovery.view.components.general.tables.TableComposition;
+import org.processmining.placebasedlpmdiscovery.view.components.general.tables.TableListener;
+import org.processmining.placebasedlpmdiscovery.view.components.general.tables.factories.PluginVisualizerTableFactory;
+import org.processmining.placebasedlpmdiscovery.view.components.lpmdisplay.LPMDisplayComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.lpmdisplay.LPMPetriNetComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponent;
+import org.processmining.placebasedlpmdiscovery.view.components.placesetdisplay.PlaceSetDisplayComponent;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.DataCommunicationControllerVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.datalisteners.DataListenerVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataTypeVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.EmittableDataVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.tableselection.NewLPMSelectedEmittableDataVM;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.emittabledata.tableselection.NewPlaceSelectedEmittableDataVM;
 import org.processmining.placebasedlpmdiscovery.view.listeners.NewElementSelectedListener;
-import org.processmining.plugins.utils.ProvidedObjectHelper;
 
 import javax.swing.*;
 import java.awt.*;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.UUID;
 
-public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Serializable>
-        extends JComponent implements TableListener<T>, ComponentListener {
+public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Serializable> extends JComponent implements TableListener<T>, ComponentListener, LPMSetDisplayComponent, PlaceSetDisplayComponent, DataListenerVM {
 
-    private final PluginContext context;
     private final Collection<T> result;
-    private final AbstractPluginVisualizerTableFactory<T> tableFactory;
+    private final PluginVisualizerTableFactory<T> tableFactory;
     private final NewElementSelectedListener<T> newElementSelectedListener;
 
-    private JComponent visualizerComponent;
+    private final DataCommunicationControllerVM dcVM;
 
-    public SimpleCollectionOfElementsComponent(PluginContext context,
-                                               Collection<T> result,
-                                               AbstractPluginVisualizerTableFactory<T> tableFactory,
-                                               NewElementSelectedListener<T> newElementSelectedListener) {
-        this.context = context;
+    // components
+    private JComponent visualizerComponent;
+    private TableComposition<T> tableComponent;
+
+    public SimpleCollectionOfElementsComponent(Collection<T> result, PluginVisualizerTableFactory<T> tableFactory,
+                                               NewElementSelectedListener<T> newElementSelectedListener,
+                                               DataCommunicationControllerVM dcVM) {
         this.result = result;
         this.tableFactory = tableFactory;
         this.newElementSelectedListener = newElementSelectedListener;
+        this.dcVM = dcVM;
         init();
     }
 
@@ -48,7 +53,12 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
 
         // create the table and LPM visualization containers
         visualizerComponent = createVisualizerComponent();
-        JComponent tableContainer = new TableComposition<>(this.result, this.tableFactory, this);
+        tableComponent = new TableComposition<>(this.result, this.tableFactory, this, this.dcVM);
+        this.dcVM.registerDataListener(this,
+                String.join("/", EmittableDataTypeVM.NewLPMSelectedVM.name(), tableComponent.getId()));
+        this.dcVM.registerDataListener(this,
+                String.join("/", EmittableDataTypeVM.NewPlaceSelectedVM.name(), tableComponent.getId()));
+        tableComponent.reselect();
 
         // set the preferred dimension of the two containers
 //        int windowHeight = Toolkit.getDefaultToolkit().getScreenSize().height;
@@ -57,7 +67,7 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
 //        visualizerComponent.setPreferredSize(new Dimension(80 * windowWidth / 100, windowHeight));
 
         // add the table and LPM visualization containers and add some space between them
-        this.add(tableContainer, BorderLayout.LINE_START);
+        this.add(tableComponent, BorderLayout.LINE_START);
 //        this.add(Box.createRigidArea(new Dimension(windowWidth / 100, windowHeight)));
         this.add(visualizerComponent, BorderLayout.CENTER);
     }
@@ -70,54 +80,63 @@ public class SimpleCollectionOfElementsComponent<T extends TextDescribable & Ser
 
     @Override
     public void newSelection(T selectedObject) {
-        this.newElementSelectedListener.newLPMSelected(selectedObject);
-        // if in the visualizer component there is an LPM drawn
-        if (visualizerComponent.getComponents().length >= 1)
-            visualizerComponent.remove(0); // remove it
-
         if (selectedObject instanceof LocalProcessModel) {
-            // create the visualizer
-            LocalProcessModelVisualizer visualizer = new LocalProcessModelVisualizer();
-            // add visualization for the newly selected LPM
-            LocalProcessModel lpm = (LocalProcessModel) selectedObject;
-            visualizerComponent.add(
-                    visualizer.visualize(context, lpm),
-                    BorderLayout.CENTER);
+            // add Petri net component for the newly selected LPM
+            newLPMSelected((LocalProcessModel) selectedObject);
         }
 
         if (selectedObject instanceof Place) {
             // create the visualizer
-            PlaceVisualizer visualizer = new PlaceVisualizer();
-            // add visualization for the newly selected Place
-            Place place = (Place) selectedObject;
-            visualizerComponent.add(
-                    visualizer.visualize(context, place),
-                    BorderLayout.CENTER);
+            newPlaceSelected((Place) selectedObject);
         }
+    }
+
+    public void reselect() {
+        this.tableComponent.reselect();
+    }
+
+    private void newPlaceSelected(Place selectedObject) {
+        // if in the visualizer component there is a place drawn
+        if (visualizerComponent.getComponents().length >= 1) visualizerComponent.remove(0); // remove it
+
+        PlaceVisualizer visualizer = new PlaceVisualizer();
+        // add visualization for the newly selected Place
+        Place place = selectedObject;
+        visualizerComponent.add(visualizer.createPlaceNetDisplayComponent(place), BorderLayout.CENTER);
 
         visualizerComponent.revalidate(); // revalidate the component
     }
 
-    @Override
-    public void export(SerializableCollection<T> collection) {
-        if (collection instanceof LPMResult) {
-            LPMResult lpmResult = (LPMResult) collection;
-            context.getProvidedObjectManager()
-                    .createProvidedObject("Collection exported from LPM Discovery plugin", lpmResult, LPMResult.class, context);
-            ProvidedObjectHelper.setFavorite(context, lpmResult);
-        }
+    private void newLPMSelected(LocalProcessModel selectedObject) {
+        // if in the visualizer component there is an LPM drawn
+        if (visualizerComponent.getComponents().length >= 1) visualizerComponent.remove(0); // remove it
 
-        if (collection instanceof PlaceSet) {
-            PlaceSet places = (PlaceSet) collection;
-            context.getProvidedObjectManager()
-                    .createProvidedObject("Collection exported from LPM Discovery plugin", places, PlaceSet.class, context);
-            ProvidedObjectHelper.setFavorite(context, places);
-        }
+        LocalProcessModel lpm = selectedObject;
+        LPMDisplayComponent lpmDisplayComponent = new LPMPetriNetComponent(lpm);
+        visualizerComponent.add(lpmDisplayComponent.getComponent(), BorderLayout.CENTER);
+
+        visualizerComponent.revalidate(); // revalidate the component
     }
 
     @Override
     public void componentExpansion(ComponentId componentId, boolean expanded) {
         // change visibility of lpm container
 //        this.visualizerComponent.setVisible(!expanded);
+    }
+
+    @Override
+    public JComponent getComponent() {
+        return this;
+    }
+
+    @Override
+    public void receive(EmittableDataVM data) {
+        if (data instanceof NewLPMSelectedEmittableDataVM) {
+            NewLPMSelectedEmittableDataVM cData = (NewLPMSelectedEmittableDataVM) data;
+            this.newLPMSelected(cData.getLpm());
+        } else if (data instanceof NewPlaceSelectedEmittableDataVM) {
+            NewPlaceSelectedEmittableDataVM cData = (NewPlaceSelectedEmittableDataVM) data;
+            this.newPlaceSelected(cData.getPlace());
+        }
     }
 }

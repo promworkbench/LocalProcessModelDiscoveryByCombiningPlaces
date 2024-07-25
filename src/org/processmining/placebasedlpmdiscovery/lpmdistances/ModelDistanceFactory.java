@@ -1,8 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmdistances;
 
 import com.google.inject.Inject;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistanceConfig;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistanceFactory;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.*;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.MixedModelDistance;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.MixedModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.WeightedModelDistanceConfig;
@@ -15,14 +14,17 @@ import java.util.stream.Collectors;
 
 public class ModelDistanceFactory {
 
-    @Inject
-    private DataAttributeModelDistanceFactory dataAttributeModelDistanceFactory;
+    private final DataAttributeVectorExtractorFactory dataAttributeVectorExtractorFactory;
 
     @Inject
+    public ModelDistanceFactory(DataAttributeVectorExtractorFactory dataAttributeVectorExtractorFactory) {
+        this.dataAttributeVectorExtractorFactory = dataAttributeVectorExtractorFactory;
+    }
+
     public ModelDistance getModelDistance(ModelDistanceConfig distanceConfig) {
         switch (distanceConfig.getDistanceMethod()) {
             case DataAttributeModelDistanceConfig.METHOD:
-                return dataAttributeModelDistanceFactory.create();
+                return this.getDataAttributeDistance((DataAttributeModelDistanceConfig) distanceConfig);
             case ProcessModelSimilarityDistanceConfig.METHOD:
                 if (!(distanceConfig instanceof ProcessModelSimilarityDistanceConfig))
                     throw new IllegalStateException("The distance method does not pass on the distance config.");
@@ -35,6 +37,13 @@ public class ModelDistanceFactory {
                 return new PrecomputedFromFileModelDistance((PrecomputedFromFileModelDistanceConfig) distanceConfig);
         }
         throw new IllegalArgumentException("The Distance Method " + distanceConfig.getDistanceMethod() + " is illegal.");
+    }
+
+    private ModelDistance getDataAttributeDistance(DataAttributeModelDistanceConfig distanceConfig) {
+        DataAttributeModelDistance res = new EuclideanDataAttributeModelDistance(
+                dataAttributeVectorExtractorFactory.create(distanceConfig.getAttributes())
+        );
+        return res;
     }
 
     private ModelDistance getProcessModelSimilarityDistance(ProcessModelSimilarityDistanceConfig distanceConfig) {

@@ -1,0 +1,16 @@
+[
+  {
+    "runnerInput": {
+      "inputs": {
+        "eventlog": ".\\data\\bpi2012_res10939.xes",
+        "lpms": ".\\data\\bpi2012_res10939_lpms.json"
+      }
+    },
+    "runnerOutput": {
+      "outputs": {
+        "data_attribute_vectors": ".\\data\\bpi2012_res10939_datavectors.csv"
+      }
+    },
+    "attributes": ["time:timestamp"]
+  }
+]

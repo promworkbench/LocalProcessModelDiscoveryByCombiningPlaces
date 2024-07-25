@@ -35,7 +35,7 @@ public class DataAttributeExtractorRunner {
     private static void extractDataVectors(XLog log, LPMDiscoveryResult lpmResult, String output) throws IOException {
         Injector injector = Guice.createInjector(
                 new InputModule(log),
-                new LPMDistancesDependencyInjectionModule(new DataAttributeModelDistanceConfig())
+                new LPMDistancesDependencyInjectionModule()
         );
 
         List<LocalProcessModel> lpms = new ArrayList<>(lpmResult.getAllLPMs());

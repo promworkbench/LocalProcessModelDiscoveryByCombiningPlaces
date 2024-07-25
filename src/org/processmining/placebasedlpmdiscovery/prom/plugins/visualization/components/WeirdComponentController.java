@@ -2,7 +2,7 @@ package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.comp
 
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.tables.TableListener;
+import org.processmining.placebasedlpmdiscovery.view.components.general.tables.TableListener;
 
 import java.io.Serializable;
 

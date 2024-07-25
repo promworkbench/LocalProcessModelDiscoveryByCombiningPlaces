@@ -5,6 +5,7 @@ import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventNameClassifier;
 import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.in.XesXmlParser;
+import org.deckfour.xes.info.XAttributeInfo;
 import org.deckfour.xes.info.XLogInfo;
 import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XAttribute;
@@ -43,6 +44,12 @@ public class LogUtils {
                 .getClasses().stream()
                 .map(XEventClass::getId)
                 .collect(Collectors.toList());
+    }
+
+    public static Collection<String> getEventAttributesKeys(XLog log) {
+        XLogInfo logInfo = XLogInfoFactory.createLogInfo(log);
+        XAttributeInfo eventAttributeInfo = logInfo.getEventAttributeInfo();
+        return eventAttributeInfo.getAttributeKeys();
     }
 
     /**

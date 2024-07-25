@@ -1,22 +1,25 @@
 package org.processmining.placebasedlpmdiscovery.view.models;
 
+import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.service.lpms.LPMSetService;
 
 import java.util.Collection;
 
 public class DefaultLPMDiscoveryResultViewModel implements LPMDiscoveryResultViewModel {
 
-    private final LPMDiscoveryResult result;
+    private final LPMSetService lpmSetService;
     private LocalProcessModel selectedLPM;
 
-    public DefaultLPMDiscoveryResultViewModel(LPMDiscoveryResult result) {
-        this.result = result;
+    @Inject
+    public DefaultLPMDiscoveryResultViewModel(LPMSetService lpmSetService) {
+        this.lpmSetService = lpmSetService;
     }
 
     @Override
     public Collection<LocalProcessModel> getLPMs() {
-        return result.getAllLPMs();
+        return this.lpmSetService.getLPMSet().getAllLPMs();
     }
 
     @Override

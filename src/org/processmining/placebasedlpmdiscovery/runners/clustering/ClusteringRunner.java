@@ -72,7 +72,7 @@ public class ClusteringRunner {
     public static GroupingController getGroupingController(GroupingConfig config, XLog log) {
         Injector injector = Guice.createInjector(
                 new InputModule(log),
-                new LPMDistancesDependencyInjectionModule(config.getModelDistanceConfig())
+                new LPMDistancesDependencyInjectionModule()
         );
 
         return injector.getInstance(GroupingController.class);

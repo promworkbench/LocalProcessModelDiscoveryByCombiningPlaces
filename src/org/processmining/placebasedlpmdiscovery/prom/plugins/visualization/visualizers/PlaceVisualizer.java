@@ -27,12 +27,16 @@ public class PlaceVisualizer {
     @PluginVariant(requiredParameterLabels = {0})
     public JComponent visualize(PluginContext context, Place place) {
         if (place == null)
-            throw new IllegalArgumentException("The local process model to be visualized should not be null: " + place);
+            throw new IllegalArgumentException("The place net to be visualized should not be null: " + place);
+        return createPlaceNetDisplayComponent(place);
+    }
+
+    public JComponent createPlaceNetDisplayComponent(Place place) {
         AcceptingPetriNet net = LocalProcessModelUtils.getAcceptingPetriNetRepresentation(new LocalProcessModel(place));
 
         JComponent component = new JPanel();
         component.setLayout(new BoxLayout(component, BoxLayout.X_AXIS));
-        component.add((new CustomAcceptingPetriNetVisualizer()).visualize(context, net));
+        component.add((new CustomAcceptingPetriNetVisualizer()).createProMJGraphPanel(net));
         component.add(getPlaceAdditionalInfoComponent(place.getAdditionalInfo()));
         return component;
     }
