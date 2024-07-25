@@ -13,7 +13,8 @@ public class DefaultLPMSetService implements LPMSetService, DataListener {
     private LPMDiscoveryResult originalLPMSet;
 
     @Inject
-    public DefaultLPMSetService(DataCommunicationController dc) {
+    public DefaultLPMSetService(LPMDiscoveryResult originalResult, DataCommunicationController dc) {
+        this.originalLPMSet = originalResult;
         dc.registerDataListener(this, EmittableDataType.LPMSetDiscovered);
     }
 

@@ -20,7 +20,6 @@ public class PromGuiceModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        install(new LPMDiscoveryGuiceModule());
         install(new PromViewGuiceModule());
     }
 }

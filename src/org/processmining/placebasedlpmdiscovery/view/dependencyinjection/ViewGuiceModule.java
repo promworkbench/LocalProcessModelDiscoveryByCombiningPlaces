@@ -17,35 +17,18 @@ import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LP
 import org.processmining.placebasedlpmdiscovery.view.components.placesetdisplay.DefaultPlaceSetDisplayComponentFactory;
 import org.processmining.placebasedlpmdiscovery.view.components.placesetdisplay.PlaceSetDisplayComponentFactory;
 import org.processmining.placebasedlpmdiscovery.view.components.settablepanels.grouping.lpmsimilarity.*;
+import org.processmining.placebasedlpmdiscovery.view.datacommunication.dependencyinjection.DataCommunicationGuiceModuleVM;
 
 public class ViewGuiceModule extends AbstractModule {
     @Override
     protected void configure() {
+        install(new DataCommunicationGuiceModuleVM());
         bind(PlaceSetDisplayComponentFactory.class).to(DefaultPlaceSetDisplayComponentFactory.class);
         bind(LPMSetDisplayComponentFactory.class).to(DefaultLPMSetDisplayComponentFactory.class);
-        bind(ConfigurationComponentFactory.class).to(DefaultConfigurationComponentFactory.class);
         bind(ComponentFactory.class).to(DefaultComponentFactory.class);
         bind(new TypeLiteral<PluginVisualizerTableFactory<LocalProcessModel>>(){})
                 .to(LPMResultPluginVisualizerTableFactory.class);
         bind(new TypeLiteral<PluginVisualizerTableFactory<Place>>(){})
                 .to(PlaceSetPluginVisualizerTableFactory.class);
-
-        MapBinder<String, LPMSimilaritySetupComponent> mapBinderLPMSimilaritySetupPanels = MapBinder.newMapBinder(binder(),
-                String.class, LPMSimilaritySetupComponent.class);
-        mapBinderLPMSimilaritySetupPanels.addBinding("Model Similarity")
-                .to(ModelSimilarityLPMSimilaritySetupPanel.class);
-        mapBinderLPMSimilaritySetupPanels.addBinding("Data Attributes")
-                .to(DataAttributeLPMSimilaritySetupPanel.class);
-        mapBinderLPMSimilaritySetupPanels.addBinding("Mixed")
-                .to(MixedLPMSimilaritySetupPanel.class);
-
-//        MapBinder<ConfigurationComponentType, ConfigurationComponent> mapBinderConfigurationComponents =
-//                MapBinder.newMapBinder(binder(), ConfigurationComponentType.class, ConfigurationComponent.class);
-//        mapBinderConfigurationComponents
-//                .addBinding(StandardConfigurationComponentType.LPMSimilarityConfigurationComponent)
-//                .to(LPMSimilarityChooserPanel.class);
-//        mapBinderConfigurationComponents
-//                .addBinding(StandardConfigurationComponentType.GroupingConfigurationComponent)
-//                .to(GroupingSetupPanel.class);
     }
 }

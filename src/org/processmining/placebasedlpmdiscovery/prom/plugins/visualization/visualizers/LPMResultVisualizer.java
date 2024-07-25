@@ -10,6 +10,7 @@ import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.dependencyinjection.PromViewGuiceModule;
 import org.processmining.placebasedlpmdiscovery.view.components.ComponentFactory;
 import org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay.LPMSetDisplayComponentType;
+import org.processmining.placebasedlpmdiscovery.view.dependencyinjection.ViewGuiceModule;
 
 import javax.swing.*;
 import java.util.HashMap;
@@ -27,7 +28,7 @@ public class LPMResultVisualizer {
         if (result.size() < 1)
             return new JPanel();
 
-        Injector guice = Guice.createInjector(new PromViewGuiceModule());
+        Injector guice = Guice.createInjector(new ViewGuiceModule());
         ComponentFactory componentFactory = guice.getInstance(ComponentFactory.class);
 
         return componentFactory.createLPMSetDisplayComponent(LPMSetDisplayComponentType.SimpleLPMsCollection,

@@ -8,6 +8,7 @@ import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.dependencyinjection.LPMDiscoveryResultGuiceModule;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.prom.dependencyinjection.PromGuiceModule;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.DefaultLPMDiscoveryResultComponent;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.dependencyinjection.PromViewGuiceModule;
 import org.processmining.placebasedlpmdiscovery.view.controllers.DefaultLPMDiscoveryResultViewController;
@@ -25,7 +26,8 @@ public class LPMDiscoveryResultVisualizer {
     @PluginVariant(requiredParameterLabels = {0})
     public JComponent visualize(UIPluginContext context, LPMDiscoveryResult result) {
 
-        Injector injector = Guice.createInjector(new PromViewGuiceModule(), new LPMDiscoveryResultGuiceModule(result));
+        Injector injector = Guice.createInjector(new LPMDiscoveryResultGuiceModule(result),
+                new PromGuiceModule(context));
 
 //        DefaultLPMDiscoveryResultViewModel model = new DefaultLPMDiscoveryResultViewModel(result);
 //        DefaultLPMDiscoveryResultComponent view = new DefaultLPMDiscoveryResultComponent()

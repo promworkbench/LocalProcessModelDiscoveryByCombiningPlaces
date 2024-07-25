@@ -19,15 +19,12 @@ public class DefaultComponentFactory implements ComponentFactory {
 
     private final LPMSetDisplayComponentFactory lpmSetDisplayComponentFactory;
     private final PlaceSetDisplayComponentFactory placeSetDisplayComponentFactory;
-    private final ConfigurationComponentFactory configurationComponentFactory;
 
     @Inject
     public DefaultComponentFactory(LPMSetDisplayComponentFactory lpmSetDisplayComponentFactory,
-                                   PlaceSetDisplayComponentFactory placeSetDisplayComponentFactory,
-                                   ConfigurationComponentFactory configurationComponentFactory) {
+                                   PlaceSetDisplayComponentFactory placeSetDisplayComponentFactory) {
         this.lpmSetDisplayComponentFactory = lpmSetDisplayComponentFactory;
         this.placeSetDisplayComponentFactory = placeSetDisplayComponentFactory;
-        this.configurationComponentFactory = configurationComponentFactory;
     }
 
     @Override
@@ -58,8 +55,4 @@ public class DefaultComponentFactory implements ComponentFactory {
         return this.placeSetDisplayComponentFactory.createPlaceSetDisplayComponent(type, places, listener);
     }
 
-    @Override
-    public ConfigurationComponentFactory getConfigurationComponentFactory() {
-        return this.configurationComponentFactory;
-    }
 }

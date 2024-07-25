@@ -43,9 +43,9 @@ public class AttributeSummaryController {
             summary = EventAttributeSummaryFactory.getEventAttributeSummary(attribute, false);
             if (summary != null) {
                 result.getAttributeValues().put(attribute.getKey(), summary);
+                summary.addValue(attribute);
             }
         }
-        summary.addValue(attribute);
     }
 
     public EventAttributeCollectorResult computeEventAttributeSummary(XLog log) {
