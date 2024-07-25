@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.service.lpmdiscovery;
+package org.processmining.placebasedlpmdiscovery.lpmdiscovery.service;
 
 import com.google.inject.Inject;
 import org.deckfour.xes.model.XLog;
@@ -20,9 +20,10 @@ public class DefaultLPMDiscoveryService implements LPMDiscoveryService {
     }
 
     @Override
-    public void runLPMDiscovery(XLog log, PlaceSet placeSet) {
+    public LPMDiscoveryResult runLPMDiscovery(XLog log, PlaceSet placeSet) {
         LPMDiscoveryResult result = Main.createDefaultBuilder(log, placeSet,
                 new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log))).build().run();
         dc.emit(new LPMSetDiscoveredEmittableData(result));
+        return result;
     }
 }
