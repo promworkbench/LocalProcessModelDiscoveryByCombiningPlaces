@@ -1,6 +1,7 @@
-package org.processmining.placebasedlpmdiscovery.main;
+package org.processmining.placebasedlpmdiscovery.model.discovery;
 
 import org.deckfour.xes.model.XLog;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryInput;
 
 public class StandardLPMDiscoveryInput implements LPMDiscoveryInput {
 

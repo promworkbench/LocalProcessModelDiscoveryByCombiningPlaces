@@ -1,9 +1,12 @@
-package org.processmining.placebasedlpmdiscovery.main;
+package org.processmining.placebasedlpmdiscovery.model.discovery;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryConfig;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryInput;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.Exporter;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTree;
 

@@ -8,7 +8,7 @@
 //import org.processmining.models.graphbased.directed.petrinet.elements.Place;
 //import org.processmining.models.jgraph.ProMJGraphVisualizer;
 //import org.processmining.models.jgraph.visualization.ProMJGraphPanel;
-//import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
+//import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 //import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 //import org.processmining.placebasedlpmdiscovery.model.Transition;
 //import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;

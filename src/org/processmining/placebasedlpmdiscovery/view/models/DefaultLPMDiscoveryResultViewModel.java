@@ -1,7 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.view.models;
 
 import com.google.inject.Inject;
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.service.lpms.LPMSetService;
 

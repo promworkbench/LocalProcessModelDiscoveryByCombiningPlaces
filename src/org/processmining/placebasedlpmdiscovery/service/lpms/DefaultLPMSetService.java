@@ -6,7 +6,7 @@ import org.processmining.placebasedlpmdiscovery.datacommunication.datalisteners.
 import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.EmittableData;
 import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.EmittableDataType;
 import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.LPMSetDiscoveredEmittableData;
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 
 public class DefaultLPMSetService implements LPMSetService, DataListener {
 

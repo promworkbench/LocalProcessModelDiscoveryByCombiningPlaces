@@ -4,7 +4,7 @@
 //import org.processmining.framework.plugin.PluginContext;
 //import org.processmining.placebasedlpmdiscovery.Main;
 //import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
-//import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
+//import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 //import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.controllers.InteractiveLPMsDiscoveryController;
 //import org.processmining.placebasedlpmdiscovery.prom.ContextKeeper;
 //

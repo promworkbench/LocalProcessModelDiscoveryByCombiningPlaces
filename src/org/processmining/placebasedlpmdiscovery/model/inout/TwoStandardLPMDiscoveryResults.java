@@ -2,8 +2,8 @@ package org.processmining.placebasedlpmdiscovery.model.inout;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryConfig;
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryInput;
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryInput;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.main.MultipleLPMDiscoveryResults;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.Exporter;

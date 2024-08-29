@@ -7,12 +7,10 @@ import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.placebasedlpmdiscovery.grouping.DefaultGroupingConfig;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingConfig;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingController;
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.grouped.GroupedLPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.grouped.GroupingProperty;
 import org.processmining.placebasedlpmdiscovery.runners.clustering.ClusteringRunner;
-import org.processmining.placebasedlpmdiscovery.runners.io.RunnerInput;
-import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
 import javax.swing.*;
 

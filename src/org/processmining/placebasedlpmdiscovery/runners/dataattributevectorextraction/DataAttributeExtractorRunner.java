@@ -14,7 +14,7 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.results.FromFileLPM
 import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeVectorExtractor;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeVectorExtractorFactory;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.dependencyinjection.DataAttributeVectorExtractionDIModule;
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerInput;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerOutput;
