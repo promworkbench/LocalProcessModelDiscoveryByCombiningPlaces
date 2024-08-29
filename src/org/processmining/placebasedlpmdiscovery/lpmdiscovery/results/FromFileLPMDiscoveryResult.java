@@ -1,8 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.results;
 
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryConfig;
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryInput;
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryInput;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.Exporter;
 import org.processmining.placebasedlpmdiscovery.model.exporting.importers.ImporterFactory;

@@ -4,8 +4,8 @@ import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.Analyzer;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryInput;
-import org.processmining.placebasedlpmdiscovery.main.StandardLPMDiscoveryInput;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryInput;
+import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterSubject;
 
 public class RunningContext {

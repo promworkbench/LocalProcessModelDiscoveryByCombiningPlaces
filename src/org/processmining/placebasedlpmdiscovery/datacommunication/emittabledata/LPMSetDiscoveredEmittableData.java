@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata;
 
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 
 public class LPMSetDiscoveredEmittableData implements EmittableData {
 

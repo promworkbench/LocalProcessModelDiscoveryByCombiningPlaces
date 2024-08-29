@@ -2,7 +2,7 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.dependencyinjectio
 
 import com.google.inject.AbstractModule;
 import org.processmining.placebasedlpmdiscovery.InputModule;
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 
 public class LPMDiscoveryResultGuiceModule extends AbstractModule {
     private final LPMDiscoveryResult result;

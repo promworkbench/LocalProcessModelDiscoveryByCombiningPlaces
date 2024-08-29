@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.view.models;
 
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
 import java.util.Collection;
