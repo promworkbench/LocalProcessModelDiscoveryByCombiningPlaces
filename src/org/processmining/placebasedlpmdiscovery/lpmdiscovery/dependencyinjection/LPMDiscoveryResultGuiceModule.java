@@ -12,7 +12,7 @@ public class LPMDiscoveryResultGuiceModule extends AbstractModule {
     }
     @Override
     protected void configure() {
-        install(new InputModule(this.result.getInput().getLog()));
+        install(new InputModule(this.result.getInput().getLog().getOriginalLog()));
         bind(LPMDiscoveryResult.class).toInstance(result);
     }
 }

@@ -1,8 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.model.discovery;
 
-import org.deckfour.xes.model.XLog;
+import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 
 public interface LPMDiscoveryInput {
 
-    XLog getLog();
+    EventLog getLog();
 }

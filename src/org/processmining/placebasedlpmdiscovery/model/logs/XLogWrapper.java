@@ -19,4 +19,9 @@ public class XLogWrapper implements EventLog {
     public Set<Activity> getActivities() {
         return LogUtils.getActivitiesFromLog(this.log).stream().map(SimpleActivity::new).collect(Collectors.toSet());
     }
+
+    @Override
+    public XLog getOriginalLog() {
+        return this.log;
+    }
 }
