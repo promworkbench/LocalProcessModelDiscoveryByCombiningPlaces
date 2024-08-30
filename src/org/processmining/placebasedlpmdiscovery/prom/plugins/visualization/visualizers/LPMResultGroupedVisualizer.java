@@ -103,7 +103,7 @@ public class LPMResultGroupedVisualizer {
         if (property.equals(GroupingProperty.Clustering)) {
             GroupingConfig groupingConfig = new DefaultGroupingConfig();
             GroupingController groupingController = ClusteringRunner
-                    .getGroupingController(groupingConfig, result.getInput().getLog());
+                    .getGroupingController(groupingConfig, result.getInput().getLog().getOriginalLog());
             groupingController.groupLPMs(result.getAllLPMs(), groupingConfig);
         }
         GroupedLPMResult grouped = new GroupedLPMResult(result.getAllLPMs(), property);

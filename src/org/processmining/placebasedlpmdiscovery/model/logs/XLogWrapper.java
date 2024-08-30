@@ -18,4 +18,9 @@ public class XLogWrapper implements EventLog {
     public Set<String> getActivities() {
         return new HashSet<>(LogUtils.getActivitiesFromLog(this.log));
     }
+
+    @Override
+    public XLog getOriginalLog() {
+        return this.log;
+    }
 }
