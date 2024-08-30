@@ -33,12 +33,6 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         this.runningContext = runningContext;
     }
 
-    private static void transferAdditionalInfo(MainFPGrowthLPMTreeNode node, LocalProcessModel lpm) {
-        for (Map.Entry<String, LPMCollectorResult> entry : node.getAdditionalInfo().getCollectorResults().entrySet()) {
-            lpm.getAdditionalInfo().addCollectorResult(entry.getKey(), entry.getValue());
-        }
-    }
-
     @Override
     protected MainFPGrowthLPMTreeNode createRoot() {
         return new MainFPGrowthLPMTreeNode(null);
@@ -76,34 +70,6 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         return sorted;
     }
 
-    public Set<LocalProcessModel> getLPMs(int count) {
-        Set<LocalProcessModel> lpms = new HashSet<>();
-        Set<MainFPGrowthLPMTreeNode> visited = new HashSet<>();
-
-        Queue<MainFPGrowthLPMTreeNode> queue = new LinkedList<>();
-        queue.add(root);
-        int counter = 0;
-        int counter2 = 0;
-        while (!queue.isEmpty()) {
-            if (stop && lpms.size() >= count) {
-                return lpms;
-            }
-            MainFPGrowthLPMTreeNode node = queue.poll();
-            if (node != root && !node.getAdditionalInfo().getCollectorResults().isEmpty()) {
-                LocalProcessModel lpm = node.getLPM();
-                transferAdditionalInfo(node, lpm);
-                if (this.runningContext.getLpmFiltrationController().shouldKeepLPM(lpm))
-                    lpms.add(lpm);
-            }
-            queue.addAll(node.getChildren());
-        }
-
-        // TODO: The count of lpms we want returned should be used here since we don't want to go through all lpms.
-        // TODO: How not sure yet
-
-        return lpms;
-    }
-
     public void updateAllTotalCount(WindowTotalCounter windowTotalCounter, Integer totalTraceCount, XLog log) {
         for (MainFPGrowthLPMTreeNode node : this.nodes) {
             for (LPMCollectorResult res : node.getAdditionalInfo().getCollectorResults().values()) {
@@ -125,5 +91,9 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
     @Override
     public void interrupt() {
         this.stop = true;
+    }
+
+    public MainFPGrowthLPMTreeNode getRoot() {
+        return this.root;
     }
 }
