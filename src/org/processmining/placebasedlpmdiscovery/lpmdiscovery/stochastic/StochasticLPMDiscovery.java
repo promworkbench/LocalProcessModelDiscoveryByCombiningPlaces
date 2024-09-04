@@ -1,9 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.stochastic;
 
-import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryInput;
-import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.LPMDiscoveryAlg;
 
-public interface StochasticLPMDiscovery {
-
-    LPMDiscoveryResult run(LPMDiscoveryInput input);
+public interface StochasticLPMDiscovery extends LPMDiscoveryAlg {
 }

@@ -33,6 +33,14 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         this.runningContext = runningContext;
     }
 
+    public MainFPGrowthLPMTree(Map<Place, Integer> priorityMap,
+                               Map<String, Integer> labelMap,
+                               int maxDependencyLength) {
+        this.priorityMap = priorityMap;
+        this.labelMap = labelMap;
+        this.maxDependencyLength = maxDependencyLength;
+    }
+
     @Override
     protected MainFPGrowthLPMTreeNode createRoot() {
         return new MainFPGrowthLPMTreeNode(null);

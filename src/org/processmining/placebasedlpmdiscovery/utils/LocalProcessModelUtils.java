@@ -151,6 +151,41 @@ public class LocalProcessModelUtils {
         return lpm;
     }
 
+    public static LocalProcessModel convertReplayableToLPM(ReplayableLocalProcessModel replayable) {
+        // create all transitions
+        Map<Integer, Transition> transitions = new HashMap<>();
+        Set<Integer> transitionsMapped = replayable.getTransitions();
+        Set<Integer> invisibleTransitionsMapped = replayable.getInvisibleTransitions();
+        for (Integer tr : transitionsMapped) {
+            boolean invisible = invisibleTransitionsMapped.contains(tr);
+            Transition transition = new Transition(tr.toString(), invisible);
+            transitions.put(tr, transition);
+        }
+
+        // create places for each constraint
+        Map<Integer, Place> constraintIdPlaceMap = replayable.getConstraintMap()
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> new Place(e.getValue())));
+        // add output transitions to the places
+        for (Map.Entry<Integer, Set<Integer>> entry : replayable.getInputConstraints().entrySet()) {
+            int trId = entry.getKey();
+            entry.getValue().forEach(id -> constraintIdPlaceMap.get(id).addOutputTransition(transitions.get(trId)));
+        }
+        // add input transitions to the places
+        for (Map.Entry<Integer, Set<Integer>> entry : replayable.getOutputConstraints().entrySet()) {
+            int trId = entry.getKey();
+            entry.getValue().forEach(id -> constraintIdPlaceMap.get(id).addInputTransition(transitions.get(trId)));
+        }
+
+        // create the lpm
+        LocalProcessModel lpm = new LocalProcessModel();
+        for (Place p : constraintIdPlaceMap.values())
+            lpm.addPlace(p);
+
+        return lpm;
+    }
+
     public static LocalProcessModel revertLocalProcessModel(LocalProcessModel lpm) {
         LocalProcessModel reverted = new LocalProcessModel();
 

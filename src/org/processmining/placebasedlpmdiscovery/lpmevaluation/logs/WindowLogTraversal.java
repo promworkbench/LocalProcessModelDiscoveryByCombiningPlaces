@@ -11,6 +11,7 @@ public class WindowLogTraversal {
     private final int maxWindowSize;
 
     private final Set<Integer> remainingTraceVariantIds;
+    private Integer traceVariantId;
     private List<Integer> traceVariant;
     private int windowCount;
     private int position;
@@ -29,7 +30,7 @@ public class WindowLogTraversal {
         return position < this.traceVariant.size() || !this.remainingTraceVariantIds.isEmpty();
     }
 
-    public List<Integer> next() {
+    public WindowInfo next() {
         if (traceVariant == null) {
             startTraversingNewTraceVariant();
         }
@@ -40,27 +41,15 @@ public class WindowLogTraversal {
         if (position < traceVariant.size()) {
             window.add(traceVariant.get(position++));
         }
-        return new ArrayList<>(window);
+        return new WindowInfo(new ArrayList<>(window), windowCount, traceVariantId, position - window.size() + 1, position);
     }
 
     private void startTraversingNewTraceVariant() {
-        Integer id = remainingTraceVariantIds.stream().findAny().get(); // get one trace variant id
-        this.remainingTraceVariantIds.remove(id); // remove trace variant id from the set of remaining
+        this.traceVariantId = remainingTraceVariantIds.stream().findAny().get(); // get one trace variant id
+        this.remainingTraceVariantIds.remove(traceVariantId); // remove trace variant id from the set of remaining
 
-        this.traceVariant = this.windowLog.getTraceVariant(id); // get trace variant for the id
+        this.traceVariant = this.windowLog.getTraceVariant(traceVariantId); // get trace variant for the id
         this.windowCount = windowLog.getTraceVariantCount(traceVariant);
         this.position = 0;
-    }
-
-    public int getCurrentWindowCount() {
-        return windowCount;
-    }
-
-    public int getCurrentWindowFirstPos() {
-        return position - window.size() + 1;
-    }
-
-    public int getCurrentWindowLastPos() {
-        return position;
     }
 }
