@@ -1,9 +1,9 @@
-package org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.placecombination.fpgrowth;
+package org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth.placecombination;
 
 import org.apache.commons.math3.util.Pair;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.LPMBuildingAlg;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.placecombination.fpgrowth.utils.LPMFromBranchCombinationValidityChecker;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.placecombination.fpgrowth.utils.WindowLPMTreeValidLPMsRandomTraversal;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth.placecombination.utils.LPMFromBranchCombinationValidityChecker;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlg;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth.placecombination.utils.WindowLPMTreeValidLPMsRandomTraversal;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowInfo;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;

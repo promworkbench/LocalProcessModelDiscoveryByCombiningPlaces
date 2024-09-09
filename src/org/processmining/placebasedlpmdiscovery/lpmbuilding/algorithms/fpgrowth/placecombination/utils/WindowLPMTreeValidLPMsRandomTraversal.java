@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.placecombination.fpgrowth.utils;
+package org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth.placecombination.utils;
 
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.WindowLPMTree;
