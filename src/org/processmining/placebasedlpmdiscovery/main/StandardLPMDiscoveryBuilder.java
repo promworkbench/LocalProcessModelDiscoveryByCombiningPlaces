@@ -38,6 +38,9 @@ public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
     private Collection<LPMFilter> lpmFilters;
 
     public StandardLPMDiscoveryBuilder() {
+        evaluationController = new LPMEvaluationController();
+        filtrationController = new LPMFiltrationController(evaluationController);
+
         this.windowEvaluators = new HashMap<>();
         this.lpmFilters = new ArrayList<>();
     }
@@ -100,16 +103,6 @@ public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
             throw new IllegalArgumentException("An evaluator with the same name is already existing.");
         }
         this.windowEvaluators.put(name, windowCollector);
-    }
-
-    @Override
-    public void setEvaluationController(LPMEvaluationController evaluationController) {
-        this.evaluationController = evaluationController;
-    }
-
-    @Override
-    public void setFiltrationController(LPMFiltrationController filtrationController) {
-        this.filtrationController = filtrationController;
     }
 
     @Override

@@ -29,10 +29,6 @@ public interface LPMDiscoveryBuilder {
 
     void registerLPMWindowCollector(String name, WindowLPMCollector<? extends LPMCollectorResult> windowCollector);
 
-    void setEvaluationController(LPMEvaluationController evaluationController);
-
-    void setFiltrationController(LPMFiltrationController filtrationController);
-
     void setCombinationGuard(CombinationGuard combinationGuard);
 
     void registerLPMFilter(LPMFilter filter, boolean b);

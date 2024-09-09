@@ -13,12 +13,11 @@ import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindo
 import java.util.*;
 
 public class LPMEvaluationController implements EvaluatorHub {
-    private RunningContext runningContext;
     private LPMCollectorFactory evaluatorFactory;
     private Map<String, WindowLPMCollector<?>> windowEvaluators;
 
-    public LPMEvaluationController(RunningContext runningContext) {
-        this.runningContext = runningContext;
+    public LPMEvaluationController() {
+        this.evaluatorFactory = new LPMCollectorFactory();
         this.windowEvaluators = new HashMap<>();
     }
 

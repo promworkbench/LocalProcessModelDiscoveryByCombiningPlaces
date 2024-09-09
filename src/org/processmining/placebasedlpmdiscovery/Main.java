@@ -121,14 +121,8 @@ public class Main {
     }
 
     private static void setupStandardEvaluationAndFiltrationControllers(PlaceBasedLPMDiscoveryParameters parameters, LPMDiscoveryBuilder builder, RunningContext runningContext) {
-        LPMFiltrationController filtrationController = new LPMFiltrationController(runningContext);
-        builder.setFiltrationController(filtrationController);
-        LPMEvaluationController evaluationController = new LPMEvaluationController(runningContext);
-        builder.setEvaluationController(evaluationController);
-
         // add evaluators
         LPMCollectorFactory evaluatorFactory = new LPMCollectorFactory();
-        evaluationController.setEvaluatorFactory(evaluatorFactory);
         builder.registerLPMWindowCollector(StandardLPMEvaluatorId.PassageCoverageEvaluator.name(),
                 evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.PassageCoverageEvaluator));
         builder.registerLPMWindowCollector(StandardLPMEvaluatorId.FittingWindowEvaluator.name(),
@@ -149,7 +143,5 @@ public class Main {
             LPMFilter filter = filterFactory.getLPMFilter(filterId);
             builder.registerLPMFilter(filter, filter.needsEvaluation());
         }
-        runningContext.setLpmFiltrationController(filtrationController);
-        runningContext.setLpmEvaluationController(evaluationController);
     }
 }

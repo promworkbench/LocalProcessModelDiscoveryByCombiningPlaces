@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration;
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.NeedsEvaluationLPMFilter;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
@@ -10,7 +11,7 @@ import java.util.*;
 
 public class LPMFiltrationController {
 
-    private RunningContext runningContext;
+    private final LPMEvaluationController evaluationController;
     private final Map<String, LPMFilter> filterMap;
     private final List<LPMFilter> finalFilters;
     private final PriorityQueue<LPMFilter> filters;
@@ -18,9 +19,8 @@ public class LPMFiltrationController {
     private List<LPMFilter> afterEvalFilters;
 
 
-    public LPMFiltrationController(RunningContext runningContext) {
-        this.runningContext = runningContext;
-
+    public LPMFiltrationController(LPMEvaluationController evaluationController) {
+        this.evaluationController = evaluationController;
         this.filterMap = new HashMap<>();
         this.beforeEvalFilters = new ArrayList<>();
         this.afterEvalFilters = new ArrayList<>();
@@ -56,7 +56,7 @@ public class LPMFiltrationController {
                         LPMEvaluationResult.class) == null)
                     lpm.getAdditionalInfo().addCollectorResult(
                             needsEvaluationLPMFilter.getEvaluationId().name(),
-                            this.runningContext.getLpmEvaluationController()
+                            this.evaluationController
                                     .evaluate(needsEvaluationLPMFilter.getEvaluatorId().name(), lpm));
             }
             if (!filter.shouldKeep(lpm))
