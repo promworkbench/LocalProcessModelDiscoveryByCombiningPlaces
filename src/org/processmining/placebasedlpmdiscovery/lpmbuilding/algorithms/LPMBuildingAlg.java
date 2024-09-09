@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms;
+package org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms;
 
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMBuildingInput;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTree;
