@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.main;
+package org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms;
 
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationController;
@@ -24,7 +24,7 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 
     private final LPMCombinationController lpmCombination;
 
-    StandardLPMDiscoveryAlg(RunningContext runningContext,
+    public StandardLPMDiscoveryAlg(RunningContext runningContext,
                             PlaceBasedLPMDiscoveryParameters parameters,
                             PlaceDiscovery placeDiscovery,
                             PlaceChooser placeChooser,
