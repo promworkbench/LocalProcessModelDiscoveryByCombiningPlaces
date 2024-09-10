@@ -48,9 +48,6 @@ public class Main {
         LPMCombinationController controller =
                 new StandardLPMCombinationController(log, parameters, runningContext);
         builder.setLPMCombination(controller);
-        // set guard
-        builder.setCombinationGuard(new CombinationGuard(
-                new SameActivityCombinationGuard(), new NotContainingCoveringPlacesCombinationGuard()));
 
         // set filtration and evaluation controllers
         setupStandardEvaluationAndFiltrationControllers(parameters, builder);
@@ -77,9 +74,6 @@ public class Main {
         LPMCombinationController controller =
                 new StandardLPMCombinationController(log, parameters, runningContext);
         builder.setLPMCombination(controller);
-        // set guard
-        builder.setCombinationGuard(new CombinationGuard(
-                new SameActivityCombinationGuard(), new NotContainingCoveringPlacesCombinationGuard()));
 
         // set filtration and evaluation controllers
         setupStandardEvaluationAndFiltrationControllers(parameters, builder);
@@ -107,9 +101,6 @@ public class Main {
         LPMCombinationController controller =
                 new StandardLPMCombinationController(log, parameters, runningContext);
         builder.setLPMCombination(controller);
-        // set guard
-        builder.setCombinationGuard(new CombinationGuard(
-                new SameActivityCombinationGuard(), new NotContainingCoveringPlacesCombinationGuard()));
 
         // set filtration and evaluation controllers
         setupStandardEvaluationAndFiltrationControllers(parameters, builder);

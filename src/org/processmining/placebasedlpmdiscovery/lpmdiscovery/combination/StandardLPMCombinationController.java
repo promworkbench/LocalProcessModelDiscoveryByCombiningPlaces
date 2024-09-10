@@ -22,7 +22,6 @@ public class StandardLPMCombinationController implements LPMCombinationControlle
     private XLog log;
     private final PlaceBasedLPMDiscoveryParameters parameters;
     private int currentNumPlaces;
-    private CombinationGuard guard;
     private final RunningContext runningContext;
 
     public StandardLPMCombinationController(XLog log,
@@ -34,17 +33,12 @@ public class StandardLPMCombinationController implements LPMCombinationControlle
         this.runningContext = runningContext;
 
         this.currentNumPlaces = 1;
-        this.guard = (lpm, place) -> true;
 
         this.runningContext
                 .getAnalyzer()
                 .getStatistics()
                 .getGeneralStatistics()
                 .setProximity(this.parameters.getLpmCombinationParameters().getLpmProximity());
-    }
-
-    public void setCombinationGuard(CombinationGuard guard) {
-        this.guard = guard;
     }
 
     public LPMDiscoveryResult combineUsingFPGrowth(Set<Place> places, int count) {
@@ -124,11 +118,6 @@ public class StandardLPMCombinationController implements LPMCombinationControlle
 //                (new RemoveStructuralRedundantPlacesPlugin())
 //                        .run(Main.getContext(), LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm), parameters));
         return lpm;
-    }
-
-    @Override
-    public void setGuard(CombinationGuard guard) {
-        setCombinationGuard(guard); // TODO: It should allow for more probably
     }
 
     @Override

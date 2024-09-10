@@ -29,7 +29,6 @@ public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
     private PlaceChooser placeChooser;
 
     private LPMCombinationController lpmCombination;
-    private CombinationGuard combinationGuard;
 
     private LPMEvaluationController evaluationController;
     private LPMFiltrationController filtrationController;
@@ -47,9 +46,6 @@ public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
 
     @Override
     public LPMDiscoveryAlg build() {
-        // set guard
-        this.lpmCombination.setGuard(this.combinationGuard);
-
         // register evaluators
         windowEvaluators.forEach((key, value) -> this.evaluationController.registerEvaluator(key, value));
         lpmFilters.forEach(filter -> this.filtrationController.addLPMFilter(filter, filter.needsEvaluation()));
@@ -70,7 +66,6 @@ public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
         this.placeDiscovery = null;
         this.placeChooser = null;
         this.lpmCombination = null;
-        this.combinationGuard = null;
         this.evaluationController = null;
         this.filtrationController = null;
         this.windowEvaluators = new HashMap<>();
@@ -103,11 +98,6 @@ public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
             throw new IllegalArgumentException("An evaluator with the same name is already existing.");
         }
         this.windowEvaluators.put(name, windowCollector);
-    }
-
-    @Override
-    public void setCombinationGuard(CombinationGuard combinationGuard) {
-        this.combinationGuard = combinationGuard;
     }
 
     @Override

@@ -5,8 +5,6 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.LPMDisco
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationController;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMCollector;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
 import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
@@ -28,8 +26,6 @@ public interface LPMDiscoveryBuilder {
     void setRunningContext(RunningContext runningContext);
 
     void registerLPMWindowCollector(String name, WindowLPMCollector<? extends LPMCollectorResult> windowCollector);
-
-    void setCombinationGuard(CombinationGuard combinationGuard);
 
     void registerLPMFilter(LPMFilter filter, boolean b);
 
