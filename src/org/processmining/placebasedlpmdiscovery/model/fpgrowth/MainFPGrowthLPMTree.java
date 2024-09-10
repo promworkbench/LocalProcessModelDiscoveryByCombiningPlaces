@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.RunningContext;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.LPMBuildingResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventCoverageEvaluationResult;
@@ -15,7 +16,7 @@ import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
 import java.util.*;
 
-public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode> implements CanBeInterrupted {
+public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode> implements CanBeInterrupted, LPMBuildingResult {
 
     private final Map<Place, Integer> priorityMap; // place mapped into priority value
     private final Map<String, Integer> labelMap; // label mapped into integer id
