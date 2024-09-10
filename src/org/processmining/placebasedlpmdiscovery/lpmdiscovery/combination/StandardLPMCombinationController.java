@@ -3,6 +3,9 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination;
 import org.apache.commons.lang.NotImplementedException;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.RunningContext;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.LPMBuildingResult;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.LPMBuildingResultTraversal;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.MainFPGrowthLPMTreeTraversal;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard;
 //import org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth.ContextLPMTreeBuilder;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth.LPMTreeBuilder;
@@ -60,7 +63,7 @@ public class StandardLPMCombinationController implements LPMCombinationControlle
             this.runningContext.getInterrupterSubject().addObserver(tree);
             System.out.println("========End building tree========");
 
-            return new StandardLPMDiscoveryResult(getLPMs(tree, parameters.getLpmCount()));
+            return new StandardLPMDiscoveryResult(getLPMs(tree));
         } else {
             throw new NotImplementedException();
 //            ContextLPMTreeBuilder treeBuilder = new ContextLPMTreeBuilder(
@@ -76,32 +79,15 @@ public class StandardLPMCombinationController implements LPMCombinationControlle
         }
     }
 
-    private static void transferAdditionalInfo(MainFPGrowthLPMTreeNode node, LocalProcessModel lpm) {
-        for (Map.Entry<String, LPMCollectorResult> entry : node.getAdditionalInfo().getCollectorResults().entrySet()) {
-            lpm.getAdditionalInfo().addCollectorResult(entry.getKey(), entry.getValue());
-        }
-    }
-
-    private Set<LocalProcessModel> getLPMs(MainFPGrowthLPMTree tree, int count) {
+    private Set<LocalProcessModel> getLPMs(MainFPGrowthLPMTree tree) {
         Set<LocalProcessModel> lpms = new HashSet<>();
-        Set<MainFPGrowthLPMTreeNode> visited = new HashSet<>();
 
-        Queue<MainFPGrowthLPMTreeNode> queue = new LinkedList<>();
-        queue.add(tree.getRoot());
-        int counter = 0;
-        int counter2 = 0;
-        while (!queue.isEmpty()) {
-            if (lpms.size() >= count) {
-                return lpms;
+        LPMBuildingResultTraversal traversal = new MainFPGrowthLPMTreeTraversal(tree);
+        while (traversal.hasNext()) {
+            LocalProcessModel lpm = traversal.next();
+            if (this.runningContext.getLpmFiltrationController().shouldKeepLPM(lpm)) {
+                lpms.add(lpm);
             }
-            MainFPGrowthLPMTreeNode node = queue.poll();
-            if (node != tree.getRoot() && !node.getAdditionalInfo().getCollectorResults().isEmpty()) {
-                LocalProcessModel lpm = node.getLPM();
-                transferAdditionalInfo(node, lpm);
-                if (this.runningContext.getLpmFiltrationController().shouldKeepLPM(lpm))
-                    lpms.add(lpm);
-            }
-            queue.addAll(node.getChildren());
         }
 
         // TODO: The count of lpms we want returned should be used here since we don't want to go through all lpms.
