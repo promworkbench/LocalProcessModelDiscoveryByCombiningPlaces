@@ -12,6 +12,12 @@ public class FPGrowthForPlacesLPMBuildingInput implements LPMBuildingInput {
     private Set<Place> places;
     private LPMCombinationParameters parameters; // TODO: Should be FPGrowthCombinationParameters 30.08.2024
 
+    public FPGrowthForPlacesLPMBuildingInput(EventLog log, Set<Place> places, LPMCombinationParameters parameters) {
+        this.log = log;
+        this.places = places;
+        this.parameters = parameters;
+    }
+
     public EventLog getLog() {
         return this.log;
     }
