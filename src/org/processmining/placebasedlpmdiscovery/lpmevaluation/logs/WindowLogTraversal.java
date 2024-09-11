@@ -1,9 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class WindowLogTraversal {
 
@@ -22,25 +19,32 @@ public class WindowLogTraversal {
         this.windowLog = windowLog;
         this.maxWindowSize = maxWindowSize;
 
-        this.remainingTraceVariantIds = this.windowLog.getTraceVariantIds();
+        this.remainingTraceVariantIds = new HashSet<>(this.windowLog.getTraceVariantIds());
         this.window = new LinkedList<>();
     }
 
     public boolean hasNext() {
-        return position < this.traceVariant.size() || !this.remainingTraceVariantIds.isEmpty();
+        return this.traceVariantId != null && position < this.traceVariant.size()
+                || !this.remainingTraceVariantIds.isEmpty();
     }
 
     public WindowInfo next() {
-        if (traceVariant == null) {
+        boolean startNewVariant = traceVariant == null // hasn't started traversing
+                || position >= traceVariant.size() && window.size() == 1; // finishing a trace variant
+        if (startNewVariant) {
             startTraversingNewTraceVariant();
         }
-        // if no space in the window or at the end of the trace
+
+        // remove first event if no space in the window or at the end of the trace
         if (window.size() >= maxWindowSize || position >= traceVariant.size()) {
-            window.removeFirst(); // remove the first event
+            window.removeFirst();
         }
+
+        // add next event
         if (position < traceVariant.size()) {
             window.add(traceVariant.get(position++));
         }
+
         return new WindowInfo(new ArrayList<>(window), windowCount, traceVariantId, position - window.size() + 1, position);
     }
 
