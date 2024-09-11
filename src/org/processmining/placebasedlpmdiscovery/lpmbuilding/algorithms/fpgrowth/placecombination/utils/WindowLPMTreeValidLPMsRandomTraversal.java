@@ -20,6 +20,8 @@ public class WindowLPMTreeValidLPMsRandomTraversal {
     }
 
     public WindowLPMTreeNode next() {
-       return validLpms.stream().findAny().get();
+       WindowLPMTreeNode node = validLpms.stream().findAny().get();
+       validLpms.remove(node);
+       return node;
     }
 }
