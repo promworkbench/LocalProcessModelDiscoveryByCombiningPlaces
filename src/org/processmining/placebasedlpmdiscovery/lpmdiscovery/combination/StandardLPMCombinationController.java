@@ -5,20 +5,17 @@ import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.LPMBuildingResult;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.LPMBuildingResultTraversal;
-import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.MainFPGrowthLPMTreeTraversal;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard;
-//import org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth.ContextLPMTreeBuilder;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.LPMBuildingResultTraversalFactory;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth.LPMTreeBuilder;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
-import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
-import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTree;
-import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTreeNode;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class StandardLPMCombinationController implements LPMCombinationController {
 
@@ -79,10 +76,10 @@ public class StandardLPMCombinationController implements LPMCombinationControlle
         }
     }
 
-    private Set<LocalProcessModel> getLPMs(MainFPGrowthLPMTree tree) {
+    private Set<LocalProcessModel> getLPMs(LPMBuildingResult lpmBuildingResult) {
         Set<LocalProcessModel> lpms = new HashSet<>();
 
-        LPMBuildingResultTraversal traversal = new MainFPGrowthLPMTreeTraversal(tree);
+        LPMBuildingResultTraversal traversal = LPMBuildingResultTraversalFactory.createTraversal(lpmBuildingResult);
         while (traversal.hasNext()) {
             LocalProcessModel lpm = traversal.next();
             if (this.runningContext.getLpmFiltrationController().shouldKeepLPM(lpm)) {
