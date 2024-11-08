@@ -2,7 +2,7 @@ package org.processmining.placebasedlpmdiscovery.model.serializable;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryConfig;
-import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryInput;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;

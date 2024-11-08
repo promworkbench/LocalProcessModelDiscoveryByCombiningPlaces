@@ -8,10 +8,14 @@ import org.processmining.contexts.cli.CLIPluginContext;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.InputModule;
 import org.processmining.placebasedlpmdiscovery.Main;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.StandardLPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.dependencyinjection.LPMDiscoveryGuiceModule;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.dependencyinjection.LPMDiscoveryResultGuiceModule;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.prom.dependencyinjection.PromGuiceModule;
@@ -59,7 +63,7 @@ public class MainGUI extends JFrame {
 
     private BaseLPMDiscoveryResultComponent getDummyDefaultView() throws Exception {
         // discovery
-        Injector guice = Guice.createInjector(new InputModule(getDummyLog()), new LPMDiscoveryGuiceModule());
+        Injector guice = Guice.createInjector(new InputModule(getDummyLog().getOriginalLog()), new LPMDiscoveryGuiceModule());
         LPMDiscoveryService lpmDiscoveryService = guice.getInstance(LPMDiscoveryService.class);
         LPMDiscoveryResult result = lpmDiscoveryService.runLPMDiscovery(getDummyLog(),
                 new PlaceSet(PlaceUtils.extractPlaceNets("data/bpi2012_res10939.json")));
@@ -76,14 +80,17 @@ public class MainGUI extends JFrame {
         return new CLIPluginContext(new CLIContext(), "");
     }
 
-    private XLog getDummyLog() throws Exception {
-        return LogUtils.readLogFromFile("data/bpi2012_res10939.xes");
+    private EventLog getDummyLog() throws Exception {
+        return new XLogWrapper(LogUtils.readLogFromFile("data/bpi2012_res10939.xes"));
     }
 
     private LPMDiscoveryResult getDummyResult() throws Exception {
-        XLog log = getDummyLog();
+        EventLog log = getDummyLog();
         Set<Place> places = PlaceUtils.extractPlaceNets("data/artificialBig.pnml");
-        return Main.createDefaultBuilder(log, new PlaceSet(places),
-                new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log))).build().run();
+
+        LPMDiscoveryInput input = new StandardLPMDiscoveryInput(log, new FPGrowthForPlacesLPMBuildingInput(log, places));
+
+        return Main.createDefaultBuilder(log.getOriginalLog(), new PlaceSet(places),
+                new PlaceBasedLPMDiscoveryParameters(log)).build().run(input);
     }
 }

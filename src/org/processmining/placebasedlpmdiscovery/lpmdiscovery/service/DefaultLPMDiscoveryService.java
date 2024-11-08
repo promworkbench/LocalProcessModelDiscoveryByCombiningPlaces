@@ -5,7 +5,10 @@ import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.datacommunication.DataCommunicationController;
 import org.processmining.placebasedlpmdiscovery.datacommunication.emittabledata.LPMSetDiscoveredEmittableData;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.StandardLPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
@@ -20,9 +23,11 @@ public class DefaultLPMDiscoveryService implements LPMDiscoveryService {
     }
 
     @Override
-    public LPMDiscoveryResult runLPMDiscovery(XLog log, PlaceSet placeSet) {
-        LPMDiscoveryResult result = Main.createDefaultBuilder(log, placeSet,
-                new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log))).build().run();
+    public LPMDiscoveryResult runLPMDiscovery(EventLog log, PlaceSet placeSet) {
+        LPMDiscoveryResult result = Main.createDefaultBuilder(log.getOriginalLog(), placeSet,
+                new PlaceBasedLPMDiscoveryParameters(log)).build().run(
+                        new StandardLPMDiscoveryInput(log, new FPGrowthForPlacesLPMBuildingInput(log,
+                                placeSet.getPlaces().getPlaces())));
         dc.emit(new LPMSetDiscoveredEmittableData(result));
         return result;
     }

@@ -20,6 +20,7 @@ public class PlaceChooserParameters {
         this.averagePlaceDegree = Integer.MAX_VALUE;
         this.chosenActivities = chosenActivities;
         this.coveredPassagesThreshold = 0.3;
+        this.followRelationsLimit = 7;
     }
 
     public int getPlaceLimit() {

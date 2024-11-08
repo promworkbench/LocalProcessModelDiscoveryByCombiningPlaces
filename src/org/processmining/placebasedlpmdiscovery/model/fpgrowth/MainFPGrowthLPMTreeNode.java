@@ -97,4 +97,8 @@ public class MainFPGrowthLPMTreeNode {
             return 0;
         return children.stream().mapToInt(MainFPGrowthLPMTreeNode::getHeight).max().getAsInt() + 1;
     }
+
+    public void setAdditionalInfo(LPMAdditionalInfo newInfo) {
+        this.additionalInfo = newInfo;
+    }
 }

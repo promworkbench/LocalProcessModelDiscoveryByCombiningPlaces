@@ -5,9 +5,7 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTree;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTreeNode;
 
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.util.*;
 
 public class MainFPGrowthLPMTreeTraversal implements LPMBuildingResultTraversal {
 
@@ -23,7 +21,7 @@ public class MainFPGrowthLPMTreeTraversal implements LPMBuildingResultTraversal 
 
     @Override
     public boolean hasNext() {
-        return queue.isEmpty();
+        return !queue.isEmpty();
     }
 
     @Override

@@ -14,6 +14,8 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LP
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LPMFilterParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilterId;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMCollectorFactory;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMCollectorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
@@ -33,7 +35,7 @@ public class Main {
         LPMDiscoveryBuilder builder = new StandardLPMDiscoveryBuilder();
 
         // set running context
-        RunningContext runningContext = new RunningContext(log);
+        RunningContext runningContext = new RunningContext();
         setupStandardBase(log, builder, runningContext);
 
         // set place discovery
@@ -44,13 +46,16 @@ public class Main {
                 runningContext.getAnalyzer().logAnalyzer.getLEFRMatrix(parameters.getLpmCombinationParameters().getLpmProximity());
         builder.setPlaceChooser(new MainPlaceChooser(log, parameters.getPlaceChooserParameters(), lefrMatrix));
 
-        // set lpm combination controller
-        LPMCombinationController controller =
-                new StandardLPMCombinationController(log, parameters, runningContext);
-        builder.setLPMCombination(controller);
-
         // set filtration and evaluation controllers
         setupStandardEvaluationAndFiltrationControllers(parameters, builder);
+
+        // set lpm combination controller
+        LPMCombinationController controller = // TODO: Should be created in the builder - have a factory
+                new StandardLPMCombinationController(log, parameters,
+                        new LPMFiltrationController(new LPMEvaluationController()), new LPMEvaluationController(),
+                        runningContext);
+        builder.setLPMCombination(controller);
+
         return builder;
     }
 
@@ -59,7 +64,7 @@ public class Main {
         LPMDiscoveryBuilder builder = new StandardLPMDiscoveryBuilder();
 
         // set running context
-        RunningContext runningContext = new RunningContext(log);
+        RunningContext runningContext = new RunningContext();
         setupStandardBase(log, builder, runningContext);
 
         // set place discovery
@@ -72,7 +77,9 @@ public class Main {
 
         // set lpm combination controller
         LPMCombinationController controller =
-                new StandardLPMCombinationController(log, parameters, runningContext);
+                new StandardLPMCombinationController(log, parameters,
+                        new LPMFiltrationController(new LPMEvaluationController()), new LPMEvaluationController(),
+                        runningContext);
         builder.setLPMCombination(controller);
 
         // set filtration and evaluation controllers
@@ -86,7 +93,7 @@ public class Main {
         LPMDiscoveryBuilder builder = new StandardLPMDiscoveryBuilder();
 
         // set running context
-        RunningContext runningContext = new RunningContext(log);
+        RunningContext runningContext = new RunningContext();
         setupStandardBase(log, builder, runningContext);
 
         // set place discovery
@@ -99,7 +106,9 @@ public class Main {
 
         // set lpm combination controller
         LPMCombinationController controller =
-                new StandardLPMCombinationController(log, parameters, runningContext);
+                new StandardLPMCombinationController(log, parameters,
+                        new LPMFiltrationController(new LPMEvaluationController()), new LPMEvaluationController(),
+                        runningContext);
         builder.setLPMCombination(controller);
 
         // set filtration and evaluation controllers

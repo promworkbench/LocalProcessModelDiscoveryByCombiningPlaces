@@ -3,15 +3,19 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination;
 import org.apache.commons.lang.NotImplementedException;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.RunningContext;
-import org.processmining.placebasedlpmdiscovery.lpmbuilding.LPMBuildingResult;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingResult;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlg;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth.placecombination.FPGrowthForPlacesLPMBuildingAlg;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.LPMBuildingResultTraversal;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.LPMBuildingResultTraversalFactory;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth.LPMTreeBuilder;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
-import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTree;
+import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 
 import java.util.HashSet;
@@ -19,18 +23,24 @@ import java.util.Set;
 
 public class StandardLPMCombinationController implements LPMCombinationController {
 
+    private final LPMFiltrationController filtrationController;
     private XLog log;
     private final PlaceBasedLPMDiscoveryParameters parameters;
     private int currentNumPlaces;
     private final RunningContext runningContext;
+    private LPMEvaluationController evaluationController;
 
     public StandardLPMCombinationController(XLog log,
                                             PlaceBasedLPMDiscoveryParameters parameters,
+                                            LPMFiltrationController filtrationController,
+                                            LPMEvaluationController evaluationController,
                                             RunningContext runningContext) {
         this.log = log;
 
         this.parameters = parameters;
         this.runningContext = runningContext;
+        this.filtrationController = filtrationController;
+        this.evaluationController = evaluationController;
 
         this.currentNumPlaces = 1;
 
@@ -52,13 +62,16 @@ public class StandardLPMCombinationController implements LPMCombinationControlle
 //        FPGrowthLPMDiscoveryTreeBuilderSecondEdition treeBuilder = new FPGrowthLPMDiscoveryTreeBuilderSecondEdition(
 //        FPGrowthLPMDiscoveryTreeBuilder treeBuilder = new FPGrowthLPMDiscoveryTreeBuilder(
         if (this.parameters.getEventAttributeSummary().isEmpty()) {
-            LPMTreeBuilder treeBuilder = new LPMTreeBuilder(
-                    log, new HashSet<>(places), this.parameters.getLpmCombinationParameters(), this.runningContext);
-            this.runningContext.getInterrupterSubject().addObserver(treeBuilder);
-            System.out.println("========Building tree========");
-            MainFPGrowthLPMTree tree = treeBuilder.buildTree();
-            this.runningContext.getInterrupterSubject().addObserver(tree);
-            System.out.println("========End building tree========");
+            LPMBuildingAlg alg = new FPGrowthForPlacesLPMBuildingAlg(this.evaluationController);
+            LPMBuildingResult tree = alg.build(new FPGrowthForPlacesLPMBuildingInput(new XLogWrapper(this.log),
+                    places), parameters.getLPMBuildingParameters());
+//            LPMTreeBuilder treeBuilder = new LPMTreeBuilder(
+//                    log, new HashSet<>(places), this.parameters.getLpmCombinationParameters(), this.runningContext);
+//            this.runningContext.getInterrupterSubject().addObserver(treeBuilder);
+//            System.out.println("========Building tree========");
+//            MainFPGrowthLPMTree tree = treeBuilder.buildTree();
+//            this.runningContext.getInterrupterSubject().addObserver(tree);
+//            System.out.println("========End building tree========");
 
             return new StandardLPMDiscoveryResult(getLPMs(tree));
         } else {

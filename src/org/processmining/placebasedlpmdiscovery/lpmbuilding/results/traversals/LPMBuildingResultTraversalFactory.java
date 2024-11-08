@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals;
 
 import org.apache.commons.lang.NotImplementedException;
-import org.processmining.placebasedlpmdiscovery.lpmbuilding.LPMBuildingResult;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingResult;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTree;
 
 public class LPMBuildingResultTraversalFactory {

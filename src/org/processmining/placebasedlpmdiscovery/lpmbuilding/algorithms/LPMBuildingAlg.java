@@ -1,9 +1,10 @@
 package org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms;
 
-import org.processmining.placebasedlpmdiscovery.lpmbuilding.LPMBuildingResult;
-import org.processmining.placebasedlpmdiscovery.model.discovery.LPMBuildingInput;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.parameters.LPMBuildingParameters;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingResult;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.LPMBuildingInput;
 
-public interface LPMBuildingAlg<I extends LPMBuildingInput> {
+public interface LPMBuildingAlg {
 
-    LPMBuildingResult build(I input);
+    LPMBuildingResult build(LPMBuildingInput input, LPMBuildingParameters parameters);
 }

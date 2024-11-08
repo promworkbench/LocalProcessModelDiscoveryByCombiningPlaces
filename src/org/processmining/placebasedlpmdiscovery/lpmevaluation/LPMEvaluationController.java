@@ -1,6 +1,5 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation;
 
-import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMCollectorFactory;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMCollector;
@@ -25,9 +24,9 @@ public class LPMEvaluationController implements EvaluatorHub {
         this.evaluatorFactory = evaluatorFactory;
     }
 
-    public void evaluateForOneWindow(LocalProcessModel lpm,
-                                     LPMTemporaryWindowInfo tempInfo,
-                                     LPMAdditionalInfo additionalInfo) {
+    public LPMAdditionalInfo updateAdditionalInfoForOneWindow(LocalProcessModel lpm,
+                                                              LPMTemporaryWindowInfo tempInfo,
+                                                              LPMAdditionalInfo additionalInfo) {
         for (WindowLPMCollector<?> evaluator : this.windowEvaluators.values()) {
             if (!additionalInfo.existsCollectorResult(evaluator.getResultKey())) {
                 additionalInfo.addCollectorResult(evaluator.getResultKey(), evaluator.createEmptyResult(lpm));
@@ -42,6 +41,7 @@ public class LPMEvaluationController implements EvaluatorHub {
                             evaluator.getResultKey(),
                             LPMCollectorResult.class)));
         }
+        return additionalInfo;
     }
 
     @Override

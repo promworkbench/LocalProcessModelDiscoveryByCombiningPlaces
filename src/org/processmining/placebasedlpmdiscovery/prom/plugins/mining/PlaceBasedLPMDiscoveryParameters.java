@@ -1,5 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.prom.plugins.mining;
 
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlgType;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.parameters.FPGrowthForPlacesLPMBuildingParameters;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.parameters.LPMBuildingParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LPMFilterParameters;
 import org.processmining.placebasedlpmdiscovery.model.logs.Activity;
@@ -27,6 +30,8 @@ public class PlaceBasedLPMDiscoveryParameters {
 
     // local process model discovery parameters
     private final LPMCombinationParameters lpmCombinationParameters;
+    private LPMBuildingParameters lpmBuildingParameters;
+    private LPMBuildingAlgType lpmBuildingAlgType;
 
     // local process model filter parameters
     private final LPMFilterParameters lpmFilterParameters;
@@ -44,6 +49,8 @@ public class PlaceBasedLPMDiscoveryParameters {
         this.placeChooserParameters = new PlaceChooserParameters(log.getActivities()
                 .stream().map(Activity::getName).collect(Collectors.toSet()));
         this.lpmCombinationParameters = new LPMCombinationParameters();
+        this.lpmBuildingAlgType = LPMBuildingAlgType.FPGrowthForPlaces;
+        this.lpmBuildingParameters = new FPGrowthForPlacesLPMBuildingParameters(this.lpmCombinationParameters, this.placeChooserParameters);
         this.lpmFilterParameters = new LPMFilterParameters();
         this.lpmCount = 100;
         this.timeLimit = 600000;
@@ -76,6 +83,14 @@ public class PlaceBasedLPMDiscoveryParameters {
 
     public LPMCombinationParameters getLpmCombinationParameters() {
         return lpmCombinationParameters;
+    }
+
+    public LPMBuildingAlgType getLpmBuildingAlgType() {
+        return lpmBuildingAlgType;
+    }
+
+    public void setLpmBuildingAlgType(LPMBuildingAlgType lpmBuildingAlgType) {
+        this.lpmBuildingAlgType = lpmBuildingAlgType;
     }
 
     public LPMFilterParameters getLpmFilterParameters() {
@@ -143,5 +158,9 @@ public class PlaceBasedLPMDiscoveryParameters {
                 ", lpmCount=" + lpmCount +
                 ", timeLimit=" + timeLimit +
                 '}';
+    }
+
+    public LPMBuildingParameters getLPMBuildingParameters() {
+        return this.lpmBuildingParameters;
     }
 }

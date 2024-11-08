@@ -1,5 +1,6 @@
-package org.processmining.placebasedlpmdiscovery.model.discovery;
+package org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs;
 
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.LPMBuildingInput;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
@@ -10,12 +11,10 @@ public class FPGrowthForPlacesLPMBuildingInput implements LPMBuildingInput {
 
     private EventLog log;
     private Set<Place> places;
-    private LPMCombinationParameters parameters; // TODO: Should be FPGrowthCombinationParameters 30.08.2024
 
-    public FPGrowthForPlacesLPMBuildingInput(EventLog log, Set<Place> places, LPMCombinationParameters parameters) {
+    public FPGrowthForPlacesLPMBuildingInput(EventLog log, Set<Place> places) {
         this.log = log;
         this.places = places;
-        this.parameters = parameters;
     }
 
     public EventLog getLog() {
@@ -24,9 +23,5 @@ public class FPGrowthForPlacesLPMBuildingInput implements LPMBuildingInput {
 
     public Set<Place> getPlaces() {
         return this.places;
-    }
-
-    public LPMCombinationParameters getCombinationParameters() {
-        return parameters;
     }
 }

@@ -1,10 +1,18 @@
 package org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth.placecombination;
 
 import org.apache.commons.math3.util.Pair;
+import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
+import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LogAnalyzer;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth.placecombination.utils.LPMFromBranchCombinationValidityChecker;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlg;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth.placecombination.utils.WindowLPMTreeValidLPMsRandomTraversal;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.LPMBuildingInput;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.parameters.FPGrowthForPlacesLPMBuildingParameters;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.parameters.LPMBuildingParameters;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingResult;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowInfo;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLogTraversal;
@@ -13,26 +21,59 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.Wi
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
-import org.processmining.placebasedlpmdiscovery.model.discovery.FPGrowthForPlacesLPMBuildingInput;
+import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.*;
+import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
+import org.processmining.placebasedlpmdiscovery.placechooser.MainPlaceChooser;
+import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg<FPGrowthForPlacesLPMBuildingInput> {
+public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
+
+    private final LPMEvaluationController evaluationController;
+
+    public FPGrowthForPlacesLPMBuildingAlg(LPMEvaluationController evaluationController) {
+        this.evaluationController = evaluationController;
+    }
+
 
     @Override
-    public MainFPGrowthLPMTree build(FPGrowthForPlacesLPMBuildingInput input) {
+    public LPMBuildingResult build(LPMBuildingInput input, LPMBuildingParameters parameters) {
+        // cast input and parameters
+        if (!(parameters instanceof FPGrowthForPlacesLPMBuildingParameters)) {
+            throw new IllegalArgumentException("The FPGrowthForPlacesLPMBuildingAlg does not work for " +
+                    "parameters of type " + parameters.getClass());
+        }
+        FPGrowthForPlacesLPMBuildingParameters cParameters = (FPGrowthForPlacesLPMBuildingParameters) parameters;
+
+        if (!(input instanceof FPGrowthForPlacesLPMBuildingInput)) {
+            throw new IllegalArgumentException("The FPGrowthForPlacesLPMBuildingAlg does not work for " +
+                    "input of type " + input.getClass());
+        }
+        FPGrowthForPlacesLPMBuildingInput cInput = (FPGrowthForPlacesLPMBuildingInput) input;
+
+        // choose places
+        LogAnalyzer logAnalyzer = new LogAnalyzer(cInput.getLog().getOriginalLog());
+        LEFRMatrix lefrMatrix = logAnalyzer.getLEFRMatrix(cParameters.getLPMCombinationParameters().getLpmProximity());
+        PlaceChooser placeChooser = new MainPlaceChooser(cInput.getLog().getOriginalLog(), cParameters.getPlaceChooserParameters(), lefrMatrix);
+        Set<Place> places = placeChooser.choose(cInput.getPlaces(), cParameters.getPlaceChooserParameters().getPlaceLimit());
+
+        // build lpms
+        return build(cInput.getLog(), places, cParameters.getLPMCombinationParameters());
+    }
+
+    private MainFPGrowthLPMTree build(EventLog log, Set<Place> places, LPMCombinationParameters parameters) {
         // input
-        WindowLog windowLog = new WindowLog(input.getLog().getOriginalLog()); // create the integer mapped log
-        Set<Place> places = input.getPlaces();
+        WindowLog windowLog = new WindowLog(log.getOriginalLog()); // create the integer mapped log
         prepareInput(places, windowLog);
 
         // storage
         MainFPGrowthLPMTree mainTree = new MainFPGrowthLPMTree(getPlacePriorityMap(places),
-                windowLog.getMapping().getLabelMap(), input.getCombinationParameters().getLpmProximity());
+                windowLog.getMapping().getLabelMap(), parameters.getLpmProximity());
 
         // optimization helpers
         Map<Pair<Integer, Integer>, Set<Place>> inoutTransitionPlacesMap = PlaceUtils
@@ -43,7 +84,7 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg<FPGrowthF
         WindowTotalCounter windowTotalCounter = new WindowTotalCounter();
 
         // traverse
-        int maxWindowSize = input.getCombinationParameters().getLpmProximity(); // max window size
+        int maxWindowSize = parameters.getLpmProximity(); // max window size
         WindowLogTraversal traversal = new WindowLogTraversal(windowLog, maxWindowSize); // traversal
         WindowLPMTree localTree = new WindowLPMTree(maxWindowSize); // window tree
         while (traversal.hasNext()) {
@@ -78,8 +119,8 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg<FPGrowthF
 
             // transfer built local process models to the main tree
             LPMTemporaryWindowInfoCreator lpmTempInfoCreator = new LPMTemporaryWindowInfoCreator(windowInfo, windowLog);
-            addLocalTreeToMainTree(localTree, mainTree, windowInfo, input.getCombinationParameters(),
-                    lpmTempInfoCreator, windowLog.getMapping(), input.getPlaces());
+            addLocalTreeToMainTree(localTree, mainTree, windowInfo, parameters,
+                    lpmTempInfoCreator, windowLog.getMapping(), places);
         }
 
         mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount(), windowLog.getOriginalLog());
@@ -116,8 +157,13 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg<FPGrowthF
                     lpm.getPlaces().size() <= parameters.getMaxNumPlaces() &&
                     lpm.getTransitions().size() >= parameters.getMinNumTransitions() &&
                     lpm.getTransitions().size() <= parameters.getMaxNumTransitions()) {
-                mainTree.addOrUpdate(lpm, windowInfo.getWindowCount(), windowInfo.getWindow(), lpmEntry.getValue(),
-                        windowInfo.getTraceVariantId());
+                MainFPGrowthLPMTreeNode node = mainTree.getNode(lpm);
+                LPMAdditionalInfo oldInfo = node == null ? new LPMAdditionalInfo() : node.getAdditionalInfo();
+                LPMAdditionalInfo newInfo = evaluationController.updateAdditionalInfoForOneWindow(lpm,
+                        lpmEntry.getValue(), oldInfo);
+                mainTree.addOrUpdate(lpm, newInfo);
+//                mainTree.addOrUpdate(lpm, windowInfo.getWindowCount(), windowInfo.getWindow(), lpmEntry.getValue(),
+//                        windowInfo.getTraceVariantId());
             }
         }
     }
@@ -187,4 +233,5 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg<FPGrowthF
         // TODO: should be replaced with some real ordering
         return PlaceUtils.mapPlacesToIndices(places);
     }
+
 }

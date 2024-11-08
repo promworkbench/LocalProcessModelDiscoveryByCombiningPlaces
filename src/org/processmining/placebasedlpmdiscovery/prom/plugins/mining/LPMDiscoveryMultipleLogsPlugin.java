@@ -9,13 +9,17 @@ import org.processmining.framework.util.ui.wizard.ProMWizardDisplay;
 import org.processmining.framework.util.ui.wizard.ProMWizardStep;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.placebasedlpmdiscovery.Main;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.StandardLPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.main.MultipleLPMDiscoveryResults;
 import org.processmining.placebasedlpmdiscovery.model.inout.TwoStandardLPMDiscoveryResults;
+import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.prom.ContextKeeper;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PetriNetPlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.wizards.PlaceBasedLPMDiscoveryWizard;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.wizards.steps.LPMDiscoveryWizardStep;
 
@@ -47,11 +51,17 @@ public class LPMDiscoveryMultipleLogsPlugin {
         PlaceBasedLPMDiscoveryParameters parameters = getPlaceBasedLPMDiscoveryParameters(context, log1);
         if (parameters == null) return null;
 
+        EventLog elog1 = new XLogWrapper(log1);
         LPMDiscoveryBuilder builder1 = Main.createDefaultForPetriNetBuilder(log1, petrinet, parameters);
-        LPMDiscoveryResult res1 = builder1.build().run();
+        LPMDiscoveryResult res1 = builder1.build().run(new StandardLPMDiscoveryInput(elog1,
+                new FPGrowthForPlacesLPMBuildingInput(elog1,
+                        new PetriNetPlaceDiscovery(petrinet).getPlaces().getPlaces())));
 
+        EventLog elog2 = new XLogWrapper(log2);
         LPMDiscoveryBuilder builder2 = Main.createDefaultForPetriNetBuilder(log2, petrinet, parameters);
-        LPMDiscoveryResult res2 = builder2.build().run();
+        LPMDiscoveryResult res2 = builder2.build().run(new StandardLPMDiscoveryInput(elog2,
+                new FPGrowthForPlacesLPMBuildingInput(elog2,
+                        new PetriNetPlaceDiscovery(petrinet).getPlaces().getPlaces())));
 
         return new TwoStandardLPMDiscoveryResults(res1, res2);
     }
@@ -72,11 +82,15 @@ public class LPMDiscoveryMultipleLogsPlugin {
         PlaceBasedLPMDiscoveryParameters parameters = getPlaceBasedLPMDiscoveryParameters(context, log1);
         if (parameters == null) return null;
 
+        EventLog elog1 = new XLogWrapper(log1);
         LPMDiscoveryBuilder builder1 = Main.createDefaultBuilder(log1, placeSet, parameters);
-        LPMDiscoveryResult res1 = builder1.build().run();
+        LPMDiscoveryResult res1 = builder1.build().run(new StandardLPMDiscoveryInput(elog1,
+                new FPGrowthForPlacesLPMBuildingInput(elog1, placeSet.getPlaces().getPlaces())));
 
+        EventLog elog2 = new XLogWrapper(log2);
         LPMDiscoveryBuilder builder2 = Main.createDefaultBuilder(log2, placeSet, parameters);
-        LPMDiscoveryResult res2 = builder2.build().run();
+        LPMDiscoveryResult res2 = builder2.build().run(new StandardLPMDiscoveryInput(elog2,
+                new FPGrowthForPlacesLPMBuildingInput(elog2, placeSet.getPlaces().getPlaces())));
 
         return new TwoStandardLPMDiscoveryResults(res1, res2);
     }

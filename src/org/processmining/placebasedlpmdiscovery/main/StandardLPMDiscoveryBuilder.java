@@ -1,6 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.main;
 
 import org.processmining.placebasedlpmdiscovery.RunningContext;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlg;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlgFactory;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.LPMDiscoveryAlg;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.StandardLPMDiscoveryAlg;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationController;
@@ -21,6 +23,13 @@ import java.util.Map;
 
 public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
 
+    // objects that the builder can create
+    private LPMEvaluationController evaluationController;
+    private LPMFiltrationController filtrationController;
+
+    private LPMBuildingAlgFactory lpmBuildingAlgFactory;
+
+    // objects that are given to the builder
     private RunningContext runningContext;
 
     private PlaceBasedLPMDiscoveryParameters parameters;
@@ -30,15 +39,13 @@ public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
 
     private LPMCombinationController lpmCombination;
 
-    private LPMEvaluationController evaluationController;
-    private LPMFiltrationController filtrationController;
-
     private Map<String, WindowLPMCollector<?>> windowEvaluators;
     private Collection<LPMFilter> lpmFilters;
 
     public StandardLPMDiscoveryBuilder() {
-        evaluationController = new LPMEvaluationController();
-        filtrationController = new LPMFiltrationController(evaluationController);
+        this.evaluationController = new LPMEvaluationController();
+        this.filtrationController = new LPMFiltrationController(evaluationController);
+        this.lpmBuildingAlgFactory = new LPMBuildingAlgFactory(this.evaluationController);
 
         this.windowEvaluators = new HashMap<>();
         this.lpmFilters = new ArrayList<>();
@@ -55,7 +62,9 @@ public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
                 this.parameters,
                 this.placeDiscovery,
                 this.placeChooser,
-                this.lpmCombination);
+                this.lpmCombination,
+                this.lpmBuildingAlgFactory.createLPMBuildingAlg(this.parameters.getLpmBuildingAlgType()),
+                this.filtrationController);
 
         return alg;
     }
