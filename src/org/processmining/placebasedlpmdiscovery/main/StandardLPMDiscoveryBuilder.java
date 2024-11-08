@@ -35,7 +35,6 @@ public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
     private PlaceBasedLPMDiscoveryParameters parameters;
 
     private PlaceDiscovery placeDiscovery;
-    private PlaceChooser placeChooser;
 
     private LPMCombinationController lpmCombination;
 
@@ -61,7 +60,6 @@ public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
                 this.runningContext,
                 this.parameters,
                 this.placeDiscovery,
-                this.placeChooser,
                 this.lpmCombination,
                 this.lpmBuildingAlgFactory.createLPMBuildingAlg(this.parameters.getLpmBuildingAlgType()),
                 this.filtrationController);
@@ -73,7 +71,6 @@ public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
     public void reset() {
         this.runningContext = null;
         this.placeDiscovery = null;
-        this.placeChooser = null;
         this.lpmCombination = null;
         this.evaluationController = null;
         this.filtrationController = null;
@@ -84,11 +81,6 @@ public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
     @Override
     public void setPlaceDiscovery(PlaceDiscovery placeDiscovery) {
         this.placeDiscovery = placeDiscovery;
-    }
-
-    @Override
-    public void setPlaceChooser(PlaceChooser placeChooser) {
-        this.placeChooser = placeChooser;
     }
 
     @Override
