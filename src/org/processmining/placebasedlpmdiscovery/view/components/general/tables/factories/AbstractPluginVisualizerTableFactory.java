@@ -56,7 +56,7 @@ public abstract class AbstractPluginVisualizerTableFactory<T extends TextDescrib
             int[] selectedIndices = OldJavaUtils.getSelectedIndices(lsm);
 
             // at the moment only responsive for one selection
-            if (selectedIndices.length == 1) {
+            if (!indexObjectMap.isEmpty() && selectedIndices.length == 1) {
                 this.onNewSelection(
                         indexObjectMap.get(table.convertRowIndexToModel(selectedIndices[0])), table.getId());
             }
