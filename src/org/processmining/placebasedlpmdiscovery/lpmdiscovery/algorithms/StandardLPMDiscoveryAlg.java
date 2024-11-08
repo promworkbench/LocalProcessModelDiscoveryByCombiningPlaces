@@ -6,16 +6,11 @@ import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingR
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.LPMBuildingResultTraversal;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.LPMBuildingResultTraversalFactory;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationController;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterSubject;
-import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
-import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
-import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 
 import java.util.HashSet;
@@ -27,19 +22,15 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 
     private final RunningContext runningContext;
     private final PlaceBasedLPMDiscoveryParameters parameters;
-
-    private final LPMCombinationController lpmCombination;
     private final LPMBuildingAlg lpmBuildingAlg;
     private LPMFiltrationController lpmFiltrationController;
 
     public StandardLPMDiscoveryAlg(RunningContext runningContext,
                                    PlaceBasedLPMDiscoveryParameters parameters,
-                                   LPMCombinationController lpmCombination,
                                    LPMBuildingAlg lpmBuildingAlg,
                                    LPMFiltrationController lpmFiltrationController) {
         this.runningContext = runningContext;
         this.parameters = parameters;
-        this.lpmCombination = lpmCombination;
         this.lpmBuildingAlg = lpmBuildingAlg;
         this.lpmFiltrationController = lpmFiltrationController;
     }
@@ -81,7 +72,8 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 
 //            // discover places
 //            Set<Place> places = this.placeDiscovery.getPlaces().getPlaces();
-//            this.runningContext.getAnalyzer().getStatistics().getParameterStatistics().setPlaceDiscoveryIncluded(true);
+//            this.runningContext.getAnalyzer().getStatistics().getParameterStatistics().setPlaceDiscoveryIncluded
+//            (true);
 //
 //            // choose places
 //            parameters.getPlaceChooserParameters()
@@ -90,7 +82,8 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 //
 //            // export chosen places
 //            PlaceSet placeSet = new PlaceSet(places);
-//            placeSet.writePassageUsage(this.runningContext.getAnalyzer().logAnalyzer.getLEFRMatrix(parameters.getLpmCombinationParameters().getLpmProximity()));
+//            placeSet.writePassageUsage(this.runningContext.getAnalyzer().logAnalyzer.getLEFRMatrix(parameters
+//            .getLpmCombinationParameters().getLpmProximity()));
 
             // build lpms
             LPMBuildingResult lpmBuildingResult = this.lpmBuildingAlg.build(input.getLPMBuildingInput(),

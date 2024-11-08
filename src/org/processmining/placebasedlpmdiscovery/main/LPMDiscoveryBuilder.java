@@ -2,13 +2,9 @@ package org.processmining.placebasedlpmdiscovery.main;
 
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.LPMDiscoveryAlg;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationController;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.guards.CombinationGuard;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMCollector;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
-import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
-import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 
 public interface LPMDiscoveryBuilder {
@@ -16,8 +12,6 @@ public interface LPMDiscoveryBuilder {
     LPMDiscoveryAlg build();
 
     void reset();
-
-    void setLPMCombination(LPMCombinationController lpmCombination);
 
     void setRunningContext(RunningContext runningContext);
 
