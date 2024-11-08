@@ -17,8 +17,6 @@ public interface LPMDiscoveryBuilder {
 
     void reset();
 
-    void setPlaceDiscovery(PlaceDiscovery placeDiscovery);
-
     void setLPMCombination(LPMCombinationController lpmCombination);
 
     void setRunningContext(RunningContext runningContext);

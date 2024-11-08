@@ -26,8 +26,6 @@ public class Main {
         RunningContext runningContext = new RunningContext();
         setupStandardBase(log, builder, runningContext);
 
-        // set place discovery
-        builder.setPlaceDiscovery(placeSet);
 
         // set filtration and evaluation controllers
         setupStandardEvaluationAndFiltrationControllers(parameters, builder);
@@ -50,9 +48,6 @@ public class Main {
         RunningContext runningContext = new RunningContext();
         setupStandardBase(log, builder, runningContext);
 
-        // set place discovery
-        builder.setPlaceDiscovery(new StandardPlaceDiscovery(log, parameters.getPlaceDiscoveryParameters()));
-
         // set lpm combination controller
         LPMCombinationController controller =
                 new StandardLPMCombinationController(log, parameters,
@@ -73,9 +68,6 @@ public class Main {
         // set running context
         RunningContext runningContext = new RunningContext();
         setupStandardBase(log, builder, runningContext);
-
-        // set place discovery
-        builder.setPlaceDiscovery(new PetriNetPlaceDiscovery(petrinet));
 
         // set lpm combination controller
         LPMCombinationController controller =

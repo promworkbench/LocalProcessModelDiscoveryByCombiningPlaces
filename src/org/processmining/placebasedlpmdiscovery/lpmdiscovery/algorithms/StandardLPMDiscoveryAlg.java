@@ -28,21 +28,17 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
     private final RunningContext runningContext;
     private final PlaceBasedLPMDiscoveryParameters parameters;
 
-    private final PlaceDiscovery placeDiscovery;
-
     private final LPMCombinationController lpmCombination;
     private final LPMBuildingAlg lpmBuildingAlg;
     private LPMFiltrationController lpmFiltrationController;
 
     public StandardLPMDiscoveryAlg(RunningContext runningContext,
                                    PlaceBasedLPMDiscoveryParameters parameters,
-                                   PlaceDiscovery placeDiscovery,
                                    LPMCombinationController lpmCombination,
                                    LPMBuildingAlg lpmBuildingAlg,
                                    LPMFiltrationController lpmFiltrationController) {
         this.runningContext = runningContext;
         this.parameters = parameters;
-        this.placeDiscovery = placeDiscovery;
         this.lpmCombination = lpmCombination;
         this.lpmBuildingAlg = lpmBuildingAlg;
         this.lpmFiltrationController = lpmFiltrationController;
