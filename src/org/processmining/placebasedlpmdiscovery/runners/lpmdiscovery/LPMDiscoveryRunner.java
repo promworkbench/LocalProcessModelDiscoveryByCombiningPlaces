@@ -52,10 +52,7 @@ public class LPMDiscoveryRunner {
             parameters.setLpmCount(300);
             parameters.getPlaceChooserParameters().setPlaceLimit(30);
 
-            LPMDiscoveryBuilder builder = Main.createDefaultBuilder(
-                    log,
-                    placeSet,
-                    parameters);
+            LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, parameters);
             new LPMResult((StandardLPMDiscoveryResult) builder.build().run(new StandardLPMDiscoveryInput(eventLog,
                     new FPGrowthForPlacesLPMBuildingInput(eventLog, placeSet.getPlaces().getPlaces()))))
                     .export(ExporterFactory.createLPMDiscoveryResultExporter(),

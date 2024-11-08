@@ -52,13 +52,13 @@ public class LPMDiscoveryMultipleLogsPlugin {
         if (parameters == null) return null;
 
         EventLog elog1 = new XLogWrapper(log1);
-        LPMDiscoveryBuilder builder1 = Main.createDefaultForPetriNetBuilder(log1, petrinet, parameters);
+        LPMDiscoveryBuilder builder1 = Main.createDefaultBuilder(log1, parameters);
         LPMDiscoveryResult res1 = builder1.build().run(new StandardLPMDiscoveryInput(elog1,
                 new FPGrowthForPlacesLPMBuildingInput(elog1,
                         new PetriNetPlaceDiscovery(petrinet).getPlaces().getPlaces())));
 
         EventLog elog2 = new XLogWrapper(log2);
-        LPMDiscoveryBuilder builder2 = Main.createDefaultForPetriNetBuilder(log2, petrinet, parameters);
+        LPMDiscoveryBuilder builder2 = Main.createDefaultBuilder(log2, parameters);
         LPMDiscoveryResult res2 = builder2.build().run(new StandardLPMDiscoveryInput(elog2,
                 new FPGrowthForPlacesLPMBuildingInput(elog2,
                         new PetriNetPlaceDiscovery(petrinet).getPlaces().getPlaces())));
@@ -83,12 +83,12 @@ public class LPMDiscoveryMultipleLogsPlugin {
         if (parameters == null) return null;
 
         EventLog elog1 = new XLogWrapper(log1);
-        LPMDiscoveryBuilder builder1 = Main.createDefaultBuilder(log1, placeSet, parameters);
+        LPMDiscoveryBuilder builder1 = Main.createDefaultBuilder(log1, parameters);
         LPMDiscoveryResult res1 = builder1.build().run(new StandardLPMDiscoveryInput(elog1,
                 new FPGrowthForPlacesLPMBuildingInput(elog1, placeSet.getPlaces().getPlaces())));
 
         EventLog elog2 = new XLogWrapper(log2);
-        LPMDiscoveryBuilder builder2 = Main.createDefaultBuilder(log2, placeSet, parameters);
+        LPMDiscoveryBuilder builder2 = Main.createDefaultBuilder(log2, parameters);
         LPMDiscoveryResult res2 = builder2.build().run(new StandardLPMDiscoveryInput(elog2,
                 new FPGrowthForPlacesLPMBuildingInput(elog2, placeSet.getPlaces().getPlaces())));
 

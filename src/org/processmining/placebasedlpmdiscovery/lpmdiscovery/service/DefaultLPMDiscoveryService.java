@@ -24,7 +24,7 @@ public class DefaultLPMDiscoveryService implements LPMDiscoveryService {
 
     @Override
     public LPMDiscoveryResult runLPMDiscovery(EventLog log, PlaceSet placeSet) {
-        LPMDiscoveryResult result = Main.createDefaultBuilder(log.getOriginalLog(), placeSet,
+        LPMDiscoveryResult result = Main.createDefaultBuilder(log.getOriginalLog(),
                 new PlaceBasedLPMDiscoveryParameters(log)).build().run(
                         new StandardLPMDiscoveryInput(log, new FPGrowthForPlacesLPMBuildingInput(log,
                                 placeSet.getPlaces().getPlaces())));

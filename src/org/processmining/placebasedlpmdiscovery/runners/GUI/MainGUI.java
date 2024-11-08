@@ -90,7 +90,6 @@ public class MainGUI extends JFrame {
 
         LPMDiscoveryInput input = new StandardLPMDiscoveryInput(log, new FPGrowthForPlacesLPMBuildingInput(log, places));
 
-        return Main.createDefaultBuilder(log.getOriginalLog(), new PlaceSet(places),
-                new PlaceBasedLPMDiscoveryParameters(log)).build().run(input);
+        return Main.createDefaultBuilder(log.getOriginalLog(), new PlaceBasedLPMDiscoveryParameters(log)).build().run(input);
     }
 }

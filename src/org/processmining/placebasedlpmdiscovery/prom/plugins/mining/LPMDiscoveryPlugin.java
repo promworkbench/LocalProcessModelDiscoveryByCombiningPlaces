@@ -97,7 +97,7 @@ public class LPMDiscoveryPlugin {
         if (parameters == null)
             return null;
 
-        LPMDiscoveryBuilder builder = Main.createDefaultForPetriNetBuilder(log, petrinet, parameters);
+        LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, parameters);
         EventLog eventLog = new XLogWrapper(log);
         return builder.build().run(new StandardLPMDiscoveryInput(eventLog,
                 new FPGrowthForPlacesLPMBuildingInput(eventLog,
@@ -129,7 +129,7 @@ public class LPMDiscoveryPlugin {
         if (parameters == null)
             return null;
 
-        LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, placeSet, parameters);
+        LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, parameters);
         EventLog eventLog = new XLogWrapper(log);
         return builder.build().run(new StandardLPMDiscoveryInput(eventLog,
                 new FPGrowthForPlacesLPMBuildingInput(eventLog, placeSet.getPlaces().getPlaces())));
@@ -198,7 +198,7 @@ public class LPMDiscoveryPlugin {
 
     private static LPMDiscoveryResult run(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
         ContextKeeper.setUp(context);
-        LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, placeSet, parameters);
+        LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, parameters);
         EventLog eventLog = new XLogWrapper(log);
         return builder.build().run(new StandardLPMDiscoveryInput(eventLog,
                 new FPGrowthForPlacesLPMBuildingInput(eventLog, placeSet.getPlaces().getPlaces())));
