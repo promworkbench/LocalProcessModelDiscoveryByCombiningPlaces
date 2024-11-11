@@ -10,7 +10,7 @@
 //import org.processmining.framework.util.ui.wizard.ProMWizardStep;
 //import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 //import org.processmining.placebasedlpmdiscovery.Main;
-//import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
+//import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryBuilder;
 //import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 //import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
 //import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;

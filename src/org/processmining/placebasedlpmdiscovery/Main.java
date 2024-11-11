@@ -3,8 +3,8 @@ package org.processmining.placebasedlpmdiscovery;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.Analyzer;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.directors.FromParametersLPMDiscoveryDirector;
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
-import org.processmining.placebasedlpmdiscovery.main.StandardLPMDiscoveryBuilder;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryBuilder;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.StandardLPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 
 public class Main {

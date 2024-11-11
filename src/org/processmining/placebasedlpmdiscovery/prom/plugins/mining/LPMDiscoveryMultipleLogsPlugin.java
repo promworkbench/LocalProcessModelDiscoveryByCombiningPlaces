@@ -11,7 +11,7 @@ import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.StandardLPMDiscoveryInput;
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.main.MultipleLPMDiscoveryResults;
 import org.processmining.placebasedlpmdiscovery.model.inout.TwoStandardLPMDiscoveryResults;

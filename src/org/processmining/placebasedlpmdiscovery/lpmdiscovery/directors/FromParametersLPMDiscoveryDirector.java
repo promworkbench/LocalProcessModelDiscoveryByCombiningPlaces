@@ -7,7 +7,7 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lp
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMCollectorFactory;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMCollectorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 
 public class FromParametersLPMDiscoveryDirector extends AbstractLPMDiscoveryDirector {

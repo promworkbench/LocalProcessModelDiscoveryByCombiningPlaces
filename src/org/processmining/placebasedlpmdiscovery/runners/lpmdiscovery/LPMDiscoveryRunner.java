@@ -8,7 +8,7 @@ import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPl
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.StandardLPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.serialization.ModelDistanceConfigDeserializer;
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryBuilder;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryBuilder;
 import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.ExporterFactory;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;

@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.main;
+package org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder;
 
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.LPMDiscoveryAlg;
