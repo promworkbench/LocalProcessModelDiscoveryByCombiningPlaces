@@ -4,6 +4,7 @@ import org.apache.commons.math3.util.Pair;
 import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XTrace;
+import org.processmining.placebasedlpmdiscovery.model.SimplePlace;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,6 +14,7 @@ public class LPMTemporaryWindowInfo {
     private final List<Integer> firingSequence;
     private final List<Integer> replayedEventsIndices;
     private final Set<Pair<Integer, Integer>> usedPassages;
+    private final Set<SimplePlace<Integer>> usedPlaces;
     private int windowCount;
     private List<Integer> window;
     private Integer traceVariantId;
@@ -26,6 +28,7 @@ public class LPMTemporaryWindowInfo {
                                   List<Integer> replayedEventsIndices,
                                   List<Integer> window,
                                   Set<Pair<Integer, Integer>> usedPassages,
+                                  Set<SimplePlace<Integer>> usedPlaces,
                                   Map<Integer, String> reverseLabelMap,
                                   int windowCount,
                                   Integer traceVariantId,
@@ -35,6 +38,7 @@ public class LPMTemporaryWindowInfo {
         this.replayedEventsIndices = replayedEventsIndices;
         this.window = window;
         this.usedPassages = usedPassages;
+        this.usedPlaces = usedPlaces;
 
         this.reverseLabelMap = reverseLabelMap;
 
@@ -61,6 +65,10 @@ public class LPMTemporaryWindowInfo {
         return usedPassages.stream()
                 .map(p -> new Pair<>(this.reverseLabelMap.get(p.getFirst()),
                         this.reverseLabelMap.get(p.getSecond()))).collect(Collectors.toSet());
+    }
+
+    public Set<SimplePlace<Integer>> getIntegerUsedPlaces() {
+        return usedPlaces;
     }
 
     public int getWindowCount() {

@@ -34,6 +34,22 @@ import java.util.stream.Collectors;
  */
 public class PlaceUtils {
 
+    public static class Mapper {
+
+        public static <T> String getStringRepresentation(Set<T> inputTransitions,
+                                                         Set<T> outputTransitions) {
+            StringBuilder sb = new StringBuilder();
+            sb.append('(');
+            inputTransitions.forEach(tr -> sb.append(tr.toString()).append(", "));
+            sb.delete(sb.length() - 2, sb.length());
+            sb.append(" |");
+            outputTransitions.forEach(tr -> sb.append(" ").append(tr.toString()).append(", "));
+            sb.delete(sb.length() - 2, sb.length());
+            sb.append(')');
+            return sb.toString();
+        }
+    }
+
     public static void print(Set<Place> places) {
         StringBuilder sb = new StringBuilder();
         for (Place place : places) {

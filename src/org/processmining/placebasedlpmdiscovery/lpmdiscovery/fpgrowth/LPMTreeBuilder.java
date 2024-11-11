@@ -9,19 +9,18 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.Wi
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.model.SimplePlace;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTree;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.WindowLPMTree;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.WindowLPMTreeNode;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.Interruptible;
-import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.replayer.Replayer;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class LPMTreeBuilder extends Interruptible {
@@ -194,6 +193,7 @@ public class LPMTreeBuilder extends Interruptible {
                                 n.getReplayedEventsIndices(),
                                 window,
                                 n.getLpm().getUsedPassages(),
+                                n.getLpm().getUsedConstraints(),
                                 this.integerMappedLog.getMapping().getReverseLabelMap(),
                                 windowCount,
                                 traceVariantId,
@@ -241,9 +241,15 @@ public class LPMTreeBuilder extends Interruptible {
                 List<Integer> sequence = getFiringSequence(replayedEventIndices, window, lpmTemporaryWindowInfo.getWindowLastEventPos());
                 Replayer replayer = new Replayer(resLpm, integerMappedLog.getMapping().getLabelMap());
                 if (replayer.canReplay(sequence)) {
+
                     Set<Pair<Integer, Integer>> usedPassages = new HashSet<>();
                     usedPassages.addAll(lpmTemporaryWindowInfo.getIntegerUsedPassages());
                     usedPassages.addAll(lpmWithTemporaryInfo.get(lpms.get(i)).getIntegerUsedPassages());
+
+                    Set<SimplePlace<Integer>> usedPlaces = new HashSet<>();
+                    usedPlaces.addAll(lpmTemporaryWindowInfo.getIntegerUsedPlaces());
+                    usedPlaces.addAll(lpmWithTemporaryInfo.get(lpms.get(i)).getIntegerUsedPlaces());
+
                     lpmWithTemporaryInfo.put(
                             resLpm,
                             new LPMTemporaryWindowInfo(
@@ -251,6 +257,7 @@ public class LPMTreeBuilder extends Interruptible {
                                     replayedEventIndices,
                                     window,
                                     usedPassages,
+                                    usedPlaces,
                                     this.integerMappedLog.getMapping().getReverseLabelMap(),
                                     lpmTemporaryWindowInfo.getWindowCount(),
                                     lpmTemporaryWindowInfo.getTraceVariantId(),

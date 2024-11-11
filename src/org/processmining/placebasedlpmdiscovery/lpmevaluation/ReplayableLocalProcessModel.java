@@ -2,6 +2,8 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation;
 
 import com.google.common.collect.Sets;
 import org.apache.commons.math3.util.Pair;
+import org.processmining.placebasedlpmdiscovery.model.SimplePlace;
+import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -18,6 +20,7 @@ public class ReplayableLocalProcessModel {
     private boolean hasFired;
     private final List<Integer> firingSequence;
     private final Set<Pair<Integer, Integer>> usedPassages;
+    private final Set<Integer> usedConstraints;
 
     private final Set<Integer> invisibleFired; // set that is used so that invisible transitions do not create infinite recursion
     private int silentFiresCount;
@@ -32,6 +35,7 @@ public class ReplayableLocalProcessModel {
         this.invisibleFired = new HashSet<>();
         this.firingSequence = new ArrayList<>();
         this.usedPassages = new HashSet<>();
+        this.usedConstraints = new HashSet<>();
     }
 
     public ReplayableLocalProcessModel(Set<Integer> transitions, Set<Integer> invisibleTransitions) {
@@ -44,6 +48,7 @@ public class ReplayableLocalProcessModel {
         this.invisibleFired = new HashSet<>();
         this.firingSequence = new ArrayList<>();
         this.usedPassages = new HashSet<>();
+        this.usedConstraints = new HashSet<>();
     }
 
     public ReplayableLocalProcessModel(ReplayableLocalProcessModel rlpm) {
@@ -66,12 +71,40 @@ public class ReplayableLocalProcessModel {
         this.hasFired = rlpm.hasFired;
         this.firingSequence = new ArrayList<>(rlpm.getFiringSequence());
         this.usedPassages = new HashSet<>(rlpm.getUsedPassages());
+        this.usedConstraints = new HashSet<>(rlpm.usedConstraints);
         this.silentFiresCount = rlpm.silentFiresCount;
         this.invisibleFired = new HashSet<>(rlpm.invisibleFired);
     }
 
     public Set<Pair<Integer, Integer>> getUsedPassages() {
         return this.usedPassages;
+    }
+
+    public Set<SimplePlace<Integer>> getUsedConstraints() {
+        // initialize inputs and outputs for each constraint
+        Map<Integer, Set<Integer>> inputs = new HashMap<>();
+        Map<Integer, Set<Integer>> outputs = new HashMap<>();
+        this.usedConstraints.forEach(c -> {
+            inputs.put(c, new HashSet<>());
+            outputs.put(c, new HashSet<>());
+        });
+
+        // add inputs and outputs
+        this.inputConstraints.forEach((t, cs) -> {
+            Set<Integer> incs = new HashSet<>(cs);
+            incs.retainAll(this.usedConstraints);
+            incs.forEach(c -> outputs.get(c).add(t)); // for the input constraints of t, t is an output transition
+        });
+        this.outputConstraints.forEach((t, cs) -> {
+            Set<Integer> outcs = new HashSet<>(cs);
+            outcs.retainAll(this.usedConstraints);
+            outcs.forEach(c -> inputs.get(c).add(t)); // for the output constraints of t, t is an input transition
+        });
+
+        // return used constraints in short string form representation
+        return this.usedConstraints.stream()
+                .map(c -> new SimplePlace<>(inputs.get(c), outputs.get(c)))
+                .collect(Collectors.toSet());
     }
 
     public List<Integer> getFiringSequence() {
@@ -157,6 +190,7 @@ public class ReplayableLocalProcessModel {
             for (Integer inputConstraint : this.inputConstraints.get(transition)) {
                 Constraint constraint = this.constraintMap.get(inputConstraint);
                 constraint.takeTokens();
+                this.usedConstraints.add(inputConstraint); // constrained has been used
             }
         }
         // add tokens to all output constraints

@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowInfo;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;
+import org.processmining.placebasedlpmdiscovery.model.SimplePlace;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,6 +27,7 @@ public class LPMTemporaryWindowInfoCreator {
                 n.getReplayedEventsIndices(),
                 windowInfo.getWindow(),
                 n.getLpm().getUsedPassages(),
+                n.getLpm().getUsedConstraints(),
                 this.windowLog.getMapping().getReverseLabelMap(),
                 windowInfo.getWindowCount(),
                 windowInfo.getTraceVariantId(),
@@ -46,11 +48,16 @@ public class LPMTemporaryWindowInfoCreator {
         usedPassages.addAll(tempInfo1.getIntegerUsedPassages());
         usedPassages.addAll(tempInfo2.getIntegerUsedPassages());
 
+        Set<SimplePlace<Integer>> usedPlaces = new HashSet<>();
+        usedPlaces.addAll(tempInfo1.getIntegerUsedPlaces());
+        usedPlaces.addAll(tempInfo2.getIntegerUsedPlaces());
+
         return new LPMTemporaryWindowInfo(
                 sequence,
                 replayedEventIndices,
                 windowInfo.getWindow(),
                 usedPassages,
+                usedPlaces,
                 this.windowLog.getMapping().getReverseLabelMap(),
                 tempInfo1.getWindowCount(),
                 tempInfo1.getTraceVariantId(),
