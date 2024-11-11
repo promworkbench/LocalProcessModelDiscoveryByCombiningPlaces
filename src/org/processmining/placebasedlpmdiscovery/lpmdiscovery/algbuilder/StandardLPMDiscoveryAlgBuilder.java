@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder;
 
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlgFactory;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.configurator.LPMDAlgBuilderConfigurator;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.LPMDiscoveryAlg;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.StandardLPMDiscoveryAlg;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
@@ -87,5 +88,10 @@ public class StandardLPMDiscoveryAlgBuilder implements LPMDiscoveryAlgBuilder {
     @Override
     public void setParameters(PlaceBasedLPMDiscoveryParameters parameters) {
         this.parameters = parameters;
+    }
+
+    @Override
+    public void configureWithConfigurator(LPMDAlgBuilderConfigurator configurator) {
+        configurator.configure(this);
     }
 }
