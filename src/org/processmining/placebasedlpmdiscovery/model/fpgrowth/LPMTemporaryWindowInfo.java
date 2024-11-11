@@ -93,6 +93,7 @@ public class LPMTemporaryWindowInfo {
 
     /**
      * Returns the position of the first event of the window in the corresponding traces
+     *
      * @return position of first event (inclusive)
      */
     public int getWindowFirstEventPos() {
@@ -101,6 +102,7 @@ public class LPMTemporaryWindowInfo {
 
     /**
      * Returns the position of the event where the window ends in the corresponding traces
+     *
      * @return position of window end (inclusive)
      */
     public int getWindowLastEventPos() {
@@ -117,9 +119,18 @@ public class LPMTemporaryWindowInfo {
         if (!oTrace.isPresent()) throw new IllegalStateException("For each window there should be at least one trace.");
         XTrace trace = oTrace.get();
         for (int i = this.getWindowFirstEventPos(); i <= this.windowLastEventPos; ++i) {
-            XAttributeLiteral eventLabel = (XAttributeLiteral) trace.get(i).getAttributes().get(XConceptExtension.KEY_NAME);
+            XAttributeLiteral eventLabel =
+                    (XAttributeLiteral) trace.get(i).getAttributes().get(XConceptExtension.KEY_NAME);
             window.add(eventLabel.getValue());
         }
         return window;
+    }
+
+    public Set<SimplePlace<String>> getUsedPlaces() {
+        return this.usedPlaces.stream()
+                .map(p -> new SimplePlace<>(
+                        p.getInputs().stream().map(reverseLabelMap::get).collect(Collectors.toSet()),
+                        p.getOutputs().stream().map(reverseLabelMap::get).collect(Collectors.toSet())))
+                .collect(Collectors.toSet());
     }
 }

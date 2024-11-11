@@ -30,6 +30,8 @@ public class LPMCollectorFactory {
             return new EventCoverageCollector();
         if (collectorId == StandardLPMCollectorId.EventAttributeCollector)
             return new EventAttributeCollector();
+        if (collectorId == StandardLPMCollectorId.PlaceVisitsCollector)
+            return new PlaceVisitsCollector();
         throw new IllegalArgumentException("Window evaluator with id " + collectorId + " does not exist.");
     }
 }
