@@ -2,9 +2,9 @@ package org.processmining.placebasedlpmdiscovery;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.Analyzer;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.directors.FromParametersLPMDiscoveryDirector;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryAlgBuilder;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.StandardLPMDiscoveryAlgBuilder;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.configurator.FromParametersLPMDAlgBuilderConfigurator;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 
 public class Main {
@@ -15,8 +15,9 @@ public class Main {
         // set running context
         RunningContext runningContext = new RunningContext();
         setupStandardBase(log, builder, runningContext);
-        // set filtration and evaluation controllers
-        setupStandardEvaluationAndFiltrationControllers(parameters, builder);
+
+        // configure parameters, including set filtration and evaluation controllers
+        builder.configureWithConfigurator(new FromParametersLPMDAlgBuilderConfigurator(parameters));
         return builder;
     }
 
@@ -25,9 +26,4 @@ public class Main {
         builder.setRunningContext(runningContext);
     }
 
-    private static void setupStandardEvaluationAndFiltrationControllers(PlaceBasedLPMDiscoveryParameters parameters,
-                                                                        LPMDiscoveryAlgBuilder builder) {
-        FromParametersLPMDiscoveryDirector director = new FromParametersLPMDiscoveryDirector(builder, parameters);
-        director.make();
-    }
 }
