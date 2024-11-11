@@ -8,7 +8,7 @@ import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPl
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.StandardLPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.serialization.ModelDistanceConfigDeserializer;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryBuilder;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryAlgBuilder;
 import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.ExporterFactory;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
@@ -52,7 +52,7 @@ public class LPMDiscoveryRunner {
             parameters.setLpmCount(300);
             parameters.getPlaceChooserParameters().setPlaceLimit(30);
 
-            LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, parameters);
+            LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
             new LPMResult((StandardLPMDiscoveryResult) builder.build().run(new StandardLPMDiscoveryInput(eventLog,
                     new FPGrowthForPlacesLPMBuildingInput(eventLog, placeSet.getPlaces().getPlaces()))))
                     .export(ExporterFactory.createLPMDiscoveryResultExporter(),

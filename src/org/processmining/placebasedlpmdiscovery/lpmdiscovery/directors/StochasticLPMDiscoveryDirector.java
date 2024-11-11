@@ -2,13 +2,13 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.directors;
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMCollectorFactory;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMCollectorId;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryBuilder;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryAlgBuilder;
 
 public class StochasticLPMDiscoveryDirector extends AbstractLPMDiscoveryDirector {
 
     private final LPMCollectorFactory lpmCollectorFactory;
 
-    public StochasticLPMDiscoveryDirector(LPMDiscoveryBuilder builder,
+    public StochasticLPMDiscoveryDirector(LPMDiscoveryAlgBuilder builder,
                                           LPMCollectorFactory lpmCollectorFactory) {
         super(builder);
         this.lpmCollectorFactory = lpmCollectorFactory;

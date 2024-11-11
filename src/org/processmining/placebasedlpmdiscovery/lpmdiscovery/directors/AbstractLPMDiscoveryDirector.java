@@ -1,12 +1,12 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.directors;
 
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryBuilder;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryAlgBuilder;
 
 public abstract class AbstractLPMDiscoveryDirector implements LPMDiscoveryDirector {
 
-    protected final LPMDiscoveryBuilder builder;
+    protected final LPMDiscoveryAlgBuilder builder;
 
-    public AbstractLPMDiscoveryDirector(LPMDiscoveryBuilder builder) {
+    public AbstractLPMDiscoveryDirector(LPMDiscoveryAlgBuilder builder) {
         this.builder = builder;
     }
 

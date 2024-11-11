@@ -12,7 +12,7 @@ import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.StandardLPMDiscoveryInput;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryBuilder;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryAlgBuilder;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
@@ -65,7 +65,7 @@ public class LPMDiscoveryPlugin {
         if (parameters == null)
             return null;
 
-        LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, parameters);
+        LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
         EventLog eventLog = new XLogWrapper(log);
         return builder.build().run(new StandardLPMDiscoveryInput(eventLog,
                 new FPGrowthForPlacesLPMBuildingInput(eventLog, new StandardPlaceDiscovery(log,
@@ -97,7 +97,7 @@ public class LPMDiscoveryPlugin {
         if (parameters == null)
             return null;
 
-        LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, parameters);
+        LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
         EventLog eventLog = new XLogWrapper(log);
         return builder.build().run(new StandardLPMDiscoveryInput(eventLog,
                 new FPGrowthForPlacesLPMBuildingInput(eventLog,
@@ -129,7 +129,7 @@ public class LPMDiscoveryPlugin {
         if (parameters == null)
             return null;
 
-        LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, parameters);
+        LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
         EventLog eventLog = new XLogWrapper(log);
         return builder.build().run(new StandardLPMDiscoveryInput(eventLog,
                 new FPGrowthForPlacesLPMBuildingInput(eventLog, placeSet.getPlaces().getPlaces())));
@@ -189,7 +189,7 @@ public class LPMDiscoveryPlugin {
 
     private static LPMDiscoveryResult run(PluginContext context, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
         ContextKeeper.setUp(context);
-        LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, parameters);
+        LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
         EventLog eventLog = new XLogWrapper(log);
         return builder.build().run(new StandardLPMDiscoveryInput(eventLog,
                 new FPGrowthForPlacesLPMBuildingInput(eventLog, new StandardPlaceDiscovery(log,
@@ -198,7 +198,7 @@ public class LPMDiscoveryPlugin {
 
     private static LPMDiscoveryResult run(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
         ContextKeeper.setUp(context);
-        LPMDiscoveryBuilder builder = Main.createDefaultBuilder(log, parameters);
+        LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
         EventLog eventLog = new XLogWrapper(log);
         return builder.build().run(new StandardLPMDiscoveryInput(eventLog,
                 new FPGrowthForPlacesLPMBuildingInput(eventLog, placeSet.getPlaces().getPlaces())));

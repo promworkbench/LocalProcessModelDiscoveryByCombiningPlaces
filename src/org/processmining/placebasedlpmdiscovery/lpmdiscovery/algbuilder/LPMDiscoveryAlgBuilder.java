@@ -7,7 +7,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.Wind
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
 
-public interface LPMDiscoveryBuilder {
+public interface LPMDiscoveryAlgBuilder {
 
     LPMDiscoveryAlg build();
 

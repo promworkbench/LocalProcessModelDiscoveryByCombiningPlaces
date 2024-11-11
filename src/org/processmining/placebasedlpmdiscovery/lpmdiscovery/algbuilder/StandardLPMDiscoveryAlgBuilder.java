@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
+public class StandardLPMDiscoveryAlgBuilder implements LPMDiscoveryAlgBuilder {
 
     // objects that the builder can create
     private LPMEvaluationController evaluationController;
@@ -32,7 +32,7 @@ public class StandardLPMDiscoveryBuilder implements LPMDiscoveryBuilder {
     private Map<String, WindowLPMCollector<?>> windowEvaluators;
     private Collection<LPMFilter> lpmFilters;
 
-    public StandardLPMDiscoveryBuilder() {
+    public StandardLPMDiscoveryAlgBuilder() {
         this.evaluationController = new LPMEvaluationController();
         this.filtrationController = new LPMFiltrationController(evaluationController);
         this.lpmBuildingAlgFactory = new LPMBuildingAlgFactory(this.evaluationController);
