@@ -26,7 +26,6 @@ public class LPMDiscoveryAlgBuilderImpl implements LPMDiscoveryAlgBuilder {
     private final LPMBuildingAlgFactory lpmBuildingAlgFactory;
 
     // objects that are given to the builder
-    private RunningContext runningContext;
     private PlaceBasedLPMDiscoveryParameters parameters;
     private final Map<String, WindowLPMCollector<?>> windowEvaluators;
     private final Collection<LPMFilter> lpmFilters;
@@ -51,7 +50,6 @@ public class LPMDiscoveryAlgBuilderImpl implements LPMDiscoveryAlgBuilder {
         lpmFilters.forEach(filter -> this.filtrationController.addLPMFilter(filter, filter.needsEvaluation()));
 
         StandardLPMDiscoveryAlg alg = new StandardLPMDiscoveryAlg(
-                this.runningContext,
                 this.parameters,
                 this.lpmBuildingAlgFactory.createLPMBuildingAlg(this.lpmBuildingAlgType),
                 this.filtrationController);
@@ -74,11 +72,6 @@ public class LPMDiscoveryAlgBuilderImpl implements LPMDiscoveryAlgBuilder {
     public LPMDiscoveryAlgBuilder setLPMBuildingAlg(LPMBuildingAlgType lpmBuildingAlgType) {
         this.lpmBuildingAlgType = lpmBuildingAlgType;
         return this;
-    }
-
-    @Override
-    public void setRunningContext(RunningContext runningContext) {
-        this.runningContext = runningContext;
     }
 
     @Override

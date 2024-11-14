@@ -20,16 +20,13 @@ import java.util.TimerTask;
 
 public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 
-    private final RunningContext runningContext;
     private final PlaceBasedLPMDiscoveryParameters parameters;
     private final LPMBuildingAlg lpmBuildingAlg;
     private LPMFiltrationController lpmFiltrationController;
 
-    public StandardLPMDiscoveryAlg(RunningContext runningContext,
-                                   PlaceBasedLPMDiscoveryParameters parameters,
+    public StandardLPMDiscoveryAlg(PlaceBasedLPMDiscoveryParameters parameters,
                                    LPMBuildingAlg lpmBuildingAlg,
                                    LPMFiltrationController lpmFiltrationController) {
-        this.runningContext = runningContext;
         this.parameters = parameters;
         this.lpmBuildingAlg = lpmBuildingAlg;
         this.lpmFiltrationController = lpmFiltrationController;
@@ -37,11 +34,6 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 
     @Override
     public LPMDiscoveryResult run(LPMDiscoveryInput input) {
-        // cast input
-
-
-        this.runningContext.getAnalyzer().totalExecution.start();
-
         // create task that will broadcast interrupt event when the time limit is met
         InterrupterSubject interrupterSubject = new InterrupterSubject();
         Timer timer = new Timer();
@@ -50,23 +42,16 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
                     @Override
                     public void run() {
                         interrupterSubject.notifyInterruption();
-                        runningContext.getAnalyzer().getStatistics().getGeneralStatistics().setInterrupted(true);
                         System.out.println("INTERRUPTED");
                     }
                 }, parameters.getTimeLimit()
         );
-        this.runningContext.setInterrupterSubject(interrupterSubject);
-
-        // setup statistics for the parameters
-        this.runningContext.getAnalyzer().setStatisticsForParameters(parameters);
 
         // places = PlaceDiscovery.filterPlaces(places);
 
-        this.runningContext.getAnalyzer().lpmDiscoveryExecution.start();
         LPMDiscoveryResult result;
         try {
             // analyze log
-            this.runningContext.getAnalyzer().logAnalyzer.analyze(parameters.getLpmCombinationParameters().getLpmProximity());
 //            LEFRMatrix lefrMatrix = this.runningContext.getAnalyzer().logAnalyzer.getLEFRMatrix(parameters
 //            .getLpmCombinationParameters().getLpmProximity());
 
@@ -103,8 +88,6 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
             result.keep(parameters.getLpmCount());
             result.setInput(input);
 
-            this.runningContext.getAnalyzer().logAllLpmDiscovered(result.getAllLPMs().size());
-
             // TODO: Normalization has to be moved to another place
 //            if (result.size() > 0) {
 //                // normalize the fitting windows score
@@ -127,12 +110,6 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 //                result.keep(parameters.getLpmCount());
 //            }
         } finally {
-            this.runningContext.getAnalyzer().logLpmReturned(parameters.getLpmCount());
-            this.runningContext.getAnalyzer().lpmDiscoveryExecution.stop();
-            this.runningContext.getAnalyzer().close();
-            this.runningContext.getAnalyzer().totalExecution.stop();
-            this.runningContext.getAnalyzer().write();
-            this.runningContext.setAnalyzer(null);
             timer.cancel();
         }
 

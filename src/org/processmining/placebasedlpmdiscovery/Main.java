@@ -23,7 +23,6 @@ public class Main {
 
     private static void setupStandardBase(XLog log, LPMDiscoveryAlgBuilder builder, RunningContext runningContext) {
         runningContext.setAnalyzer(new Analyzer(log));
-        builder.setRunningContext(runningContext);
     }
 
 }

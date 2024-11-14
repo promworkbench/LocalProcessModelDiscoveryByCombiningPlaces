@@ -15,8 +15,6 @@ public interface LPMDiscoveryAlgBuilder {
 
     LPMDiscoveryAlgBuilder reset();
 
-    void setRunningContext(RunningContext runningContext);
-
     LPMDiscoveryAlgBuilder registerLPMWindowCollector(String name, WindowLPMCollector<? extends LPMCollectorResult> windowCollector);
 
     LPMDiscoveryAlgBuilder registerLPMFilter(LPMFilter filter);
