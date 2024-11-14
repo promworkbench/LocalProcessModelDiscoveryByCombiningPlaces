@@ -41,7 +41,7 @@ public class FromParametersLPMDAlgBuilderConfigurator implements LPMDAlgBuilderC
         LPMFilterFactory filterFactory = new LPMFilterFactory(filterParameters);
         for (LPMFilterId filterId : filterParameters.getLPMFilterIds()) {
             LPMFilter filter = filterFactory.getLPMFilter(filterId);
-            builder.registerLPMFilter(filter, filter.needsEvaluation());
+            builder.registerLPMFilter(filter);
         }
     }
 }

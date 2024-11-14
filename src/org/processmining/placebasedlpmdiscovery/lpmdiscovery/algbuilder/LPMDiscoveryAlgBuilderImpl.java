@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder;
 
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlgFactory;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlgType;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.configurator.LPMDAlgBuilderConfigurator;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.LPMDiscoveryAlg;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.StandardLPMDiscoveryAlg;
@@ -17,27 +18,28 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StandardLPMDiscoveryAlgBuilder implements LPMDiscoveryAlgBuilder {
+public class LPMDiscoveryAlgBuilderImpl implements LPMDiscoveryAlgBuilder {
 
     // objects that the builder can create
-    private LPMEvaluationController evaluationController;
-    private LPMFiltrationController filtrationController;
-
-    private LPMBuildingAlgFactory lpmBuildingAlgFactory;
+    private final LPMEvaluationController evaluationController;
+    private final LPMFiltrationController filtrationController;
+    private final LPMBuildingAlgFactory lpmBuildingAlgFactory;
 
     // objects that are given to the builder
     private RunningContext runningContext;
-
     private PlaceBasedLPMDiscoveryParameters parameters;
+    private final Map<String, WindowLPMCollector<?>> windowEvaluators;
+    private final Collection<LPMFilter> lpmFilters;
+    private LPMBuildingAlgType lpmBuildingAlgType;
 
-    private Map<String, WindowLPMCollector<?>> windowEvaluators;
-    private Collection<LPMFilter> lpmFilters;
-
-    public StandardLPMDiscoveryAlgBuilder() {
+    public LPMDiscoveryAlgBuilderImpl() {
+        // create helper classes
         this.evaluationController = new LPMEvaluationController();
         this.filtrationController = new LPMFiltrationController(evaluationController);
         this.lpmBuildingAlgFactory = new LPMBuildingAlgFactory(this.evaluationController);
 
+        // set defaults
+        this.lpmBuildingAlgType = LPMBuildingAlgType.FPGrowthForPlaces;
         this.windowEvaluators = new HashMap<>();
         this.lpmFilters = new ArrayList<>();
     }
@@ -45,25 +47,33 @@ public class StandardLPMDiscoveryAlgBuilder implements LPMDiscoveryAlgBuilder {
     @Override
     public LPMDiscoveryAlg build() {
         // register evaluators
-        windowEvaluators.forEach((key, value) -> this.evaluationController.registerEvaluator(key, value));
+        windowEvaluators.forEach(this.evaluationController::registerEvaluator);
         lpmFilters.forEach(filter -> this.filtrationController.addLPMFilter(filter, filter.needsEvaluation()));
 
         StandardLPMDiscoveryAlg alg = new StandardLPMDiscoveryAlg(
                 this.runningContext,
                 this.parameters,
-                this.lpmBuildingAlgFactory.createLPMBuildingAlg(this.parameters.getLpmBuildingAlgType()),
+                this.lpmBuildingAlgFactory.createLPMBuildingAlg(this.lpmBuildingAlgType),
                 this.filtrationController);
 
         return alg;
     }
 
     @Override
-    public void reset() {
-        this.runningContext = null;
-        this.evaluationController = null;
-        this.filtrationController = null;
-        this.windowEvaluators = new HashMap<>();
-        this.lpmFilters = new ArrayList<>();
+    public LPMDiscoveryAlgBuilder reset() {
+        return new LPMDiscoveryAlgBuilderImpl();
+    }
+
+    @Override
+    public LPMDiscoveryAlgBuilder configureWithConfigurator(LPMDAlgBuilderConfigurator configurator) {
+        configurator.configure(this);
+        return this;
+    }
+
+    @Override
+    public LPMDiscoveryAlgBuilder setLPMBuildingAlg(LPMBuildingAlgType lpmBuildingAlgType) {
+        this.lpmBuildingAlgType = lpmBuildingAlgType;
+        return this;
     }
 
     @Override
@@ -72,17 +82,19 @@ public class StandardLPMDiscoveryAlgBuilder implements LPMDiscoveryAlgBuilder {
     }
 
     @Override
-    public void registerLPMWindowCollector(String name,
+    public LPMDiscoveryAlgBuilder registerLPMWindowCollector(String name,
                                            WindowLPMCollector<? extends LPMCollectorResult> windowCollector) {
         if (this.windowEvaluators.containsKey(name)) {
             throw new IllegalArgumentException("An evaluator with the same name is already existing.");
         }
         this.windowEvaluators.put(name, windowCollector);
+        return this;
     }
 
     @Override
-    public void registerLPMFilter(LPMFilter filter, boolean b) {
+    public LPMDiscoveryAlgBuilder registerLPMFilter(LPMFilter filter) {
         this.lpmFilters.add(filter);
+        return this;
     }
 
     @Override
@@ -90,8 +102,4 @@ public class StandardLPMDiscoveryAlgBuilder implements LPMDiscoveryAlgBuilder {
         this.parameters = parameters;
     }
 
-    @Override
-    public void configureWithConfigurator(LPMDAlgBuilderConfigurator configurator) {
-        configurator.configure(this);
-    }
 }

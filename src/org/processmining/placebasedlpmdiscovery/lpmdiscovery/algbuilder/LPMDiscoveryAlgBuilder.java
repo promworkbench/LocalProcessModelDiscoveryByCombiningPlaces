@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder;
 
 import org.processmining.placebasedlpmdiscovery.RunningContext;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlgType;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.configurator.LPMDAlgBuilderConfigurator;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.LPMDiscoveryAlg;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
@@ -12,15 +13,18 @@ public interface LPMDiscoveryAlgBuilder {
 
     LPMDiscoveryAlg build();
 
-    void reset();
+    LPMDiscoveryAlgBuilder reset();
 
     void setRunningContext(RunningContext runningContext);
 
-    void registerLPMWindowCollector(String name, WindowLPMCollector<? extends LPMCollectorResult> windowCollector);
+    LPMDiscoveryAlgBuilder registerLPMWindowCollector(String name, WindowLPMCollector<? extends LPMCollectorResult> windowCollector);
 
-    void registerLPMFilter(LPMFilter filter, boolean b);
+    LPMDiscoveryAlgBuilder registerLPMFilter(LPMFilter filter);
 
     void setParameters(PlaceBasedLPMDiscoveryParameters parameters);
 
-    void configureWithConfigurator(LPMDAlgBuilderConfigurator configurator);
+    LPMDiscoveryAlgBuilder configureWithConfigurator(LPMDAlgBuilderConfigurator configurator);
+
+    LPMDiscoveryAlgBuilder setLPMBuildingAlg(LPMBuildingAlgType lpmBuildingAlg);
+
 }
