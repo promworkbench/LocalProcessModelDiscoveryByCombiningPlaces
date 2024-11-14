@@ -8,12 +8,12 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lp
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMCollectorFactory;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMCollectorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 
 public class FromParametersLPMDAlgBuilderConfigurator implements LPMDAlgBuilderConfigurator {
 
-    private final PlaceBasedLPMDiscoveryParameters parameters;
-    public FromParametersLPMDAlgBuilderConfigurator(PlaceBasedLPMDiscoveryParameters parameters) {
+    private final PlaceBasedLPMDiscoveryPluginParameters parameters;
+    public FromParametersLPMDAlgBuilderConfigurator(PlaceBasedLPMDiscoveryPluginParameters parameters) {
         this.parameters = parameters;
     }
 

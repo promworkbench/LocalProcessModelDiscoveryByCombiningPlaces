@@ -1,6 +1,5 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms;
 
-import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlg;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingResult;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.LPMBuildingResultTraversal;
@@ -11,7 +10,7 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterSubject;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,11 +19,11 @@ import java.util.TimerTask;
 
 public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 
-    private final PlaceBasedLPMDiscoveryParameters parameters;
+    private final PlaceBasedLPMDiscoveryPluginParameters parameters;
     private final LPMBuildingAlg lpmBuildingAlg;
     private LPMFiltrationController lpmFiltrationController;
 
-    public StandardLPMDiscoveryAlg(PlaceBasedLPMDiscoveryParameters parameters,
+    public StandardLPMDiscoveryAlg(PlaceBasedLPMDiscoveryPluginParameters parameters,
                                    LPMBuildingAlg lpmBuildingAlg,
                                    LPMFiltrationController lpmFiltrationController) {
         this.parameters = parameters;

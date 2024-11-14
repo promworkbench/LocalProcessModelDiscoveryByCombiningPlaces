@@ -2,7 +2,7 @@ package org.processmining.placebasedlpmdiscovery.analysis.parametermanager;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 
 /**
  * Given some ParameterSetup, creates PlaceBasedLPMDiscoveryParameters for each possibility in the setup,
@@ -28,11 +28,11 @@ public class ParameterPrioritiser {
         this.maxProximity = -1;
     }
 
-    public PlaceBasedLPMDiscoveryParameters next() {
+    public PlaceBasedLPMDiscoveryPluginParameters next() {
         return nextCardinality();
     }
 
-    public PlaceBasedLPMDiscoveryParameters nextPlaceLimit() {
+    public PlaceBasedLPMDiscoveryPluginParameters nextPlaceLimit() {
         this.currentProximityIndex = 0;
         this.currentCardinalityIndex = 0;
         // if in the last iteration we limited the number of places to more than what is available we are done
@@ -44,7 +44,7 @@ public class ParameterPrioritiser {
         return null;
     }
 
-    public PlaceBasedLPMDiscoveryParameters nextProximity() {
+    public PlaceBasedLPMDiscoveryPluginParameters nextProximity() {
         this.currentCardinalityIndex = 0;
         // if in the last iteration we limited the proximity to more than what is available we are done
 //        if (maxProximity != -1 && parameterSetup.getProximity().get(this.currentProximityIndex) >= maxProximity)
@@ -55,15 +55,15 @@ public class ParameterPrioritiser {
         return nextPlaceLimit();
     }
 
-    public PlaceBasedLPMDiscoveryParameters nextCardinality() {
+    public PlaceBasedLPMDiscoveryPluginParameters nextCardinality() {
         this.currentCardinalityIndex++;
         if (this.currentCardinalityIndex < this.parameterSetup.getCardinality().size())
             return create();
         return nextProximity();
     }
 
-    private PlaceBasedLPMDiscoveryParameters create() {
-        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(eventLog));
+    private PlaceBasedLPMDiscoveryPluginParameters create() {
+        PlaceBasedLPMDiscoveryPluginParameters parameters = new PlaceBasedLPMDiscoveryPluginParameters(new XLogWrapper(eventLog));
         parameters.getLpmCombinationParameters().setLpmProximity(this.parameterSetup.getProximity().get(currentProximityIndex));
         parameters.getLpmCombinationParameters().setConcurrencyCardinality(this.parameterSetup.getCardinality().get(currentCardinalityIndex));
         parameters.getLpmCombinationParameters().setMinNumPlaces(this.parameterSetup.getMinPlaces());

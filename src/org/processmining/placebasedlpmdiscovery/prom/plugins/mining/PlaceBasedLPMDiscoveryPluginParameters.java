@@ -18,7 +18,7 @@ import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattribute
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class PlaceBasedLPMDiscoveryParameters {
+public class PlaceBasedLPMDiscoveryPluginParameters {
 
     // place discovery parameters
     private PlaceDiscoveryAlgorithmId placeDiscoveryAlgorithmId;
@@ -43,7 +43,7 @@ public class PlaceBasedLPMDiscoveryParameters {
     // event attribute summary
     private final Map<String, AttributeSummary<?,?>> eventAttributeSummary;
 
-    public PlaceBasedLPMDiscoveryParameters(EventLog log) {
+    public PlaceBasedLPMDiscoveryPluginParameters(EventLog log) {
         this.placeDiscoveryAlgorithmId = PlaceDiscoveryAlgorithmId.ESTMiner;
         this.placeDiscoveryParameters = new EstMinerPlaceDiscoveryParameters();
         this.placeChooserParameters = new PlaceChooserParameters(log.getActivities()
@@ -101,7 +101,7 @@ public class PlaceBasedLPMDiscoveryParameters {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PlaceBasedLPMDiscoveryParameters that = (PlaceBasedLPMDiscoveryParameters) o;
+        PlaceBasedLPMDiscoveryPluginParameters that = (PlaceBasedLPMDiscoveryPluginParameters) o;
         return placeDiscoveryAlgorithmId == that.placeDiscoveryAlgorithmId &&
                 placeDiscoveryParameters.equals(that.placeDiscoveryParameters) &&
                 lpmCombinationParameters.equals(that.lpmCombinationParameters) &&

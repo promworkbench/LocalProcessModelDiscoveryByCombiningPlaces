@@ -4,11 +4,11 @@ import org.processmining.framework.util.ui.widgets.ProMComboBox;
 import org.processmining.framework.util.ui.widgets.ProMPropertiesPanel;
 import org.processmining.framework.util.ui.wizard.ProMWizardStep;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscoveryAlgorithmId;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 
 import javax.swing.*;
 
-public class PlaceDiscoveryAlgorithmChoiceWizardStep extends ProMPropertiesPanel implements ProMWizardStep<PlaceBasedLPMDiscoveryParameters> {
+public class PlaceDiscoveryAlgorithmChoiceWizardStep extends ProMPropertiesPanel implements ProMWizardStep<PlaceBasedLPMDiscoveryPluginParameters> {
 
     private static final String TITLE = "Place Discovery Algorithm Choice";
 
@@ -22,7 +22,7 @@ public class PlaceDiscoveryAlgorithmChoiceWizardStep extends ProMPropertiesPanel
     }
 
     @Override
-    public PlaceBasedLPMDiscoveryParameters apply(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
+    public PlaceBasedLPMDiscoveryPluginParameters apply(PlaceBasedLPMDiscoveryPluginParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
         if (!canApply(placeBasedLPMDiscoveryParameters, jComponent)) {
             return placeBasedLPMDiscoveryParameters;
         }
@@ -32,12 +32,12 @@ public class PlaceDiscoveryAlgorithmChoiceWizardStep extends ProMPropertiesPanel
     }
 
     @Override
-    public boolean canApply(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
+    public boolean canApply(PlaceBasedLPMDiscoveryPluginParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
         return jComponent instanceof PlaceDiscoveryAlgorithmChoiceWizardStep;
     }
 
     @Override
-    public JComponent getComponent(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters) {
+    public JComponent getComponent(PlaceBasedLPMDiscoveryPluginParameters placeBasedLPMDiscoveryParameters) {
         this.comboBox.setSelectedItem(placeBasedLPMDiscoveryParameters.getPlaceDiscoveryAlgorithmId());
         this.checkBox.setSelected(placeBasedLPMDiscoveryParameters.isUseDefaultPlaceDiscoveryParameters());
         return this;

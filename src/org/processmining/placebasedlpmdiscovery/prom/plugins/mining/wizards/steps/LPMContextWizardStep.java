@@ -5,7 +5,7 @@ import org.processmining.framework.util.ui.widgets.ProMComboCheckBox;
 import org.processmining.framework.util.ui.widgets.ProMPropertiesPanel;
 import org.processmining.framework.util.ui.wizard.ProMWizardStep;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventAttributeCollectorResult;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.eventattributesummaries.EventAttributeSummaryComponent;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.eventattributesummaries.EventAttributeSummaryComponentFactory;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummary;
@@ -16,7 +16,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.*;
 
-public class LPMContextWizardStep extends ProMPropertiesPanel implements ProMWizardStep<PlaceBasedLPMDiscoveryParameters> {
+public class LPMContextWizardStep extends ProMPropertiesPanel implements ProMWizardStep<PlaceBasedLPMDiscoveryPluginParameters> {
 
     private static final String TITLE = "LPM Context Configuration";
 
@@ -90,7 +90,7 @@ public class LPMContextWizardStep extends ProMPropertiesPanel implements ProMWiz
     }
 
     @Override
-    public PlaceBasedLPMDiscoveryParameters apply(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
+    public PlaceBasedLPMDiscoveryPluginParameters apply(PlaceBasedLPMDiscoveryPluginParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
         if (!canApply(placeBasedLPMDiscoveryParameters, jComponent)) {
             return placeBasedLPMDiscoveryParameters;
         }
@@ -102,12 +102,12 @@ public class LPMContextWizardStep extends ProMPropertiesPanel implements ProMWiz
     }
 
     @Override
-    public boolean canApply(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
+    public boolean canApply(PlaceBasedLPMDiscoveryPluginParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
         return jComponent instanceof LPMContextWizardStep;
     }
 
     @Override
-    public JComponent getComponent(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters) {
+    public JComponent getComponent(PlaceBasedLPMDiscoveryPluginParameters placeBasedLPMDiscoveryParameters) {
         return this;
     }
 

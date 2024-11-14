@@ -2,7 +2,6 @@ package org.processmining.placebasedlpmdiscovery.runners.GUI;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.deckfour.xes.model.XLog;
 import org.processmining.contexts.cli.CLIContext;
 import org.processmining.contexts.cli.CLIPluginContext;
 import org.processmining.framework.plugin.PluginContext;
@@ -19,7 +18,7 @@ import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.prom.dependencyinjection.PromGuiceModule;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.BaseLPMDiscoveryResultComponent;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.service.LPMDiscoveryService;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
@@ -90,6 +89,6 @@ public class MainGUI extends JFrame {
 
         LPMDiscoveryInput input = new StandardLPMDiscoveryInput(log, new FPGrowthForPlacesLPMBuildingInput(log, places));
 
-        return Main.createDefaultBuilder(log.getOriginalLog(), new PlaceBasedLPMDiscoveryParameters(log)).build().run(input);
+        return Main.createDefaultBuilder(log.getOriginalLog(), new PlaceBasedLPMDiscoveryPluginParameters(log)).build().run(input);
     }
 }

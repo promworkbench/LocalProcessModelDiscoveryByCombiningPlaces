@@ -3,13 +3,13 @@ package org.processmining.placebasedlpmdiscovery.prom.plugins.mining.wizards;
 import org.processmining.framework.util.ui.wizard.MapWizard;
 import org.processmining.framework.util.ui.wizard.ProMWizardStep;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscoveryAlgorithmId;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
-public class PlaceBasedLPMDiscoveryWizard extends MapWizard<PlaceBasedLPMDiscoveryParameters, String> {
+public class PlaceBasedLPMDiscoveryWizard extends MapWizard<PlaceBasedLPMDiscoveryPluginParameters, String> {
 
     public static final String INITIAL_KEY = "PlaceDiscoveryAlgorithmChoiceParameters";
     public static final String PD_EST_MINER = "PlaceDiscoveryESTMinerParameters";
@@ -22,32 +22,32 @@ public class PlaceBasedLPMDiscoveryWizard extends MapWizard<PlaceBasedLPMDiscove
     private final boolean discoverPlaces;
     private final boolean withContext;
 
-    public PlaceBasedLPMDiscoveryWizard(Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryParameters>> steps, boolean discoverPlaces, boolean withContext) {
+    public PlaceBasedLPMDiscoveryWizard(Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryPluginParameters>> steps, boolean discoverPlaces, boolean withContext) {
         super(steps);
         this.discoverPlaces = discoverPlaces;
         this.withContext = withContext;
     }
 
-    public PlaceBasedLPMDiscoveryWizard(Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryParameters>> steps, boolean discoverPlaces) {
+    public PlaceBasedLPMDiscoveryWizard(Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryPluginParameters>> steps, boolean discoverPlaces) {
         this(steps, discoverPlaces, false);
     }
 
     @Override
-    public Collection<String> getFinalKeys(MapModel<PlaceBasedLPMDiscoveryParameters, String> mapModel) {
+    public Collection<String> getFinalKeys(MapModel<PlaceBasedLPMDiscoveryPluginParameters, String> mapModel) {
         if (withContext)
             return Collections.singletonList(PlaceBasedLPMDiscoveryWizard.LPM_CONTEXT);
         return Collections.singletonList(PlaceBasedLPMDiscoveryWizard.LPM_DISCOVERY);
     }
 
     @Override
-    public String getInitialKey(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters) {
+    public String getInitialKey(PlaceBasedLPMDiscoveryPluginParameters placeBasedLPMDiscoveryParameters) {
         if (discoverPlaces)
             return PlaceBasedLPMDiscoveryWizard.INITIAL_KEY;
         return PlaceBasedLPMDiscoveryWizard.LPM_DISCOVERY;
     }
 
     @Override
-    public String getNextKey(MapModel<PlaceBasedLPMDiscoveryParameters, String> mapModel) {
+    public String getNextKey(MapModel<PlaceBasedLPMDiscoveryPluginParameters, String> mapModel) {
         if (mapModel.getCurrent().equals(INITIAL_KEY)) {
             if (mapModel.getModel().isUseDefaultPlaceDiscoveryParameters()) {
                 mapModel.getModel().setDefaultPlaceDiscoveryParameters();

@@ -3,12 +3,12 @@ package org.processmining.placebasedlpmdiscovery.prom.plugins.mining.wizards.ste
 import org.deckfour.xes.model.XLog;
 import org.processmining.framework.util.ui.wizard.ProMWizardStep;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.InductiveMinerPlaceDiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 import org.processmining.plugins.InductiveMiner.plugins.dialogs.IMMiningDialog;
 
 import javax.swing.*;
 
-public class InductiveMinerWizardStep implements ProMWizardStep<PlaceBasedLPMDiscoveryParameters> {
+public class InductiveMinerWizardStep implements ProMWizardStep<PlaceBasedLPMDiscoveryPluginParameters> {
 
     private IMMiningDialog wrappedStep;
     private InductiveMinerPlaceDiscoveryParameters parameters;
@@ -19,7 +19,7 @@ public class InductiveMinerWizardStep implements ProMWizardStep<PlaceBasedLPMDis
     }
 
     @Override
-    public PlaceBasedLPMDiscoveryParameters apply(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
+    public PlaceBasedLPMDiscoveryPluginParameters apply(PlaceBasedLPMDiscoveryPluginParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
         if (!canApply(placeBasedLPMDiscoveryParameters, jComponent))
             return placeBasedLPMDiscoveryParameters;
         this.parameters.setMiningParameters(this.wrappedStep.getMiningParameters());
@@ -29,12 +29,12 @@ public class InductiveMinerWizardStep implements ProMWizardStep<PlaceBasedLPMDis
     }
 
     @Override
-    public boolean canApply(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
+    public boolean canApply(PlaceBasedLPMDiscoveryPluginParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
         return jComponent instanceof IMMiningDialog;
     }
 
     @Override
-    public JComponent getComponent(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters) {
+    public JComponent getComponent(PlaceBasedLPMDiscoveryPluginParameters placeBasedLPMDiscoveryParameters) {
         return this.wrappedStep;
     }
 

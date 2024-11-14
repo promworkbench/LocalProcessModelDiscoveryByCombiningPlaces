@@ -5,11 +5,11 @@ import org.processmining.placebasedlpmdiscovery.analysis.analyzers.Analyzer;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryAlgBuilder;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryAlgBuilderImpl;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.configurator.FromParametersLPMDAlgBuilderConfigurator;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 
 public class Main {
 
-    public static LPMDiscoveryAlgBuilder createDefaultBuilder(XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
+    public static LPMDiscoveryAlgBuilder createDefaultBuilder(XLog log, PlaceBasedLPMDiscoveryPluginParameters parameters) {
         // create builder
         LPMDiscoveryAlgBuilder builder = new LPMDiscoveryAlgBuilderImpl();
         // set running context

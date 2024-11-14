@@ -49,10 +49,10 @@ public class LPMDiscoveryPlugin {
     public static LPMDiscoveryResult mineLPMs(UIPluginContext context, XLog log) {
         ContextKeeper.setUp(context);
 
-        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log));
+        PlaceBasedLPMDiscoveryPluginParameters parameters = new PlaceBasedLPMDiscoveryPluginParameters(new XLogWrapper(log));
 
         // show wizard
-        Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryParameters>> stepMap = new HashMap<>();
+        Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryPluginParameters>> stepMap = new HashMap<>();
         stepMap.put(PlaceBasedLPMDiscoveryWizard.INITIAL_KEY, new PlaceDiscoveryAlgorithmChoiceWizardStep());
         stepMap.put(PlaceBasedLPMDiscoveryWizard.PD_EST_MINER, new ESTMinerWizardStep(log));
         stepMap.put(PlaceBasedLPMDiscoveryWizard.PD_INDUCTIVE_MINER, new InductiveMinerWizardStep(log));
@@ -85,10 +85,10 @@ public class LPMDiscoveryPlugin {
     public static LPMDiscoveryResult mineLPMs(UIPluginContext context, XLog log, Petrinet petrinet) {
         ContextKeeper.setUp(context);
 
-        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log));
+        PlaceBasedLPMDiscoveryPluginParameters parameters = new PlaceBasedLPMDiscoveryPluginParameters(new XLogWrapper(log));
 
         // show wizard
-        Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryParameters>> stepMap = new HashMap<>();
+        Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryPluginParameters>> stepMap = new HashMap<>();
         stepMap.put(PlaceBasedLPMDiscoveryWizard.LPM_DISCOVERY, new LPMDiscoveryWizardStep(log));
 //		stepMap.put(PlaceBasedLPMDiscoveryWizard.EVALUATION, new EvaluationWizardStep());
         PlaceBasedLPMDiscoveryWizard wizard = new PlaceBasedLPMDiscoveryWizard(stepMap, false);
@@ -117,10 +117,10 @@ public class LPMDiscoveryPlugin {
     public static LPMDiscoveryResult mineLPMs(UIPluginContext context, XLog log, PlaceSet placeSet) {
         ContextKeeper.setUp(context);
 
-        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log));
+        PlaceBasedLPMDiscoveryPluginParameters parameters = new PlaceBasedLPMDiscoveryPluginParameters(new XLogWrapper(log));
 
         // show wizard
-        Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryParameters>> stepMap = new HashMap<>();
+        Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryPluginParameters>> stepMap = new HashMap<>();
         stepMap.put(PlaceBasedLPMDiscoveryWizard.LPM_DISCOVERY, new LPMDiscoveryWizardStep(log));
 //		stepMap.put(PlaceBasedLPMDiscoveryWizard.EVALUATION, new EvaluationWizardStep());
         PlaceBasedLPMDiscoveryWizard wizard = new PlaceBasedLPMDiscoveryWizard(stepMap, false);
@@ -142,7 +142,7 @@ public class LPMDiscoveryPlugin {
     public static LPMDiscoveryResult mineLPMs(PluginContext context, XLog log) {
         ContextKeeper.setUp(context);
 
-        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log));
+        PlaceBasedLPMDiscoveryPluginParameters parameters = new PlaceBasedLPMDiscoveryPluginParameters(new XLogWrapper(log));
 
         return run(context, log, parameters);
     }
@@ -154,7 +154,7 @@ public class LPMDiscoveryPlugin {
     public static LPMDiscoveryResult mineLPMs(PluginContext context, XLog log, PlaceSet placeSet) {
         ContextKeeper.setUp(context);
 
-        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log));
+        PlaceBasedLPMDiscoveryPluginParameters parameters = new PlaceBasedLPMDiscoveryPluginParameters(new XLogWrapper(log));
         return run(context, log, placeSet, parameters);
     }
 
@@ -165,7 +165,7 @@ public class LPMDiscoveryPlugin {
     public static LPMDiscoveryResult mineLPMs(PluginContext context, XLog log, Petrinet petrinet) {
         ContextKeeper.setUp(context);
 
-        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log));
+        PlaceBasedLPMDiscoveryPluginParameters parameters = new PlaceBasedLPMDiscoveryPluginParameters(new XLogWrapper(log));
         PlaceSet places = new PlaceSet(PlaceUtils.getPlacesFromPetriNet(petrinet));
 
         return run(context, log, places, parameters);
@@ -175,7 +175,7 @@ public class LPMDiscoveryPlugin {
             variantLabel = "Local Process Models Discovery Based on Set of Places given Log",
             requiredParameterLabels = {0, 3}
     )
-    public static LPMDiscoveryResult mineLPMs(PluginContext context, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
+    public static LPMDiscoveryResult mineLPMs(PluginContext context, XLog log, PlaceBasedLPMDiscoveryPluginParameters parameters) {
         return run(context, log, parameters);
     }
 
@@ -183,11 +183,11 @@ public class LPMDiscoveryPlugin {
             variantLabel = "Local Process Models Discovery Based on Set of Places given Places (faster)",
             requiredParameterLabels = {0, 1, 3}
     )
-    public static LPMDiscoveryResult mineLPMs(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
+    public static LPMDiscoveryResult mineLPMs(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryPluginParameters parameters) {
         return run(context, log, placeSet, parameters);
     }
 
-    private static LPMDiscoveryResult run(PluginContext context, XLog log, PlaceBasedLPMDiscoveryParameters parameters) {
+    private static LPMDiscoveryResult run(PluginContext context, XLog log, PlaceBasedLPMDiscoveryPluginParameters parameters) {
         ContextKeeper.setUp(context);
         LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
         EventLog eventLog = new XLogWrapper(log);
@@ -196,7 +196,7 @@ public class LPMDiscoveryPlugin {
                         parameters.getPlaceDiscoveryParameters()).getPlaces().getPlaces())));
     }
 
-    private static LPMDiscoveryResult run(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryParameters parameters) {
+    private static LPMDiscoveryResult run(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryPluginParameters parameters) {
         ContextKeeper.setUp(context);
         LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
         EventLog eventLog = new XLogWrapper(log);

@@ -2,7 +2,7 @@ package org.processmining.placebasedlpmdiscovery.analysis.analyzers;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LogAnalyzer;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 import org.processmining.placebasedlpmdiscovery.analysis.statistics.*;
 
 import java.util.UUID;
@@ -43,7 +43,7 @@ public class Analyzer {
 //                rewrite);
     }
 
-    public void setStatisticsForParameters(PlaceBasedLPMDiscoveryParameters parameters) {
+    public void setStatisticsForParameters(PlaceBasedLPMDiscoveryPluginParameters parameters) {
         this.getStatistics().getParameterStatistics().setProximity(parameters.getLpmCombinationParameters().getLpmProximity());
         this.getStatistics().getParameterStatistics().setCountPlacesLimit(parameters.getPlaceChooserParameters().getPlaceLimit());
         this.getStatistics().getParameterStatistics().setPlaceDiscoveryAlgorithmId(parameters.getPlaceDiscoveryAlgorithmId());

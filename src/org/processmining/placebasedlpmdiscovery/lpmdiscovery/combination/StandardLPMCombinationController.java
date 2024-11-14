@@ -16,7 +16,7 @@ import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPl
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -25,13 +25,13 @@ public class StandardLPMCombinationController implements LPMCombinationControlle
 
     private final LPMFiltrationController filtrationController;
     private XLog log;
-    private final PlaceBasedLPMDiscoveryParameters parameters;
+    private final PlaceBasedLPMDiscoveryPluginParameters parameters;
     private int currentNumPlaces;
     private final RunningContext runningContext;
     private LPMEvaluationController evaluationController;
 
     public StandardLPMCombinationController(XLog log,
-                                            PlaceBasedLPMDiscoveryParameters parameters,
+                                            PlaceBasedLPMDiscoveryPluginParameters parameters,
                                             LPMFiltrationController filtrationController,
                                             LPMEvaluationController evaluationController,
                                             RunningContext runningContext) {

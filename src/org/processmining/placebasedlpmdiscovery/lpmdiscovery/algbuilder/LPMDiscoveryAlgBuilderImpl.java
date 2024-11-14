@@ -1,6 +1,5 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder;
 
-import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlgFactory;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlgType;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.configurator.LPMDAlgBuilderConfigurator;
@@ -11,7 +10,7 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltr
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMCollector;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,7 +25,7 @@ public class LPMDiscoveryAlgBuilderImpl implements LPMDiscoveryAlgBuilder {
     private final LPMBuildingAlgFactory lpmBuildingAlgFactory;
 
     // objects that are given to the builder
-    private PlaceBasedLPMDiscoveryParameters parameters;
+    private PlaceBasedLPMDiscoveryPluginParameters parameters;
     private final Map<String, WindowLPMCollector<?>> windowEvaluators;
     private final Collection<LPMFilter> lpmFilters;
     private LPMBuildingAlgType lpmBuildingAlgType;
@@ -91,7 +90,7 @@ public class LPMDiscoveryAlgBuilderImpl implements LPMDiscoveryAlgBuilder {
     }
 
     @Override
-    public void setParameters(PlaceBasedLPMDiscoveryParameters parameters) {
+    public void setParameters(PlaceBasedLPMDiscoveryPluginParameters parameters) {
         this.parameters = parameters;
     }
 

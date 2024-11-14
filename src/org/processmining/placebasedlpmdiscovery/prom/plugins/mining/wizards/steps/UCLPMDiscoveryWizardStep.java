@@ -8,14 +8,14 @@ import org.processmining.framework.util.ui.widgets.ProMComboCheckBox;
 import org.processmining.framework.util.ui.widgets.ProMPropertiesPanel;
 import org.processmining.framework.util.ui.widgets.ProMTextField;
 import org.processmining.framework.util.ui.wizard.ProMWizardStep;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class UCLPMDiscoveryWizardStep extends ProMPropertiesPanel implements ProMWizardStep<PlaceBasedLPMDiscoveryParameters> {
+public class UCLPMDiscoveryWizardStep extends ProMPropertiesPanel implements ProMWizardStep<PlaceBasedLPMDiscoveryPluginParameters> {
 
     private static final String TITLE = "LPM Discovery Configuration";
 
@@ -171,7 +171,7 @@ public class UCLPMDiscoveryWizardStep extends ProMPropertiesPanel implements Pro
     }
 
     @Override
-    public PlaceBasedLPMDiscoveryParameters apply(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
+    public PlaceBasedLPMDiscoveryPluginParameters apply(PlaceBasedLPMDiscoveryPluginParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
         if (!canApply(placeBasedLPMDiscoveryParameters, jComponent))
             return placeBasedLPMDiscoveryParameters;
         placeBasedLPMDiscoveryParameters.getPlaceChooserParameters().setChosenActivities(activitiesComponent.getSelectedItems());
@@ -190,12 +190,12 @@ public class UCLPMDiscoveryWizardStep extends ProMPropertiesPanel implements Pro
     }
 
     @Override
-    public boolean canApply(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
+    public boolean canApply(PlaceBasedLPMDiscoveryPluginParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
         return jComponent instanceof UCLPMDiscoveryWizardStep;
     }
 
     @Override
-    public JComponent getComponent(PlaceBasedLPMDiscoveryParameters model) {
+    public JComponent getComponent(PlaceBasedLPMDiscoveryPluginParameters model) {
         this.activitiesComponent.addSelectedItems(model.getPlaceChooserParameters().getChosenActivities());
 //        this.filteringComponent.addSelectedItems(model.getLpmFilterParameters().getLPMFilterIds());
         this.lpmCount.setText(String.valueOf(model.getLpmCount()));

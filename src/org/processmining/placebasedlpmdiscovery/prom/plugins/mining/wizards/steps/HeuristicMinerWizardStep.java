@@ -3,13 +3,13 @@ package org.processmining.placebasedlpmdiscovery.prom.plugins.mining.wizards.ste
 import org.deckfour.xes.model.XLog;
 import org.processmining.framework.util.ui.wizard.ProMWizardStep;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.HeuristicMinerPlaceDiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 import org.processmining.plugins.heuristicsnet.miner.heuristics.miner.LogUtility;
 import org.processmining.plugins.heuristicsnet.miner.heuristics.miner.gui.ParametersPanel;
 
 import javax.swing.*;
 
-public class HeuristicMinerWizardStep implements ProMWizardStep<PlaceBasedLPMDiscoveryParameters> {
+public class HeuristicMinerWizardStep implements ProMWizardStep<PlaceBasedLPMDiscoveryPluginParameters> {
 
     private static final String TITLE = "Heuristic Miner Place Discovery Algorithm";
 
@@ -23,7 +23,7 @@ public class HeuristicMinerWizardStep implements ProMWizardStep<PlaceBasedLPMDis
     }
 
     @Override
-    public PlaceBasedLPMDiscoveryParameters apply(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
+    public PlaceBasedLPMDiscoveryPluginParameters apply(PlaceBasedLPMDiscoveryPluginParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
         if (!canApply(placeBasedLPMDiscoveryParameters, jComponent))
             return placeBasedLPMDiscoveryParameters;
         this.parameters.setSettings(this.wrappedStep.getSettings());
@@ -32,12 +32,12 @@ public class HeuristicMinerWizardStep implements ProMWizardStep<PlaceBasedLPMDis
     }
 
     @Override
-    public boolean canApply(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
+    public boolean canApply(PlaceBasedLPMDiscoveryPluginParameters placeBasedLPMDiscoveryParameters, JComponent jComponent) {
         return jComponent instanceof ParametersPanel;
     }
 
     @Override
-    public JComponent getComponent(PlaceBasedLPMDiscoveryParameters placeBasedLPMDiscoveryParameters) {
+    public JComponent getComponent(PlaceBasedLPMDiscoveryPluginParameters placeBasedLPMDiscoveryParameters) {
         return this.wrappedStep;
     }
 

@@ -48,7 +48,7 @@ public class LPMDiscoveryMultipleLogsPlugin {
     public static MultipleLPMDiscoveryResults mineLPMs(UIPluginContext context, XLog log1, XLog log2, Petrinet petrinet) {
         ContextKeeper.setUp(context);
 
-        PlaceBasedLPMDiscoveryParameters parameters = getPlaceBasedLPMDiscoveryParameters(context, log1);
+        PlaceBasedLPMDiscoveryPluginParameters parameters = getPlaceBasedLPMDiscoveryParameters(context, log1);
         if (parameters == null) return null;
 
         EventLog elog1 = new XLogWrapper(log1);
@@ -79,7 +79,7 @@ public class LPMDiscoveryMultipleLogsPlugin {
     public static MultipleLPMDiscoveryResults mineLPMs(UIPluginContext context, XLog log1, XLog log2, PlaceSet placeSet) {
         ContextKeeper.setUp(context);
 
-        PlaceBasedLPMDiscoveryParameters parameters = getPlaceBasedLPMDiscoveryParameters(context, log1);
+        PlaceBasedLPMDiscoveryPluginParameters parameters = getPlaceBasedLPMDiscoveryParameters(context, log1);
         if (parameters == null) return null;
 
         EventLog elog1 = new XLogWrapper(log1);
@@ -95,11 +95,11 @@ public class LPMDiscoveryMultipleLogsPlugin {
         return new TwoStandardLPMDiscoveryResults(res1, res2);
     }
 
-    private static PlaceBasedLPMDiscoveryParameters getPlaceBasedLPMDiscoveryParameters(UIPluginContext context, XLog log1) {
-        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log1));
+    private static PlaceBasedLPMDiscoveryPluginParameters getPlaceBasedLPMDiscoveryParameters(UIPluginContext context, XLog log1) {
+        PlaceBasedLPMDiscoveryPluginParameters parameters = new PlaceBasedLPMDiscoveryPluginParameters(new XLogWrapper(log1));
 
         // show wizard
-        Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryParameters>> stepMap = new HashMap<>();
+        Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryPluginParameters>> stepMap = new HashMap<>();
         stepMap.put(PlaceBasedLPMDiscoveryWizard.LPM_DISCOVERY, new LPMDiscoveryWizardStep(log1));
         PlaceBasedLPMDiscoveryWizard wizard = new PlaceBasedLPMDiscoveryWizard(stepMap, false);
         parameters = ProMWizardDisplay.show(context, wizard, parameters);
