@@ -21,7 +21,15 @@ public class MainFPGrowthLPMTreeTraversal implements LPMBuildingResultTraversal 
 
     @Override
     public boolean hasNext() {
-        return !queue.isEmpty();
+        while (!queue.isEmpty()) {
+            MainFPGrowthLPMTreeNode node = queue.peek();
+            queue.addAll(node.getChildren());
+            if (node != result.getRoot() && !node.getAdditionalInfo().getCollectorResults().isEmpty()) {
+                return true;
+            }
+            queue.poll();
+        }
+        return false;
     }
 
     @Override
@@ -30,12 +38,14 @@ public class MainFPGrowthLPMTreeTraversal implements LPMBuildingResultTraversal 
         LocalProcessModel lpm = null;
         while (!stop) {
             MainFPGrowthLPMTreeNode node = queue.poll();
-            if (node != result.getRoot() && !node.getAdditionalInfo().getCollectorResults().isEmpty()) {
-                lpm = node.getLPM();
-                transferAdditionalInfo(node, lpm);
-                stop = true;
+            if (node != result.getRoot()) {
+                assert node != null;
+                if (!node.getAdditionalInfo().getCollectorResults().isEmpty()) {
+                    lpm = node.getLPM();
+                    transferAdditionalInfo(node, lpm);
+                    stop = true;
+                }
             }
-            queue.addAll(node.getChildren());
         }
         return lpm;
     }
