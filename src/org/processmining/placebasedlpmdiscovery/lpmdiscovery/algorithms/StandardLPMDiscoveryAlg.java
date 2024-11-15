@@ -5,6 +5,7 @@ import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingR
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.LPMBuildingResultTraversal;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.LPMBuildingResultTraversalFactory;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.parameters.LPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
@@ -19,20 +20,17 @@ import java.util.TimerTask;
 
 public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 
-    private final PlaceBasedLPMDiscoveryPluginParameters parameters;
     private final LPMBuildingAlg lpmBuildingAlg;
-    private LPMFiltrationController lpmFiltrationController;
+    private final LPMFiltrationController lpmFiltrationController;
 
-    public StandardLPMDiscoveryAlg(PlaceBasedLPMDiscoveryPluginParameters parameters,
-                                   LPMBuildingAlg lpmBuildingAlg,
+    public StandardLPMDiscoveryAlg(LPMBuildingAlg lpmBuildingAlg,
                                    LPMFiltrationController lpmFiltrationController) {
-        this.parameters = parameters;
         this.lpmBuildingAlg = lpmBuildingAlg;
         this.lpmFiltrationController = lpmFiltrationController;
     }
 
     @Override
-    public LPMDiscoveryResult run(LPMDiscoveryInput input) {
+    public LPMDiscoveryResult run(LPMDiscoveryInput input, LPMDiscoveryParameters parameters) {
         // create task that will broadcast interrupt event when the time limit is met
         InterrupterSubject interrupterSubject = new InterrupterSubject();
         Timer timer = new Timer();

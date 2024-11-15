@@ -11,8 +11,10 @@ import org.processmining.framework.util.ui.wizard.ProMWizardStep;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.StandardLPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryAlgBuilder;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.parameters.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
@@ -20,6 +22,7 @@ import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.prom.ContextKeeper;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PetriNetPlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.StandardPlaceDiscovery;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.parameters.adapters.ParameterAdaptersUtils;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.wizards.PlaceBasedLPMDiscoveryWizard;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.wizards.steps.*;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
@@ -36,6 +39,7 @@ import java.util.Map;
         help = "Builds Local Process Models"
 )
 public class LPMDiscoveryPlugin {
+
     @UITopiaVariant(
             affiliation = "RWTH - PADS",
             author = "Viki Peeva",
@@ -49,27 +53,12 @@ public class LPMDiscoveryPlugin {
     public static LPMDiscoveryResult mineLPMs(UIPluginContext context, XLog log) {
         ContextKeeper.setUp(context);
 
-        PlaceBasedLPMDiscoveryPluginParameters parameters = new PlaceBasedLPMDiscoveryPluginParameters(new XLogWrapper(log));
-
-        // show wizard
-        Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryPluginParameters>> stepMap = new HashMap<>();
-        stepMap.put(PlaceBasedLPMDiscoveryWizard.INITIAL_KEY, new PlaceDiscoveryAlgorithmChoiceWizardStep());
-        stepMap.put(PlaceBasedLPMDiscoveryWizard.PD_EST_MINER, new ESTMinerWizardStep(log));
-        stepMap.put(PlaceBasedLPMDiscoveryWizard.PD_INDUCTIVE_MINER, new InductiveMinerWizardStep(log));
-        stepMap.put(PlaceBasedLPMDiscoveryWizard.PD_HEURISTIC_MINER, new HeuristicMinerWizardStep(log));
-        stepMap.put(PlaceBasedLPMDiscoveryWizard.LPM_DISCOVERY, new LPMDiscoveryWizardStep(log));
-//		stepMap.put(PlaceBasedLPMDiscoveryWizard.EVALUATION, new EvaluationWizardStep());
-        PlaceBasedLPMDiscoveryWizard wizard = new PlaceBasedLPMDiscoveryWizard(stepMap, true);
-        parameters = ProMWizardDisplay.show(context, wizard, parameters);
-
-        if (parameters == null)
-            return null;
-
-        LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
         EventLog eventLog = new XLogWrapper(log);
-        return builder.build().run(new StandardLPMDiscoveryInput(eventLog,
+        PlaceBasedLPMDiscoveryPluginParameters parameters = chooseParameters(context, eventLog, true);
+        LPMDiscoveryInput input = new StandardLPMDiscoveryInput(eventLog,
                 new FPGrowthForPlacesLPMBuildingInput(eventLog, new StandardPlaceDiscovery(log,
-                        parameters.getPlaceDiscoveryParameters()).getPlaces().getPlaces())));
+                        parameters.getPlaceDiscoveryParameters()).getPlaces().getPlaces()));
+        return getLpmDiscoveryResult(input, parameters);
     }
 
     @UITopiaVariant(
@@ -85,23 +74,13 @@ public class LPMDiscoveryPlugin {
     public static LPMDiscoveryResult mineLPMs(UIPluginContext context, XLog log, Petrinet petrinet) {
         ContextKeeper.setUp(context);
 
-        PlaceBasedLPMDiscoveryPluginParameters parameters = new PlaceBasedLPMDiscoveryPluginParameters(new XLogWrapper(log));
-
-        // show wizard
-        Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryPluginParameters>> stepMap = new HashMap<>();
-        stepMap.put(PlaceBasedLPMDiscoveryWizard.LPM_DISCOVERY, new LPMDiscoveryWizardStep(log));
-//		stepMap.put(PlaceBasedLPMDiscoveryWizard.EVALUATION, new EvaluationWizardStep());
-        PlaceBasedLPMDiscoveryWizard wizard = new PlaceBasedLPMDiscoveryWizard(stepMap, false);
-        parameters = ProMWizardDisplay.show(context, wizard, parameters);
-
-        if (parameters == null)
-            return null;
-
-        LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
         EventLog eventLog = new XLogWrapper(log);
-        return builder.build().run(new StandardLPMDiscoveryInput(eventLog,
+        PlaceBasedLPMDiscoveryPluginParameters parameters = chooseParameters(context, eventLog, false);
+
+        LPMDiscoveryInput input = new StandardLPMDiscoveryInput(eventLog,
                 new FPGrowthForPlacesLPMBuildingInput(eventLog,
-                        new PetriNetPlaceDiscovery(petrinet).getPlaces().getPlaces())));
+                        new PetriNetPlaceDiscovery(petrinet).getPlaces().getPlaces()));
+        return getLpmDiscoveryResult(input, parameters);
     }
 
     @UITopiaVariant(
@@ -117,22 +96,12 @@ public class LPMDiscoveryPlugin {
     public static LPMDiscoveryResult mineLPMs(UIPluginContext context, XLog log, PlaceSet placeSet) {
         ContextKeeper.setUp(context);
 
-        PlaceBasedLPMDiscoveryPluginParameters parameters = new PlaceBasedLPMDiscoveryPluginParameters(new XLogWrapper(log));
-
-        // show wizard
-        Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryPluginParameters>> stepMap = new HashMap<>();
-        stepMap.put(PlaceBasedLPMDiscoveryWizard.LPM_DISCOVERY, new LPMDiscoveryWizardStep(log));
-//		stepMap.put(PlaceBasedLPMDiscoveryWizard.EVALUATION, new EvaluationWizardStep());
-        PlaceBasedLPMDiscoveryWizard wizard = new PlaceBasedLPMDiscoveryWizard(stepMap, false);
-        parameters = ProMWizardDisplay.show(context, wizard, parameters);
-
-        if (parameters == null)
-            return null;
-
-        LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
         EventLog eventLog = new XLogWrapper(log);
-        return builder.build().run(new StandardLPMDiscoveryInput(eventLog,
-                new FPGrowthForPlacesLPMBuildingInput(eventLog, placeSet.getPlaces().getPlaces())));
+        PlaceBasedLPMDiscoveryPluginParameters parameters = chooseParameters(context, eventLog, false);
+
+        LPMDiscoveryInput input = new StandardLPMDiscoveryInput(eventLog,
+                new FPGrowthForPlacesLPMBuildingInput(eventLog, placeSet.getPlaces().getPlaces()));
+        return getLpmDiscoveryResult(input, parameters);
     }
 
     @PluginVariant(
@@ -189,20 +158,50 @@ public class LPMDiscoveryPlugin {
 
     private static LPMDiscoveryResult run(PluginContext context, XLog log, PlaceBasedLPMDiscoveryPluginParameters parameters) {
         ContextKeeper.setUp(context);
-        LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
+
         EventLog eventLog = new XLogWrapper(log);
-        return builder.build().run(new StandardLPMDiscoveryInput(eventLog,
+        LPMDiscoveryInput input = new StandardLPMDiscoveryInput(eventLog,
                 new FPGrowthForPlacesLPMBuildingInput(eventLog, new StandardPlaceDiscovery(log,
-                        parameters.getPlaceDiscoveryParameters()).getPlaces().getPlaces())));
+                        parameters.getPlaceDiscoveryParameters()).getPlaces().getPlaces()));
+        return getLpmDiscoveryResult(input, parameters);
     }
 
     private static LPMDiscoveryResult run(PluginContext context, XLog log, PlaceSet placeSet, PlaceBasedLPMDiscoveryPluginParameters parameters) {
         ContextKeeper.setUp(context);
-        LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
+
         EventLog eventLog = new XLogWrapper(log);
-        return builder.build().run(new StandardLPMDiscoveryInput(eventLog,
-                new FPGrowthForPlacesLPMBuildingInput(eventLog, placeSet.getPlaces().getPlaces())));
+        LPMDiscoveryInput input = new StandardLPMDiscoveryInput(eventLog,
+                new FPGrowthForPlacesLPMBuildingInput(eventLog, placeSet.getPlaces().getPlaces()));
+        return getLpmDiscoveryResult(input, parameters);
     }
 
+    public static LPMDiscoveryResult getLpmDiscoveryResult(LPMDiscoveryInput input,
+                                                            PlaceBasedLPMDiscoveryPluginParameters parameters) {
+        if (parameters == null)
+            return null;
+
+        PlaceBasedLPMDiscoveryParameters algParam = ParameterAdaptersUtils.transform(parameters, input.getLog());
+        LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(input.getLog().getOriginalLog(), algParam);
+
+        return builder.build().run(input, algParam);
+    }
+
+    private static PlaceBasedLPMDiscoveryPluginParameters chooseParameters(UIPluginContext context, EventLog eventLog, boolean placeDiscoveryIncluded) {
+        PlaceBasedLPMDiscoveryPluginParameters parameters =
+                new PlaceBasedLPMDiscoveryPluginParameters(eventLog);
+
+        // show wizard
+        Map<String, ProMWizardStep<PlaceBasedLPMDiscoveryPluginParameters>> stepMap = new HashMap<>();
+        if (placeDiscoveryIncluded) {
+            stepMap.put(PlaceBasedLPMDiscoveryWizard.INITIAL_KEY, new PlaceDiscoveryAlgorithmChoiceWizardStep());
+            stepMap.put(PlaceBasedLPMDiscoveryWizard.PD_EST_MINER, new ESTMinerWizardStep(eventLog.getOriginalLog()));
+            stepMap.put(PlaceBasedLPMDiscoveryWizard.PD_INDUCTIVE_MINER, new InductiveMinerWizardStep(eventLog.getOriginalLog()));
+            stepMap.put(PlaceBasedLPMDiscoveryWizard.PD_HEURISTIC_MINER, new HeuristicMinerWizardStep(eventLog.getOriginalLog()));
+        }
+        stepMap.put(PlaceBasedLPMDiscoveryWizard.LPM_DISCOVERY, new LPMDiscoveryWizardStep(eventLog.getOriginalLog()));
+//		stepMap.put(PlaceBasedLPMDiscoveryWizard.EVALUATION, new EvaluationWizardStep());
+        PlaceBasedLPMDiscoveryWizard wizard = new PlaceBasedLPMDiscoveryWizard(stepMap, true);
+        return ProMWizardDisplay.show(context, wizard, parameters);
+    }
 
 }

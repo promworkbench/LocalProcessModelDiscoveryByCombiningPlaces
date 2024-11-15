@@ -10,6 +10,7 @@ import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.StandardLPMDiscoveryInput;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.parameters.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.dependencyinjection.LPMDiscoveryGuiceModule;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.dependencyinjection.LPMDiscoveryResultGuiceModule;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
@@ -18,7 +19,6 @@ import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.prom.dependencyinjection.PromGuiceModule;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.BaseLPMDiscoveryResultComponent;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.service.LPMDiscoveryService;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
@@ -89,6 +89,7 @@ public class MainGUI extends JFrame {
 
         LPMDiscoveryInput input = new StandardLPMDiscoveryInput(log, new FPGrowthForPlacesLPMBuildingInput(log, places));
 
-        return Main.createDefaultBuilder(log.getOriginalLog(), new PlaceBasedLPMDiscoveryPluginParameters(log)).build().run(input);
+        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
+        return Main.createDefaultBuilder(log.getOriginalLog(), parameters).build().run(input, parameters);
     }
 }

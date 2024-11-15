@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.configurator;
 
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryAlgBuilder;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.parameters.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LPMFilterFactory;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LPMFilterParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lpms.LPMFilter;
@@ -8,19 +9,16 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.lp
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.LPMCollectorFactory;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMCollectorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 
 public class FromParametersLPMDAlgBuilderConfigurator implements LPMDAlgBuilderConfigurator {
 
-    private final PlaceBasedLPMDiscoveryPluginParameters parameters;
-    public FromParametersLPMDAlgBuilderConfigurator(PlaceBasedLPMDiscoveryPluginParameters parameters) {
+    private final PlaceBasedLPMDiscoveryParameters parameters;
+    public FromParametersLPMDAlgBuilderConfigurator(PlaceBasedLPMDiscoveryParameters parameters) {
         this.parameters = parameters;
     }
 
     @Override
     public void configure(LPMDiscoveryAlgBuilder builder) {
-        builder.setParameters(this.parameters);
-
         // add evaluators
         LPMCollectorFactory evaluatorFactory = new LPMCollectorFactory();
         builder.registerLPMWindowCollector(StandardLPMEvaluatorId.PassageCoverageEvaluator.name(),

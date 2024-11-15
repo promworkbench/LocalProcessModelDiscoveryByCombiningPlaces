@@ -6,6 +6,7 @@ import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.StandardLPMDiscoveryInput;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.parameters.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.serialization.ModelDistanceConfigDeserializer;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryAlgBuilder;
@@ -15,7 +16,6 @@ import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerInput;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerOutput;
 import org.processmining.placebasedlpmdiscovery.runners.serialization.RunnerInputAdapter;
@@ -48,13 +48,14 @@ public class LPMDiscoveryRunner {
             EventLog eventLog = new XLogWrapper(log);
             PlaceSet placeSet = new PlaceSet(PlaceUtils.extractPlaceNets(config.getInput().get("places")));
 
-            PlaceBasedLPMDiscoveryPluginParameters parameters = new PlaceBasedLPMDiscoveryPluginParameters(new XLogWrapper(log));
+            PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(new XLogWrapper(log));
             parameters.setLpmCount(300);
             parameters.getPlaceChooserParameters().setPlaceLimit(30);
 
             LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
             new LPMResult((StandardLPMDiscoveryResult) builder.build().run(new StandardLPMDiscoveryInput(eventLog,
-                    new FPGrowthForPlacesLPMBuildingInput(eventLog, placeSet.getPlaces().getPlaces()))))
+                    new FPGrowthForPlacesLPMBuildingInput(eventLog, placeSet.getPlaces().getPlaces())),
+                    parameters))
                     .export(ExporterFactory.createLPMDiscoveryResultExporter(),
                             Files.newOutputStream(Paths.get(config.getOutput().get("lpms"))));
         }

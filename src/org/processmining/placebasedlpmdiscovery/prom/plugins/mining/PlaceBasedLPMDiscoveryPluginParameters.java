@@ -81,6 +81,14 @@ public class PlaceBasedLPMDiscoveryPluginParameters {
         this.useDefaultPlaceDiscoveryParameters = useDefaultPlaceDiscoveryParameters;
     }
 
+    public LPMBuildingParameters getLpmBuildingParameters() {
+        return lpmBuildingParameters;
+    }
+
+    public void setLpmBuildingParameters(LPMBuildingParameters lpmBuildingParameters) {
+        this.lpmBuildingParameters = lpmBuildingParameters;
+    }
+
     public LPMCombinationParameters getLpmCombinationParameters() {
         return lpmCombinationParameters;
     }
