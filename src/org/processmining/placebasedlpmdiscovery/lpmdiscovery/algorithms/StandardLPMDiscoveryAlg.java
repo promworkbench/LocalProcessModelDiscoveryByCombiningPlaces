@@ -48,25 +48,6 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 
         LPMDiscoveryResult result;
         try {
-            // analyze log
-//            LEFRMatrix lefrMatrix = this.runningContext.getAnalyzer().logAnalyzer.getLEFRMatrix(parameters
-//            .getLpmCombinationParameters().getLpmProximity());
-
-//            // discover places
-//            Set<Place> places = this.placeDiscovery.getPlaces().getPlaces();
-//            this.runningContext.getAnalyzer().getStatistics().getParameterStatistics().setPlaceDiscoveryIncluded
-//            (true);
-//
-//            // choose places
-//            parameters.getPlaceChooserParameters()
-//                    .setFollowRelationsLimit(parameters.getLpmCombinationParameters().getLpmProximity());
-//            places = this.placeChooser.choose(places, parameters.getPlaceChooserParameters().getPlaceLimit());
-//
-//            // export chosen places
-//            PlaceSet placeSet = new PlaceSet(places);
-//            placeSet.writePassageUsage(this.runningContext.getAnalyzer().logAnalyzer.getLEFRMatrix(parameters
-//            .getLpmCombinationParameters().getLpmProximity()));
-
             // build lpms
             LPMBuildingResult lpmBuildingResult = this.lpmBuildingAlg.build(input.getLPMBuildingInput(),
                     parameters.getLPMBuildingParameters());
@@ -85,27 +66,10 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
             result.keep(parameters.getLpmCount());
             result.setInput(input);
 
-            // TODO: Normalization has to be moved to another place
-//            if (result.size() > 0) {
-//                // normalize the fitting windows score
-//                double max = result.highestScoringElement((LocalProcessModel lpm) -> lpm.getAdditionalInfo()
-//                                .getEvaluationResult(StandardLPMEvaluationResultId.FittingWindowsEvaluationResult
-//                                .name(),
-//                                        FittingWindowsEvaluationResult.class).getResult())
-//                        .getAdditionalInfo().getEvaluationResult(
-//                                StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
-//                                FittingWindowsEvaluationResult.class).getResult();
-//                result.edit(lpm -> ((FittingWindowsEvaluationResult) lpm.getAdditionalInfo()
-//                        .getEvaluationResult(StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
-//                                FittingWindowsEvaluationResult.class))
-//                        .normalizeResult(max, 0));
-//
-//                EvaluationResultAggregateOperation aggregateOperation = new EvaluationResultAggregateOperation();
-//                result.sort((LocalProcessModel lpm1, LocalProcessModel lpm2) -> Double.compare(
-//                        aggregateOperation.aggregate(lpm1.getAdditionalInfo().getEvalResults().values()),
-//                        aggregateOperation.aggregate(lpm2.getAdditionalInfo().getEvalResults().values())));
-//                result.keep(parameters.getLpmCount());
-//            }
+            // post-process lpms
+
+
+
         } finally {
             timer.cancel();
         }
