@@ -6,12 +6,15 @@ import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.extra.AbstractActivityMapping;
+import org.processmining.placebasedlpmdiscovery.model.logs.Activity;
+import org.processmining.placebasedlpmdiscovery.model.logs.RemappedActivity;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class AbstractRemappedActivitiesLog<T> extends AbstractEnhancedLog implements RemappedActivitiesLog<T>{
 
-    // The mapping from the original activities in the event log to the integer labels
+    // The mapping from the original activities in the event log to labels of the generic class
     protected AbstractActivityMapping<T> mapping;
 
     // To every trace variant we have given an id
@@ -83,5 +86,10 @@ public abstract class AbstractRemappedActivitiesLog<T> extends AbstractEnhancedL
 
     public Set<XTrace> getOriginalTraces(Integer traceVariantId) {
         return this.backToOriginalMapping.get(this.traceVariantIdsMap.get(traceVariantId));
+    }
+
+    @Override
+    public Set<Activity> getActivities() {
+        return this.mapping.getLabelMap().values().stream().map(RemappedActivity<T>::new).collect(Collectors.toSet());
     }
 }
