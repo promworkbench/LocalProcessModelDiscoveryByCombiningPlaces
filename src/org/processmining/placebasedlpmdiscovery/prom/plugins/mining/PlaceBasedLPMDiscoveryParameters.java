@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.prom.plugins.mining;
 
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LPMFilterParameters;
+import org.processmining.placebasedlpmdiscovery.model.logs.Activity;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooserParameters;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscoveryAlgorithmId;
@@ -12,6 +13,7 @@ import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.P
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummary;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class PlaceBasedLPMDiscoveryParameters {
 
@@ -39,7 +41,8 @@ public class PlaceBasedLPMDiscoveryParameters {
     public PlaceBasedLPMDiscoveryParameters(EventLog log) {
         this.placeDiscoveryAlgorithmId = PlaceDiscoveryAlgorithmId.ESTMiner;
         this.placeDiscoveryParameters = new EstMinerPlaceDiscoveryParameters();
-        this.placeChooserParameters = new PlaceChooserParameters(log.getActivities());
+        this.placeChooserParameters = new PlaceChooserParameters(log.getActivities()
+                .stream().map(Activity::getName).collect(Collectors.toSet()));
         this.lpmCombinationParameters = new LPMCombinationParameters();
         this.lpmFilterParameters = new LPMFilterParameters();
         this.lpmCount = 100;

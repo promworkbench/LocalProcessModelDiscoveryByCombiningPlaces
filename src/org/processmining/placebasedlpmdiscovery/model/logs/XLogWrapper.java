@@ -5,6 +5,7 @@ import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class XLogWrapper implements EventLog {
 
@@ -15,7 +16,7 @@ public class XLogWrapper implements EventLog {
     }
 
     @Override
-    public Set<String> getActivities() {
-        return new HashSet<>(LogUtils.getActivitiesFromLog(this.log));
+    public Set<Activity> getActivities() {
+        return LogUtils.getActivitiesFromLog(this.log).stream().map(SimpleActivity::new).collect(Collectors.toSet());
     }
 }
