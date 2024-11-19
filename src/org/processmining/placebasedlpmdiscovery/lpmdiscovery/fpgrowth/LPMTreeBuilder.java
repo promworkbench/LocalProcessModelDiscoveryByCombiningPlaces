@@ -4,6 +4,7 @@ import org.apache.commons.math3.util.Pair;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.RunningContext;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.IntegerMappedLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
@@ -27,6 +28,7 @@ public class LPMTreeBuilder extends Interruptible {
 
     private final Set<Place> places;
     LPMCombinationParameters parameters;
+    private final IntegerMappedLog integerMappedLog;
     private final WindowLog windowLog;
 
     private final RunningContext runningContext;
@@ -38,37 +40,41 @@ public class LPMTreeBuilder extends Interruptible {
         this.places = places;
         this.parameters = parameters;
 //        this.stop = false;
-        windowLog = new WindowLog(log); // create the integer mapped log
+        // integer mapping
+        integerMappedLog = new IntegerMappedLog(log);
+        windowLog = new WindowLog(integerMappedLog); // create the integer mapped log
         this.runningContext = runningContext;
     }
 
     public MainFPGrowthLPMTree buildTree() {
         Set<Transition> transitions = PlaceUtils.getAllTransitions(this.places); // get all transitions
 
+
         // add invisible transitions to the label map
-        windowLog.getMapping().addInvisibleTransitionsInLabelMap(transitions
+        integerMappedLog.getMapping().addInvisibleTransitionsInLabelMap(transitions
                 .stream()
                 .map(Transition::getLabel)
                 .collect(Collectors.toSet()));
 
         MainFPGrowthLPMTree mainTree = new MainFPGrowthLPMTree(getPlacePriorityMap(),
-                windowLog.getMapping().getLabelMap(), this.parameters.getLpmProximity(), this.runningContext);
+                integerMappedLog.getMapping().getLabelMap(), this.parameters.getLpmProximity(), this.runningContext);
 
         // map transitions to places that have it as input
 //        Set<String> transitionLabels = transitions.stream().map(Transition::getLabel).collect(Collectors.toSet());
 //        Map<Integer, Set<Place>> inTransitionPlacesMap = PlaceUtils.getTransitionPlaceSetMapping(
 //                transitionLabels, this.places, true, windowLog.getLabelMap(), true);
         Map<Pair<Integer, Integer>, Set<Place>> inoutTransitionPlacesMap = PlaceUtils
-                .getInoutTransitionPlaceSetMapping(this.places, windowLog.getMapping().getLabelMap());
+                .getInoutTransitionPlaceSetMapping(this.places, integerMappedLog.getMapping().getLabelMap());
         Map<Pair<Integer, Integer>, Set<List<Place>>> inoutViaSilentPlaceMap = PlaceUtils
-                .getInoutTransitionPlaceSetMappingViaSilent(this.places, windowLog.getMapping().getLabelMap());
+                .getInoutTransitionPlaceSetMappingViaSilent(this.places, integerMappedLog.getMapping().getLabelMap());
 
         WindowTotalCounter windowTotalCounter = new WindowTotalCounter();
 
         // iterate through all traces
-        for (Integer traceVariantId : windowLog.getTraceVariantIds()) {
-            List<Integer> traceVariant = windowLog.getTraceVariant(traceVariantId); // mapped trace variant
-            int traceCount = windowLog.getTraceVariantCount(traceVariant); // count of traces represented by the trace variant
+        for (Integer traceVariantId : integerMappedLog.getTraceVariantIds()) {
+            List<Integer> traceVariant = integerMappedLog.getTraceVariant(traceVariantId); // mapped trace variant
+            int traceCount = integerMappedLog.getTraceVariantCount(traceVariant); // count of traces represented by the trace
+            // variant
 
             // Storage for the window
             LinkedList<Integer> window = new LinkedList<>();
@@ -78,7 +84,8 @@ public class LPMTreeBuilder extends Interruptible {
             int eventPos = -1; // position of end event of the current window
             for (int event : traceVariant) { // for each event in the trace variant
                 if (stop) { // time stop
-                    mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount(), this.windowLog.getOriginalLog());
+                    mainTree.updateAllTotalCount(windowTotalCounter, integerMappedLog.getTraceCount(),
+                            this.integerMappedLog.getOriginalLog());
                     this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
                     return mainTree;
                 }
@@ -107,7 +114,7 @@ public class LPMTreeBuilder extends Interruptible {
 //                    localTree.add(window.get(i), placesForAddition, paths, windowLog.getLabelMap(), i);
                     localTree.add(window.get(i), eventPos - window.size() + 1 + i,
                             event, eventPos,
-                            placesForAddition, paths, windowLog.getMapping().getLabelMap());
+                            placesForAddition, paths, integerMappedLog.getMapping().getLabelMap());
                 }
                 // calculate fitting local process models
                 localTree.tryAddNullChildren(event, eventPos);
@@ -137,7 +144,7 @@ public class LPMTreeBuilder extends Interruptible {
             this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().traceVariantPassed();
         }
 
-        mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount(), this.windowLog.getOriginalLog());
+        mainTree.updateAllTotalCount(windowTotalCounter, integerMappedLog.getTraceCount(), this.integerMappedLog.getOriginalLog());
         this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
         return mainTree;
     }
@@ -180,18 +187,18 @@ public class LPMTreeBuilder extends Interruptible {
                 .stream()
                 .collect(Collectors.toMap(
                         n -> LocalProcessModelUtils
-                                .convertReplayableToLPM(n.getLpm(), this.windowLog.getMapping().getReverseLabelMap(),
+                                .convertReplayableToLPM(n.getLpm(), this.integerMappedLog.getMapping().getReverseLabelMap(),
                                         this.places),
                         n -> new LPMTemporaryWindowInfo(
                                 n.getLpm().getFiringSequence(),
                                 n.getReplayedEventsIndices(),
                                 window,
                                 n.getLpm().getUsedPassages(),
-                                this.windowLog.getMapping().getReverseLabelMap(),
+                                this.integerMappedLog.getMapping().getReverseLabelMap(),
                                 windowCount,
                                 traceVariantId,
                                 eventPos,
-                                this.windowLog.getOriginalTraces(traceVariantId)),
+                                this.integerMappedLog.getOriginalTraces(traceVariantId)),
                         (n1, n2) -> n1)); // TODO: update how the firing sequences are added
         addBranchCombinations(lpmWithTemporaryInfo, new ArrayList<>(window));
         return lpmWithTemporaryInfo;
@@ -232,7 +239,7 @@ public class LPMTreeBuilder extends Interruptible {
                 replayedEventIndices.addAll(ireIndices);
                 replayedEventIndices = replayedEventIndices.stream().distinct().sorted().collect(Collectors.toList());
                 List<Integer> sequence = getFiringSequence(replayedEventIndices, window, lpmTemporaryWindowInfo.getWindowLastEventPos());
-                Replayer replayer = new Replayer(resLpm, windowLog.getMapping().getLabelMap());
+                Replayer replayer = new Replayer(resLpm, integerMappedLog.getMapping().getLabelMap());
                 if (replayer.canReplay(sequence)) {
                     Set<Pair<Integer, Integer>> usedPassages = new HashSet<>();
                     usedPassages.addAll(lpmTemporaryWindowInfo.getIntegerUsedPassages());
@@ -244,7 +251,7 @@ public class LPMTreeBuilder extends Interruptible {
                                     replayedEventIndices,
                                     window,
                                     usedPassages,
-                                    this.windowLog.getMapping().getReverseLabelMap(),
+                                    this.integerMappedLog.getMapping().getReverseLabelMap(),
                                     lpmTemporaryWindowInfo.getWindowCount(),
                                     lpmTemporaryWindowInfo.getTraceVariantId(),
                                     lpmTemporaryWindowInfo.getWindowLastEventPos(),
