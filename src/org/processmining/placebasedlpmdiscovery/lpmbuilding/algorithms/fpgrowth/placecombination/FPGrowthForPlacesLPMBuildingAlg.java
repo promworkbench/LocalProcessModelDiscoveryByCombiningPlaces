@@ -3,8 +3,8 @@ package org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth
 import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LogAnalyzer;
-import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth.placecombination.utils.LPMFromBranchCombinationValidityChecker;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlg;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth.placecombination.utils.LPMFromBranchCombinationValidityChecker;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth.placecombination.utils.WindowLPMTreeValidLPMsRandomTraversal;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.LPMBuildingInput;
@@ -14,8 +14,8 @@ import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingR
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowInfo;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLogTraversal;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.IntegerMappedLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.extra.AbstractActivityMapping;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
@@ -59,8 +59,10 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
         // choose places
         LogAnalyzer logAnalyzer = new LogAnalyzer(cInput.getLog().getOriginalLog());
         LEFRMatrix lefrMatrix = logAnalyzer.getLEFRMatrix(cParameters.getLPMCombinationParameters().getLpmProximity());
-        PlaceChooser placeChooser = new MainPlaceChooser(cInput.getLog().getOriginalLog(), cParameters.getPlaceChooserParameters(), lefrMatrix);
-        Set<Place> places = placeChooser.choose(cInput.getPlaces(), cParameters.getPlaceChooserParameters().getPlaceLimit());
+        PlaceChooser placeChooser = new MainPlaceChooser(cInput.getLog().getOriginalLog(),
+                cParameters.getPlaceChooserParameters(), lefrMatrix);
+        Set<Place> places = placeChooser.choose(cInput.getPlaces(),
+                cParameters.getPlaceChooserParameters().getPlaceLimit());
 
         // build lpms
         return build(cInput.getLog(), places, cParameters.getLPMCombinationParameters());
@@ -68,24 +70,24 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
 
     private MainFPGrowthLPMTree build(EventLog log, Set<Place> places, LPMCombinationParameters parameters) {
         // input
-        WindowLog windowLog = new WindowLog(log.getOriginalLog()); // create the integer mapped log
-        prepareInput(places, windowLog);
+        IntegerMappedLog integerMappedLog = new IntegerMappedLog(log.getOriginalLog());
+        prepareInput(places, integerMappedLog);
 
         // storage
         MainFPGrowthLPMTree mainTree = new MainFPGrowthLPMTree(getPlacePriorityMap(places),
-                windowLog.getMapping().getLabelMap(), parameters.getLpmProximity());
+                integerMappedLog.getMapping().getLabelMap(), parameters.getLpmProximity());
 
         // optimization helpers
         Map<Pair<Integer, Integer>, Set<Place>> inoutTransitionPlacesMap = PlaceUtils
-                .getInoutTransitionPlaceSetMapping(places, windowLog.getMapping().getLabelMap());
+                .getInoutTransitionPlaceSetMapping(places, integerMappedLog.getMapping().getLabelMap());
         Map<Pair<Integer, Integer>, Set<List<Place>>> inoutViaSilentPlaceMap = PlaceUtils
-                .getInoutTransitionPlaceSetMappingViaSilent(places, windowLog.getMapping().getLabelMap());
+                .getInoutTransitionPlaceSetMappingViaSilent(places, integerMappedLog.getMapping().getLabelMap());
 
         WindowTotalCounter windowTotalCounter = new WindowTotalCounter();
 
         // traverse
         int maxWindowSize = parameters.getLpmProximity(); // max window size
-        WindowLogTraversal traversal = new WindowLogTraversal(windowLog, maxWindowSize); // traversal
+        WindowLogTraversal traversal = new WindowLogTraversal(integerMappedLog, maxWindowSize); // traversal
         WindowLPMTree localTree = new WindowLPMTree(maxWindowSize); // window tree
         while (traversal.hasNext()) {
             WindowInfo windowInfo = traversal.next(); // next window
@@ -112,24 +114,25 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
 
                 // update local tree for the i-th and last event of the window
                 localTree.add(window.get(i), windowInfo.getStartPos() + i, newEvent, windowInfo.getEndPos(),
-                        placesForAddition, paths, windowLog.getMapping().getLabelMap());
+                        placesForAddition, paths, integerMappedLog.getMapping().getLabelMap());
             }
             // calculate fitting local process models
             localTree.tryAddNullChildren(newEvent, windowInfo.getEndPos());
 
             // transfer built local process models to the main tree
-            LPMTemporaryWindowInfoCreator lpmTempInfoCreator = new LPMTemporaryWindowInfoCreator(windowInfo, windowLog);
-            addLocalTreeToMainTree(localTree, mainTree, windowInfo, parameters,
-                    lpmTempInfoCreator, windowLog.getMapping(), places);
+            LPMTemporaryWindowInfoCreator lpmTempInfoCreator = new LPMTemporaryWindowInfoCreator(windowInfo,
+                    integerMappedLog);
+            addLocalTreeToMainTree(localTree, mainTree, parameters,
+                    lpmTempInfoCreator, integerMappedLog.getMapping(), places);
         }
 
-        mainTree.updateAllTotalCount(windowTotalCounter, windowLog.getTraceCount(), windowLog.getOriginalLog());
+        mainTree.updateAllTotalCount(windowTotalCounter, integerMappedLog.getTraceCount(),
+                integerMappedLog.getOriginalLog());
         return mainTree;
     }
 
     private void addLocalTreeToMainTree(WindowLPMTree localTree,
                                         MainFPGrowthLPMTree mainTree,
-                                        WindowInfo windowInfo,
                                         LPMCombinationParameters parameters,
                                         LPMTemporaryWindowInfoCreator lpmTempInfoCreator,
                                         AbstractActivityMapping<Integer> labelMapping,
@@ -218,12 +221,12 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
         }
     }
 
-    private void prepareInput(Set<Place> places, WindowLog windowLog) {
+    private void prepareInput(Set<Place> places, IntegerMappedLog log) {
         // get all transitions
         Set<Transition> transitions = PlaceUtils.getAllTransitions(places);
 
         // add invisible transitions to the label map
-        windowLog.getMapping().addInvisibleTransitionsInLabelMap(transitions
+        log.getMapping().addInvisibleTransitionsInLabelMap(transitions
                 .stream()
                 .map(Transition::getLabel)
                 .collect(Collectors.toSet()));

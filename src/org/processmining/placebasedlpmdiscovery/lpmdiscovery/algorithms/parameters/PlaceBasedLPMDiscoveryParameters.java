@@ -5,6 +5,7 @@ import org.processmining.placebasedlpmdiscovery.lpmbuilding.parameters.FPGrowthF
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.parameters.LPMBuildingParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LPMFilterParameters;
+import org.processmining.placebasedlpmdiscovery.model.logs.Activity;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooserParameters;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscoveryAlgorithmId;
@@ -14,7 +15,10 @@ import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.I
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.PlaceDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummary;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class PlaceBasedLPMDiscoveryParameters implements LPMDiscoveryParameters {
 
@@ -39,15 +43,17 @@ public class PlaceBasedLPMDiscoveryParameters implements LPMDiscoveryParameters 
     private long timeLimit;
 
     // event attribute summary
-    private final Map<String, AttributeSummary<?,?>> eventAttributeSummary;
+    private final Map<String, AttributeSummary<?, ?>> eventAttributeSummary;
 
     public PlaceBasedLPMDiscoveryParameters(EventLog log) {
         this.placeDiscoveryAlgorithmId = PlaceDiscoveryAlgorithmId.ESTMiner;
         this.placeDiscoveryParameters = new EstMinerPlaceDiscoveryParameters();
-        this.placeChooserParameters = new PlaceChooserParameters(log.getActivities());
+        this.placeChooserParameters =
+                new PlaceChooserParameters(log.getActivities().stream().map(Activity::getName).collect(Collectors.toSet()));
         this.lpmCombinationParameters = new LPMCombinationParameters();
         this.lpmBuildingAlgType = LPMBuildingAlgType.FPGrowthForPlaces;
-        this.lpmBuildingParameters = new FPGrowthForPlacesLPMBuildingParameters(this.lpmCombinationParameters, this.placeChooserParameters);
+        this.lpmBuildingParameters = new FPGrowthForPlacesLPMBuildingParameters(this.lpmCombinationParameters,
+                this.placeChooserParameters);
         this.lpmFilterParameters = new LPMFilterParameters();
         this.lpmCount = 100;
         this.timeLimit = 600000;
@@ -156,7 +162,7 @@ public class PlaceBasedLPMDiscoveryParameters implements LPMDiscoveryParameters 
         return placeChooserParameters;
     }
 
-    public Map<String, AttributeSummary<?,?>> getEventAttributeSummary() {
+    public Map<String, AttributeSummary<?, ?>> getEventAttributeSummary() {
         return eventAttributeSummary;
     }
 

@@ -1,10 +1,12 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
 
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.IntegerMappedLog;
+
 import java.util.*;
 
 public class WindowLogTraversal {
 
-    private final WindowLog windowLog;
+    private final IntegerMappedLog log;
     private final int maxWindowSize;
 
     private final Set<Integer> remainingTraceVariantIds;
@@ -15,11 +17,11 @@ public class WindowLogTraversal {
     LinkedList<Integer> window;
 
 
-    public WindowLogTraversal(WindowLog windowLog, int maxWindowSize) {
-        this.windowLog = windowLog;
+    public WindowLogTraversal(IntegerMappedLog log, int maxWindowSize) {
+        this.log = log;
         this.maxWindowSize = maxWindowSize;
 
-        this.remainingTraceVariantIds = new HashSet<>(this.windowLog.getTraceVariantIds());
+        this.remainingTraceVariantIds = new HashSet<>(this.log.getTraceVariantIds());
         this.window = new LinkedList<>();
     }
 
@@ -52,8 +54,8 @@ public class WindowLogTraversal {
         this.traceVariantId = remainingTraceVariantIds.stream().findAny().get(); // get one trace variant id
         this.remainingTraceVariantIds.remove(traceVariantId); // remove trace variant id from the set of remaining
 
-        this.traceVariant = this.windowLog.getTraceVariant(traceVariantId); // get trace variant for the id
-        this.windowCount = windowLog.getTraceVariantCount(traceVariant);
+        this.traceVariant = this.log.getTraceVariant(traceVariantId); // get trace variant for the id
+        this.windowCount = log.getTraceVariantCount(traceVariant);
         this.position = 0;
     }
 }

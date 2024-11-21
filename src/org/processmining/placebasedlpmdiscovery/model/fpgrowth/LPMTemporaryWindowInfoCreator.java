@@ -2,7 +2,7 @@ package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
 import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowInfo;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.IntegerMappedLog;
 import org.processmining.placebasedlpmdiscovery.model.SimplePlace;
 
 import java.util.ArrayList;
@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 
 public class LPMTemporaryWindowInfoCreator {
 
-    private final WindowLog windowLog;
+    private final IntegerMappedLog log;
     private final WindowInfo windowInfo;
 
-    public LPMTemporaryWindowInfoCreator(WindowInfo windowInfo, WindowLog windowLog) {
+    public LPMTemporaryWindowInfoCreator(WindowInfo windowInfo, IntegerMappedLog log) {
         this.windowInfo = windowInfo;
-        this.windowLog = windowLog;
+        this.log = log;
     }
 
     public LPMTemporaryWindowInfo createTempInfo(WindowLPMTreeNode n) {
@@ -28,11 +28,11 @@ public class LPMTemporaryWindowInfoCreator {
                 windowInfo.getWindow(),
                 n.getLpm().getUsedPassages(),
                 n.getLpm().getUsedConstraints(),
-                this.windowLog.getMapping().getReverseLabelMap(),
+                this.log.getMapping().getReverseLabelMap(),
                 windowInfo.getWindowCount(),
                 windowInfo.getTraceVariantId(),
                 windowInfo.getEndPos(),
-                this.windowLog.getOriginalTraces(windowInfo.getTraceVariantId()));
+                this.log.getOriginalTraces(windowInfo.getTraceVariantId()));
     }
 
     public LPMTemporaryWindowInfo createTempInfo(LPMTemporaryWindowInfo tempInfo1,
@@ -58,7 +58,7 @@ public class LPMTemporaryWindowInfoCreator {
                 windowInfo.getWindow(),
                 usedPassages,
                 usedPlaces,
-                this.windowLog.getMapping().getReverseLabelMap(),
+                this.log.getMapping().getReverseLabelMap(),
                 tempInfo1.getWindowCount(),
                 tempInfo1.getTraceVariantId(),
                 tempInfo1.getWindowLastEventPos(),
