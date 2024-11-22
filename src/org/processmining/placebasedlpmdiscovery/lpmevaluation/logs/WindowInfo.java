@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class WindowInfo {
     private final ArrayList<Integer> window;
@@ -35,5 +36,18 @@ public class WindowInfo {
 
     public int getWindowCount() {
         return windowCount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        WindowInfo that = (WindowInfo) o;
+        return windowCount == that.windowCount && startPos == that.startPos && endPos == that.endPos && Objects.equals(window, that.window) && Objects.equals(traceVariantId, that.traceVariantId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(window, windowCount, traceVariantId, startPos, endPos);
     }
 }
