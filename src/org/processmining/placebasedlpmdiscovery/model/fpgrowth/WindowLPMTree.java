@@ -1,8 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
 
 import java.util.*;
 
@@ -102,5 +102,12 @@ public class WindowLPMTree implements CanBeInterrupted {
     @Override
     public void interrupt() {
         this.stop = true;
+    }
+
+    @Override
+    public String toString() {
+        return "WindowLPMTree{" +
+                "root=" + root +
+                '}';
     }
 }

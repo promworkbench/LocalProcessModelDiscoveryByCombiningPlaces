@@ -213,4 +213,13 @@ public class WindowLPMTreeNode {
         tempEventIndices.add(eventPos);
         return tempEventIndices;
     }
+
+    @Override
+    public String toString() {
+        return "WindowLPMTreeNode{" +
+                "inEvent=" + inEvent +
+                ", outEvent=" + outEvent +
+                ", children=" + children +
+                '}';
+    }
 }

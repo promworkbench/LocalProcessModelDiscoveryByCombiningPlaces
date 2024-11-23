@@ -50,4 +50,14 @@ public class CircularListWithMapping<T, M> {
         T obj = list.get(pos % size);
         return obj == null ? defaultObj : obj;
     }
+
+    @Override
+    public String toString() {
+        return "CircularListWithMapping{" +
+                "originalPos=" + originalPos +
+                ", list=" + list +
+                ", mappingList=" + mappingList +
+                ", size=" + size +
+                '}';
+    }
 }
