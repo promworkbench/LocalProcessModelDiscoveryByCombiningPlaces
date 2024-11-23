@@ -98,7 +98,7 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
                 localTree = new WindowLPMTree(maxWindowSize);
             }
             if (windowInfo.getStartPos() != 0) { // remove branches for the removed event
-                localTree.refreshPosition(windowInfo.getStartPos() - 1);
+                localTree.refreshPosition(windowInfo.getEndPos());
             }
 
 
