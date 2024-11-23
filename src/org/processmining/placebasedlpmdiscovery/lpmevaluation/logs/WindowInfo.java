@@ -26,10 +26,18 @@ public class WindowInfo {
         return traceVariantId;
     }
 
+    /**
+     * Returns the start position of the window in the trace
+     * @return startPos - the start position of the window in the trace
+     */
     public int getStartPos() {
         return startPos;
     }
 
+    /**
+     * Returns the end position of the window in the trace
+     * @return endPos - the end position of the window in the trace
+     */
     public int getEndPos() {
         return endPos;
     }
@@ -49,5 +57,16 @@ public class WindowInfo {
     @Override
     public int hashCode() {
         return Objects.hash(window, windowCount, traceVariantId, startPos, endPos);
+    }
+
+    @Override
+    public String toString() {
+        return "WindowInfo{" +
+                "window=" + window +
+                ", windowCount=" + windowCount +
+                ", traceVariantId=" + traceVariantId +
+                ", startPos=" + startPos +
+                ", endPos=" + endPos +
+                '}';
     }
 }

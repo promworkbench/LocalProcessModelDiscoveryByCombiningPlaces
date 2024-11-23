@@ -26,7 +26,8 @@ public class WindowLogTraversal {
     }
 
     public boolean hasNext() {
-        return this.traceVariantId != null && position < this.traceVariant.size()
+        return this.traceVariantId != null
+                && (position < this.traceVariant.size() || this.window.size() > 1)
                 || !this.remainingTraceVariantIds.isEmpty();
     }
 
@@ -47,7 +48,7 @@ public class WindowLogTraversal {
             window.add(traceVariant.get(position++));
         }
 
-        return new WindowInfo(new ArrayList<>(window), windowCount, traceVariantId, position - window.size() + 1, position);
+        return new WindowInfo(new ArrayList<>(window), windowCount, traceVariantId, position - window.size(), position - 1);
     }
 
     private void startTraversingNewTraceVariant() {
@@ -57,5 +58,6 @@ public class WindowLogTraversal {
         this.traceVariant = this.log.getTraceVariant(traceVariantId); // get trace variant for the id
         this.windowCount = log.getTraceVariantCount(traceVariant);
         this.position = 0;
+        this.window = new LinkedList<>();
     }
 }
