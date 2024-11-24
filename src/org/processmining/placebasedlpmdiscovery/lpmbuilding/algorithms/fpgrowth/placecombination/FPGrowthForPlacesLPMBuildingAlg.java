@@ -211,7 +211,7 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
             }
 
             // check validity of the merged model
-            if (lpmValidityChecker.checkValidity(lpm, resTempInfo)) {
+            if (lpmValidityChecker.checkValidity(resLpm, resTempInfo)) {
                 lpmWithTemporaryInfo.put(resLpm, resTempInfo);
 
                 if (currIteration < lastIteration) { // do additional combinations if necessary
