@@ -3,10 +3,9 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.fpgrowth;
 import org.apache.commons.math3.util.Pair;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.RunningContext;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLog;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.IntegerMappedLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.SimplePlace;
@@ -28,7 +27,6 @@ public class LPMTreeBuilder extends Interruptible {
     private final Set<Place> places;
     LPMCombinationParameters parameters;
     private final IntegerMappedLog integerMappedLog;
-    private final WindowLog windowLog;
 
     private final RunningContext runningContext;
 
@@ -41,7 +39,6 @@ public class LPMTreeBuilder extends Interruptible {
 //        this.stop = false;
         // integer mapping
         integerMappedLog = new IntegerMappedLog(log);
-        windowLog = new WindowLog(integerMappedLog); // create the integer mapped log
         this.runningContext = runningContext;
     }
 
@@ -72,7 +69,8 @@ public class LPMTreeBuilder extends Interruptible {
         // iterate through all traces
         for (Integer traceVariantId : integerMappedLog.getTraceVariantIds()) {
             List<Integer> traceVariant = integerMappedLog.getTraceVariant(traceVariantId); // mapped trace variant
-            int traceCount = integerMappedLog.getTraceVariantCount(traceVariant); // count of traces represented by the trace
+            int traceCount = integerMappedLog.getTraceVariantCount(traceVariant); // count of traces represented by
+            // the trace
             // variant
 
             // Storage for the window
@@ -119,7 +117,7 @@ public class LPMTreeBuilder extends Interruptible {
                 localTree.tryAddNullChildren(event, eventPos);
                 this.runningContext.getAnalyzer().stopWindow(); // analysis
                 // transfer built local process models to the main tree
-                addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId, eventPos);
+                addLocalTreeToMainTree(localTree, mainTree, traceCount, window, traceVariantId, eventPos);
             }
             // if trace is smaller than window size the next block would not change the local process models
             // because the refresh would refresh empty positions
@@ -138,12 +136,14 @@ public class LPMTreeBuilder extends Interruptible {
                 window.removeFirst();
                 localTree.refreshPosition(eventPos);
                 windowTotalCounter.update(window, traceCount);
-                addLocalTreeToMainTree(localTree, mainTree, traceCount, window, windowLog, traceVariantId, traceVariant.size() - 1);
+                addLocalTreeToMainTree(localTree, mainTree, traceCount, window, traceVariantId,
+                        traceVariant.size() - 1);
             }
             this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().traceVariantPassed();
         }
 
-        mainTree.updateAllTotalCount(windowTotalCounter, integerMappedLog.getTraceCount(), this.integerMappedLog.getOriginalLog());
+        mainTree.updateAllTotalCount(windowTotalCounter, integerMappedLog.getTraceCount(),
+                this.integerMappedLog.getOriginalLog());
         this.runningContext.getAnalyzer().getStatistics().getFpGrowthStatistics().initializeMainTreeStatistics(mainTree);
         return mainTree;
     }
@@ -152,7 +152,6 @@ public class LPMTreeBuilder extends Interruptible {
                                         MainFPGrowthLPMTree mainTree,
                                         int windowCount,
                                         LinkedList<Integer> window,
-                                        WindowLog windowLog,
                                         Integer traceVariantId,
                                         int eventPos) {
         // get the null children
@@ -186,7 +185,8 @@ public class LPMTreeBuilder extends Interruptible {
                 .stream()
                 .collect(Collectors.toMap(
                         n -> LocalProcessModelUtils
-                                .convertReplayableToLPM(n.getLpm(), this.integerMappedLog.getMapping().getReverseLabelMap(),
+                                .convertReplayableToLPM(n.getLpm(),
+                                        this.integerMappedLog.getMapping().getReverseLabelMap(),
                                         this.places),
                         n -> new LPMTemporaryWindowInfo(
                                 n.getLpm().getFiringSequence(),
@@ -204,7 +204,8 @@ public class LPMTreeBuilder extends Interruptible {
         return lpmWithTemporaryInfo;
     }
 
-    private void addBranchCombinations(Map<LocalProcessModel, LPMTemporaryWindowInfo> lpmFiringSequenceMap, List<Integer> window) {
+    private void addBranchCombinations(Map<LocalProcessModel, LPMTemporaryWindowInfo> lpmFiringSequenceMap,
+                                       List<Integer> window) {
         // TODO: We combine only by two LPMs, but more can be done
         if (parameters.getConcurrencyCardinality() == 1)
             return;
@@ -238,7 +239,8 @@ public class LPMTreeBuilder extends Interruptible {
                 replayedEventIndices.addAll(reIndices);
                 replayedEventIndices.addAll(ireIndices);
                 replayedEventIndices = replayedEventIndices.stream().distinct().sorted().collect(Collectors.toList());
-                List<Integer> sequence = getFiringSequence(replayedEventIndices, window, lpmTemporaryWindowInfo.getWindowLastEventPos());
+                List<Integer> sequence = getFiringSequence(replayedEventIndices, window,
+                        lpmTemporaryWindowInfo.getWindowLastEventPos());
                 Replayer replayer = new Replayer(resLpm, integerMappedLog.getMapping().getLabelMap());
                 if (replayer.canReplay(sequence)) {
 
@@ -264,14 +266,15 @@ public class LPMTreeBuilder extends Interruptible {
                                     lpmTemporaryWindowInfo.getWindowLastEventPos(),
                                     lpmTemporaryWindowInfo.getOriginalTraces()));
                     if (currIteration < this.parameters.getConcurrencyCardinality()) {
-                        addBranchCombinations(resLpm, lpms, i+1, lpmWithTemporaryInfo, window, currIteration + 1);
+                        addBranchCombinations(resLpm, lpms, i + 1, lpmWithTemporaryInfo, window, currIteration + 1);
                     }
                 }
             }
         }
     }
 
-    private List<Integer> getFiringSequence(List<Integer> replayedEventIndices, List<Integer> window, Integer windowLastEventPos) {
+    private List<Integer> getFiringSequence(List<Integer> replayedEventIndices, List<Integer> window,
+                                            Integer windowLastEventPos) {
         List<Integer> firingSequence = new ArrayList<>();
         int ind = 0;
         for (int i = 0; i < window.size(); ++i) {
