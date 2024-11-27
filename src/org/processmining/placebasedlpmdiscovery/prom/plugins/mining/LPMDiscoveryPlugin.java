@@ -200,7 +200,7 @@ public class LPMDiscoveryPlugin {
         }
         stepMap.put(PlaceBasedLPMDiscoveryWizard.LPM_DISCOVERY, new LPMDiscoveryWizardStep(eventLog.getOriginalLog()));
 //		stepMap.put(PlaceBasedLPMDiscoveryWizard.EVALUATION, new EvaluationWizardStep());
-        PlaceBasedLPMDiscoveryWizard wizard = new PlaceBasedLPMDiscoveryWizard(stepMap, true);
+        PlaceBasedLPMDiscoveryWizard wizard = new PlaceBasedLPMDiscoveryWizard(stepMap, placeDiscoveryIncluded);
         return ProMWizardDisplay.show(context, wizard, parameters);
     }
 
