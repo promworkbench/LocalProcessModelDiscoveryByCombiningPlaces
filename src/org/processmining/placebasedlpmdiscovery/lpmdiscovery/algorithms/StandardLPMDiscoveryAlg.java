@@ -2,8 +2,6 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms;
 
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlg;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingResult;
-import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.LPMBuildingResultTraversal;
-import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.LPMBuildingResultTraversalFactory;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.parameters.LPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
@@ -11,7 +9,8 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterSubject;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
+import org.processmining.placebasedlpmdiscovery.model.lpmstorage.traversals.GlobalLPMStorageTraversal;
+import org.processmining.placebasedlpmdiscovery.model.lpmstorage.traversals.LPMStorageTraversalFactory;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -54,7 +53,7 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 
             // choose lpms
             Set<LocalProcessModel> lpms = new HashSet<>();
-            LPMBuildingResultTraversal traversal = LPMBuildingResultTraversalFactory.createTraversal(lpmBuildingResult);
+            GlobalLPMStorageTraversal traversal = LPMStorageTraversalFactory.createTraversal(lpmBuildingResult.getStorage());
             while (traversal.hasNext()) {
                 LocalProcessModel lpm = traversal.next();
                 if (this.lpmFiltrationController.shouldKeepLPM(lpm)) {

@@ -1,13 +1,15 @@
-package org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals;
+package org.processmining.placebasedlpmdiscovery.model.lpmstorage.traversals;
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTree;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTreeNode;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
-public class MainFPGrowthLPMTreeTraversal implements LPMBuildingResultTraversal {
+public class MainFPGrowthLPMTreeTraversal implements GlobalLPMStorageTraversal {
 
     private final MainFPGrowthLPMTree result;
 
