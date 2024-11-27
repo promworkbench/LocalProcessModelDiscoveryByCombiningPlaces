@@ -1,7 +1,5 @@
 package org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs;
 
-import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.LPMBuildingInput;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 
@@ -23,5 +21,10 @@ public class FPGrowthForPlacesLPMBuildingInput implements LPMBuildingInput {
 
     public Set<Place> getPlaces() {
         return this.places;
+    }
+
+    @Override
+    public EventLog getEventLog() {
+        return this.log;
     }
 }

@@ -1,10 +1,11 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.IntegerMappedLog;
+import org.processmining.placebasedlpmdiscovery.model.logs.traversals.EventLogWindowTraversal;
 
 import java.util.*;
 
-public class WindowLogTraversal {
+public class WindowLogTraversal implements EventLogWindowTraversal {
 
     private final IntegerMappedLog log;
     private final int maxWindowSize;
