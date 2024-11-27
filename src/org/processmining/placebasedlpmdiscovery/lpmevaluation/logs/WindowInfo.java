@@ -3,7 +3,7 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
 import java.util.ArrayList;
 import java.util.Objects;
 
-public class WindowInfo {
+public class WindowInfo implements IWindowInfo {
     private final ArrayList<Integer> window;
     private final int windowCount;
     private final Integer traceVariantId;

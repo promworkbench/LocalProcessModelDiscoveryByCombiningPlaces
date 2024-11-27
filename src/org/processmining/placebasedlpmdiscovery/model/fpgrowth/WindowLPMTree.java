@@ -1,12 +1,13 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.model.WindowLPMStorage;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
 
 import java.util.*;
 
-public class WindowLPMTree implements CanBeInterrupted {
+public class WindowLPMTree implements WindowLPMStorage, CanBeInterrupted {
 
     private final WindowLPMTreeNode root;
 
