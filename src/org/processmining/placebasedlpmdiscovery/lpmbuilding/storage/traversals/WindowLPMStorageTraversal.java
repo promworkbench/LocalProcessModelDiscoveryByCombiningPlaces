@@ -1,12 +1,11 @@
-package org.processmining.placebasedlpmdiscovery.model.lpmstorage.traversals;
+package org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.traversals;
 
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
 /**
- * The classes of this type are used to traverse a global LPM storage.
+ * The classes of this type are used to traverse an LPM storage for a single window.
  */
-public interface GlobalLPMStorageTraversal {
-
+public interface WindowLPMStorageTraversal {
     /**
      * Returns if there is a next LPM in the storage.
      * @return true if there is a next LPM, false otherwise
@@ -18,5 +17,4 @@ public interface GlobalLPMStorageTraversal {
      * @return next LPM in the storage.
      */
     LocalProcessModel next();
-
 }
