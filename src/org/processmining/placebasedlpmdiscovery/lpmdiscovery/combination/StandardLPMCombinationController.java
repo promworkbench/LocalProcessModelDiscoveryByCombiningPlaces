@@ -3,19 +3,19 @@ package org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination;
 import org.apache.commons.lang.NotImplementedException;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.RunningContext;
-import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingResult;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlg;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth.placecombination.FPGrowthForPlacesLPMBuildingAlg;
-import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.LPMBuildingResultTraversal;
-import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.LPMBuildingResultTraversalFactory;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingResult;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
-import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
+import org.processmining.placebasedlpmdiscovery.model.lpmstorage.traversals.GlobalLPMStorageTraversal;
+import org.processmining.placebasedlpmdiscovery.model.lpmstorage.traversals.LPMStorageTraversalFactory;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 
 import java.util.HashSet;
@@ -92,7 +92,7 @@ public class StandardLPMCombinationController implements LPMCombinationControlle
     private Set<LocalProcessModel> getLPMs(LPMBuildingResult lpmBuildingResult) {
         Set<LocalProcessModel> lpms = new HashSet<>();
 
-        LPMBuildingResultTraversal traversal = LPMBuildingResultTraversalFactory.createTraversal(lpmBuildingResult);
+        GlobalLPMStorageTraversal traversal = LPMStorageTraversalFactory.createTraversal(lpmBuildingResult.getStorage());
         while (traversal.hasNext()) {
             LocalProcessModel lpm = traversal.next();
             if (this.runningContext.getLpmFiltrationController().shouldKeepLPM(lpm)) {

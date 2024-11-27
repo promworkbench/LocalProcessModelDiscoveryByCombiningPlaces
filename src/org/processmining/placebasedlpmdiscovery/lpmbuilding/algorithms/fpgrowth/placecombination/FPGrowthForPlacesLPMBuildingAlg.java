@@ -10,6 +10,7 @@ import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPl
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.LPMBuildingInput;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.parameters.FPGrowthForPlacesLPMBuildingParameters;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.parameters.LPMBuildingParameters;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.DefaultLPMBuildingResult;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingResult;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
@@ -65,7 +66,7 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
                 cParameters.getPlaceChooserParameters().getPlaceLimit());
 
         // build lpms
-        return build(cInput.getLog(), places, cParameters.getLPMCombinationParameters());
+        return new DefaultLPMBuildingResult(build(cInput.getLog(), places, cParameters.getLPMCombinationParameters()));
     }
 
     private MainFPGrowthLPMTree build(EventLog log, Set<Place> places, LPMCombinationParameters parameters) {

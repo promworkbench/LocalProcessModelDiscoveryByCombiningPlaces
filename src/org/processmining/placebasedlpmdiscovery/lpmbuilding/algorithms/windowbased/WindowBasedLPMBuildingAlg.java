@@ -5,6 +5,7 @@ import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.LPMBuildingIn
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.WindowBasedLPMBuildingInput;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.parameters.LPMBuildingParameters;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.parameters.WindowBasedLPMBuildingParameters;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.DefaultLPMBuildingResult;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingResult;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowLPMStorage;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowToGlobalLPMStorageTransporter;
@@ -51,6 +52,6 @@ public class WindowBasedLPMBuildingAlg implements LPMBuildingAlg {
             storageTransporter.move(windowStorage, lpmStorage);
         }
 
-        return null;
+        return new DefaultLPMBuildingResult(lpmStorage);
     }
 }

@@ -12,6 +12,8 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterSubject;
+import org.processmining.placebasedlpmdiscovery.model.lpmstorage.traversals.GlobalLPMStorageTraversal;
+import org.processmining.placebasedlpmdiscovery.model.lpmstorage.traversals.LPMStorageTraversalFactory;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -57,7 +59,7 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 
             // choose lpms
             Set<LocalProcessModel> lpms = new HashSet<>();
-            LPMBuildingResultTraversal traversal = LPMBuildingResultTraversalFactory.createTraversal(lpmBuildingResult);
+            GlobalLPMStorageTraversal traversal = LPMStorageTraversalFactory.createTraversal(lpmBuildingResult.getStorage());
             while (traversal.hasNext()) {
                 LocalProcessModel lpm = traversal.next();
                 if (this.lpmFiltrationController.shouldKeepLPM(lpm)) {
