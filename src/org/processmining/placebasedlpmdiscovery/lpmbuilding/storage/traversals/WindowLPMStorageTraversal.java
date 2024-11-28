@@ -28,7 +28,7 @@ public interface WindowLPMStorageTraversal {
      */
     static WindowLPMStorageTraversal getInstance(WindowLPMStorage storage) {
         if (storage instanceof WindowLPMTreeWrapperAsWindowLPMStorage) {
-            return new WindowLPMTreeWrapperAsWindowLPMStorageTraversal(storage);
+            return new WindowLPMTreeWrapperAsWindowLPMStorageTraversal((WindowLPMTreeWrapperAsWindowLPMStorage) storage);
         }
         throw new NotImplementedException("There exists no traversal for a storage of type: " + storage.getClass());
     }
