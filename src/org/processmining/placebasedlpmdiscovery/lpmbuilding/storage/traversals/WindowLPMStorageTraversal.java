@@ -1,5 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.traversals;
 
+import org.apache.commons.lang.NotImplementedException;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowLPMStorage;
+import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowLPMTreeWrapperAsWindowLPMStorage;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
 /**
@@ -17,4 +20,16 @@ public interface WindowLPMStorageTraversal {
      * @return next LPM in the storage.
      */
     LocalProcessModel next();
+
+    /**
+     * Returns a default traversal for the given storage.
+     * @param storage the storage for which we want to get a traversal object
+     * @return - a traversal object
+     */
+    static WindowLPMStorageTraversal getInstance(WindowLPMStorage storage) {
+        if (storage instanceof WindowLPMTreeWrapperAsWindowLPMStorage) {
+            return new WindowLPMTreeWrapperAsWindowLPMStorageTraversal(storage);
+        }
+        throw new NotImplementedException("There exists no traversal for a storage of type: " + storage.getClass());
+    }
 }
