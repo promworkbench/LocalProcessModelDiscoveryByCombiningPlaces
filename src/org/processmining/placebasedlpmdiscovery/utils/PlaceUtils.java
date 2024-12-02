@@ -290,7 +290,7 @@ public class PlaceUtils {
         }
     }
 
-    private static Petrinet extractPetriNet(String petriNetFileName) throws XmlPullParserException, IOException {
+    public static Petrinet extractPetriNet(String petriNetFileName) throws XmlPullParserException, IOException {
         FullPnmlElementFactory pnmlFactory = new FullPnmlElementFactory();
         Petrinet net = PetrinetFactory.newPetrinet("place nets");
 
