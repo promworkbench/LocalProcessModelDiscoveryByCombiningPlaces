@@ -1,13 +1,12 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery.results;
 
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
-import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryConfig;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.Exporter;
 import org.processmining.placebasedlpmdiscovery.model.exporting.importers.ImporterFactory;
 import org.processmining.placebasedlpmdiscovery.model.exporting.importers.JsonImporter;
-import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -17,11 +16,11 @@ import java.util.Collection;
 
 public class FromFileLPMDiscoveryResult implements LPMDiscoveryResult {
 
-    private final LPMResult lpmResult;
+    private final LPMDiscoveryResult lpmResult;
 
     public FromFileLPMDiscoveryResult(String filePath) throws IOException {
-        JsonImporter<LPMResult> importer = ImporterFactory.createLPMDiscoveryResultJsonImporter();
-        this.lpmResult = importer.read(LPMResult.class, Files.newInputStream(Paths.get(filePath)));
+        JsonImporter<LPMDiscoveryResult> importer = ImporterFactory.createLPMDiscoveryResultJsonImporter();
+        this.lpmResult = importer.read(LPMDiscoveryResult.class, Files.newInputStream(Paths.get(filePath)));
     }
 
     @Override

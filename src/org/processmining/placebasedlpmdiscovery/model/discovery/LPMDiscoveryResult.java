@@ -1,10 +1,12 @@
 package org.processmining.placebasedlpmdiscovery.model.discovery;
 
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.results.FromFileLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryConfig;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.exporting.Exportable;
 
+import java.io.IOException;
 import java.util.Collection;
 
 public interface LPMDiscoveryResult extends Exportable<LPMDiscoveryResult> {
@@ -25,4 +27,8 @@ public interface LPMDiscoveryResult extends Exportable<LPMDiscoveryResult> {
     LPMDiscoveryConfig getConfig();
 
     void keep(int lpmCount);
+
+    static LPMDiscoveryResult fromFile(String filePath) throws IOException {
+        return new FromFileLPMDiscoveryResult(filePath);
+    }
 }
