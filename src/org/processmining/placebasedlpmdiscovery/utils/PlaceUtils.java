@@ -27,6 +27,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -155,13 +156,19 @@ public class PlaceUtils {
      */
     public static <T> Map<Pair<T, T>, Set<Place>> getInoutTransitionPlaceSetMapping(Set<Place> places,
                                                                                     Map<String, T> labelMap) {
+        return getInoutTransitionPlaceSetMapping(places, labelMap::get);
+    }
+
+    public static <T> Map<Pair<T, T>, Set<Place>> getInoutTransitionPlaceSetMapping(Set<Place> places,
+                                                                                    Function<String, T> labelMapper) {
         Map<Pair<T, T>, Set<Place>> resMap = new HashMap<>();
         for (Place place : places) {
             for (Transition inTr : place.getInputTransitions()) {
                 if (place.isSelfLoop(inTr.getLabel()))
                     continue;
                 for (Transition outTr : place.getOutputTransitions()) {
-                    Pair<T, T> pair = new Pair<>(labelMap.get(inTr.getLabel()), labelMap.get(outTr.getLabel()));
+                    Pair<T, T> pair = new Pair<>(labelMapper.apply(inTr.getLabel()),
+                            labelMapper.apply(outTr.getLabel()));
                     Set<Place> set = resMap.getOrDefault(pair, new HashSet<>());
                     set.add(place);
                     resMap.put(pair, set);
@@ -195,35 +202,40 @@ public class PlaceUtils {
 
     public static Map<Pair<Integer, Integer>, Set<List<Place>>> getInoutTransitionPlaceSetMappingViaSilent(
             Set<Place> places, Map<String, Integer> labelMap) {
-        Map<Pair<Integer, Integer>, Set<List<Place>>> inoutTransitionPlaceMap = new HashMap<>();
+        return getInoutTransitionPlaceSetMappingViaSilent(places, labelMap::get);
+    }
+
+    public static <T> Map<Pair<T, T>, Set<List<Place>>> getInoutTransitionPlaceSetMappingViaSilent(
+            Set<Place> places, Function<String, T> labelMapper) {
+        Map<Pair<T, T>, Set<List<Place>>> inoutTransitionPlaceMap = new HashMap<>();
 
         Set<Place> silentIn = places // get all places that have silent transition as input
                 .stream()
-                .filter(p -> p.getInputTransitions()
+                .filter(p -> !p.getInputTransitions()
                         .stream()
                         .filter(Transition::isInvisible)
-                        .collect(Collectors.toSet()).size() > 0)
+                        .collect(Collectors.toSet()).isEmpty())
                 .collect(Collectors.toSet());
         Set<Place> silentOut = places // get all places that have silent transition as output
                 .stream()
-                .filter(p -> p.getOutputTransitions()
+                .filter(p -> !p.getOutputTransitions()
                         .stream()
                         .filter(Transition::isInvisible)
-                        .collect(Collectors.toSet()).size() > 0)
+                        .collect(Collectors.toSet()).isEmpty())
                 .collect(Collectors.toSet());
 
         for (Place first : silentOut) {
             for (Place second : silentIn) {
                 // check if the two places have common silent transition
-                if (Sets.intersection(first.getOutputTransitions(), second.getInputTransitions()
-                        .stream().filter(Transition::isInvisible).collect(Collectors.toSet())).size() > 0) {
+                if (!Sets.intersection(first.getOutputTransitions(), second.getInputTransitions()
+                        .stream().filter(Transition::isInvisible).collect(Collectors.toSet())).isEmpty()) {
                     for (Transition trIn : first.getInputTransitions()) {
                         for (Transition trOut : second.getOutputTransitions()) {
                             if (trIn.getLabel().equals(trOut.getLabel()))
                                 continue;
-                            int mappedIn = labelMap.get(trIn.getLabel());
-                            int mappedOut = labelMap.get(trOut.getLabel());
-                            Pair<Integer, Integer> pair = new Pair<>(mappedIn, mappedOut);
+                            T mappedIn = labelMapper.apply(trIn.getLabel());
+                            T mappedOut = labelMapper.apply(trOut.getLabel());
+                            Pair<T, T> pair = new Pair<>(mappedIn, mappedOut);
                             Set<List<Place>> paths = inoutTransitionPlaceMap.getOrDefault(
                                     pair, new HashSet<>());
                             paths.add(Arrays.asList(first, second));
