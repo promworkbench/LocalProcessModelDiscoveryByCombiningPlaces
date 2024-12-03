@@ -1,5 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.model.logs.activities;
 
+import java.util.Objects;
+
 public class SimpleActivity implements Activity{
 
     private final String name;
@@ -20,4 +22,16 @@ public class SimpleActivity implements Activity{
         return this.activityId;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleActivity that = (SimpleActivity) o;
+        return Objects.equals(name, that.name) && Objects.equals(activityId, that.activityId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(activityId);
+    }
 }
