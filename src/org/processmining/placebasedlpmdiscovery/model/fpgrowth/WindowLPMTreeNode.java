@@ -8,6 +8,7 @@ import org.processmining.placebasedlpmdiscovery.utils.CircularListWithMapping;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class WindowLPMTreeNode {
@@ -41,16 +42,17 @@ public class WindowLPMTreeNode {
         this.replayedEventsIndices = replayedEventsIndices;
     }
 
-    public void tryAddPlace(int inEvent, int inPos, int outEvent, int outPos, Place place, Map<String, Integer> labelMap) {
-        if (!canAddPlace(inEvent, place, labelMap))
+    public void tryAddPlace(int inEvent, int inPos, int outEvent, int outPos, Place place,
+                            Function<String, Integer> labelMapper) {
+        if (!canAddPlace(inEvent, place, labelMapper))
             return;
 
-        WindowLPMTreeNode child = createChild(inEvent, inPos, outEvent, outPos, place, labelMap);
+        WindowLPMTreeNode child = createChild(inEvent, inPos, outEvent, outPos, place, labelMapper);
         addChild(inEvent, inPos, outEvent, outPos, child);
     }
 
-    public void tryAddPath(int inEvent, int inPos, int outEvent, int outPos, List<Place> path, Map<String, Integer> labelMap) {
-        WindowLPMTreeNode child = createChild(inEvent, inPos, outEvent, outPos, path, labelMap);
+    public void tryAddPath(int inEvent, int inPos, int outEvent, int outPos, List<Place> path, Function<String, Integer> labelMapper) {
+        WindowLPMTreeNode child = createChild(inEvent, inPos, outEvent, outPos, path, labelMapper);
         addChild(inEvent, inPos, outEvent, outPos, child);
     }
 
@@ -76,42 +78,42 @@ public class WindowLPMTreeNode {
     }
 
 
-    private WindowLPMTreeNode createChild(int event, int position, int outEvent, int outPos, Place place, Map<String, Integer> labelMap) {
+    private WindowLPMTreeNode createChild(int event, int position, int outEvent, int outPos, Place place, Function<String, Integer> labelMapper) {
         ReplayableLocalProcessModel newLpm = new ReplayableLocalProcessModel(this.lpm);
-        addPlaceInRLPM(newLpm, event, place, labelMap);
+        addPlaceInRLPM(newLpm, event, place, labelMapper);
         return new WindowLPMTreeNode(position, this.windowWidth, newLpm, event, outEvent,
                 getCopyOfUpdatedReplayedEventIndices(position)); // create node
     }
 
-    private WindowLPMTreeNode createChild(int event, int position, int outEvent, int outPos, List<Place> path, Map<String, Integer> labelMap) {
+    private WindowLPMTreeNode createChild(int event, int position, int outEvent, int outPos, List<Place> path, Function<String, Integer> labelMapper) {
         ReplayableLocalProcessModel newLpm = new ReplayableLocalProcessModel(this.lpm);
-        addPlaceInRLPM(newLpm, event, path.get(0), labelMap);
+        addPlaceInRLPM(newLpm, event, path.get(0), labelMapper);
         Place previous = path.get(0);
         for (int i = 1; i < path.size(); ++i) {
             Place next = path.get(i);
             Transition silent = PlaceUtils.getCommonSilentTransition(previous, next);
             if (silent == null)
                 throw new IllegalArgumentException("The path is not valid");
-            addPlaceInRLPM(newLpm, labelMap.get(silent.getLabel()), next, labelMap);
+            addPlaceInRLPM(newLpm, labelMapper.apply(silent.getLabel()), next, labelMapper);
             previous = next;
         }
         return new WindowLPMTreeNode(position, this.windowWidth, newLpm, event, outEvent,
                 getCopyOfUpdatedReplayedEventIndices(position)); // create node
     }
 
-    private void addPlaceInRLPM(ReplayableLocalProcessModel rlpm, int event, Place place, Map<String, Integer> labelMap) {
+    private void addPlaceInRLPM(ReplayableLocalProcessModel rlpm, int event, Place place, Function<String, Integer> labelMapper) {
         // add transitions in the replayable lpm
-        place.getInputTransitions().forEach(t -> rlpm.addTransition(labelMap.get(t.getLabel()), t.isInvisible()));
-        place.getOutputTransitions().forEach(t -> rlpm.addTransition(labelMap.get(t.getLabel()), t.isInvisible()));
+        place.getInputTransitions().forEach(t -> rlpm.addTransition(labelMapper.apply(t.getLabel()), t.isInvisible()));
+        place.getOutputTransitions().forEach(t -> rlpm.addTransition(labelMapper.apply(t.getLabel()), t.isInvisible()));
 
         // convert transitions in integers
         Set<Integer> inputTransitionIds = place.getInputTransitions()
                 .stream()
-                .map(t -> labelMap.get(t.getLabel()))
+                .map(t -> labelMapper.apply(t.getLabel()))
                 .collect(Collectors.toSet());
         Set<Integer> outputTransitionIds = place.getOutputTransitions()
                 .stream()
-                .map(t -> labelMap.get(t.getLabel()))
+                .map(t -> labelMapper.apply(t.getLabel()))
                 .collect(Collectors.toSet());
 
         rlpm.addConstraint(place.getId(), 0, outputTransitionIds, inputTransitionIds); // add the constraint
@@ -124,18 +126,18 @@ public class WindowLPMTreeNode {
      *
      * @param event:    the event we want to replay
      * @param place:    the place we want to add
-     * @param labelMap: the mapping between the string and integer labels
+     * @param labelMapper: the mapping between the string and integer labels
      * @return whether the place can be added without destroying the previous replay
      */
-    private boolean canAddPlace(Integer event, Place place, Map<String, Integer> labelMap) {
+    private boolean canAddPlace(Integer event, Place place, Function<String, Integer> labelMapper) {
         Set<Integer> outputTransitionIds = place.getOutputTransitions()
                 .stream()
-                .map(t -> labelMap.get(t.getLabel()))
+                .map(t -> labelMapper.apply(t.getLabel()))
                 .collect(Collectors.toSet());
 
         Set<Integer> inputTransitionIds = place.getInputTransitions()
                 .stream()
-                .map(t -> labelMap.get(t.getLabel()))
+                .map(t -> labelMapper.apply(t.getLabel()))
                 .collect(Collectors.toSet());
 
         return Sets.intersection(outputTransitionIds, new HashSet<>(lpm.getFiringSequence())).isEmpty()

@@ -117,7 +117,7 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
 
                 // update local tree for the i-th and last event of the window
                 localTree.add(window.get(i), windowInfo.getStartPos() + i, newEvent, windowInfo.getEndPos(),
-                        placesForAddition, paths, integerMappedLog.getMapping().getLabelMap());
+                        placesForAddition, paths, obj -> integerMappedLog.getMapping().getLabelMap().get(obj));
             }
             // calculate fitting local process models
             localTree.tryAddNullChildren(newEvent, windowInfo.getEndPos());

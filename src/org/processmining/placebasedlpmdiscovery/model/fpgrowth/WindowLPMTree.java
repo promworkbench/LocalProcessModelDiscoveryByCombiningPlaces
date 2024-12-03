@@ -5,6 +5,7 @@ import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class WindowLPMTree implements CanBeInterrupted {
 
@@ -24,15 +25,15 @@ public class WindowLPMTree implements CanBeInterrupted {
 
     public void add(int inEvent, int inPos, int outEvent, int outPos,
                     Set<Place> places, Set<List<Place>> pathsViaSilent,
-                    Map<String, Integer> labelMap) {
+                    Function<String, Integer> labelMapper) {
 
         Set<WindowLPMTreeNode> nodes = getNodesThatCanFire(inEvent, inPos);
         nodes.add(root); // also add the root
         for (WindowLPMTreeNode node : nodes) { // to each such node
             if (stop)
                 break;
-            addPlaces(node, inEvent, inPos, outEvent, outPos, places, labelMap); // concat the places
-            addPaths(node, inEvent, inPos, outEvent, outPos, pathsViaSilent, labelMap); // add the paths
+            addPlaces(node, inEvent, inPos, outEvent, outPos, places, labelMapper); // concat the places
+            addPaths(node, inEvent, inPos, outEvent, outPos, pathsViaSilent, labelMapper); // add the paths
         }
     }
 
@@ -78,20 +79,20 @@ public class WindowLPMTree implements CanBeInterrupted {
     }
 
     private void addPlaces(WindowLPMTreeNode node, int inEvent, int inPos, int outEvent, int outPos,
-                           Set<Place> places, Map<String, Integer> labelMap) {
+                           Set<Place> places, Function<String, Integer> labelMapper) {
         for (Place place : places) {
             if (stop)
                 return;
-            node.tryAddPlace(inEvent, inPos, outEvent, outPos, place, labelMap);
+            node.tryAddPlace(inEvent, inPos, outEvent, outPos, place, labelMapper);
         }
     }
 
     private void addPaths(WindowLPMTreeNode node, int inEvent, int inPos, int outEvent, int outPos,
-                          Set<List<Place>> paths, Map<String, Integer> labelMap) {
+                          Set<List<Place>> paths, Function<String, Integer> labelMapper) {
         for (List<Place> path : paths) {
             if (stop)
                 return;
-            node.tryAddPath(inEvent, inPos, outEvent, outPos, path, labelMap);
+            node.tryAddPath(inEvent, inPos, outEvent, outPos, path, labelMapper);
         }
     }
 
