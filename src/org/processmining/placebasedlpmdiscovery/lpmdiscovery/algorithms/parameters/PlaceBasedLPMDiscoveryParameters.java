@@ -55,7 +55,7 @@ public class PlaceBasedLPMDiscoveryParameters implements LPMDiscoveryParameters 
         this.lpmBuildingParameters = new FPGrowthForPlacesLPMBuildingParameters(this.lpmCombinationParameters,
                 this.placeChooserParameters);
         this.lpmFilterParameters = new LPMFilterParameters();
-        this.lpmCount = 100;
+        this.lpmCount = 1000;
         this.timeLimit = 600000;
         this.eventAttributeSummary = new HashMap<>();
     }
