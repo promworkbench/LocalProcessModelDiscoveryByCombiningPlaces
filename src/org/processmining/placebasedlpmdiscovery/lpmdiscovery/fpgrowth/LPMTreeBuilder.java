@@ -111,7 +111,7 @@ public class LPMTreeBuilder extends Interruptible {
 //                    localTree.add(window.get(i), placesForAddition, paths, windowLog.getLabelMap(), i);
                     localTree.add(window.get(i), eventPos - window.size() + 1 + i,
                             event, eventPos,
-                            placesForAddition, paths, integerMappedLog.getMapping().getLabelMap());
+                            placesForAddition, paths, obj -> integerMappedLog.getMapping().getLabelMap().get(obj));
                 }
                 // calculate fitting local process models
                 localTree.tryAddNullChildren(event, eventPos);
