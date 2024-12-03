@@ -5,8 +5,8 @@ import org.processmining.placebasedlpmdiscovery.lpmbuilding.parameters.FPGrowthF
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.parameters.LPMBuildingParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filterstrategies.LPMFilterParameters;
-import org.processmining.placebasedlpmdiscovery.model.logs.Activity;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
 import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooserParameters;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscoveryAlgorithmId;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.EstMinerPlaceDiscoveryParameters;
