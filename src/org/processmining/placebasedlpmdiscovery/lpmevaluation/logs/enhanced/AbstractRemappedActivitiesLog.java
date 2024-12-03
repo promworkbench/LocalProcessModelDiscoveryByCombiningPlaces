@@ -6,8 +6,8 @@ import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.extra.AbstractActivityMapping;
-import org.processmining.placebasedlpmdiscovery.model.logs.Activity;
-import org.processmining.placebasedlpmdiscovery.model.logs.RemappedActivity;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.RemappedActivity;
 
 import java.util.*;
 import java.util.stream.Collectors;
