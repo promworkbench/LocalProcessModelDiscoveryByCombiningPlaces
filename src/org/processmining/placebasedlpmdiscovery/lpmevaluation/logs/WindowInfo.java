@@ -69,4 +69,9 @@ public class WindowInfo implements IWindowInfo {
                 ", endPos=" + endPos +
                 '}';
     }
+
+    @Override
+    public String getParentSequenceId() {
+        return traceVariantId.toString();
+    }
 }
