@@ -4,6 +4,10 @@ import java.awt.*;
 
 public class Constants {
 
+    public static class Logs {
+        public static final String DEFAULT_CASE_ATTRIBUTE = "concept:name";
+    }
+
     public static class Visualization {
 
         public static class Colors {
