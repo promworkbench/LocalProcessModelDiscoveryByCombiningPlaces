@@ -23,4 +23,11 @@ public class ActivityIdImpl implements ActivityId {
     public int hashCode() {
         return Objects.hash(id);
     }
+
+    @Override
+    public String toString() {
+        return "ActivityIdImpl{" +
+                "id=" + id +
+                '}';
+    }
 }
