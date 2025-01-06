@@ -31,6 +31,14 @@ public class SimpleActivity implements Activity{
     }
 
     @Override
+    public String toString() {
+        return "SimpleActivity{" +
+                "name='" + name + '\'' +
+                ", activityId=" + activityId +
+                '}';
+    }
+
+    @Override
     public int hashCode() {
         return Objects.hash(activityId);
     }
