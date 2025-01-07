@@ -18,6 +18,7 @@ import org.processmining.placebasedlpmdiscovery.model.Arc;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.ActivityCache;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 
 import java.io.ByteArrayOutputStream;
@@ -40,6 +41,37 @@ public class LocalProcessModelUtils {
         }
 
         return res;
+    }
+
+    public static ReplayableLocalProcessModel convertToReplayable(LocalProcessModel lpm) {
+        Set<Integer> transitionsMapped = lpm.getTransitions()
+                .stream()
+                .map(t -> ActivityCache.getInstance().getIntForActivityId(
+                        ActivityCache.getInstance().getActivity(t.getLabel()).getId()))
+                .collect(Collectors.toSet());
+        Set<Integer> invisibleTransitions = lpm.getTransitions()
+                .stream()
+                .filter(Transition::isInvisible)
+                .map(t -> ActivityCache.getInstance().getIntForActivityId(
+                        ActivityCache.getInstance().getActivity(t.getLabel()).getId()))
+                .collect(Collectors.toSet());
+
+        ReplayableLocalProcessModel replayable = new ReplayableLocalProcessModel(transitionsMapped, invisibleTransitions);
+        for (Place p : lpm.getPlaces()) {
+            Set<Integer> inputTransitionIds = p.getInputTransitions()
+                    .stream()
+                    .map(t -> ActivityCache.getInstance().getIntForActivityId(
+                            ActivityCache.getInstance().getActivity(t.getLabel()).getId()))
+                    .collect(Collectors.toSet());
+            Set<Integer> outputTransitionIds = p.getOutputTransitions()
+                    .stream()
+                    .map(t ->ActivityCache.getInstance().getIntForActivityId(
+                            ActivityCache.getInstance().getActivity(t.getLabel()).getId()))
+                    .collect(Collectors.toSet());
+            replayable.addConstraint(p.getId(), p.getNumTokens(), outputTransitionIds, inputTransitionIds);
+        }
+
+        return replayable;
     }
 
     public static ReplayableLocalProcessModel convertToReplayable(LocalProcessModel lpm,
@@ -130,6 +162,47 @@ public class LocalProcessModelUtils {
         for (Integer tr : transitionsMapped) {
             boolean invisible = invisibleTransitionsMapped.contains(tr);
             Transition transition = new Transition(reversedLabelMap.get(tr), invisible);
+            transitions.put(tr, transition);
+        }
+
+        // create places for each constraint
+        Map<Integer, Place> constraintIdPlaceMap = replayable.getConstraintMap()
+                .entrySet()
+                .stream()
+                .collect(Collectors.toMap(Map.Entry::getKey, e -> idToPlace.get(e.getValue())));
+        // add output transitions to the places
+        for (Map.Entry<Integer, Set<Integer>> entry : replayable.getInputConstraints().entrySet()) {
+            int trId = entry.getKey();
+            entry.getValue().forEach(id -> constraintIdPlaceMap.get(id).addOutputTransition(transitions.get(trId)));
+        }
+        // add input transitions to the places
+        for (Map.Entry<Integer, Set<Integer>> entry : replayable.getOutputConstraints().entrySet()) {
+            int trId = entry.getKey();
+            entry.getValue().forEach(id -> constraintIdPlaceMap.get(id).addInputTransition(transitions.get(trId)));
+        }
+
+        // create the lpm
+        LocalProcessModel lpm = new LocalProcessModel();
+        for (Place p : constraintIdPlaceMap.values())
+            lpm.addPlace(p);
+
+        return lpm;
+    }
+
+    public static LocalProcessModel convertReplayableToLPM(ReplayableLocalProcessModel replayable,
+                                                           Set<Place> originalPlaces) {
+        Map<String, Place> idToPlace = originalPlaces.stream().collect(Collectors.toMap(Place::getId, p -> p));
+
+        // create all transitions
+        Map<Integer, Transition> transitions = new HashMap<>();
+        Set<Integer> transitionsMapped = replayable.getTransitions();
+        Set<Integer> invisibleTransitionsMapped = replayable.getInvisibleTransitions();
+        for (Integer tr : transitionsMapped) {
+            boolean invisible = invisibleTransitionsMapped.contains(tr);
+            String label = ActivityCache.getInstance().getActivity(
+                    ActivityCache.getInstance().getActivityIdForInt(tr))
+                    .getName();
+            Transition transition = new Transition(label, invisible);
             transitions.put(tr, transition);
         }
 
