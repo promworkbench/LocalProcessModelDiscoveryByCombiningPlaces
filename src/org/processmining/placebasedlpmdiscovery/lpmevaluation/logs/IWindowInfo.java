@@ -1,13 +1,16 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
 
-import java.util.ArrayList;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
+
+import java.util.List;
 
 public interface IWindowInfo {
-    String getParentSequenceId();
 
-    ArrayList<Integer> getWindow();
+    List<Activity> getWindow();
 
     int getStartPos();
 
     int getEndPos();
+
+    boolean hasPreviousWindow();
 }

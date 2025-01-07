@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.logs.tracevariants.EventLogTraceVariant;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +11,7 @@ import java.util.Objects;
 
 public class TraceSupportEvaluationResult extends SimpleEvaluationResult {
 
-    private final Map<Integer, Integer> coveredTraces;
+    private final Map<EventLogTraceVariant, Integer> coveredTraces;
     private int totalTraceCount;
 
     public TraceSupportEvaluationResult(LocalProcessModel lpm) {
@@ -45,7 +46,7 @@ public class TraceSupportEvaluationResult extends SimpleEvaluationResult {
         return Objects.hash(totalTraceCount, coveredTraces);
     }
 
-    public void addTraces(Integer traceVariantId, int windowMultiplicity) {
-        this.coveredTraces.put(traceVariantId, windowMultiplicity);
+    public void addTraces(EventLogTraceVariant traceVariant, int windowMultiplicity) {
+        this.coveredTraces.put(traceVariant, windowMultiplicity);
     }
 }

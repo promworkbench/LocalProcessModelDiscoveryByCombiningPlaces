@@ -7,6 +7,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLP
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.PassageVisitsCollectorResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class PassageVisitsCollector implements WindowLPMCollector<PassageVisitsC
         PassageVisitsCollectorResult result = (PassageVisitsCollectorResult) existingEvaluation;
 
         int windowCount = lpmTemporaryWindowInfo.getWindowCount();
-        List<Integer> firingSequence = lpmTemporaryWindowInfo.getIntegerFiringSequence();
+        List<Activity> firingSequence = lpmTemporaryWindowInfo.getActivityFiringSequence();
         result.updatePassagesUsed(lpmTemporaryWindowInfo.getIntegerUsedPassages(), windowCount);
         result.updateFirstPassage(firingSequence.get(0), windowCount);
         result.updateLastPassage(firingSequence.get(firingSequence.size() - 1), windowCount);

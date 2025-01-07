@@ -5,34 +5,37 @@ import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.model.XAttributeLiteral;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.placebasedlpmdiscovery.model.SimplePlace;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.ActivityCache;
+import org.processmining.placebasedlpmdiscovery.model.logs.tracevariants.EventLogTraceVariant;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class LPMTemporaryWindowInfo {
 
-    private final List<Integer> firingSequence;
+    private final List<Activity> firingSequence;
     private final List<Integer> replayedEventsIndices;
     private final Set<Pair<Integer, Integer>> usedPassages;
     private final Set<SimplePlace<Integer>> usedPlaces;
     private int windowCount;
-    private List<Integer> window;
-    private Integer traceVariantId;
+    private List<Activity> window;
     private int windowLastEventPos;
 
+    private final EventLogTraceVariant traceVariant;
     private Set<XTrace> traces;
 
     private final Map<Integer, String> reverseLabelMap;
 
-    public LPMTemporaryWindowInfo(List<Integer> firingSequence,
+    public LPMTemporaryWindowInfo(List<Activity> firingSequence,
                                   List<Integer> replayedEventsIndices,
-                                  List<Integer> window,
+                                  List<Activity> window,
                                   Set<Pair<Integer, Integer>> usedPassages,
                                   Set<SimplePlace<Integer>> usedPlaces,
                                   Map<Integer, String> reverseLabelMap,
                                   int windowCount,
-                                  Integer traceVariantId,
                                   int windowLastEventPos,
+                                  EventLogTraceVariant traceVariant,
                                   Set<XTrace> traces) {
         this.firingSequence = firingSequence;
         this.replayedEventsIndices = replayedEventsIndices;
@@ -43,13 +46,13 @@ public class LPMTemporaryWindowInfo {
         this.reverseLabelMap = reverseLabelMap;
 
         this.windowCount = windowCount;
-        this.traceVariantId = traceVariantId;
 
         this.windowLastEventPos = windowLastEventPos;
+        this.traceVariant = traceVariant;
         this.traces = traces;
     }
 
-    public List<Integer> getIntegerFiringSequence() {
+    public List<Activity> getActivityFiringSequence() {
         return firingSequence;
     }
 
@@ -76,15 +79,16 @@ public class LPMTemporaryWindowInfo {
     }
 
     public List<Integer> getIntegerWindow() {
-        return window;
-    }
-
-    public Integer getTraceVariantId() {
-        return traceVariantId;
+        return window.stream().map(a -> ActivityCache.getInstance().getIntForActivityId(a.getId()))
+                .collect(Collectors.toList());
     }
 
     public Map<Integer, String> getReverseLabelMap() {
         return reverseLabelMap;
+    }
+
+    public EventLogTraceVariant getTraceVariant() {
+        return traceVariant;
     }
 
     public Set<XTrace> getOriginalTraces() {

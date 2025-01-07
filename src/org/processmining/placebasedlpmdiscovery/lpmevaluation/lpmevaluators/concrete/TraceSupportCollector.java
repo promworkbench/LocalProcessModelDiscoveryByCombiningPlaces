@@ -3,7 +3,6 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.con
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMCollector;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.TraceSupportEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
@@ -20,7 +19,7 @@ public class TraceSupportCollector implements WindowLPMCollector<TraceSupportEva
         }
 
         TraceSupportEvaluationResult result = (TraceSupportEvaluationResult) existingEvaluation;
-        result.addTraces(lpmTemporaryWindowInfo.getTraceVariantId(), lpmTemporaryWindowInfo.getWindowCount());
+        result.addTraces(lpmTemporaryWindowInfo.getTraceVariant(), lpmTemporaryWindowInfo.getWindowCount());
         return result;
     }
 

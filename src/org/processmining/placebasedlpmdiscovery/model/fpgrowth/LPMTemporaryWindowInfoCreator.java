@@ -1,9 +1,14 @@
 package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
 import org.apache.commons.math3.util.Pair;
+import org.deckfour.xes.model.XTrace;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowInfo;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.IntegerMappedLog;
 import org.processmining.placebasedlpmdiscovery.model.SimplePlace;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.ActivityCache;
+import org.processmining.placebasedlpmdiscovery.model.logs.traces.EventLogTraceTransformer;
+import org.processmining.placebasedlpmdiscovery.model.logs.tracevariants.ActivityBasedTotallyOrderedEventLogTraceVariant;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,24 +20,35 @@ public class LPMTemporaryWindowInfoCreator {
 
     private final IntegerMappedLog log;
     private final WindowInfo windowInfo;
+    private final ActivityBasedTotallyOrderedEventLogTraceVariant parentSequence;
 
-    public LPMTemporaryWindowInfoCreator(WindowInfo windowInfo, IntegerMappedLog log) {
+    public LPMTemporaryWindowInfoCreator(WindowInfo windowInfo, IntegerMappedLog log,
+                                         ActivityBasedTotallyOrderedEventLogTraceVariant parentSequence) {
         this.windowInfo = windowInfo;
         this.log = log;
+        this.parentSequence = parentSequence;
     }
 
     public LPMTemporaryWindowInfo createTempInfo(WindowLPMTreeNode n) {
         return new LPMTemporaryWindowInfo(
-                n.getLpm().getFiringSequence(),
+                n.getLpm().getFiringSequence().stream().map(i -> ActivityCache.getInstance().getActivity(
+                        ActivityCache.getInstance().getActivityIdForInt(i))).collect(Collectors.toList()),
                 n.getReplayedEventsIndices(),
                 windowInfo.getWindow(),
                 n.getLpm().getUsedPassages(),
                 n.getLpm().getUsedConstraints(),
                 this.log.getMapping().getReverseLabelMap(),
                 windowInfo.getWindowCount(),
-                windowInfo.getTraceVariantId(),
                 windowInfo.getEndPos(),
-                this.log.getOriginalTraces(windowInfo.getTraceVariantId()));
+                this.parentSequence,
+                this.extractOriginalTraces(this.parentSequence));
+    }
+
+    private Set<XTrace> extractOriginalTraces(ActivityBasedTotallyOrderedEventLogTraceVariant parentSequence) {
+        return parentSequence.getTraces()
+                .stream()
+                .map(t -> EventLogTraceTransformer.toXTrace(t))
+                .collect(Collectors.toSet());
     }
 
     public LPMTemporaryWindowInfo createTempInfo(LPMTemporaryWindowInfo tempInfo1,
@@ -41,7 +57,7 @@ public class LPMTemporaryWindowInfoCreator {
         replayedEventIndices.addAll(tempInfo1.getReplayedEventsIndices());
         replayedEventIndices.addAll(tempInfo2.getReplayedEventsIndices());
         replayedEventIndices = replayedEventIndices.stream().distinct().sorted().collect(Collectors.toList());
-        List<Integer> sequence = getFiringSequence(replayedEventIndices, windowInfo.getWindow(),
+        List<Activity> sequence = getFiringSequence(replayedEventIndices, windowInfo.getWindow(),
                 tempInfo1.getWindowLastEventPos());
 
         Set<Pair<Integer, Integer>> usedPassages = new HashSet<>();
@@ -60,13 +76,14 @@ public class LPMTemporaryWindowInfoCreator {
                 usedPlaces,
                 this.log.getMapping().getReverseLabelMap(),
                 tempInfo1.getWindowCount(),
-                tempInfo1.getTraceVariantId(),
                 tempInfo1.getWindowLastEventPos(),
+                tempInfo1.getTraceVariant(),
                 tempInfo1.getOriginalTraces());
     }
 
-    private List<Integer> getFiringSequence(List<Integer> replayedEventIndices, List<Integer> window, Integer windowLastEventPos) {
-        List<Integer> firingSequence = new ArrayList<>();
+    private List<Activity> getFiringSequence(List<Integer> replayedEventIndices, List<Activity> window,
+                                            Integer windowLastEventPos) {
+        List<Activity> firingSequence = new ArrayList<>();
         int ind = 0;
         for (int i = 0; i < window.size(); ++i) {
             int eventPos = windowLastEventPos - window.size() + i + 1; // the last event inclusive

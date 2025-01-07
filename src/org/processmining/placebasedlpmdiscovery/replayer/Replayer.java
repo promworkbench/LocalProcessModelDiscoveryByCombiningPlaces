@@ -3,6 +3,8 @@ package org.processmining.placebasedlpmdiscovery.replayer;
 import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.ActivityCache;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 
 import java.util.*;
@@ -136,6 +138,12 @@ public class Replayer {
     public boolean canReplay(List<Integer> sequence) {
         return canReplay(sequence, LocalProcessModelUtils
                 .convertToReplayable(this.lpm, this.labelMapping));
+    }
+
+    public boolean canReplayActivitySequence(List<Activity> sequence) {
+        return canReplay(sequence.stream().map(a -> ActivityCache.getInstance().getIntForActivityId(a.getId()))
+                        .collect(Collectors.toList()),
+                LocalProcessModelUtils.convertToReplayable(this.lpm));
     }
 
     public boolean canReplay(List<Integer> sequence, ReplayableLocalProcessModel rlpm) {

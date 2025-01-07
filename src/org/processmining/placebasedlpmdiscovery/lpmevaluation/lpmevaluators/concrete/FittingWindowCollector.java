@@ -3,7 +3,6 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.con
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMCollector;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
@@ -22,7 +21,7 @@ public class FittingWindowCollector implements WindowLPMCollector<FittingWindows
 
         FittingWindowsEvaluationResult result = (FittingWindowsEvaluationResult) existingEvaluation;
         result.updateCount(lpmTemporaryWindowInfo.getWindowCount());
-        result.updateWeightedCount(1.0 * lpmTemporaryWindowInfo.getIntegerFiringSequence().size() *
+        result.updateWeightedCount(1.0 * lpmTemporaryWindowInfo.getActivityFiringSequence().size() *
                 lpmTemporaryWindowInfo.getWindowCount() / lpmTemporaryWindowInfo.getIntegerWindow().size());
 
         return result;
