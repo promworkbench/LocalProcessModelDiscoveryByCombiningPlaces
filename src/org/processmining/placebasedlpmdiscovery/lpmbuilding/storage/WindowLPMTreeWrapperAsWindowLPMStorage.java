@@ -1,25 +1,37 @@
 package org.processmining.placebasedlpmdiscovery.lpmbuilding.storage;
 
-import org.apache.commons.lang.NotImplementedException;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.WindowLPMTree;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.WindowLPMTreeNode;
+import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 public class WindowLPMTreeWrapperAsWindowLPMStorage implements WindowLPMStorage {
 
     private final WindowLPMTree windowLPMTree;
+    private final Set<Place> placeNets;
 
-    public WindowLPMTreeWrapperAsWindowLPMStorage(WindowLPMTree windowLPMTree) {
+    public WindowLPMTreeWrapperAsWindowLPMStorage(WindowLPMTree windowLPMTree, Set<Place> placeNets) {
         this.windowLPMTree = windowLPMTree;
+        this.placeNets = placeNets;
     }
 
-    public List<LocalProcessModel> getAllValidLPMs() {
+    public Collection<LocalProcessModel> getAllValidLPMs() {
+        Set<LocalProcessModel> lpms = new HashSet<>();
         Set<WindowLPMTreeNode> nullNodes = this.windowLPMTree.getNullNodes();
         for (WindowLPMTreeNode n : nullNodes) {
+            LocalProcessModel lpm = LocalProcessModelUtils.convertReplayableToLPM(n.getLpm(), this.placeNets);
+            lpms.add(lpm);
         }
-        throw new NotImplementedException();
+        return lpms;
+    }
+
+    @Override
+    public Collection<LocalProcessModel> getLPMs() {
+        return getAllValidLPMs();
     }
 }
