@@ -5,6 +5,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollect
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMCollectorResultId;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,8 +14,8 @@ import java.util.Set;
 public class PassageVisitsCollectorResult implements LPMCollectorResult {
 
     private final Map<Pair<Integer, Integer>, Integer> passageCount;
-    private final Map<Integer, Integer> firstTransitionCount;
-    private final Map<Integer, Integer> lastTransitionCount;
+    private final Map<Activity, Integer> firstTransitionCount;
+    private final Map<Activity, Integer> lastTransitionCount;
 
     public PassageVisitsCollectorResult(LocalProcessModel lpm) {
         this.passageCount = new HashMap<>();
@@ -34,12 +35,12 @@ public class PassageVisitsCollectorResult implements LPMCollectorResult {
         }
     }
 
-    public void updateFirstPassage(Integer firstTransition, int windowCount) {
+    public void updateFirstPassage(Activity firstTransition, int windowCount) {
         int count = this.firstTransitionCount.getOrDefault(firstTransition, 0);
         this.firstTransitionCount.put(firstTransition, count + windowCount);
     }
 
-    public void updateLastPassage(Integer lastTransition, int windowCount) {
+    public void updateLastPassage(Activity lastTransition, int windowCount) {
         int count = this.lastTransitionCount.getOrDefault(lastTransition, 0);
         this.lastTransitionCount.put(lastTransition, count + windowCount);
     }

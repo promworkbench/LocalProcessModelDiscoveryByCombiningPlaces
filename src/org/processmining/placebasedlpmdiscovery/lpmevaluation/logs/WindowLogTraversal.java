@@ -1,35 +1,44 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.IntegerMappedLog;
+import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
+import org.processmining.placebasedlpmdiscovery.model.logs.tracevariants.ActivityBasedTotallyOrderedEventLogTraceVariant;
+import org.processmining.placebasedlpmdiscovery.model.logs.tracevariants.extractors.ActivityBasedTotallyOrderedEventLogTraceVariantExtractor;
+import org.processmining.placebasedlpmdiscovery.model.logs.tracevariants.extractors.EventLogTraceVariantExtractor;
 import org.processmining.placebasedlpmdiscovery.model.logs.traversals.EventLogWindowTraversal;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.Optional;
 
 public class WindowLogTraversal implements EventLogWindowTraversal {
 
-    private final IntegerMappedLog log;
+    private final EventLog log;
     private final int maxWindowSize;
 
-    private final Set<Integer> remainingTraceVariantIds;
-    private Integer traceVariantId;
-    private List<Integer> traceVariant;
+    private final Collection<ActivityBasedTotallyOrderedEventLogTraceVariant> remainingTraceVariants;
+    private ActivityBasedTotallyOrderedEventLogTraceVariant traceVariant;
     private int windowCount;
     private int position;
-    LinkedList<Integer> window;
+    LinkedList<Activity> window;
 
 
-    public WindowLogTraversal(IntegerMappedLog log, int maxWindowSize) {
+    public WindowLogTraversal(EventLog log, int maxWindowSize) {
         this.log = log;
         this.maxWindowSize = maxWindowSize;
 
-        this.remainingTraceVariantIds = new HashSet<>(this.log.getTraceVariantIds());
+        ActivityBasedTotallyOrderedEventLogTraceVariantExtractor tvExtractor =
+                EventLogTraceVariantExtractor.getActivityBasedTotallyOrdered(
+                "concept:name");
+        this.remainingTraceVariants = tvExtractor.extract(this.log);
         this.window = new LinkedList<>();
     }
 
     public boolean hasNext() {
-        return this.traceVariantId != null
+        return this.traceVariant != null
                 && (position < this.traceVariant.size() || this.window.size() > 1)
-                || !this.remainingTraceVariantIds.isEmpty();
+                || !this.remainingTraceVariants.isEmpty();
     }
 
     public WindowInfo next() {
@@ -49,16 +58,21 @@ public class WindowLogTraversal implements EventLogWindowTraversal {
             window.add(traceVariant.get(position++));
         }
 
-        return new WindowInfo(new ArrayList<>(window), windowCount, traceVariantId, position - window.size(), position - 1);
+        return new WindowInfo(new ArrayList<>(window), windowCount, position - window.size(), position - 1);
     }
 
     private void startTraversingNewTraceVariant() {
-        this.traceVariantId = remainingTraceVariantIds.stream().findAny().get(); // get one trace variant id
-        this.remainingTraceVariantIds.remove(traceVariantId); // remove trace variant id from the set of remaining
+        Optional<ActivityBasedTotallyOrderedEventLogTraceVariant> nextVariant = this.remainingTraceVariants.stream().findFirst();
+        if (nextVariant.isPresent()) {
+            this.traceVariant = nextVariant.get();
+            this.windowCount = this.traceVariant.getCardinality();
+            this.position = 0;
+            this.window = new LinkedList<>();
+            this.remainingTraceVariants.remove(this.traceVariant);
+        }
+    }
 
-        this.traceVariant = this.log.getTraceVariant(traceVariantId); // get trace variant for the id
-        this.windowCount = log.getTraceVariantCount(traceVariant);
-        this.position = 0;
-        this.window = new LinkedList<>();
+    public ActivityBasedTotallyOrderedEventLogTraceVariant currentWindowParentSequence() {
+        return traceVariant;
     }
 }

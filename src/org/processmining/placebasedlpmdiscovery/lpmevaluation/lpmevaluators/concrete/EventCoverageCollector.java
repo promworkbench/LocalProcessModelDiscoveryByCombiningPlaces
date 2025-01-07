@@ -3,7 +3,6 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.con
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMCollector;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventCoverageEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
@@ -28,10 +27,11 @@ public class EventCoverageCollector implements WindowLPMCollector<EventCoverageE
         for (int i=0;i<lpmTemporaryWindowInfo.getFiringSequence().size();++i) {
             String activity = lpmTemporaryWindowInfo.getFiringSequence().get(i);
             if (!result.isLastCoveredEvent(activity,
-                    lpmTemporaryWindowInfo.getTraceVariantId(),
+                    lpmTemporaryWindowInfo.getTraceVariant(),
                     lpmTemporaryWindowInfo.getReplayedEventsIndices().get(i))) {
                 result.updateCoveredEventsCount(activity, lpmTemporaryWindowInfo.getWindowCount());
-                result.updateLastCoveredEvent(activity, lpmTemporaryWindowInfo.getTraceVariantId(), lpmTemporaryWindowInfo.getReplayedEventsIndices().get(i));
+                result.updateLastCoveredEvent(activity, lpmTemporaryWindowInfo.getTraceVariant(),
+                        lpmTemporaryWindowInfo.getReplayedEventsIndices().get(i));
             }
         }
 

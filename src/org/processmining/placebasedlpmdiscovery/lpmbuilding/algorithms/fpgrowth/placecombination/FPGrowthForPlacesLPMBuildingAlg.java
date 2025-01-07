@@ -88,12 +88,12 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
 
         // traverse
         int maxWindowSize = parameters.getLpmProximity(); // max window size
-        WindowLogTraversal traversal = new WindowLogTraversal(integerMappedLog, maxWindowSize); // traversal
+        WindowLogTraversal traversal = new WindowLogTraversal(log, maxWindowSize); // traversal
         WindowLPMTree localTree = new WindowLPMTree(maxWindowSize); // window tree
         while (traversal.hasNext()) {
             WindowInfo windowInfo = traversal.next(); // next window
 
-            windowTotalCounter.update(windowInfo.getWindow(), windowInfo.getWindowCount()); // update window counter
+            windowTotalCounter.update(windowInfo.getIntWindow(), windowInfo.getWindowCount()); // update window counter
 
             if (windowInfo.getStartPos() == 0 && windowInfo.getEndPos() == 0) { // new trace variant new WindowLPMTree
                 localTree = new WindowLPMTree(maxWindowSize);
@@ -106,7 +106,7 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
 
 
             // process the window (only pairs with the last event need to be processed)
-            List<Integer> window = windowInfo.getWindow();
+            List<Integer> window = windowInfo.getIntWindow();
             int newEvent = window.get(window.size() - 1);
             for (int i = 0; i < window.size() - 1; ++i) { // iterate through the first n-1 events in the window
                 // get places and paths for addition
@@ -124,7 +124,7 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
 
             // transfer built local process models to the main tree
             LPMTemporaryWindowInfoCreator lpmTempInfoCreator = new LPMTemporaryWindowInfoCreator(windowInfo,
-                    integerMappedLog);
+                    integerMappedLog, traversal.currentWindowParentSequence());
             addLocalTreeToMainTree(localTree, mainTree, parameters,
                     lpmTempInfoCreator, integerMappedLog.getMapping(), places);
         }
