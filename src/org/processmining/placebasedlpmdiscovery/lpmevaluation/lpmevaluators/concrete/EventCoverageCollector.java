@@ -20,12 +20,12 @@ public class EventCoverageCollector implements WindowLPMCollector<EventCoverageE
 
         EventCoverageEvaluationResult result = (EventCoverageEvaluationResult) existingEvaluation;
 
-        if (lpmTemporaryWindowInfo.getFiringSequence().size() != lpmTemporaryWindowInfo.getReplayedEventsIndices().size()) {
+        if (lpmTemporaryWindowInfo.getActivityFiringSequence().size() != lpmTemporaryWindowInfo.getReplayedEventsIndices().size()) {
             System.out.println("Something is wrong");
         }
 
-        for (int i=0;i<lpmTemporaryWindowInfo.getFiringSequence().size();++i) {
-            String activity = lpmTemporaryWindowInfo.getFiringSequence().get(i);
+        for (int i=0;i<lpmTemporaryWindowInfo.getActivityFiringSequence().size();++i) {
+            String activity = lpmTemporaryWindowInfo.getActivityFiringSequence().get(i).getName();
             if (!result.isLastCoveredEvent(activity,
                     lpmTemporaryWindowInfo.getTraceVariant(),
                     lpmTemporaryWindowInfo.getReplayedEventsIndices().get(i))) {

@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class TraceSupportEvaluationResult extends SimpleEvaluationResult {
 
-    private final Map<EventLogTraceVariant, Integer> coveredTraces;
+    private final Map<EventLogTraceVariant<?>, Integer> coveredTraces;
     private int totalTraceCount;
 
     public TraceSupportEvaluationResult(LocalProcessModel lpm) {
@@ -46,7 +46,7 @@ public class TraceSupportEvaluationResult extends SimpleEvaluationResult {
         return Objects.hash(totalTraceCount, coveredTraces);
     }
 
-    public void addTraces(EventLogTraceVariant traceVariant, int windowMultiplicity) {
+    public void addTraces(EventLogTraceVariant<?> traceVariant, int windowMultiplicity) {
         this.coveredTraces.put(traceVariant, windowMultiplicity);
     }
 }

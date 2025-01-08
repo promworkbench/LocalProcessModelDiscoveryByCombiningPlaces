@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class EventCoverageEvaluationResult implements LPMEvaluationResult {
     // last event covered map for each transition (doesn't support duplicates at this point) to avoid repetition
-    private final Map<String, Pair<EventLogTraceVariant, Integer>> lastCoveredEvents;
+    private final Map<String, Pair<EventLogTraceVariant<?>, Integer>> lastCoveredEvents;
     // count of covered events for each transition (doesn't support duplicates at this point)
     private final Map<String, Integer> coveredEventsCount;
     private Map<String, Integer> eventCountPerActivity;
@@ -47,8 +47,8 @@ public class EventCoverageEvaluationResult implements LPMEvaluationResult {
         return StandardLPMEvaluationResultId.EventCoverageEvaluationResult;
     }
 
-    public boolean isLastCoveredEvent(String activity, EventLogTraceVariant traceVariant, Integer eventPos) {
-        Pair<EventLogTraceVariant, Integer> eventId = this.lastCoveredEvents.get(activity);
+    public boolean isLastCoveredEvent(String activity, EventLogTraceVariant<?> traceVariant, Integer eventPos) {
+        Pair<EventLogTraceVariant<?>, Integer> eventId = this.lastCoveredEvents.get(activity);
         return eventId != null && eventId.getLeft().equals(traceVariant) && eventId.getRight().equals(eventPos);
     }
 
@@ -56,7 +56,7 @@ public class EventCoverageEvaluationResult implements LPMEvaluationResult {
         this.coveredEventsCount.put(activity, this.coveredEventsCount.get(activity) + count);
     }
 
-    public void updateLastCoveredEvent(String activity, EventLogTraceVariant traceVariant, Integer eventPos) {
+    public void updateLastCoveredEvent(String activity, EventLogTraceVariant<?> traceVariant, Integer eventPos) {
         this.lastCoveredEvents.put(activity, new ImmutablePair<>(traceVariant, eventPos));
     }
 

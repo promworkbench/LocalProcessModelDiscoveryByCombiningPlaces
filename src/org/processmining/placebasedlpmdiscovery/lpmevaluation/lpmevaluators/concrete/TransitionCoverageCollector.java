@@ -3,11 +3,13 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.con
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.StandardLPMEvaluatorId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMCollector;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.TransitionCoverageEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
+
+import java.util.stream.Collectors;
 
 public class TransitionCoverageCollector implements WindowLPMCollector<TransitionCoverageEvaluationResult> {
     @Override
@@ -21,7 +23,7 @@ public class TransitionCoverageCollector implements WindowLPMCollector<Transitio
 
         TransitionCoverageEvaluationResult result = (TransitionCoverageEvaluationResult) existingEvaluation;
         result.updateTransitionCoverageCountMap(
-                lpmTemporaryWindowInfo.getFiringSequence(),
+                lpmTemporaryWindowInfo.getActivityFiringSequence().stream().map(Activity::getName).collect(Collectors.toList()),
                 lpmTemporaryWindowInfo.getWindow(),
                 lpmTemporaryWindowInfo.getWindowCount()
         );
