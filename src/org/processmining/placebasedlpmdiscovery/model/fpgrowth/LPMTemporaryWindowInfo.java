@@ -60,10 +60,6 @@ public class LPMTemporaryWindowInfo {
         return usedPassages;
     }
 
-    public List<String> getFiringSequence() {
-        return firingSequence.stream().map(this.reverseLabelMap::get).collect(Collectors.toList());
-    }
-
     public Set<Pair<String, String>> getUsedPassages() {
         return usedPassages.stream()
                 .map(p -> new Pair<>(this.reverseLabelMap.get(p.getFirst()),
