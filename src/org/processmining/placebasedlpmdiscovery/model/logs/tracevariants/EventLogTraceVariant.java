@@ -1,10 +1,11 @@
 package org.processmining.placebasedlpmdiscovery.model.logs.tracevariants;
 
+import org.processmining.placebasedlpmdiscovery.model.exporting.gson.GsonSerializable;
 import org.processmining.placebasedlpmdiscovery.model.logs.traces.EventLogTrace;
 
 import java.util.Collection;
 
-public interface EventLogTraceVariant<ELEMENT extends EventLogTraceVariantElement> {
+public interface EventLogTraceVariant<ELEMENT extends EventLogTraceVariantElement> extends GsonSerializable {
 
     int getCardinality();
 

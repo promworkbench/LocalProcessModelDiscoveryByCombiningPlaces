@@ -1,5 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.model.logs.activities;
 
-public interface ActivityId {
+import org.processmining.placebasedlpmdiscovery.model.exporting.gson.GsonSerializable;
+
+public interface ActivityId extends GsonSerializable {
 
 }

@@ -230,6 +230,7 @@ public class ReplayableLocalProcessModel {
 
     /**
      * Calculate the used passages after firing the latest transition
+     *
      * @param transition: the fired transition
      * @return the set of used passages
      */
@@ -323,6 +324,47 @@ public class ReplayableLocalProcessModel {
         return silentFiresCount;
     }
 
+    public ReplayableLocalProcessModel revert() {
+        ReplayableLocalProcessModel reverted = new ReplayableLocalProcessModel();
+        for (Integer constraintId : this.getConstraintMap().keySet()) {
+            Constraint constraint = this.constraintMap.get(constraintId);
+            Set<Integer> haveAsInputConstraint = this.getInputConstraints().entrySet().stream()
+                    .filter(entry -> entry.getValue().contains(constraintId))
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toSet());
+            Set<Integer> haveAsOutputConstraint = this.getOutputConstraints().entrySet().stream()
+                    .filter(entry -> entry.getValue().contains(constraintId))
+                    .map(Map.Entry::getKey)
+                    .collect(Collectors.toSet());
+            reverted.addConstraint(constraint.getId(), constraint.getNumTokens(), haveAsOutputConstraint,
+                    haveAsInputConstraint);
+        }
+        return reverted;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        ReplayableLocalProcessModel that = (ReplayableLocalProcessModel) o;
+        return constraintIdentifier == that.constraintIdentifier && hasFired == that.hasFired
+                && silentFiresCount == that.silentFiresCount && Objects.equals(constraintMap, that.constraintMap)
+                && Objects.equals(inputConstraints, that.inputConstraints)
+                && Objects.equals(outputConstraints, that.outputConstraints)
+                && Objects.equals(transitions, that.transitions)
+                && Objects.equals(invisibleTransitions, that.invisibleTransitions)
+                && Objects.equals(firingSequence, that.firingSequence)
+                && Objects.equals(usedPassages, that.usedPassages)
+                && Objects.equals(usedConstraints, that.usedConstraints)
+                && Objects.equals(invisibleFired, that.invisibleFired);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(constraintIdentifier, constraintMap, inputConstraints, outputConstraints, transitions,
+                invisibleTransitions, hasFired, firingSequence, usedPassages, usedConstraints, invisibleFired,
+                silentFiresCount);
+    }
+
     @Override
     public String toString() {
         return "ReplayableLocalProcessModel{" +
@@ -333,6 +375,9 @@ public class ReplayableLocalProcessModel {
                 '}';
     }
 
+    public int getNumTokens(Integer constraintId) {
+        return this.constraintMap.get(constraintId).getNumTokens();
+    }
 }
 
 class Constraint {

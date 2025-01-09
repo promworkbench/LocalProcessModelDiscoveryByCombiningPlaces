@@ -12,6 +12,11 @@ import org.processmining.placebasedlpmdiscovery.model.exporting.gson.adapters.LP
 import org.processmining.placebasedlpmdiscovery.model.exporting.gson.deserializers.LPMAdditionalInfoDeserializer;
 import org.processmining.placebasedlpmdiscovery.model.exporting.gson.deserializers.LPMEvaluationResultIdDeserializer;
 import org.processmining.placebasedlpmdiscovery.model.exporting.gson.instancecreators.PairInstanceCreator;
+import org.processmining.placebasedlpmdiscovery.model.logs.Event;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.ActivityId;
+import org.processmining.placebasedlpmdiscovery.model.logs.traces.EventLogTrace;
+import org.processmining.placebasedlpmdiscovery.model.logs.tracevariants.EventLogTraceVariant;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummary;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.serialization.AttributeSummaryAdapter;
 
@@ -28,6 +33,12 @@ public class JsonImporter<T> implements Importer<T> {
                 .registerTypeAdapter(LPMEvaluationResultId.class, new LPMEvaluationResultIdDeserializer())
                 .registerTypeAdapter(AttributeSummary.class, new AttributeSummaryAdapter())
                 .registerTypeAdapter(LPMDiscoveryResult.class, new LPMDiscoveryResultAdapter())
+                .registerTypeAdapter(Pair.class, new PairInstanceCreator())
+                .registerTypeAdapter(ActivityId.class, new GeneralInterfaceAdapter<ActivityId>())
+                .registerTypeAdapter(Activity.class, new GeneralInterfaceAdapter<Activity>())
+                .registerTypeAdapter(Event.class, new GeneralInterfaceAdapter<Event>())
+                .registerTypeAdapter(EventLogTrace.class, new GeneralInterfaceAdapter<EventLogTrace<?>>())
+                .registerTypeAdapter(EventLogTraceVariant.class, new GeneralInterfaceAdapter<EventLogTraceVariant<?>>());
                 .registerTypeAdapter(Pair.class, new PairInstanceCreator())
                 .registerTypeAdapter(ClusteringConfig.class, new GeneralInterfaceAdapter<ClusteringConfig>());
         Gson gson = gsonBuilder.create();

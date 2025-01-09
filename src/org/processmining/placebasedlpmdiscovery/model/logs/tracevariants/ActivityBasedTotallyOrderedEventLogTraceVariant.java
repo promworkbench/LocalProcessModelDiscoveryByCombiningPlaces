@@ -9,7 +9,7 @@ import java.util.*;
 public class ActivityBasedTotallyOrderedEventLogTraceVariant implements TotallyOrderedEventLogTraceVariant<Activity> {
 
     private final List<Activity> key;
-    private final Collection<EventLogTrace<?>> traces;
+    private final transient Collection<EventLogTrace<?>> traces;
 
     public ActivityBasedTotallyOrderedEventLogTraceVariant(List<Activity> activities) {
         this.key = Collections.unmodifiableList(activities);
@@ -51,4 +51,5 @@ public class ActivityBasedTotallyOrderedEventLogTraceVariant implements TotallyO
     public int hashCode() {
         return Objects.hashCode(key);
     }
+
 }

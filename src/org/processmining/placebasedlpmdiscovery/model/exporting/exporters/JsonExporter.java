@@ -3,10 +3,14 @@ package org.processmining.placebasedlpmdiscovery.model.exporting.exporters;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonWriter;
-import org.processmining.placebasedlpmdiscovery.grouping.ClusteringConfig;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.exporting.gson.adapters.GeneralInterfaceAdapter;
 import org.processmining.placebasedlpmdiscovery.model.exporting.gson.adapters.LPMDiscoveryResultAdapter;
+import org.processmining.placebasedlpmdiscovery.model.logs.Event;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.ActivityId;
+import org.processmining.placebasedlpmdiscovery.model.logs.traces.EventLogTrace;
+import org.processmining.placebasedlpmdiscovery.model.logs.tracevariants.EventLogTraceVariant;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummary;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.serialization.AttributeSummaryAdapter;
 import org.python.google.common.reflect.TypeToken;
@@ -24,7 +28,11 @@ public class JsonExporter<T> implements Exporter<T> {
                 .enableComplexMapKeySerialization()
                 .registerTypeAdapter(LPMDiscoveryResult.class, new LPMDiscoveryResultAdapter())
                 .registerTypeAdapter(AttributeSummary.class, new AttributeSummaryAdapter())
-                .registerTypeAdapter(ClusteringConfig.class, new GeneralInterfaceAdapter<ClusteringConfig>())
+                .registerTypeAdapter(ActivityId.class, new GeneralInterfaceAdapter<ActivityId>())
+                .registerTypeAdapter(Activity.class, new GeneralInterfaceAdapter<Activity>())
+                .registerTypeAdapter(Event.class, new GeneralInterfaceAdapter<Event>())
+                .registerTypeAdapter(EventLogTrace.class, new GeneralInterfaceAdapter<EventLogTrace<?>>())
+                .registerTypeAdapter(EventLogTraceVariant.class, new GeneralInterfaceAdapter<EventLogTraceVariant<?>>())
                 .create();
         try (JsonWriter writer = new JsonWriter(new OutputStreamWriter(os))) {
             gson.toJson(object, new TypeToken<LPMDiscoveryResult>(){}.getType(), writer);
