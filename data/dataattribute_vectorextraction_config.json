@@ -1,16 +1,3 @@
-[
-  {
-    "runnerInput": {
-      "inputs": {
-        "eventlog": ".\\data\\bpi2012_res10939.xes",
-        "lpms": ".\\data\\bpi2012_res10939_lpms.json"
-      }
-    },
-    "runnerOutput": {
-      "outputs": {
-        "data_attribute_vectors": ".\\data\\bpi2012_res10939_datavectors.csv"
-      }
-    },
-    "attributes": ["time:timestamp"]
-  }
-]
+version https://git-lfs.github.com/spec/v1
+oid sha256:4f73676f832cc20e38341731edcb8683bed2a98d9c6b49e51cfb7f5ffb829f63
+size 358

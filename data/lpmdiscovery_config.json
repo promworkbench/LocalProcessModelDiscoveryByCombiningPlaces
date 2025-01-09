@@ -1,15 +1,3 @@
-[
-  {
-    "runnerInput": {
-      "inputs": {
-        "eventlog": "C:\\Users\\peeva\\My\\research\\resources\\quick_input\\RTFM.xes",
-        "places": "C:\\Users\\peeva\\My\\research\\resources\\quick_input\\RTFM.pnml"
-      }
-    },
-    "runnerOutput": {
-      "outputs": {
-        "lpms": "C:\\Users\\peeva\\My\\research\\resources\\quick_input\\RTFM.json"
-      }
-    }
-  }
-]
+version https://git-lfs.github.com/spec/v1
+oid sha256:5844e21300aa9f4fd771264ffc724776f7a0c79b7d563d72a73c1006136847b6
+size 392

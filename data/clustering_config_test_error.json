@@ -1,31 +1,3 @@
-[
-  {
-    "runnerInput": {
-      "inputs": {
-        "eventlog": ".\\data\\bpi2012_res10939.xes",
-        "lpms": "C:\\Users\\peeva\\Downloads\\LPM_testdata_error\\lpms100.json"
-      }
-    },
-    "runnerOutput": {
-      "outputs": {
-        "clustering": "C:\\Users\\peeva\\Downloads\\LPM_testdata_error\\clustering.csv"
-      }
-    },
-    "clusteringConfig": {
-      "identifier": "hierarchical-complete",
-      "clusteringAlgorithm": "Hierarchical",
-      "clusteringConfig": {
-        "num_clusters": "10",
-        "linkage": "complete"
-      },
-      "modelDistanceConfig": {
-        "distanceMethod": "Precomputed",
-        "filename": "C:\\Users\\peeva\\Downloads\\LPM_testdata_error\\distance100.csv",
-        "originalConfig": {
-          "distanceMethod": "DataAttribute",
-          "attributes": ["SemActDuration","TraceDurationPedaAct", "TraceDurationSemanticAct","TraceDurationPedaActConcept", "TraceDurationConcept", "Apply", "Assess_A", "Assess_P", "Exercise_A", "Exercise_P", "Study_P"]
-        }
-      }
-    }
-  }
-]
+version https://git-lfs.github.com/spec/v1
+oid sha256:e9d589c00ca9d9bc2cc002a85a0eecd8695736428fa59ead2eaf8fcf584d0b65
+size 1062
