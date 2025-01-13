@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 public class WindowInfo implements IWindowInfo {
     private final ArrayList<Activity> window;
     private final int windowCount;
-    private final int startPos;
-    private final int endPos;
+    private final int startPos; // inclusive
+    private final int endPos; // inclusive
 
     public WindowInfo(ArrayList<Activity> window, int windowCount, int startPos, int endPos) {
         this.window = window;
@@ -43,7 +43,7 @@ public class WindowInfo implements IWindowInfo {
 
     @Override
     public boolean hasPreviousWindow() {
-        return false;
+        return startPos + endPos != 0;
     }
 
     public int getWindowCount() {
