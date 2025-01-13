@@ -10,18 +10,18 @@ import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Replayer {
+public class ReplayerForReplayableLocalProcessModel {
 
     private final Map<LinkedList<Integer>, Boolean> sequenceCanBeReplayedMap;
 
     private final ReplayableLocalProcessModel lpm;
 
-    public Replayer(LocalProcessModel lpm) {
+    public ReplayerForReplayableLocalProcessModel(LocalProcessModel lpm) {
         this.sequenceCanBeReplayedMap = new HashMap<>();
         this.lpm = LocalProcessModelUtils.convertToReplayable(lpm);
     }
 
-    public Replayer(ReplayableLocalProcessModel lpm) {
+    public ReplayerForReplayableLocalProcessModel(ReplayableLocalProcessModel lpm) {
         this.sequenceCanBeReplayedMap = new HashMap<>();
         this.lpm = lpm;
     }
