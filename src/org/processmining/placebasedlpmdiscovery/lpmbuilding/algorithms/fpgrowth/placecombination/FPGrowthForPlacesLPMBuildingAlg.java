@@ -152,7 +152,7 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
 
         // extend with concurrency
         LPMFromBranchCombinationValidityChecker lpmValidityChecker =
-                new LPMFromBranchCombinationValidityChecker(labelMapping.getLabelMap());
+                new LPMFromBranchCombinationValidityChecker();
         addBranchCombinations(lpms, parameters.getConcurrencyCardinality(), lpmValidityChecker, lpmTempInfoCreator);
 
 
@@ -198,7 +198,7 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
         for (int i = from; i < lpms.size(); ++i) {
             // first check if considering the two temp infos it makes sense to merge the two models
             LPMTemporaryWindowInfo iLpmTemporaryWindowInfo = lpmWithTemporaryInfo.get(lpms.get(i));
-            if (!lpmValidityChecker.shouldMerge(lpmTemporaryWindowInfo, iLpmTemporaryWindowInfo)) {
+            if (lpmValidityChecker.shouldNotMerge(lpmTemporaryWindowInfo, iLpmTemporaryWindowInfo)) {
                 continue;
             }
 
