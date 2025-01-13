@@ -14,13 +14,16 @@ public class Replayer {
 
     private final Map<LinkedList<Integer>, Boolean> sequenceCanBeReplayedMap;
 
-    private final LocalProcessModel lpm;
-    private final Map<String, Integer> labelMapping;
+    private final ReplayableLocalProcessModel lpm;
 
-    public Replayer(LocalProcessModel lpm, Map<String, Integer> labelMapping) {
+    public Replayer(LocalProcessModel lpm) {
+        this.sequenceCanBeReplayedMap = new HashMap<>();
+        this.lpm = LocalProcessModelUtils.convertToReplayable(lpm);
+    }
+
+    public Replayer(ReplayableLocalProcessModel lpm) {
         this.sequenceCanBeReplayedMap = new HashMap<>();
         this.lpm = lpm;
-        this.labelMapping = labelMapping;
     }
 
     public boolean canReplay(LinkedList<Integer> sequence, ReplayerType type) {
@@ -44,12 +47,11 @@ public class Replayer {
     private boolean canReplaySuffix(LinkedList<Integer> sequence) {
         LinkedList<Integer> reversed = new LinkedList<>(sequence);
         Collections.reverse(reversed);
-        return getLPMAfterReplay(reversed, LocalProcessModelUtils.convertToReplayable(
-                LocalProcessModelUtils.revertLocalProcessModel(this.lpm), this.labelMapping)) != null;
+        return getLPMAfterReplay(reversed, this.lpm.revert()) != null;
     }
 
     private boolean canReplayPrefix(LinkedList<Integer> sequence) {
-        return getLPMAfterReplay(sequence, LocalProcessModelUtils.convertToReplayable(this.lpm, this.labelMapping)) != null;
+        return getLPMAfterReplay(sequence, this.lpm) != null;
     }
 
     /**
@@ -76,16 +78,14 @@ public class Replayer {
     }
 
     private List<Integer> replayPrefix(LinkedList<Integer> sequence) {
-        ReplayableLocalProcessModel lpm = getLPMAfterReplay(sequence, LocalProcessModelUtils
-                .convertToReplayable(this.lpm, this.labelMapping));
+        ReplayableLocalProcessModel lpm = getLPMAfterReplay(sequence, this.lpm);
         return lpm != null ? lpm.getFiringSequence() : null;
     }
 
     private List<Integer> replaySuffix(LinkedList<Integer> sequence) {
         LinkedList<Integer> reversed = new LinkedList<>(sequence);
         Collections.reverse(reversed);
-        ReplayableLocalProcessModel lpm = getLPMAfterReplay(reversed, LocalProcessModelUtils
-                .convertToReplayable(LocalProcessModelUtils.revertLocalProcessModel(this.lpm), this.labelMapping));
+        ReplayableLocalProcessModel lpm = getLPMAfterReplay(reversed, this.lpm.revert());
         List<Integer> reversedFiringSequence = lpm != null ? lpm.getFiringSequence() : null;
         if (reversedFiringSequence != null)
             Collections.reverse(reversedFiringSequence);
@@ -136,14 +136,12 @@ public class Replayer {
     }
 
     public boolean canReplay(List<Integer> sequence) {
-        return canReplay(sequence, LocalProcessModelUtils
-                .convertToReplayable(this.lpm, this.labelMapping));
+        return canReplay(sequence, this.lpm);
     }
 
     public boolean canReplayActivitySequence(List<Activity> sequence) {
         return canReplay(sequence.stream().map(a -> ActivityCache.getInstance().getIntForActivityId(a.getId()))
-                        .collect(Collectors.toList()),
-                LocalProcessModelUtils.convertToReplayable(this.lpm));
+                        .collect(Collectors.toList()), this.lpm);
     }
 
     public boolean canReplay(List<Integer> sequence, ReplayableLocalProcessModel rlpm) {
