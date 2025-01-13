@@ -3,11 +3,12 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation;
 import com.google.common.collect.Sets;
 import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.model.SimplePlace;
+import org.processmining.placebasedlpmdiscovery.replayer.ExecutableLPMModel;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ReplayableLocalProcessModel {
+public class ReplayableLocalProcessModel implements ExecutableLPMModel {
     // TODO: Maybe between the transitions and constraints, weights can be added
     // TODO: It doesn't support duplicate transitions
     private int constraintIdentifier;

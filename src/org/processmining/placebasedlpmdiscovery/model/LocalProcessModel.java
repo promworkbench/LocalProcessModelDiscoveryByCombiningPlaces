@@ -1,7 +1,11 @@
 package org.processmining.placebasedlpmdiscovery.model;
 
 import org.processmining.models.graphbased.NodeID;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.ActivityCache;
+import org.processmining.placebasedlpmdiscovery.replayer.ExecutableLPMModel;
+import org.processmining.placebasedlpmdiscovery.replayer.LPMModel;
 
 import java.io.Serializable;
 import java.util.*;
@@ -13,7 +17,7 @@ import java.util.stream.Collectors;
  * The LocalProcessModel class is used to represent the logic for local process models. It contains places,
  * transitions and arcs between them.
  */
-public class LocalProcessModel implements Serializable, TextDescribable {
+public class LocalProcessModel implements Serializable, TextDescribable, LPMModel {
     private static final long serialVersionUID = -2415080755970445804L;
 
     private String id;
@@ -227,5 +231,37 @@ public class LocalProcessModel implements Serializable, TextDescribable {
 
     public Place getPlace(NodeID id) {
         return null;
+    }
+
+    @Override
+    public ExecutableLPMModel toExecutable() {
+        Set<Integer> transitionsMapped = this.getTransitions()
+                .stream()
+                .map(t -> ActivityCache.getInstance().getIntForActivityId(
+                        ActivityCache.getInstance().getActivity(t.getLabel()).getId()))
+                .collect(Collectors.toSet());
+        Set<Integer> invisibleTransitions = this.getTransitions()
+                .stream()
+                .filter(Transition::isInvisible)
+                .map(t -> ActivityCache.getInstance().getIntForActivityId(
+                        ActivityCache.getInstance().getActivity(t.getLabel()).getId()))
+                .collect(Collectors.toSet());
+
+        ReplayableLocalProcessModel replayable = new ReplayableLocalProcessModel(transitionsMapped, invisibleTransitions);
+        for (Place p : this.getPlaces()) {
+            Set<Integer> inputTransitionIds = p.getInputTransitions()
+                    .stream()
+                    .map(t -> ActivityCache.getInstance().getIntForActivityId(
+                            ActivityCache.getInstance().getActivity(t.getLabel()).getId()))
+                    .collect(Collectors.toSet());
+            Set<Integer> outputTransitionIds = p.getOutputTransitions()
+                    .stream()
+                    .map(t ->ActivityCache.getInstance().getIntForActivityId(
+                            ActivityCache.getInstance().getActivity(t.getLabel()).getId()))
+                    .collect(Collectors.toSet());
+            replayable.addConstraint(p.getId(), p.getNumTokens(), outputTransitionIds, inputTransitionIds);
+        }
+
+        return replayable;
     }
 }
