@@ -4,7 +4,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalPro
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
 import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
-import org.processmining.placebasedlpmdiscovery.replayer.ReplayerForReplayableLocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.replayer.LPMModelReplayer;
 
 import java.util.HashSet;
 import java.util.List;
@@ -16,12 +16,12 @@ public class LPMFromBranchCombinationValidityChecker {
     }
 
     public boolean checkValidity(LocalProcessModel lpm, LPMTemporaryWindowInfo tempInfo) {
-        ReplayerForReplayableLocalProcessModel replayer = new ReplayerForReplayableLocalProcessModel(lpm);
+        LPMModelReplayer replayer = LPMModelReplayer.getInstance(lpm);
         return replayer.canReplayActivitySequence(tempInfo.getActivityFiringSequence());
     }
 
     public boolean checkValidity(ReplayableLocalProcessModel lpm, List<Activity> firingSequence) {
-        ReplayerForReplayableLocalProcessModel replayer = new ReplayerForReplayableLocalProcessModel(lpm);
+        LPMModelReplayer replayer = LPMModelReplayer.getInstance(lpm);
         return replayer.canReplayActivitySequence(firingSequence);
     }
 
