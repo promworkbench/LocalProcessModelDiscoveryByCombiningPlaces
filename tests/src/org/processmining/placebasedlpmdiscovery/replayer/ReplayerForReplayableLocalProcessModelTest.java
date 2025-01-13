@@ -7,7 +7,7 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.exporting.importers.JsonImporter;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
-import org.processmining.placebasedlpmdiscovery.replayer.ReplayerForReplayableLocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.replayer.ReplayableLocalProcessModelReplayer;
 import org.python.google.common.reflect.TypeToken;
 import src.org.processmining.mockobjects.MockLPMs;
 import src.org.processmining.mockobjects.MockPlaces;
@@ -28,7 +28,7 @@ public class ReplayerForReplayableLocalProcessModelTest {
         Place p = MockPlaces.getSequencePlace_ab();
 
         // act
-        Set<List<String>> actualPaths = ReplayerForReplayableLocalProcessModel.findAllPaths(10, new LocalProcessModel(p));
+        Set<List<String>> actualPaths = ReplayableLocalProcessModelReplayer.findAllPaths(10, new LocalProcessModel(p));
 
         // set expected result
         Set<List<String>> expectedPaths = new HashSet<>(Collections.singletonList(Arrays.asList("a", "b")));
@@ -43,7 +43,7 @@ public class ReplayerForReplayableLocalProcessModelTest {
         Place p = MockPlaces.getSequencePlace_ab();
 
         // act
-        Set<List<String>> actualPaths = ReplayerForReplayableLocalProcessModel.findAllPaths(1, new LocalProcessModel(p));
+        Set<List<String>> actualPaths = ReplayableLocalProcessModelReplayer.findAllPaths(1, new LocalProcessModel(p));
 
         // set expected result
         Set<List<String>> expectedPaths = new HashSet<>();
@@ -58,7 +58,7 @@ public class ReplayerForReplayableLocalProcessModelTest {
         LocalProcessModel lpm = MockLPMs.getSequenceLPM_abc();
 
         // act
-        Set<List<String>> actualPaths = ReplayerForReplayableLocalProcessModel.findAllPaths(10, lpm);
+        Set<List<String>> actualPaths = ReplayableLocalProcessModelReplayer.findAllPaths(10, lpm);
 
         // set expected result
         Set<List<String>> expectedPaths = new HashSet<>(Collections.singletonList(Arrays.asList("a", "b", "c")));
@@ -80,7 +80,7 @@ public class ReplayerForReplayableLocalProcessModelTest {
         // act
         Map<String, Set<List<String>>> actualPaths = new HashMap<>();
         for (LocalProcessModel lpm : lpmResult.getAllLPMs()) {
-            actualPaths.put(lpm.getId(), ReplayerForReplayableLocalProcessModel.findAllPaths(10, lpm));
+            actualPaths.put(lpm.getId(), ReplayableLocalProcessModelReplayer.findAllPaths(10, lpm));
         }
 
         // read expected paths

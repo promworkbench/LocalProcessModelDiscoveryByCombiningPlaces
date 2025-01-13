@@ -5,7 +5,7 @@ import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistance;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.undecided.Utils;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
-import org.processmining.placebasedlpmdiscovery.replayer.ReplayerForReplayableLocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.replayer.ReplayableLocalProcessModelReplayer;
 
 import java.util.HashSet;
 import java.util.List;
@@ -20,10 +20,10 @@ public class EFOverlapModelDistance implements ModelDistance {
                 lpm2.getTransitions().stream().map(Transition::getLabel).collect(Collectors.toSet()));
         Map<String, Integer> trLabelsMap = Utils.getStringsToIntegerMap(trLabels);
 
-        List<List<Integer>> paths1 = ReplayerForReplayableLocalProcessModel.findAllPaths(10, lpm1).stream()
+        List<List<Integer>> paths1 = ReplayableLocalProcessModelReplayer.findAllPaths(10, lpm1).stream()
                 .map(path -> path.stream().map(trLabelsMap::get).collect(Collectors.toList()))
                 .collect(Collectors.toList());
-        List<List<Integer>> paths2 = ReplayerForReplayableLocalProcessModel.findAllPaths(10, lpm2).stream()
+        List<List<Integer>> paths2 = ReplayableLocalProcessModelReplayer.findAllPaths(10, lpm2).stream()
                 .map(path -> path.stream().map(trLabelsMap::get).collect(Collectors.toList()))
                 .collect(Collectors.toList());
 
@@ -46,10 +46,10 @@ public class EFOverlapModelDistance implements ModelDistance {
         }
         for (int i = 0; i < lpms.size(); ++i) { // fill the rest
             for (int j = 0; j < i; ++j) {
-                List<List<Integer>> paths1 = ReplayerForReplayableLocalProcessModel.findAllPaths(10, lpms.get(i)).stream()
+                List<List<Integer>> paths1 = ReplayableLocalProcessModelReplayer.findAllPaths(10, lpms.get(i)).stream()
                         .map(path -> path.stream().map(trLabelsMap::get).collect(Collectors.toList()))
                         .collect(Collectors.toList());
-                List<List<Integer>> paths2 = ReplayerForReplayableLocalProcessModel.findAllPaths(10, lpms.get(j)).stream()
+                List<List<Integer>> paths2 = ReplayableLocalProcessModelReplayer.findAllPaths(10, lpms.get(j)).stream()
                         .map(path -> path.stream().map(trLabelsMap::get).collect(Collectors.toList()))
                         .collect(Collectors.toList());
 
