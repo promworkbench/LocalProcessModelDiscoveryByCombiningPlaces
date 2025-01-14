@@ -2,12 +2,14 @@ package org.processmining.placebasedlpmdiscovery.replayer;
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
+import org.processmining.placebasedlpmdiscovery.model.lpmmodels.ExecutableLPMModel;
+import org.processmining.placebasedlpmdiscovery.model.lpmmodels.LPMModel;
 
 import java.util.List;
 
 public interface LPMModelReplayer {
 
-    static LPMModelReplayer getInstance(LPMModel model) {
+    static LPMModelReplayer getInstance(LPMModel<?> model) {
         return getInstance(model.toExecutable());
     }
 
