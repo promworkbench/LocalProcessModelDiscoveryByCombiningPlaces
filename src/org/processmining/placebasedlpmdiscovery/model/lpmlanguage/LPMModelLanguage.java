@@ -1,4 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.model.lpmlanguage;
 
-public interface LPMModelLanguage {
+import org.processmining.placebasedlpmdiscovery.model.lpms.LPMRepresentation;
+
+public interface LPMModelLanguage extends LPMRepresentation {
 }

@@ -1,4 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.model.lpmmodels;
 
-public interface ExecutableLPMModel {
+import org.processmining.placebasedlpmdiscovery.model.lpms.LPMRepresentation;
+
+public interface ExecutableLPMModel extends LPMRepresentation {
 }
