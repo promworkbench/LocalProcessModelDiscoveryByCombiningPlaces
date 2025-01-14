@@ -3,7 +3,7 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation;
 import com.google.common.collect.Sets;
 import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.model.SimplePlace;
-import org.processmining.placebasedlpmdiscovery.replayer.ExecutableLPMModel;
+import org.processmining.placebasedlpmdiscovery.model.lpmmodels.ExecutableLPMModel;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,7 +24,8 @@ public class ReplayableLocalProcessModel implements ExecutableLPMModel {
     private final Set<Pair<Integer, Integer>> usedPassages;
     private final Set<Integer> usedConstraints;
 
-    private final Set<Integer> invisibleFired; // set that is used so that invisible transitions do not create infinite recursion
+    private final Set<Integer> invisibleFired; // set that is used so that invisible transitions do not create
+    // infinite recursion
     private int silentFiresCount;
 
     public ReplayableLocalProcessModel() {
