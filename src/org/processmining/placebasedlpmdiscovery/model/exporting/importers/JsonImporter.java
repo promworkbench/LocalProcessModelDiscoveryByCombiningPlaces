@@ -3,9 +3,11 @@ package org.processmining.placebasedlpmdiscovery.model.exporting.importers;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.apache.commons.lang3.tuple.Pair;
+import org.processmining.placebasedlpmdiscovery.grouping.ClusteringConfig;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.model.exporting.gson.adapters.GeneralInterfaceAdapter;
 import org.processmining.placebasedlpmdiscovery.model.exporting.gson.adapters.LPMDiscoveryResultAdapter;
 import org.processmining.placebasedlpmdiscovery.model.exporting.gson.deserializers.LPMAdditionalInfoDeserializer;
 import org.processmining.placebasedlpmdiscovery.model.exporting.gson.deserializers.LPMEvaluationResultIdDeserializer;
@@ -26,7 +28,8 @@ public class JsonImporter<T> implements Importer<T> {
                 .registerTypeAdapter(LPMEvaluationResultId.class, new LPMEvaluationResultIdDeserializer())
                 .registerTypeAdapter(AttributeSummary.class, new AttributeSummaryAdapter())
                 .registerTypeAdapter(LPMDiscoveryResult.class, new LPMDiscoveryResultAdapter())
-                .registerTypeAdapter(Pair.class, new PairInstanceCreator());
+                .registerTypeAdapter(Pair.class, new PairInstanceCreator())
+                .registerTypeAdapter(ClusteringConfig.class, new GeneralInterfaceAdapter<ClusteringConfig>());
         Gson gson = gsonBuilder.create();
         try(InputStreamReader reader = new InputStreamReader(is)) {
             return gson.fromJson(reader, tClass);

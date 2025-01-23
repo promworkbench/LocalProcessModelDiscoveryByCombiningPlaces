@@ -11,6 +11,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.InputModule;
+import org.processmining.placebasedlpmdiscovery.grouping.ClusteringConfig;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingConfig;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingController;
 import org.processmining.placebasedlpmdiscovery.grouping.serialization.GroupingConfigDeserializer;
@@ -18,8 +19,9 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.results.FromFileLPM
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.dependencyinjection.LPMDistancesDependencyInjectionModule;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.serialization.ModelDistanceConfigDeserializer;
-import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.model.exporting.gson.adapters.GeneralInterfaceAdapter;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerInput;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerOutput;
 import org.processmining.placebasedlpmdiscovery.runners.serialization.RunnerInputAdapter;
@@ -109,7 +111,8 @@ public class ClusteringRunner {
                 .registerTypeAdapter(GroupingConfig.class, new GroupingConfigDeserializer())
                 .registerTypeAdapter(ModelDistanceConfig.class, new ModelDistanceConfigDeserializer())
                 .registerTypeAdapter(RunnerInput.class, new RunnerInputAdapter())
-                .registerTypeAdapter(RunnerOutput.class, new RunnerOutputDeserializer());
+                .registerTypeAdapter(RunnerOutput.class, new RunnerOutputDeserializer())
+                .registerTypeAdapter(ClusteringConfig.class, new GeneralInterfaceAdapter<ClusteringConfig>());
 
         Gson gson = gsonBuilder.create();
         List<ClusteringRunnerConfig> configs = gson.fromJson(
