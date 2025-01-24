@@ -1,7 +1,11 @@
 package org.processmining.placebasedlpmdiscovery.lpmdistances;
 
 import com.google.inject.Inject;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.*;
+import org.deckfour.xes.model.XLog;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistance;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeModelDistanceConfig;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.DataAttributeVectorExtractorFactory;
+import org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes.EuclideanDataAttributeModelDistance;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.MixedModelDistance;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.MixedModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.mixed.WeightedModelDistanceConfig;
@@ -19,6 +23,10 @@ public class ModelDistanceFactory {
     @Inject
     public ModelDistanceFactory(DataAttributeVectorExtractorFactory dataAttributeVectorExtractorFactory) {
         this.dataAttributeVectorExtractorFactory = dataAttributeVectorExtractorFactory;
+    }
+
+    public static ModelDistanceFactory getInstance(XLog log) {
+        return new ModelDistanceFactory(DataAttributeVectorExtractorFactory.getInstance(log));
     }
 
     public ModelDistance getModelDistance(ModelDistanceConfig distanceConfig) {

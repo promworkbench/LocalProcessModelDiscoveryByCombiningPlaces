@@ -14,6 +14,7 @@ import org.processmining.placebasedlpmdiscovery.InputModule;
 import org.processmining.placebasedlpmdiscovery.grouping.ClusteringConfig;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingConfig;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingController;
+import org.processmining.placebasedlpmdiscovery.grouping.GroupingService;
 import org.processmining.placebasedlpmdiscovery.grouping.serialization.GroupingConfigDeserializer;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.results.FromFileLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ClusteringRunner {
+public class LPMClusteringRunner {
 
     public static void main(String[] args) throws Exception {
         if (args.length != 1) {
@@ -60,10 +61,11 @@ public class ClusteringRunner {
 
             System.out.println("LPMs imported");
 
-            GroupingController groupingController = getGroupingController(
-                    config.getClusteringConfig(),
-                    LogUtils.readLogFromFile(config.getInput().get(RunnerInput.EVENT_LOG)));
-            groupingController.groupLPMs(lpms, config.getClusteringConfig());
+            XLog eventLog = LogUtils.readLogFromFile(config.getInput().get(RunnerInput.EVENT_LOG));
+            GroupingService groupingService = GroupingService.getInstance(eventLog);
+            groupingService.groupLPMs(lpms, config.getClusteringConfig());
+//            GroupingController groupingController = getGroupingController(config.getClusteringConfig(), eventLog);
+//            groupingController.groupLPMs(lpms, config.getClusteringConfig());
 
 
             writeClustering(config, lpms);
