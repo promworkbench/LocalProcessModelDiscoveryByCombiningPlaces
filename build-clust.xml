@@ -10,14 +10,9 @@
     <property name="manifest.file" value="${basedir}/META-INF/MANIFEST-clustering.MF"/>
     <property name="lib.dir" value="dist/lib"/>
 
-    <manifestclasspath property="jar.classpath" jarfile="${dist.dir}/lpm-clustering.jar">
-        <classpath>
-            <fileset dir="${lib.dir}" includes="*.jar"/>
-        </classpath>
-    </manifestclasspath>
     <!-- Target for retrieving dependencies -->
     <target name="retrieve">
-        <mkdir dir="/dist/lib"/>  <!-- Ensure lib directory exists -->
+        <mkdir dir="${lib.dir}"/>  <!-- Ensure lib directory exists -->
         <ivy:retrieve pattern="${lib.dir}/[artifact]-[revision].[ext]" />
     </target>
 
@@ -27,7 +22,7 @@
         <javac srcdir="${src.dir}" destdir="${bin.dir}">
             <classpath>
                 <!-- Include all JARs from the lib directory (retrieved by Ivy) -->
-                <fileset dir="dist/lib">
+                <fileset dir="${lib.dir}">
                     <include name="*.jar"/>
                 </fileset>
             </classpath>
@@ -38,6 +33,11 @@
     <!-- Target for creating the JAR file with manifest -->
     <target name="make" depends="retrieve, compile">
         <mkdir dir="${dist.dir}"/>
+        <manifestclasspath property="jar.classpath" jarfile="${dist.dir}/lpm-clustering.jar">
+            <classpath>
+                <fileset dir="${lib.dir}" includes="*.jar"/>
+            </classpath>
+        </manifestclasspath>
 
         <jar jarfile="${dist.dir}/lpm-clustering.jar" basedir="${bin.dir}">
             <manifest>
