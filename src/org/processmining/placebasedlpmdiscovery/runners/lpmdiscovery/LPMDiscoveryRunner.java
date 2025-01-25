@@ -40,6 +40,7 @@ public class LPMDiscoveryRunner {
         for (LPMDiscoveryRunnerConfig config : runnerConfigs) {
             XLog log = LogUtils.readLogFromFile(config.getInput().get("eventlog"));
             LPMDiscoveryResult result = LPMDiscovery.getInstance().from(log);
+            System.out.println(result.getAllLPMs().size());
             result.export(ExporterFactory.createLPMDiscoveryResultExporter(),
                     Files.newOutputStream(Paths.get(config.getOutput().get("lpms"))));
 //            EventLog eventLog = new XLogWrapper(log);

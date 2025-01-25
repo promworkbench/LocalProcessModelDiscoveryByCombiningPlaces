@@ -1,9 +1,917 @@
-8
-{a}|{c}
-{e}|{☐, j, k, h}
-{h, k, j}|{f}
-{c, d, f}|{e}
-{▷}|{s}
-{s}|{b, a}
-{b}|{d}
-{s, a, b, n, c, d, f}|{e, d, c, n, b, a}
+916
+{A_ACCEPTED, A_CANCELLED, ▷}|{A_ACCEPTED, ☐}
+{A_ACCEPTED, A_PREACCEPTED, ▷}|{A_ACCEPTED, ☐}
+{A_ACCEPTED, O_CANCELLED, ▷}|{A_ACCEPTED, ☐}
+{A_ACCEPTED, W_Nabellen incomplete dossiers, ▷}|{A_ACCEPTED, ☐}
+{A_ACCEPTED, W_Valideren aanvraag, ▷}|{A_ACCEPTED, ☐}
+{A_ACCEPTED, ▷}|{A_ACCEPTED, A_CANCELLED, ☐}
+{A_ACCEPTED, ▷}|{A_ACCEPTED, A_PREACCEPTED, ☐}
+{A_ACCEPTED, ▷}|{A_ACCEPTED, O_CANCELLED, ☐}
+{A_ACCEPTED, ▷}|{A_ACCEPTED, W_Nabellen incomplete dossiers, ☐}
+{A_ACCEPTED, ▷}|{A_ACCEPTED, W_Valideren aanvraag, ☐}
+{A_ACCEPTED, ▷}|{A_ACCEPTED, ☐}
+{A_CANCELLED, A_FINALIZED, ▷}|{A_ACCEPTED, ☐}
+{A_FINALIZED, A_PREACCEPTED, ▷}|{A_ACCEPTED, ☐}
+{A_FINALIZED, O_CANCELLED, ▷}|{A_ACCEPTED, ☐}
+{A_FINALIZED, W_Nabellen incomplete dossiers, ▷}|{A_ACCEPTED, ☐}
+{A_FINALIZED, W_Valideren aanvraag, ▷}|{A_ACCEPTED, ☐}
+{A_FINALIZED, ▷}|{A_ACCEPTED, A_CANCELLED, ☐}
+{A_FINALIZED, ▷}|{A_ACCEPTED, A_PREACCEPTED, ☐}
+{A_FINALIZED, ▷}|{A_ACCEPTED, O_CANCELLED, ☐}
+{A_FINALIZED, ▷}|{A_ACCEPTED, W_Nabellen incomplete dossiers, ☐}
+{A_FINALIZED, ▷}|{A_ACCEPTED, W_Valideren aanvraag, ☐}
+{A_FINALIZED, ▷}|{A_ACCEPTED, ☐}
+{O_CANCELLED, O_CREATED, ▷}|{A_ACCEPTED, ☐}
+{O_CANCELLED, O_SELECTED, ▷}|{A_ACCEPTED, ☐}
+{O_CANCELLED, O_SENT, ▷}|{A_ACCEPTED, ☐}
+{O_CREATED, W_Valideren aanvraag, ▷}|{A_ACCEPTED, ☐}
+{O_CREATED, ▷}|{A_ACCEPTED, A_CANCELLED, ☐}
+{O_CREATED, ▷}|{A_ACCEPTED, O_CANCELLED, ☐}
+{O_CREATED, ▷}|{A_ACCEPTED, W_Valideren aanvraag, ☐}
+{O_CREATED, ▷}|{A_ACCEPTED, ☐}
+{O_SELECTED, W_Valideren aanvraag, ▷}|{A_ACCEPTED, ☐}
+{O_SELECTED, ▷}|{A_ACCEPTED, A_CANCELLED, ☐}
+{O_SELECTED, ▷}|{A_ACCEPTED, O_CANCELLED, ☐}
+{O_SELECTED, ▷}|{A_ACCEPTED, W_Valideren aanvraag, ☐}
+{O_SELECTED, ▷}|{A_ACCEPTED, ☐}
+{O_SENT, W_Valideren aanvraag, ▷}|{A_ACCEPTED, ☐}
+{O_SENT, ▷}|{A_ACCEPTED, A_CANCELLED, ☐}
+{O_SENT, ▷}|{A_ACCEPTED, O_CANCELLED, ☐}
+{O_SENT, ▷}|{A_ACCEPTED, W_Valideren aanvraag, ☐}
+{O_SENT, ▷}|{A_ACCEPTED, ☐}
+{A_ACCEPTED}|{A_CANCELLED, A_FINALIZED}
+{A_ACCEPTED, A_CANCELLED}|{A_CANCELLED, A_FINALIZED}
+{A_ACCEPTED, A_CANCELLED, O_CANCELLED}|{A_CANCELLED, O_CREATED}
+{A_ACCEPTED, A_CANCELLED, O_CANCELLED}|{A_CANCELLED, O_SELECTED}
+{A_ACCEPTED, A_CANCELLED, O_CANCELLED}|{A_CANCELLED, O_SENT}
+{A_ACCEPTED, A_PREACCEPTED, O_CANCELLED}|{A_CANCELLED, O_CREATED}
+{A_ACCEPTED, A_PREACCEPTED, O_CANCELLED}|{A_CANCELLED, O_SENT}
+{A_ACCEPTED, O_CANCELLED}|{A_CANCELLED, A_FINALIZED}
+{A_ACCEPTED, O_CANCELLED}|{A_CANCELLED, A_FINALIZED, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED}|{A_CANCELLED, O_CREATED}
+{A_ACCEPTED, O_CANCELLED}|{A_CANCELLED, O_CREATED, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED}|{A_CANCELLED, O_SELECTED}
+{A_ACCEPTED, O_CANCELLED}|{A_CANCELLED, O_SELECTED, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED}|{A_CANCELLED, O_SENT}
+{A_ACCEPTED, O_CANCELLED}|{A_CANCELLED, O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{A_CANCELLED, A_FINALIZED}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{A_CANCELLED, O_CREATED}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{A_CANCELLED, O_SELECTED}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{A_CANCELLED, O_SENT}
+{A_ACCEPTED, O_CREATED}|{A_CANCELLED, A_FINALIZED, O_SENT}
+{A_ACCEPTED, O_SELECTED}|{A_CANCELLED, A_FINALIZED, O_CREATED}
+{A_ACCEPTED, O_SELECTED}|{A_CANCELLED, A_FINALIZED, O_SENT}
+{A_ACCEPTED, ▷}|{A_CANCELLED, A_FINALIZED, ☐}
+{A_CANCELLED}|{A_CANCELLED}
+{A_CANCELLED}|{A_CANCELLED, W_Valideren aanvraag}
+{A_CANCELLED, A_FINALIZED, O_CANCELLED}|{A_CANCELLED, O_CREATED}
+{A_CANCELLED, A_FINALIZED, O_CANCELLED}|{A_CANCELLED, O_SENT}
+{A_CANCELLED, A_PREACCEPTED, ▷}|{A_CANCELLED, ☐}
+{A_CANCELLED, O_CANCELLED, ▷}|{A_CANCELLED, ☐}
+{A_CANCELLED, O_CREATED}|{A_CANCELLED, O_SENT}
+{A_CANCELLED, O_CREATED}|{A_CANCELLED, O_SENT, W_Valideren aanvraag}
+{A_CANCELLED, O_CREATED, W_Valideren aanvraag}|{A_CANCELLED, O_SENT}
+{A_CANCELLED, O_SELECTED}|{A_CANCELLED, O_CREATED}
+{A_CANCELLED, O_SELECTED}|{A_CANCELLED, O_CREATED, W_Valideren aanvraag}
+{A_CANCELLED, O_SELECTED}|{A_CANCELLED, O_SENT}
+{A_CANCELLED, O_SELECTED}|{A_CANCELLED, O_SENT, W_Valideren aanvraag}
+{A_CANCELLED, O_SELECTED, W_Valideren aanvraag}|{A_CANCELLED, O_CREATED}
+{A_CANCELLED, O_SELECTED, W_Valideren aanvraag}|{A_CANCELLED, O_SENT}
+{A_CANCELLED, W_Nabellen incomplete dossiers, ▷}|{A_CANCELLED, ☐}
+{A_CANCELLED, W_Valideren aanvraag}|{A_CANCELLED}
+{A_CANCELLED, W_Valideren aanvraag}|{A_CANCELLED, W_Valideren aanvraag}
+{A_CANCELLED, W_Valideren aanvraag, ▷}|{A_CANCELLED, ☐}
+{A_CANCELLED, ▷}|{A_CANCELLED, A_PREACCEPTED, ☐}
+{A_CANCELLED, ▷}|{A_CANCELLED, O_CANCELLED, ☐}
+{A_CANCELLED, ▷}|{A_CANCELLED, W_Nabellen incomplete dossiers, ☐}
+{A_CANCELLED, ▷}|{A_CANCELLED, W_Valideren aanvraag, ☐}
+{A_CANCELLED, ▷}|{A_CANCELLED, ☐}
+{A_DECLINED, ▷}|{A_CANCELLED, A_DECLINED, ☐}
+{A_FINALIZED, A_PREACCEPTED, O_CANCELLED}|{A_CANCELLED, O_CREATED}
+{A_FINALIZED, A_PREACCEPTED, O_CANCELLED}|{A_CANCELLED, O_SENT}
+{A_FINALIZED, O_CANCELLED}|{A_CANCELLED, O_CREATED}
+{A_FINALIZED, O_CANCELLED}|{A_CANCELLED, O_CREATED, W_Valideren aanvraag}
+{A_FINALIZED, O_CANCELLED}|{A_CANCELLED, O_SENT}
+{A_FINALIZED, O_CANCELLED}|{A_CANCELLED, O_SENT, W_Valideren aanvraag}
+{A_FINALIZED, O_CANCELLED, W_Valideren aanvraag}|{A_CANCELLED, O_CREATED}
+{A_FINALIZED, O_CANCELLED, W_Valideren aanvraag}|{A_CANCELLED, O_SENT}
+{A_FINALIZED, ▷}|{A_CANCELLED, A_FINALIZED, ☐}
+{A_PREACCEPTED, ▷}|{A_CANCELLED, A_PREACCEPTED, ☐}
+{A_PREACCEPTED, ▷}|{A_CANCELLED, ☐}
+{O_CANCELLED}|{A_CANCELLED}
+{O_CANCELLED}|{A_CANCELLED, W_Valideren aanvraag}
+{O_CANCELLED, O_CREATED}|{A_CANCELLED, O_SENT}
+{O_CANCELLED, O_CREATED}|{A_CANCELLED, O_SENT, W_Valideren aanvraag}
+{O_CANCELLED, O_CREATED, W_Valideren aanvraag}|{A_CANCELLED, O_SENT}
+{O_CANCELLED, O_SELECTED}|{A_CANCELLED, O_CANCELLED, O_CREATED}
+{O_CANCELLED, O_SELECTED}|{A_CANCELLED, O_CANCELLED, O_SENT}
+{O_CANCELLED, O_SELECTED}|{A_CANCELLED, O_CREATED}
+{O_CANCELLED, O_SELECTED}|{A_CANCELLED, O_CREATED, W_Valideren aanvraag}
+{O_CANCELLED, O_SELECTED}|{A_CANCELLED, O_SENT}
+{O_CANCELLED, O_SELECTED}|{A_CANCELLED, O_SENT, W_Valideren aanvraag}
+{O_CANCELLED, O_SELECTED, W_Valideren aanvraag}|{A_CANCELLED, O_CREATED}
+{O_CANCELLED, O_SELECTED, W_Valideren aanvraag}|{A_CANCELLED, O_SENT}
+{O_CANCELLED, W_Valideren aanvraag}|{A_CANCELLED}
+{O_CANCELLED, W_Valideren aanvraag}|{A_CANCELLED, W_Valideren aanvraag}
+{O_CANCELLED, W_Valideren aanvraag, ▷}|{A_CANCELLED, ☐}
+{O_CANCELLED, ▷}|{A_CANCELLED, O_CANCELLED, ☐}
+{O_CANCELLED, ▷}|{A_CANCELLED, W_Valideren aanvraag, ☐}
+{O_CANCELLED, ▷}|{A_CANCELLED, ☐}
+{O_CREATED}|{A_CANCELLED, O_SENT}
+{O_CREATED}|{A_CANCELLED, O_SENT, W_Valideren aanvraag}
+{O_CREATED, O_SELECTED}|{A_CANCELLED, O_CREATED, O_SENT}
+{O_CREATED, W_Valideren aanvraag}|{A_CANCELLED, O_SENT}
+{O_CREATED, W_Valideren aanvraag}|{A_CANCELLED, O_SENT, W_Valideren aanvraag}
+{O_CREATED, ▷}|{A_CANCELLED, A_FINALIZED, ☐}
+{O_CREATED, ▷}|{A_CANCELLED, O_CREATED, ☐}
+{O_CREATED, ▷}|{A_CANCELLED, O_SELECTED, ☐}
+{O_CREATED, ▷}|{A_CANCELLED, O_SENT, ☐}
+{O_SELECTED}|{A_CANCELLED, O_CREATED}
+{O_SELECTED}|{A_CANCELLED, O_CREATED, W_Valideren aanvraag}
+{O_SELECTED}|{A_CANCELLED, O_SENT}
+{O_SELECTED}|{A_CANCELLED, O_SENT, W_Valideren aanvraag}
+{O_SELECTED, W_Valideren aanvraag}|{A_CANCELLED, O_CREATED}
+{O_SELECTED, W_Valideren aanvraag}|{A_CANCELLED, O_CREATED, W_Valideren aanvraag}
+{O_SELECTED, W_Valideren aanvraag}|{A_CANCELLED, O_SENT}
+{O_SELECTED, W_Valideren aanvraag}|{A_CANCELLED, O_SENT, W_Valideren aanvraag}
+{O_SELECTED, ▷}|{A_CANCELLED, A_FINALIZED, ☐}
+{O_SELECTED, ▷}|{A_CANCELLED, O_CREATED, ☐}
+{O_SELECTED, ▷}|{A_CANCELLED, O_SELECTED, ☐}
+{O_SELECTED, ▷}|{A_CANCELLED, O_SENT, ☐}
+{O_SENT, ▷}|{A_CANCELLED, A_FINALIZED, ☐}
+{O_SENT, ▷}|{A_CANCELLED, O_CREATED, ☐}
+{O_SENT, ▷}|{A_CANCELLED, O_SELECTED, ☐}
+{O_SENT, ▷}|{A_CANCELLED, O_SENT, ☐}
+{W_Afhandelen leads, ▷}|{A_CANCELLED, W_Afhandelen leads, ☐}
+{W_Completeren aanvraag, ▷}|{A_CANCELLED, W_Completeren aanvraag, ☐}
+{W_Nabellen incomplete dossiers, W_Valideren aanvraag, ▷}|{A_CANCELLED, ☐}
+{W_Nabellen incomplete dossiers, ▷}|{A_CANCELLED, W_Nabellen incomplete dossiers, ☐}
+{W_Nabellen incomplete dossiers, ▷}|{A_CANCELLED, W_Valideren aanvraag, ☐}
+{W_Nabellen incomplete dossiers, ▷}|{A_CANCELLED, ☐}
+{W_Nabellen offertes, ▷}|{A_CANCELLED, W_Nabellen offertes, ☐}
+{W_Valideren aanvraag}|{A_CANCELLED}
+{W_Valideren aanvraag}|{A_CANCELLED, W_Valideren aanvraag}
+{W_Valideren aanvraag, ▷}|{A_CANCELLED, W_Valideren aanvraag, ☐}
+{W_Valideren aanvraag, ▷}|{A_CANCELLED, ☐}
+{▷}|{A_CANCELLED, W_Valideren aanvraag, ☐}
+{▷}|{A_CANCELLED, ☐}
+{A_CANCELLED, A_DECLINED, ▷}|{A_DECLINED, ☐}
+{A_DECLINED, A_PREACCEPTED, ▷}|{A_DECLINED, ☐}
+{A_DECLINED, O_CANCELLED, ▷}|{A_DECLINED, ☐}
+{A_DECLINED, W_Nabellen incomplete dossiers, ▷}|{A_DECLINED, ☐}
+{A_DECLINED, W_Valideren aanvraag, ▷}|{A_DECLINED, ☐}
+{A_DECLINED, ▷}|{A_DECLINED, A_PREACCEPTED, ☐}
+{A_DECLINED, ▷}|{A_DECLINED, O_CANCELLED, ☐}
+{A_DECLINED, ▷}|{A_DECLINED, W_Nabellen incomplete dossiers, ☐}
+{A_DECLINED, ▷}|{A_DECLINED, W_Valideren aanvraag, ☐}
+{A_DECLINED, ▷}|{A_DECLINED, ☐}
+{A_PREACCEPTED, W_Valideren aanvraag, ▷}|{A_DECLINED, ☐}
+{A_PREACCEPTED, ▷}|{A_DECLINED, W_Valideren aanvraag, ☐}
+{A_PREACCEPTED, ▷}|{A_DECLINED, ☐}
+{A_ACCEPTED}|{A_FINALIZED}
+{A_ACCEPTED}|{A_FINALIZED, A_PREACCEPTED}
+{A_ACCEPTED}|{A_FINALIZED, O_CANCELLED}
+{A_ACCEPTED}|{A_FINALIZED, O_CANCELLED, W_Valideren aanvraag}
+{A_ACCEPTED}|{A_FINALIZED, W_Nabellen incomplete dossiers}
+{A_ACCEPTED}|{A_FINALIZED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{A_ACCEPTED}|{A_FINALIZED, W_Valideren aanvraag}
+{A_ACCEPTED, A_CANCELLED}|{A_FINALIZED}
+{A_ACCEPTED, A_CANCELLED}|{A_FINALIZED, O_CANCELLED}
+{A_ACCEPTED, A_CANCELLED}|{A_FINALIZED, W_Valideren aanvraag}
+{A_ACCEPTED, A_CANCELLED, A_FINALIZED}|{A_FINALIZED, O_CREATED}
+{A_ACCEPTED, A_CANCELLED, A_FINALIZED}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, A_CANCELLED, O_CREATED}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, A_CANCELLED, O_SELECTED}|{A_FINALIZED, O_CREATED}
+{A_ACCEPTED, A_CANCELLED, O_SELECTED}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, A_CANCELLED, W_Valideren aanvraag}|{A_FINALIZED}
+{A_ACCEPTED, A_CANCELLED, W_Valideren aanvraag}|{A_FINALIZED, W_Valideren aanvraag}
+{A_ACCEPTED, A_CANCELLED, ▷}|{A_FINALIZED, ☐}
+{A_ACCEPTED, A_FINALIZED}|{A_FINALIZED, O_CANCELLED, O_CREATED}
+{A_ACCEPTED, A_FINALIZED}|{A_FINALIZED, O_CANCELLED, O_SENT}
+{A_ACCEPTED, A_FINALIZED}|{A_FINALIZED, O_CREATED}
+{A_ACCEPTED, A_FINALIZED}|{A_FINALIZED, O_CREATED, W_Valideren aanvraag}
+{A_ACCEPTED, A_FINALIZED}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, A_FINALIZED}|{A_FINALIZED, O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, A_FINALIZED, O_CANCELLED}|{A_FINALIZED, O_CREATED}
+{A_ACCEPTED, A_FINALIZED, O_CANCELLED}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, A_FINALIZED, W_Nabellen incomplete dossiers}|{A_FINALIZED, O_CREATED}
+{A_ACCEPTED, A_FINALIZED, W_Nabellen incomplete dossiers}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, A_FINALIZED, W_Valideren aanvraag}|{A_FINALIZED, O_CREATED}
+{A_ACCEPTED, A_FINALIZED, W_Valideren aanvraag}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, A_PREACCEPTED}|{A_FINALIZED}
+{A_ACCEPTED, A_PREACCEPTED}|{A_FINALIZED, A_PREACCEPTED}
+{A_ACCEPTED, A_PREACCEPTED}|{A_FINALIZED, W_Valideren aanvraag}
+{A_ACCEPTED, A_PREACCEPTED, O_CREATED}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, A_PREACCEPTED, O_SELECTED}|{A_FINALIZED, O_CREATED}
+{A_ACCEPTED, A_PREACCEPTED, O_SELECTED}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, A_PREACCEPTED, ▷}|{A_FINALIZED, ☐}
+{A_ACCEPTED, O_CANCELLED}|{A_FINALIZED}
+{A_ACCEPTED, O_CANCELLED}|{A_FINALIZED, O_CANCELLED}
+{A_ACCEPTED, O_CANCELLED}|{A_FINALIZED, O_CANCELLED, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED}|{A_FINALIZED, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED, O_CREATED}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, O_CANCELLED, O_SELECTED}|{A_FINALIZED, O_CREATED}
+{A_ACCEPTED, O_CANCELLED, O_SELECTED}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{A_FINALIZED}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{A_FINALIZED, O_CANCELLED}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{A_FINALIZED, W_Nabellen incomplete dossiers}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{A_FINALIZED, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED, ▷}|{A_FINALIZED, ☐}
+{A_ACCEPTED, O_CREATED}|{A_FINALIZED, A_PREACCEPTED, O_SENT}
+{A_ACCEPTED, O_CREATED}|{A_FINALIZED, O_CANCELLED, O_SENT}
+{A_ACCEPTED, O_CREATED}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, O_CREATED}|{A_FINALIZED, O_SENT, W_Nabellen incomplete dossiers}
+{A_ACCEPTED, O_CREATED}|{A_FINALIZED, O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, O_CREATED, W_Nabellen incomplete dossiers}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, O_CREATED, W_Valideren aanvraag}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, O_SELECTED}|{A_FINALIZED, A_PREACCEPTED, O_CREATED}
+{A_ACCEPTED, O_SELECTED}|{A_FINALIZED, A_PREACCEPTED, O_SENT}
+{A_ACCEPTED, O_SELECTED}|{A_FINALIZED, O_CANCELLED, O_CREATED}
+{A_ACCEPTED, O_SELECTED}|{A_FINALIZED, O_CANCELLED, O_SENT}
+{A_ACCEPTED, O_SELECTED}|{A_FINALIZED, O_CREATED}
+{A_ACCEPTED, O_SELECTED}|{A_FINALIZED, O_CREATED, W_Nabellen incomplete dossiers}
+{A_ACCEPTED, O_SELECTED}|{A_FINALIZED, O_CREATED, W_Valideren aanvraag}
+{A_ACCEPTED, O_SELECTED}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, O_SELECTED}|{A_FINALIZED, O_SENT, W_Nabellen incomplete dossiers}
+{A_ACCEPTED, O_SELECTED}|{A_FINALIZED, O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, O_SELECTED, W_Nabellen incomplete dossiers}|{A_FINALIZED, O_CREATED}
+{A_ACCEPTED, O_SELECTED, W_Nabellen incomplete dossiers}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, O_SELECTED, W_Valideren aanvraag}|{A_FINALIZED, O_CREATED}
+{A_ACCEPTED, O_SELECTED, W_Valideren aanvraag}|{A_FINALIZED, O_SENT}
+{A_ACCEPTED, W_Nabellen incomplete dossiers}|{A_FINALIZED}
+{A_ACCEPTED, W_Nabellen incomplete dossiers}|{A_FINALIZED, O_CANCELLED}
+{A_ACCEPTED, W_Nabellen incomplete dossiers}|{A_FINALIZED, O_CANCELLED, W_Valideren aanvraag}
+{A_ACCEPTED, W_Nabellen incomplete dossiers}|{A_FINALIZED, W_Nabellen incomplete dossiers}
+{A_ACCEPTED, W_Nabellen incomplete dossiers}|{A_FINALIZED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{A_ACCEPTED, W_Nabellen incomplete dossiers}|{A_FINALIZED, W_Valideren aanvraag}
+{A_ACCEPTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{A_FINALIZED}
+{A_ACCEPTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{A_FINALIZED, O_CANCELLED}
+{A_ACCEPTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{A_FINALIZED, W_Nabellen incomplete dossiers}
+{A_ACCEPTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{A_FINALIZED, W_Valideren aanvraag}
+{A_ACCEPTED, W_Nabellen incomplete dossiers, ▷}|{A_FINALIZED, ☐}
+{A_ACCEPTED, W_Valideren aanvraag}|{A_FINALIZED}
+{A_ACCEPTED, W_Valideren aanvraag}|{A_FINALIZED, A_PREACCEPTED}
+{A_ACCEPTED, W_Valideren aanvraag}|{A_FINALIZED, O_CANCELLED}
+{A_ACCEPTED, W_Valideren aanvraag}|{A_FINALIZED, O_CANCELLED, W_Valideren aanvraag}
+{A_ACCEPTED, W_Valideren aanvraag}|{A_FINALIZED, W_Nabellen incomplete dossiers}
+{A_ACCEPTED, W_Valideren aanvraag}|{A_FINALIZED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{A_ACCEPTED, W_Valideren aanvraag}|{A_FINALIZED, W_Valideren aanvraag}
+{A_ACCEPTED, W_Valideren aanvraag, ▷}|{A_FINALIZED, ☐}
+{A_ACCEPTED, ▷}|{A_FINALIZED, A_PREACCEPTED, ☐}
+{A_ACCEPTED, ▷}|{A_FINALIZED, O_CANCELLED, ☐}
+{A_ACCEPTED, ▷}|{A_FINALIZED, W_Nabellen incomplete dossiers, ☐}
+{A_ACCEPTED, ▷}|{A_FINALIZED, W_Valideren aanvraag, ☐}
+{A_ACCEPTED, ▷}|{A_FINALIZED, ☐}
+{A_CANCELLED, A_FINALIZED, ▷}|{A_FINALIZED, ☐}
+{A_FINALIZED, A_PREACCEPTED, ▷}|{A_FINALIZED, ☐}
+{A_FINALIZED, O_CANCELLED, ▷}|{A_FINALIZED, ☐}
+{A_FINALIZED, O_SELECTED}|{A_FINALIZED, O_CREATED}
+{A_FINALIZED, O_SELECTED}|{A_FINALIZED, O_SENT}
+{A_FINALIZED, W_Nabellen incomplete dossiers, ▷}|{A_FINALIZED, ☐}
+{A_FINALIZED, W_Valideren aanvraag, ▷}|{A_FINALIZED, ☐}
+{A_FINALIZED, ▷}|{A_FINALIZED, A_PREACCEPTED, ☐}
+{A_FINALIZED, ▷}|{A_FINALIZED, O_CANCELLED, ☐}
+{A_FINALIZED, ▷}|{A_FINALIZED, W_Nabellen incomplete dossiers, ☐}
+{A_FINALIZED, ▷}|{A_FINALIZED, W_Valideren aanvraag, ☐}
+{A_FINALIZED, ▷}|{A_FINALIZED, ☐}
+{O_CANCELLED, O_CREATED, ▷}|{A_FINALIZED, ☐}
+{O_CANCELLED, O_SELECTED, ▷}|{A_FINALIZED, ☐}
+{O_CANCELLED, O_SENT, ▷}|{A_FINALIZED, ☐}
+{O_CREATED, W_Valideren aanvraag, ▷}|{A_FINALIZED, ☐}
+{O_CREATED, ▷}|{A_FINALIZED, O_CANCELLED, ☐}
+{O_CREATED, ▷}|{A_FINALIZED, W_Valideren aanvraag, ☐}
+{O_CREATED, ▷}|{A_FINALIZED, ☐}
+{O_SELECTED, W_Valideren aanvraag, ▷}|{A_FINALIZED, ☐}
+{O_SELECTED, ▷}|{A_FINALIZED, O_CANCELLED, ☐}
+{O_SELECTED, ▷}|{A_FINALIZED, W_Valideren aanvraag, ☐}
+{O_SELECTED, ▷}|{A_FINALIZED, ☐}
+{O_SENT, W_Valideren aanvraag, ▷}|{A_FINALIZED, ☐}
+{O_SENT, ▷}|{A_FINALIZED, O_CANCELLED, ☐}
+{O_SENT, ▷}|{A_FINALIZED, W_Valideren aanvraag, ☐}
+{O_SENT, ▷}|{A_FINALIZED, ☐}
+{A_ACCEPTED, O_CANCELLED}|{A_PREACCEPTED, O_CREATED}
+{A_ACCEPTED, O_CANCELLED}|{A_PREACCEPTED, O_SENT}
+{A_CANCELLED, A_PREACCEPTED, ▷}|{A_PREACCEPTED, ☐}
+{A_CANCELLED, ▷}|{A_PREACCEPTED, ☐}
+{A_DECLINED, ▷}|{A_PREACCEPTED, ☐}
+{A_FINALIZED, O_CANCELLED}|{A_PREACCEPTED, O_CREATED}
+{A_FINALIZED, O_CANCELLED}|{A_PREACCEPTED, O_SENT}
+{A_PREACCEPTED}|{A_PREACCEPTED}
+{A_PREACCEPTED, O_CANCELLED, ▷}|{A_PREACCEPTED, ☐}
+{A_PREACCEPTED, O_CREATED}|{A_PREACCEPTED, O_SENT}
+{A_PREACCEPTED, O_SELECTED}|{A_PREACCEPTED, O_CREATED}
+{A_PREACCEPTED, O_SELECTED}|{A_PREACCEPTED, O_SENT}
+{A_PREACCEPTED, W_Nabellen incomplete dossiers, ▷}|{A_PREACCEPTED, ☐}
+{A_PREACCEPTED, W_Valideren aanvraag, ▷}|{A_PREACCEPTED, ☐}
+{A_PREACCEPTED, ▷}|{A_PREACCEPTED, O_CANCELLED, ☐}
+{A_PREACCEPTED, ▷}|{A_PREACCEPTED, W_Nabellen incomplete dossiers, ☐}
+{A_PREACCEPTED, ▷}|{A_PREACCEPTED, W_Valideren aanvraag, ☐}
+{A_PREACCEPTED, ▷}|{A_PREACCEPTED, ☐}
+{O_CANCELLED, ▷}|{A_PREACCEPTED, O_CANCELLED, ☐}
+{O_CREATED}|{A_PREACCEPTED, O_SENT}
+{O_CREATED, O_SELECTED}|{A_PREACCEPTED, O_CREATED, O_SENT}
+{O_CREATED, W_Valideren aanvraag}|{A_PREACCEPTED, O_SENT}
+{O_CREATED, ▷}|{A_PREACCEPTED, O_CREATED, ☐}
+{O_CREATED, ▷}|{A_PREACCEPTED, O_SELECTED, ☐}
+{O_CREATED, ▷}|{A_PREACCEPTED, O_SENT, ☐}
+{O_SELECTED}|{A_PREACCEPTED, O_CREATED}
+{O_SELECTED}|{A_PREACCEPTED, O_SENT}
+{O_SELECTED, W_Valideren aanvraag}|{A_PREACCEPTED, O_CREATED}
+{O_SELECTED, W_Valideren aanvraag}|{A_PREACCEPTED, O_SENT}
+{O_SELECTED, ▷}|{A_PREACCEPTED, O_CREATED, ☐}
+{O_SELECTED, ▷}|{A_PREACCEPTED, O_SELECTED, ☐}
+{O_SELECTED, ▷}|{A_PREACCEPTED, O_SENT, ☐}
+{O_SENT, ▷}|{A_PREACCEPTED, O_CREATED, ☐}
+{O_SENT, ▷}|{A_PREACCEPTED, O_SELECTED, ☐}
+{O_SENT, ▷}|{A_PREACCEPTED, O_SENT, ☐}
+{W_Afhandelen leads, ▷}|{A_PREACCEPTED, W_Afhandelen leads, ☐}
+{W_Completeren aanvraag, ▷}|{A_PREACCEPTED, W_Completeren aanvraag, ☐}
+{W_Nabellen incomplete dossiers, ▷}|{A_PREACCEPTED, W_Nabellen incomplete dossiers, ☐}
+{W_Nabellen offertes, ▷}|{A_PREACCEPTED, W_Nabellen offertes, ☐}
+{W_Valideren aanvraag}|{A_PREACCEPTED}
+{W_Valideren aanvraag, ▷}|{A_PREACCEPTED, W_Valideren aanvraag, ☐}
+{W_Valideren aanvraag, ▷}|{A_PREACCEPTED, ☐}
+{▷}|{A_PREACCEPTED, ☐}
+{A_ACCEPTED}|{O_CANCELLED, O_CREATED}
+{A_ACCEPTED}|{O_CANCELLED, O_CREATED, W_Valideren aanvraag}
+{A_ACCEPTED}|{O_CANCELLED, O_SELECTED}
+{A_ACCEPTED}|{O_CANCELLED, O_SELECTED, W_Valideren aanvraag}
+{A_ACCEPTED}|{O_CANCELLED, O_SENT}
+{A_ACCEPTED}|{O_CANCELLED, O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, A_CANCELLED, O_CANCELLED}|{O_CANCELLED, O_CREATED}
+{A_ACCEPTED, A_CANCELLED, O_CANCELLED}|{O_CANCELLED, O_SENT}
+{A_ACCEPTED, A_FINALIZED}|{O_CANCELLED, O_CREATED, O_SELECTED}
+{A_ACCEPTED, A_FINALIZED}|{O_CANCELLED, O_CREATED, O_SENT}
+{A_ACCEPTED, A_FINALIZED}|{O_CANCELLED, O_SELECTED, O_SENT}
+{A_ACCEPTED, O_CANCELLED}|{O_CANCELLED, O_CREATED}
+{A_ACCEPTED, O_CANCELLED}|{O_CANCELLED, O_CREATED, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED}|{O_CANCELLED, O_SELECTED}
+{A_ACCEPTED, O_CANCELLED}|{O_CANCELLED, O_SELECTED, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED}|{O_CANCELLED, O_SENT}
+{A_ACCEPTED, O_CANCELLED}|{O_CANCELLED, O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_CANCELLED, O_CREATED}
+{A_ACCEPTED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_CANCELLED, O_SELECTED}
+{A_ACCEPTED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_CANCELLED, O_SENT}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{O_CANCELLED, O_CREATED}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{O_CANCELLED, O_SELECTED}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{O_CANCELLED, O_SENT}
+{A_ACCEPTED, O_CREATED}|{O_CANCELLED, O_CREATED, O_SENT}
+{A_ACCEPTED, O_CREATED}|{O_CANCELLED, O_SELECTED, O_SENT}
+{A_ACCEPTED, O_SELECTED}|{O_CANCELLED, O_CREATED, O_SELECTED}
+{A_ACCEPTED, O_SELECTED}|{O_CANCELLED, O_CREATED, O_SENT}
+{A_ACCEPTED, O_SELECTED}|{O_CANCELLED, O_SELECTED, O_SENT}
+{A_ACCEPTED, W_Valideren aanvraag}|{O_CANCELLED, O_CREATED}
+{A_ACCEPTED, W_Valideren aanvraag}|{O_CANCELLED, O_CREATED, W_Valideren aanvraag}
+{A_ACCEPTED, W_Valideren aanvraag}|{O_CANCELLED, O_SELECTED}
+{A_ACCEPTED, W_Valideren aanvraag}|{O_CANCELLED, O_SELECTED, W_Valideren aanvraag}
+{A_ACCEPTED, W_Valideren aanvraag}|{O_CANCELLED, O_SENT}
+{A_ACCEPTED, W_Valideren aanvraag}|{O_CANCELLED, O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, ▷}|{O_CANCELLED, O_CREATED, ☐}
+{A_ACCEPTED, ▷}|{O_CANCELLED, O_SELECTED, ☐}
+{A_ACCEPTED, ▷}|{O_CANCELLED, O_SENT, ☐}
+{A_CANCELLED}|{O_CANCELLED}
+{A_CANCELLED, A_FINALIZED}|{O_CANCELLED, O_CREATED}
+{A_CANCELLED, A_FINALIZED}|{O_CANCELLED, O_SENT}
+{A_CANCELLED, A_FINALIZED, O_CANCELLED}|{O_CANCELLED, O_CREATED}
+{A_CANCELLED, A_FINALIZED, O_CANCELLED}|{O_CANCELLED, O_SENT}
+{A_CANCELLED, O_CANCELLED, O_SELECTED}|{O_CANCELLED, O_CREATED}
+{A_CANCELLED, O_CANCELLED, O_SELECTED}|{O_CANCELLED, O_SENT}
+{A_CANCELLED, O_CANCELLED, ▷}|{O_CANCELLED, ☐}
+{A_CANCELLED, O_CREATED}|{O_CANCELLED, O_SENT}
+{A_CANCELLED, O_SELECTED}|{O_CANCELLED, O_CREATED}
+{A_CANCELLED, O_SELECTED}|{O_CANCELLED, O_SENT}
+{A_CANCELLED, W_Valideren aanvraag, ▷}|{O_CANCELLED, ☐}
+{A_CANCELLED, ▷}|{O_CANCELLED, W_Valideren aanvraag, ☐}
+{A_CANCELLED, ▷}|{O_CANCELLED, ☐}
+{A_FINALIZED}|{O_CANCELLED, O_CREATED}
+{A_FINALIZED}|{O_CANCELLED, O_CREATED, W_Valideren aanvraag}
+{A_FINALIZED}|{O_CANCELLED, O_SENT}
+{A_FINALIZED}|{O_CANCELLED, O_SENT, W_Valideren aanvraag}
+{A_FINALIZED, O_CANCELLED}|{O_CANCELLED, O_CREATED}
+{A_FINALIZED, O_CANCELLED}|{O_CANCELLED, O_CREATED, W_Valideren aanvraag}
+{A_FINALIZED, O_CANCELLED}|{O_CANCELLED, O_SENT}
+{A_FINALIZED, O_CANCELLED}|{O_CANCELLED, O_SENT, W_Valideren aanvraag}
+{A_FINALIZED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_CANCELLED, O_CREATED}
+{A_FINALIZED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_CANCELLED, O_SENT}
+{A_FINALIZED, O_CANCELLED, W_Valideren aanvraag}|{O_CANCELLED, O_CREATED}
+{A_FINALIZED, O_CANCELLED, W_Valideren aanvraag}|{O_CANCELLED, O_SENT}
+{A_FINALIZED, O_CREATED}|{O_CANCELLED, O_CREATED, O_SENT}
+{A_FINALIZED, O_SELECTED}|{O_CANCELLED, O_CREATED, O_SENT}
+{A_FINALIZED, W_Valideren aanvraag}|{O_CANCELLED, O_CREATED}
+{A_FINALIZED, W_Valideren aanvraag}|{O_CANCELLED, O_CREATED, W_Valideren aanvraag}
+{A_FINALIZED, W_Valideren aanvraag}|{O_CANCELLED, O_SENT}
+{A_FINALIZED, W_Valideren aanvraag}|{O_CANCELLED, O_SENT, W_Valideren aanvraag}
+{A_FINALIZED, ▷}|{O_CANCELLED, O_CREATED, ☐}
+{A_FINALIZED, ▷}|{O_CANCELLED, O_SELECTED, ☐}
+{A_FINALIZED, ▷}|{O_CANCELLED, O_SENT, ☐}
+{A_PREACCEPTED, O_CANCELLED, ▷}|{O_CANCELLED, ☐}
+{O_CANCELLED}|{O_CANCELLED}
+{O_CANCELLED}|{O_CANCELLED, W_Valideren aanvraag}
+{O_CANCELLED, O_CREATED}|{O_CANCELLED, O_SENT}
+{O_CANCELLED, O_CREATED}|{O_CANCELLED, O_SENT, W_Valideren aanvraag}
+{O_CANCELLED, O_CREATED, W_Valideren aanvraag}|{O_CANCELLED, O_SENT}
+{O_CANCELLED, O_SELECTED}|{O_CANCELLED, O_CREATED}
+{O_CANCELLED, O_SELECTED}|{O_CANCELLED, O_CREATED, W_Nabellen incomplete dossiers}
+{O_CANCELLED, O_SELECTED}|{O_CANCELLED, O_CREATED, W_Valideren aanvraag}
+{O_CANCELLED, O_SELECTED}|{O_CANCELLED, O_SENT}
+{O_CANCELLED, O_SELECTED}|{O_CANCELLED, O_SENT, W_Nabellen incomplete dossiers}
+{O_CANCELLED, O_SELECTED}|{O_CANCELLED, O_SENT, W_Valideren aanvraag}
+{O_CANCELLED, O_SELECTED, W_Nabellen incomplete dossiers}|{O_CANCELLED, O_CREATED}
+{O_CANCELLED, O_SELECTED, W_Nabellen incomplete dossiers}|{O_CANCELLED, O_SENT}
+{O_CANCELLED, O_SELECTED, W_Valideren aanvraag}|{O_CANCELLED, O_CREATED}
+{O_CANCELLED, O_SELECTED, W_Valideren aanvraag}|{O_CANCELLED, O_SENT}
+{O_CANCELLED, W_Nabellen incomplete dossiers, ▷}|{O_CANCELLED, ☐}
+{O_CANCELLED, W_Valideren aanvraag}|{O_CANCELLED}
+{O_CANCELLED, W_Valideren aanvraag}|{O_CANCELLED, W_Valideren aanvraag}
+{O_CANCELLED, W_Valideren aanvraag, ▷}|{O_CANCELLED, ☐}
+{O_CANCELLED, ▷}|{O_CANCELLED, W_Nabellen incomplete dossiers, ☐}
+{O_CANCELLED, ▷}|{O_CANCELLED, W_Valideren aanvraag, ☐}
+{O_CANCELLED, ▷}|{O_CANCELLED, ☐}
+{O_CREATED}|{O_CANCELLED, O_SENT}
+{O_CREATED}|{O_CANCELLED, O_SENT, W_Valideren aanvraag}
+{O_CREATED, O_SELECTED}|{O_CANCELLED, O_CREATED, O_SENT}
+{O_CREATED, W_Nabellen incomplete dossiers}|{O_CANCELLED, O_SENT}
+{O_CREATED, W_Nabellen incomplete dossiers}|{O_CANCELLED, O_SENT, W_Valideren aanvraag}
+{O_CREATED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_CANCELLED, O_SENT}
+{O_CREATED, W_Valideren aanvraag}|{O_CANCELLED, O_SENT}
+{O_CREATED, W_Valideren aanvraag}|{O_CANCELLED, O_SENT, W_Valideren aanvraag}
+{O_CREATED, ▷}|{O_CANCELLED, O_CREATED, ☐}
+{O_CREATED, ▷}|{O_CANCELLED, O_SELECTED, ☐}
+{O_CREATED, ▷}|{O_CANCELLED, O_SENT, ☐}
+{O_SELECTED}|{O_CANCELLED, O_CREATED}
+{O_SELECTED}|{O_CANCELLED, O_CREATED, W_Valideren aanvraag}
+{O_SELECTED}|{O_CANCELLED, O_SENT}
+{O_SELECTED}|{O_CANCELLED, O_SENT, W_Valideren aanvraag}
+{O_SELECTED, W_Nabellen incomplete dossiers}|{O_CANCELLED, O_CREATED}
+{O_SELECTED, W_Nabellen incomplete dossiers}|{O_CANCELLED, O_CREATED, W_Valideren aanvraag}
+{O_SELECTED, W_Nabellen incomplete dossiers}|{O_CANCELLED, O_SENT}
+{O_SELECTED, W_Nabellen incomplete dossiers}|{O_CANCELLED, O_SENT, W_Valideren aanvraag}
+{O_SELECTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_CANCELLED, O_CREATED}
+{O_SELECTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_CANCELLED, O_SENT}
+{O_SELECTED, W_Valideren aanvraag}|{O_CANCELLED, O_CREATED}
+{O_SELECTED, W_Valideren aanvraag}|{O_CANCELLED, O_CREATED, W_Valideren aanvraag}
+{O_SELECTED, W_Valideren aanvraag}|{O_CANCELLED, O_SENT}
+{O_SELECTED, W_Valideren aanvraag}|{O_CANCELLED, O_SENT, W_Valideren aanvraag}
+{O_SELECTED, ▷}|{O_CANCELLED, O_CREATED, ☐}
+{O_SELECTED, ▷}|{O_CANCELLED, O_SELECTED, ☐}
+{O_SELECTED, ▷}|{O_CANCELLED, O_SENT, ☐}
+{O_SENT, ▷}|{O_CANCELLED, O_CREATED, ☐}
+{O_SENT, ▷}|{O_CANCELLED, O_SELECTED, ☐}
+{O_SENT, ▷}|{O_CANCELLED, O_SENT, ☐}
+{W_Afhandelen leads, ▷}|{O_CANCELLED, W_Afhandelen leads, ☐}
+{W_Completeren aanvraag, ▷}|{O_CANCELLED, W_Completeren aanvraag, ☐}
+{W_Nabellen incomplete dossiers}|{O_CANCELLED}
+{W_Nabellen incomplete dossiers}|{O_CANCELLED, W_Valideren aanvraag}
+{W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_CANCELLED}
+{W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_CANCELLED, W_Valideren aanvraag}
+{W_Nabellen incomplete dossiers, W_Valideren aanvraag, ▷}|{O_CANCELLED, ☐}
+{W_Nabellen incomplete dossiers, ▷}|{O_CANCELLED, W_Nabellen incomplete dossiers, ☐}
+{W_Nabellen incomplete dossiers, ▷}|{O_CANCELLED, W_Valideren aanvraag, ☐}
+{W_Nabellen incomplete dossiers, ▷}|{O_CANCELLED, ☐}
+{W_Nabellen offertes, ▷}|{O_CANCELLED, W_Nabellen offertes, ☐}
+{W_Valideren aanvraag}|{O_CANCELLED}
+{W_Valideren aanvraag}|{O_CANCELLED, W_Valideren aanvraag}
+{W_Valideren aanvraag, ▷}|{O_CANCELLED, W_Valideren aanvraag, ☐}
+{W_Valideren aanvraag, ▷}|{O_CANCELLED, ☐}
+{▷}|{O_CANCELLED, W_Valideren aanvraag, ☐}
+{▷}|{O_CANCELLED, ☐}
+{A_ACCEPTED}|{O_CREATED}
+{A_ACCEPTED}|{O_CREATED, W_Valideren aanvraag}
+{A_ACCEPTED, A_CANCELLED}|{O_CREATED}
+{A_ACCEPTED, A_CANCELLED, O_CANCELLED}|{O_CREATED}
+{A_ACCEPTED, A_CANCELLED, O_CREATED}|{O_CREATED, O_SENT}
+{A_ACCEPTED, A_CANCELLED, O_SELECTED}|{O_CREATED, O_SELECTED}
+{A_ACCEPTED, A_CANCELLED, O_SELECTED}|{O_CREATED, O_SENT}
+{A_ACCEPTED, A_CANCELLED, ▷}|{O_CREATED, ☐}
+{A_ACCEPTED, A_FINALIZED}|{O_CREATED, O_SELECTED}
+{A_ACCEPTED, A_FINALIZED}|{O_CREATED, O_SELECTED, W_Valideren aanvraag}
+{A_ACCEPTED, A_FINALIZED}|{O_CREATED, O_SENT}
+{A_ACCEPTED, A_FINALIZED}|{O_CREATED, O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, A_FINALIZED, O_CANCELLED}|{O_CREATED, O_SELECTED}
+{A_ACCEPTED, A_FINALIZED, O_CANCELLED}|{O_CREATED, O_SENT}
+{A_ACCEPTED, A_FINALIZED, W_Valideren aanvraag}|{O_CREATED, O_SELECTED}
+{A_ACCEPTED, A_FINALIZED, W_Valideren aanvraag}|{O_CREATED, O_SENT}
+{A_ACCEPTED, O_CANCELLED}|{O_CREATED}
+{A_ACCEPTED, O_CANCELLED}|{O_CREATED, W_Nabellen incomplete dossiers}
+{A_ACCEPTED, O_CANCELLED}|{O_CREATED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED}|{O_CREATED, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED, O_CREATED}|{O_CREATED, O_SENT}
+{A_ACCEPTED, O_CANCELLED, O_SELECTED}|{O_CREATED, O_SELECTED}
+{A_ACCEPTED, O_CANCELLED, O_SELECTED}|{O_CREATED, O_SENT}
+{A_ACCEPTED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_CREATED}
+{A_ACCEPTED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_CREATED, W_Nabellen incomplete dossiers}
+{A_ACCEPTED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_CREATED, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_CREATED}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{O_CREATED}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{O_CREATED, W_Nabellen incomplete dossiers}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{O_CREATED, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED, ▷}|{O_CREATED, ☐}
+{A_ACCEPTED, O_CREATED}|{O_CREATED, O_SENT}
+{A_ACCEPTED, O_CREATED}|{O_CREATED, O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, O_CREATED, W_Nabellen incomplete dossiers}|{O_CREATED, O_SENT}
+{A_ACCEPTED, O_CREATED, W_Valideren aanvraag}|{O_CREATED, O_SENT}
+{A_ACCEPTED, O_SELECTED}|{O_CREATED, O_SELECTED}
+{A_ACCEPTED, O_SELECTED}|{O_CREATED, O_SELECTED, W_Valideren aanvraag}
+{A_ACCEPTED, O_SELECTED}|{O_CREATED, O_SENT}
+{A_ACCEPTED, O_SELECTED}|{O_CREATED, O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, O_SELECTED, W_Nabellen incomplete dossiers}|{O_CREATED, O_SELECTED}
+{A_ACCEPTED, O_SELECTED, W_Nabellen incomplete dossiers}|{O_CREATED, O_SENT}
+{A_ACCEPTED, O_SELECTED, W_Valideren aanvraag}|{O_CREATED, O_SELECTED}
+{A_ACCEPTED, O_SELECTED, W_Valideren aanvraag}|{O_CREATED, O_SENT}
+{A_ACCEPTED, W_Nabellen incomplete dossiers}|{O_CREATED}
+{A_ACCEPTED, W_Nabellen incomplete dossiers}|{O_CREATED, W_Valideren aanvraag}
+{A_ACCEPTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_CREATED}
+{A_ACCEPTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_CREATED, W_Valideren aanvraag}
+{A_ACCEPTED, W_Nabellen incomplete dossiers, ▷}|{O_CREATED, ☐}
+{A_ACCEPTED, W_Valideren aanvraag}|{O_CREATED}
+{A_ACCEPTED, W_Valideren aanvraag}|{O_CREATED, W_Valideren aanvraag}
+{A_ACCEPTED, W_Valideren aanvraag, ▷}|{O_CREATED, ☐}
+{A_ACCEPTED, ▷}|{O_CREATED, W_Valideren aanvraag, ☐}
+{A_ACCEPTED, ▷}|{O_CREATED, ☐}
+{A_CANCELLED, A_FINALIZED}|{O_CREATED}
+{A_CANCELLED, A_FINALIZED, O_CANCELLED}|{O_CREATED}
+{A_CANCELLED, A_FINALIZED, O_CANCELLED}|{O_CREATED, W_Valideren aanvraag}
+{A_CANCELLED, A_FINALIZED, O_CANCELLED, W_Valideren aanvraag}|{O_CREATED}
+{A_CANCELLED, A_FINALIZED, O_CREATED}|{O_CREATED, O_SENT}
+{A_CANCELLED, A_FINALIZED, O_SELECTED}|{O_CREATED, O_SENT}
+{A_CANCELLED, A_FINALIZED, W_Valideren aanvraag}|{O_CREATED, W_Valideren aanvraag}
+{A_CANCELLED, A_FINALIZED, ▷}|{O_CREATED, ☐}
+{A_CANCELLED, O_CREATED, O_SELECTED}|{O_CREATED, O_SENT}
+{A_CANCELLED, O_CREATED, ▷}|{O_CREATED, ☐}
+{A_CANCELLED, O_SELECTED}|{O_CREATED}
+{A_CANCELLED, O_SELECTED}|{O_CREATED, W_Valideren aanvraag}
+{A_CANCELLED, O_SELECTED, W_Valideren aanvraag}|{O_CREATED}
+{A_CANCELLED, O_SELECTED, W_Valideren aanvraag}|{O_CREATED, W_Valideren aanvraag}
+{A_CANCELLED, O_SELECTED, ▷}|{O_CREATED, ☐}
+{A_CANCELLED, O_SENT, ▷}|{O_CREATED, ☐}
+{A_FINALIZED}|{O_CREATED}
+{A_FINALIZED}|{O_CREATED, W_Valideren aanvraag}
+{A_FINALIZED, O_CANCELLED}|{O_CREATED}
+{A_FINALIZED, O_CANCELLED}|{O_CREATED, W_Nabellen incomplete dossiers}
+{A_FINALIZED, O_CANCELLED}|{O_CREATED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{A_FINALIZED, O_CANCELLED}|{O_CREATED, W_Valideren aanvraag}
+{A_FINALIZED, O_CANCELLED, O_CREATED}|{O_CREATED, O_SENT}
+{A_FINALIZED, O_CANCELLED, O_SELECTED}|{O_CREATED, O_SENT}
+{A_FINALIZED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_CREATED}
+{A_FINALIZED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_CREATED, W_Nabellen incomplete dossiers}
+{A_FINALIZED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_CREATED, W_Valideren aanvraag}
+{A_FINALIZED, O_CANCELLED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_CREATED}
+{A_FINALIZED, O_CANCELLED, W_Valideren aanvraag}|{O_CREATED}
+{A_FINALIZED, O_CANCELLED, W_Valideren aanvraag}|{O_CREATED, W_Nabellen incomplete dossiers}
+{A_FINALIZED, O_CANCELLED, W_Valideren aanvraag}|{O_CREATED, W_Valideren aanvraag}
+{A_FINALIZED, O_CANCELLED, ▷}|{O_CREATED, ☐}
+{A_FINALIZED, O_CREATED}|{O_CREATED, O_SENT}
+{A_FINALIZED, O_CREATED}|{O_CREATED, O_SENT, W_Valideren aanvraag}
+{A_FINALIZED, O_CREATED, W_Nabellen incomplete dossiers}|{O_CREATED, O_SENT}
+{A_FINALIZED, O_CREATED, W_Valideren aanvraag}|{O_CREATED, O_SENT}
+{A_FINALIZED, O_SELECTED}|{O_CREATED, O_SENT}
+{A_FINALIZED, O_SELECTED}|{O_CREATED, O_SENT, W_Valideren aanvraag}
+{A_FINALIZED, O_SELECTED, W_Nabellen incomplete dossiers}|{O_CREATED, O_SENT}
+{A_FINALIZED, O_SELECTED, W_Valideren aanvraag}|{O_CREATED, O_SENT}
+{A_FINALIZED, W_Nabellen incomplete dossiers}|{O_CREATED}
+{A_FINALIZED, W_Nabellen incomplete dossiers}|{O_CREATED, W_Valideren aanvraag}
+{A_FINALIZED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_CREATED}
+{A_FINALIZED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_CREATED, W_Valideren aanvraag}
+{A_FINALIZED, W_Nabellen incomplete dossiers, ▷}|{O_CREATED, ☐}
+{A_FINALIZED, W_Valideren aanvraag}|{O_CREATED}
+{A_FINALIZED, W_Valideren aanvraag}|{O_CREATED, W_Valideren aanvraag}
+{A_FINALIZED, W_Valideren aanvraag, ▷}|{O_CREATED, ☐}
+{A_FINALIZED, ▷}|{O_CREATED, W_Valideren aanvraag, ☐}
+{A_FINALIZED, ▷}|{O_CREATED, ☐}
+{A_PREACCEPTED, O_CREATED, O_SELECTED}|{O_CREATED, O_SENT}
+{A_PREACCEPTED, O_CREATED, ▷}|{O_CREATED, ☐}
+{A_PREACCEPTED, O_SELECTED}|{O_CREATED}
+{A_PREACCEPTED, O_SELECTED}|{O_CREATED, W_Valideren aanvraag}
+{A_PREACCEPTED, O_SELECTED, ▷}|{O_CREATED, ☐}
+{A_PREACCEPTED, O_SENT, ▷}|{O_CREATED, ☐}
+{O_CANCELLED, O_CREATED, O_SELECTED}|{O_CREATED, O_SENT}
+{O_CANCELLED, O_CREATED, ▷}|{O_CREATED, ☐}
+{O_CANCELLED, O_SELECTED}|{O_CREATED}
+{O_CANCELLED, O_SELECTED}|{O_CREATED, W_Nabellen incomplete dossiers}
+{O_CANCELLED, O_SELECTED}|{O_CREATED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{O_CANCELLED, O_SELECTED}|{O_CREATED, W_Valideren aanvraag}
+{O_CANCELLED, O_SELECTED, W_Valideren aanvraag}|{O_CREATED}
+{O_CANCELLED, O_SELECTED, W_Valideren aanvraag}|{O_CREATED, W_Nabellen incomplete dossiers}
+{O_CANCELLED, O_SELECTED, W_Valideren aanvraag}|{O_CREATED, W_Valideren aanvraag}
+{O_CANCELLED, O_SELECTED, ▷}|{O_CREATED, ☐}
+{O_CANCELLED, O_SENT, ▷}|{O_CREATED, ☐}
+{O_CREATED, O_SELECTED}|{O_CREATED, O_SENT}
+{O_CREATED, O_SELECTED}|{O_CREATED, O_SENT, W_Nabellen incomplete dossiers}
+{O_CREATED, O_SELECTED}|{O_CREATED, O_SENT, W_Valideren aanvraag}
+{O_CREATED, O_SELECTED, W_Nabellen incomplete dossiers}|{O_CREATED, O_SENT}
+{O_CREATED, O_SELECTED, W_Valideren aanvraag}|{O_CREATED, O_SENT}
+{O_CREATED, W_Nabellen incomplete dossiers, ▷}|{O_CREATED, ☐}
+{O_CREATED, W_Valideren aanvraag, ▷}|{O_CREATED, ☐}
+{O_CREATED, ▷}|{O_CREATED, W_Nabellen incomplete dossiers, ☐}
+{O_CREATED, ▷}|{O_CREATED, W_Valideren aanvraag, ☐}
+{O_CREATED, ▷}|{O_CREATED, ☐}
+{O_SELECTED}|{O_CREATED}
+{O_SELECTED}|{O_CREATED, W_Nabellen incomplete dossiers}
+{O_SELECTED}|{O_CREATED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{O_SELECTED}|{O_CREATED, W_Valideren aanvraag}
+{O_SELECTED, W_Nabellen incomplete dossiers}|{O_CREATED}
+{O_SELECTED, W_Nabellen incomplete dossiers}|{O_CREATED, W_Nabellen incomplete dossiers}
+{O_SELECTED, W_Nabellen incomplete dossiers}|{O_CREATED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{O_SELECTED, W_Nabellen incomplete dossiers}|{O_CREATED, W_Valideren aanvraag}
+{O_SELECTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_CREATED}
+{O_SELECTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_CREATED, W_Nabellen incomplete dossiers}
+{O_SELECTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_CREATED, W_Valideren aanvraag}
+{O_SELECTED, W_Nabellen incomplete dossiers, ▷}|{O_CREATED, ☐}
+{O_SELECTED, W_Valideren aanvraag}|{O_CREATED}
+{O_SELECTED, W_Valideren aanvraag}|{O_CREATED, W_Nabellen incomplete dossiers}
+{O_SELECTED, W_Valideren aanvraag}|{O_CREATED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{O_SELECTED, W_Valideren aanvraag}|{O_CREATED, W_Valideren aanvraag}
+{O_SELECTED, W_Valideren aanvraag, ▷}|{O_CREATED, ☐}
+{O_SELECTED, ▷}|{O_CREATED, W_Nabellen incomplete dossiers, ☐}
+{O_SELECTED, ▷}|{O_CREATED, W_Valideren aanvraag, ☐}
+{O_SELECTED, ▷}|{O_CREATED, ☐}
+{O_SENT, W_Nabellen incomplete dossiers, ▷}|{O_CREATED, ☐}
+{O_SENT, W_Valideren aanvraag, ▷}|{O_CREATED, ☐}
+{O_SENT, ▷}|{O_CREATED, W_Nabellen incomplete dossiers, ☐}
+{O_SENT, ▷}|{O_CREATED, W_Valideren aanvraag, ☐}
+{O_SENT, ▷}|{O_CREATED, ☐}
+{A_ACCEPTED}|{O_SELECTED}
+{A_ACCEPTED}|{O_SELECTED, W_Valideren aanvraag}
+{A_ACCEPTED, A_CANCELLED}|{O_SELECTED}
+{A_ACCEPTED, A_CANCELLED, O_CANCELLED}|{O_SELECTED}
+{A_ACCEPTED, A_CANCELLED, O_CREATED}|{O_SELECTED, O_SENT}
+{A_ACCEPTED, A_CANCELLED, O_SELECTED}|{O_SELECTED, O_SENT}
+{A_ACCEPTED, A_CANCELLED, ▷}|{O_SELECTED, ☐}
+{A_ACCEPTED, A_FINALIZED}|{O_SELECTED, O_SENT}
+{A_ACCEPTED, A_FINALIZED}|{O_SELECTED, O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, A_FINALIZED, O_CANCELLED}|{O_SELECTED, O_SENT}
+{A_ACCEPTED, A_FINALIZED, W_Valideren aanvraag}|{O_SELECTED, O_SENT}
+{A_ACCEPTED, O_CANCELLED}|{O_SELECTED}
+{A_ACCEPTED, O_CANCELLED}|{O_SELECTED, W_Nabellen incomplete dossiers}
+{A_ACCEPTED, O_CANCELLED}|{O_SELECTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED}|{O_SELECTED, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED, O_CREATED}|{O_SELECTED, O_SENT}
+{A_ACCEPTED, O_CANCELLED, O_SELECTED}|{O_SELECTED, O_SENT}
+{A_ACCEPTED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_SELECTED}
+{A_ACCEPTED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_SELECTED, W_Nabellen incomplete dossiers}
+{A_ACCEPTED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_SELECTED, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_SELECTED}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{O_SELECTED}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{O_SELECTED, W_Nabellen incomplete dossiers}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{O_SELECTED, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED, ▷}|{O_SELECTED, ☐}
+{A_ACCEPTED, O_CREATED}|{O_SELECTED, O_SENT}
+{A_ACCEPTED, O_CREATED}|{O_SELECTED, O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, O_CREATED, W_Nabellen incomplete dossiers}|{O_SELECTED, O_SENT}
+{A_ACCEPTED, O_CREATED, W_Valideren aanvraag}|{O_SELECTED, O_SENT}
+{A_ACCEPTED, O_SELECTED}|{O_SELECTED, O_SENT}
+{A_ACCEPTED, O_SELECTED}|{O_SELECTED, O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, O_SELECTED, W_Nabellen incomplete dossiers}|{O_SELECTED, O_SENT}
+{A_ACCEPTED, O_SELECTED, W_Valideren aanvraag}|{O_SELECTED, O_SENT}
+{A_ACCEPTED, W_Nabellen incomplete dossiers}|{O_SELECTED}
+{A_ACCEPTED, W_Nabellen incomplete dossiers}|{O_SELECTED, W_Valideren aanvraag}
+{A_ACCEPTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_SELECTED}
+{A_ACCEPTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_SELECTED, W_Valideren aanvraag}
+{A_ACCEPTED, W_Nabellen incomplete dossiers, ▷}|{O_SELECTED, ☐}
+{A_ACCEPTED, W_Valideren aanvraag}|{O_SELECTED}
+{A_ACCEPTED, W_Valideren aanvraag}|{O_SELECTED, W_Valideren aanvraag}
+{A_ACCEPTED, W_Valideren aanvraag, ▷}|{O_SELECTED, ☐}
+{A_ACCEPTED, ▷}|{O_SELECTED, W_Valideren aanvraag, ☐}
+{A_ACCEPTED, ▷}|{O_SELECTED, ☐}
+{A_CANCELLED, A_FINALIZED, ▷}|{O_SELECTED, ☐}
+{A_CANCELLED, O_CREATED, ▷}|{O_SELECTED, ☐}
+{A_CANCELLED, O_SELECTED, ▷}|{O_SELECTED, ☐}
+{A_CANCELLED, O_SENT, ▷}|{O_SELECTED, ☐}
+{A_FINALIZED, O_CANCELLED, ▷}|{O_SELECTED, ☐}
+{A_FINALIZED, W_Nabellen incomplete dossiers, ▷}|{O_SELECTED, ☐}
+{A_FINALIZED, W_Valideren aanvraag, ▷}|{O_SELECTED, ☐}
+{A_FINALIZED, ▷}|{O_SELECTED, W_Valideren aanvraag, ☐}
+{A_FINALIZED, ▷}|{O_SELECTED, ☐}
+{A_PREACCEPTED, O_CREATED, ▷}|{O_SELECTED, ☐}
+{A_PREACCEPTED, O_SELECTED, ▷}|{O_SELECTED, ☐}
+{A_PREACCEPTED, O_SENT, ▷}|{O_SELECTED, ☐}
+{O_CANCELLED, O_CREATED, ▷}|{O_SELECTED, ☐}
+{O_CANCELLED, O_SELECTED, ▷}|{O_SELECTED, ☐}
+{O_CANCELLED, O_SENT, ▷}|{O_SELECTED, ☐}
+{O_CREATED, W_Nabellen incomplete dossiers, ▷}|{O_SELECTED, ☐}
+{O_CREATED, W_Valideren aanvraag, ▷}|{O_SELECTED, ☐}
+{O_CREATED, ▷}|{O_SELECTED, W_Nabellen incomplete dossiers, ☐}
+{O_CREATED, ▷}|{O_SELECTED, W_Valideren aanvraag, ☐}
+{O_CREATED, ▷}|{O_SELECTED, ☐}
+{O_SELECTED, W_Nabellen incomplete dossiers, ▷}|{O_SELECTED, ☐}
+{O_SELECTED, W_Valideren aanvraag, ▷}|{O_SELECTED, ☐}
+{O_SELECTED, ▷}|{O_SELECTED, W_Nabellen incomplete dossiers, ☐}
+{O_SELECTED, ▷}|{O_SELECTED, W_Valideren aanvraag, ☐}
+{O_SELECTED, ▷}|{O_SELECTED, ☐}
+{O_SENT, W_Nabellen incomplete dossiers, ▷}|{O_SELECTED, ☐}
+{O_SENT, W_Valideren aanvraag, ▷}|{O_SELECTED, ☐}
+{O_SENT, ▷}|{O_SELECTED, W_Nabellen incomplete dossiers, ☐}
+{O_SENT, ▷}|{O_SELECTED, W_Valideren aanvraag, ☐}
+{O_SENT, ▷}|{O_SELECTED, ☐}
+{A_ACCEPTED}|{O_SENT}
+{A_ACCEPTED}|{O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, A_CANCELLED}|{O_SENT}
+{A_ACCEPTED, A_CANCELLED, O_CANCELLED}|{O_SENT}
+{A_ACCEPTED, A_CANCELLED, ▷}|{O_SENT, ☐}
+{A_ACCEPTED, O_CANCELLED}|{O_SENT}
+{A_ACCEPTED, O_CANCELLED}|{O_SENT, W_Nabellen incomplete dossiers}
+{A_ACCEPTED, O_CANCELLED}|{O_SENT, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED}|{O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_SENT}
+{A_ACCEPTED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_SENT, W_Nabellen incomplete dossiers}
+{A_ACCEPTED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_SENT}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{O_SENT}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{O_SENT, W_Nabellen incomplete dossiers}
+{A_ACCEPTED, O_CANCELLED, W_Valideren aanvraag}|{O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, O_CANCELLED, ▷}|{O_SENT, ☐}
+{A_ACCEPTED, W_Nabellen incomplete dossiers}|{O_SENT}
+{A_ACCEPTED, W_Nabellen incomplete dossiers}|{O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_SENT}
+{A_ACCEPTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, W_Nabellen incomplete dossiers, ▷}|{O_SENT, ☐}
+{A_ACCEPTED, W_Valideren aanvraag}|{O_SENT}
+{A_ACCEPTED, W_Valideren aanvraag}|{O_SENT, W_Valideren aanvraag}
+{A_ACCEPTED, W_Valideren aanvraag, ▷}|{O_SENT, ☐}
+{A_ACCEPTED, ▷}|{O_SENT, W_Valideren aanvraag, ☐}
+{A_ACCEPTED, ▷}|{O_SENT, ☐}
+{A_CANCELLED, A_FINALIZED}|{O_SENT}
+{A_CANCELLED, A_FINALIZED, O_CANCELLED}|{O_SENT}
+{A_CANCELLED, A_FINALIZED, O_CANCELLED}|{O_SENT, W_Valideren aanvraag}
+{A_CANCELLED, A_FINALIZED, O_CANCELLED, W_Valideren aanvraag}|{O_SENT}
+{A_CANCELLED, A_FINALIZED, W_Valideren aanvraag}|{O_SENT, W_Valideren aanvraag}
+{A_CANCELLED, A_FINALIZED, ▷}|{O_SENT, ☐}
+{A_CANCELLED, O_CREATED}|{O_SENT}
+{A_CANCELLED, O_CREATED}|{O_SENT, W_Valideren aanvraag}
+{A_CANCELLED, O_CREATED, W_Valideren aanvraag}|{O_SENT}
+{A_CANCELLED, O_CREATED, W_Valideren aanvraag}|{O_SENT, W_Valideren aanvraag}
+{A_CANCELLED, O_CREATED, ▷}|{O_SENT, ☐}
+{A_CANCELLED, O_SELECTED}|{O_SENT}
+{A_CANCELLED, O_SELECTED}|{O_SENT, W_Valideren aanvraag}
+{A_CANCELLED, O_SELECTED, W_Valideren aanvraag}|{O_SENT}
+{A_CANCELLED, O_SELECTED, W_Valideren aanvraag}|{O_SENT, W_Valideren aanvraag}
+{A_CANCELLED, O_SELECTED, ▷}|{O_SENT, ☐}
+{A_CANCELLED, O_SENT, ▷}|{O_SENT, ☐}
+{A_FINALIZED}|{O_SENT}
+{A_FINALIZED}|{O_SENT, W_Valideren aanvraag}
+{A_FINALIZED, O_CANCELLED}|{O_SENT}
+{A_FINALIZED, O_CANCELLED}|{O_SENT, W_Nabellen incomplete dossiers}
+{A_FINALIZED, O_CANCELLED}|{O_SENT, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{A_FINALIZED, O_CANCELLED}|{O_SENT, W_Valideren aanvraag}
+{A_FINALIZED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_SENT}
+{A_FINALIZED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_SENT, W_Nabellen incomplete dossiers}
+{A_FINALIZED, O_CANCELLED, W_Nabellen incomplete dossiers}|{O_SENT, W_Valideren aanvraag}
+{A_FINALIZED, O_CANCELLED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_SENT}
+{A_FINALIZED, O_CANCELLED, W_Valideren aanvraag}|{O_SENT}
+{A_FINALIZED, O_CANCELLED, W_Valideren aanvraag}|{O_SENT, W_Nabellen incomplete dossiers}
+{A_FINALIZED, O_CANCELLED, W_Valideren aanvraag}|{O_SENT, W_Valideren aanvraag}
+{A_FINALIZED, O_CANCELLED, ▷}|{O_SENT, ☐}
+{A_FINALIZED, W_Nabellen incomplete dossiers}|{O_SENT}
+{A_FINALIZED, W_Nabellen incomplete dossiers}|{O_SENT, W_Valideren aanvraag}
+{A_FINALIZED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_SENT}
+{A_FINALIZED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_SENT, W_Valideren aanvraag}
+{A_FINALIZED, W_Nabellen incomplete dossiers, ▷}|{O_SENT, ☐}
+{A_FINALIZED, W_Valideren aanvraag}|{O_SENT}
+{A_FINALIZED, W_Valideren aanvraag}|{O_SENT, W_Valideren aanvraag}
+{A_FINALIZED, W_Valideren aanvraag, ▷}|{O_SENT, ☐}
+{A_FINALIZED, ▷}|{O_SENT, W_Valideren aanvraag, ☐}
+{A_FINALIZED, ▷}|{O_SENT, ☐}
+{A_PREACCEPTED, O_CREATED}|{O_SENT}
+{A_PREACCEPTED, O_CREATED}|{O_SENT, W_Valideren aanvraag}
+{A_PREACCEPTED, O_CREATED, ▷}|{O_SENT, ☐}
+{A_PREACCEPTED, O_SELECTED}|{O_SENT}
+{A_PREACCEPTED, O_SELECTED}|{O_SENT, W_Valideren aanvraag}
+{A_PREACCEPTED, O_SELECTED, ▷}|{O_SENT, ☐}
+{A_PREACCEPTED, O_SENT, ▷}|{O_SENT, ☐}
+{O_CANCELLED, O_CREATED}|{O_SENT}
+{O_CANCELLED, O_CREATED}|{O_SENT, W_Nabellen incomplete dossiers}
+{O_CANCELLED, O_CREATED}|{O_SENT, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{O_CANCELLED, O_CREATED}|{O_SENT, W_Valideren aanvraag}
+{O_CANCELLED, O_CREATED, W_Valideren aanvraag}|{O_SENT}
+{O_CANCELLED, O_CREATED, W_Valideren aanvraag}|{O_SENT, W_Nabellen incomplete dossiers}
+{O_CANCELLED, O_CREATED, W_Valideren aanvraag}|{O_SENT, W_Valideren aanvraag}
+{O_CANCELLED, O_CREATED, ▷}|{O_SENT, ☐}
+{O_CANCELLED, O_SELECTED}|{O_SENT}
+{O_CANCELLED, O_SELECTED}|{O_SENT, W_Nabellen incomplete dossiers}
+{O_CANCELLED, O_SELECTED}|{O_SENT, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{O_CANCELLED, O_SELECTED}|{O_SENT, W_Valideren aanvraag}
+{O_CANCELLED, O_SELECTED, W_Valideren aanvraag}|{O_SENT}
+{O_CANCELLED, O_SELECTED, W_Valideren aanvraag}|{O_SENT, W_Nabellen incomplete dossiers}
+{O_CANCELLED, O_SELECTED, W_Valideren aanvraag}|{O_SENT, W_Valideren aanvraag}
+{O_CANCELLED, O_SELECTED, ▷}|{O_SENT, ☐}
+{O_CANCELLED, O_SENT, ▷}|{O_SENT, ☐}
+{O_CREATED}|{O_SENT}
+{O_CREATED}|{O_SENT, W_Nabellen incomplete dossiers}
+{O_CREATED}|{O_SENT, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{O_CREATED}|{O_SENT, W_Valideren aanvraag}
+{O_CREATED, W_Nabellen incomplete dossiers}|{O_SENT}
+{O_CREATED, W_Nabellen incomplete dossiers}|{O_SENT, W_Nabellen incomplete dossiers}
+{O_CREATED, W_Nabellen incomplete dossiers}|{O_SENT, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{O_CREATED, W_Nabellen incomplete dossiers}|{O_SENT, W_Valideren aanvraag}
+{O_CREATED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_SENT}
+{O_CREATED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_SENT, W_Nabellen incomplete dossiers}
+{O_CREATED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_SENT, W_Valideren aanvraag}
+{O_CREATED, W_Nabellen incomplete dossiers, ▷}|{O_SENT, ☐}
+{O_CREATED, W_Valideren aanvraag}|{O_SENT}
+{O_CREATED, W_Valideren aanvraag}|{O_SENT, W_Nabellen incomplete dossiers}
+{O_CREATED, W_Valideren aanvraag}|{O_SENT, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{O_CREATED, W_Valideren aanvraag}|{O_SENT, W_Valideren aanvraag}
+{O_CREATED, W_Valideren aanvraag, ▷}|{O_SENT, ☐}
+{O_CREATED, ▷}|{O_SENT, W_Nabellen incomplete dossiers, ☐}
+{O_CREATED, ▷}|{O_SENT, W_Valideren aanvraag, ☐}
+{O_CREATED, ▷}|{O_SENT, ☐}
+{O_SELECTED}|{O_SENT}
+{O_SELECTED}|{O_SENT, W_Nabellen incomplete dossiers}
+{O_SELECTED}|{O_SENT, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{O_SELECTED}|{O_SENT, W_Valideren aanvraag}
+{O_SELECTED, W_Nabellen incomplete dossiers}|{O_SENT}
+{O_SELECTED, W_Nabellen incomplete dossiers}|{O_SENT, W_Nabellen incomplete dossiers}
+{O_SELECTED, W_Nabellen incomplete dossiers}|{O_SENT, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{O_SELECTED, W_Nabellen incomplete dossiers}|{O_SENT, W_Valideren aanvraag}
+{O_SELECTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_SENT}
+{O_SELECTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_SENT, W_Nabellen incomplete dossiers}
+{O_SELECTED, W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{O_SENT, W_Valideren aanvraag}
+{O_SELECTED, W_Nabellen incomplete dossiers, ▷}|{O_SENT, ☐}
+{O_SELECTED, W_Valideren aanvraag}|{O_SENT}
+{O_SELECTED, W_Valideren aanvraag}|{O_SENT, W_Nabellen incomplete dossiers}
+{O_SELECTED, W_Valideren aanvraag}|{O_SENT, W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{O_SELECTED, W_Valideren aanvraag}|{O_SENT, W_Valideren aanvraag}
+{O_SELECTED, W_Valideren aanvraag, ▷}|{O_SENT, ☐}
+{O_SELECTED, ▷}|{O_SENT, W_Nabellen incomplete dossiers, ☐}
+{O_SELECTED, ▷}|{O_SENT, W_Valideren aanvraag, ☐}
+{O_SELECTED, ▷}|{O_SENT, ☐}
+{O_SENT, W_Nabellen incomplete dossiers, ▷}|{O_SENT, ☐}
+{O_SENT, W_Valideren aanvraag, ▷}|{O_SENT, ☐}
+{O_SENT, ▷}|{O_SENT, W_Nabellen incomplete dossiers, ☐}
+{O_SENT, ▷}|{O_SENT, W_Valideren aanvraag, ☐}
+{O_SENT, ▷}|{O_SENT, ☐}
+{A_CANCELLED, W_Afhandelen leads, ▷}|{W_Afhandelen leads, ☐}
+{A_PREACCEPTED, W_Afhandelen leads, ▷}|{W_Afhandelen leads, ☐}
+{O_CANCELLED, W_Afhandelen leads, ▷}|{W_Afhandelen leads, ☐}
+{W_Afhandelen leads, W_Nabellen incomplete dossiers, ▷}|{W_Afhandelen leads, ☐}
+{W_Afhandelen leads, W_Valideren aanvraag, ▷}|{W_Afhandelen leads, ☐}
+{W_Afhandelen leads, ▷}|{W_Afhandelen leads, W_Nabellen incomplete dossiers, ☐}
+{W_Afhandelen leads, ▷}|{W_Afhandelen leads, W_Valideren aanvraag, ☐}
+{W_Afhandelen leads, ▷}|{W_Afhandelen leads, ☐}
+{A_CANCELLED, W_Completeren aanvraag, ▷}|{W_Completeren aanvraag, ☐}
+{A_PREACCEPTED, W_Completeren aanvraag, ▷}|{W_Completeren aanvraag, ☐}
+{O_CANCELLED, W_Completeren aanvraag, ▷}|{W_Completeren aanvraag, ☐}
+{W_Completeren aanvraag, W_Nabellen incomplete dossiers, ▷}|{W_Completeren aanvraag, ☐}
+{W_Completeren aanvraag, W_Valideren aanvraag, ▷}|{W_Completeren aanvraag, ☐}
+{W_Completeren aanvraag, ▷}|{W_Completeren aanvraag, W_Nabellen incomplete dossiers, ☐}
+{W_Completeren aanvraag, ▷}|{W_Completeren aanvraag, W_Valideren aanvraag, ☐}
+{W_Completeren aanvraag, ▷}|{W_Completeren aanvraag, ☐}
+{A_CANCELLED, W_Nabellen incomplete dossiers, ▷}|{W_Nabellen incomplete dossiers, ☐}
+{A_CANCELLED, ▷}|{W_Nabellen incomplete dossiers, ☐}
+{A_PREACCEPTED, W_Nabellen incomplete dossiers, ▷}|{W_Nabellen incomplete dossiers, ☐}
+{O_CANCELLED}|{W_Nabellen incomplete dossiers}
+{O_CANCELLED}|{W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{O_CANCELLED, W_Nabellen incomplete dossiers, ▷}|{W_Nabellen incomplete dossiers, ☐}
+{O_CANCELLED, W_Valideren aanvraag}|{W_Nabellen incomplete dossiers}
+{O_CANCELLED, W_Valideren aanvraag}|{W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{O_CANCELLED, W_Valideren aanvraag, ▷}|{W_Nabellen incomplete dossiers, ☐}
+{O_CANCELLED, ▷}|{W_Nabellen incomplete dossiers, W_Valideren aanvraag, ☐}
+{O_CANCELLED, ▷}|{W_Nabellen incomplete dossiers, ☐}
+{W_Nabellen incomplete dossiers}|{W_Nabellen incomplete dossiers}
+{W_Nabellen incomplete dossiers}|{W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{W_Nabellen incomplete dossiers}
+{W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{W_Nabellen incomplete dossiers, W_Valideren aanvraag, ▷}|{W_Nabellen incomplete dossiers, ☐}
+{W_Nabellen incomplete dossiers, ▷}|{W_Nabellen incomplete dossiers, W_Valideren aanvraag, ☐}
+{W_Nabellen incomplete dossiers, ▷}|{W_Nabellen incomplete dossiers, ☐}
+{W_Nabellen offertes, ▷}|{W_Nabellen incomplete dossiers, W_Nabellen offertes, ☐}
+{W_Valideren aanvraag}|{W_Nabellen incomplete dossiers}
+{W_Valideren aanvraag}|{W_Nabellen incomplete dossiers, W_Valideren aanvraag}
+{W_Valideren aanvraag, ▷}|{W_Nabellen incomplete dossiers, W_Valideren aanvraag, ☐}
+{W_Valideren aanvraag, ▷}|{W_Nabellen incomplete dossiers, ☐}
+{▷}|{W_Nabellen incomplete dossiers, W_Valideren aanvraag, ☐}
+{▷}|{W_Nabellen incomplete dossiers, ☐}
+{A_CANCELLED, W_Nabellen offertes, ▷}|{W_Nabellen offertes, ☐}
+{A_PREACCEPTED, W_Nabellen offertes, ▷}|{W_Nabellen offertes, ☐}
+{O_CANCELLED, W_Nabellen offertes, ▷}|{W_Nabellen offertes, ☐}
+{W_Nabellen incomplete dossiers, W_Nabellen offertes, ▷}|{W_Nabellen offertes, ☐}
+{W_Nabellen offertes, W_Valideren aanvraag, ▷}|{W_Nabellen offertes, ☐}
+{W_Nabellen offertes, ▷}|{W_Nabellen offertes, W_Valideren aanvraag, ☐}
+{W_Nabellen offertes, ▷}|{W_Nabellen offertes, ☐}
+{A_CANCELLED}|{W_Valideren aanvraag}
+{A_CANCELLED, W_Valideren aanvraag}|{W_Valideren aanvraag}
+{A_CANCELLED, W_Valideren aanvraag, ▷}|{W_Valideren aanvraag, ☐}
+{A_CANCELLED, ▷}|{W_Valideren aanvraag, ☐}
+{A_PREACCEPTED}|{W_Valideren aanvraag}
+{A_PREACCEPTED, W_Valideren aanvraag, ▷}|{W_Valideren aanvraag, ☐}
+{A_PREACCEPTED, ▷}|{W_Valideren aanvraag, ☐}
+{O_CANCELLED}|{W_Valideren aanvraag}
+{O_CANCELLED, W_Valideren aanvraag}|{W_Valideren aanvraag}
+{O_CANCELLED, W_Valideren aanvraag, ▷}|{W_Valideren aanvraag, ☐}
+{O_CANCELLED, ▷}|{W_Valideren aanvraag, ☐}
+{W_Nabellen incomplete dossiers}|{W_Valideren aanvraag}
+{W_Nabellen incomplete dossiers, W_Valideren aanvraag}|{W_Valideren aanvraag}
+{W_Nabellen incomplete dossiers, W_Valideren aanvraag, ▷}|{W_Valideren aanvraag, ☐}
+{W_Nabellen incomplete dossiers, ▷}|{W_Valideren aanvraag, ☐}
+{W_Valideren aanvraag}|{W_Valideren aanvraag}
+{W_Valideren aanvraag, ▷}|{W_Valideren aanvraag, ☐}
+{▷}|{W_Valideren aanvraag, ☐}
+{A_CANCELLED, W_Valideren aanvraag, ▷}|{☐}
+{A_CANCELLED, ▷}|{☐}
+{A_PREACCEPTED, ▷}|{☐}
+{O_CANCELLED, W_Valideren aanvraag, ▷}|{☐}
+{O_CANCELLED, ▷}|{☐}
+{W_Nabellen incomplete dossiers, W_Valideren aanvraag, ▷}|{☐}
+{W_Nabellen incomplete dossiers, ▷}|{☐}
+{W_Valideren aanvraag, ▷}|{☐}
+{▷}|{☐}

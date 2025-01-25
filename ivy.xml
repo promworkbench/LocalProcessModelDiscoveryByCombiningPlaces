@@ -23,6 +23,7 @@
 		<dependency org="prom" name="HeuristicsMiner" rev="latest" changing="true" transitive="true"/>
 		<dependency org="prom" name="AcceptingPetriNetRedundantPlacesReductor" rev="latest" changing="true"	transitive="true"/>
 		<dependency org="prom" name="AcceptingPetriNetClassicalReductor" rev="latest" changing="true" transitive="true"/>
+		<dependency org="prom" name="SPECpp" rev="latest" changing="true" transitive="true"/>
 		<!-- Third party libraries. These may span multiple lines. -->
     	<!-- Please uncomment the second line in the resolve target in your build.xml file
     	     if you have any third party libraries. -->

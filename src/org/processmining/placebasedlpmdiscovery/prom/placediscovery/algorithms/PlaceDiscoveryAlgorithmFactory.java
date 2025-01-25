@@ -4,6 +4,7 @@ import org.processmining.placebasedlpmdiscovery.prom.placediscovery.converters.p
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.EstMinerPlaceDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.HeuristicMinerPlaceDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.InductiveMinerPlaceDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.SPECppPlaceDiscoveryParameters;
 
 public class PlaceDiscoveryAlgorithmFactory {
 
@@ -17,5 +18,9 @@ public class PlaceDiscoveryAlgorithmFactory {
 
     public HeuristicMinerPlaceDiscoveryAlgorithm createPlaceDiscoveryAlgorithm(HeuristicMinerPlaceDiscoveryParameters parameters) {
         return new HeuristicMinerPlaceDiscoveryAlgorithm(new PetriNetPlaceConverter(), parameters);
+    }
+
+    public SPECppPlaceDiscoveryAlgorithm createPlaceDiscoveryAlgorithm(SPECppPlaceDiscoveryParameters parameters) {
+        return new SPECppPlaceDiscoveryAlgorithm(new PetriNetPlaceConverter(), parameters);
     }
 }

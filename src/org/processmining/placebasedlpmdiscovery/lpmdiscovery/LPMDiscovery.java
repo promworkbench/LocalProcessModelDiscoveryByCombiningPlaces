@@ -7,7 +7,7 @@ import org.processmining.placebasedlpmdiscovery.prom.PlacesProvider;
 public interface LPMDiscovery {
 
     static LPMDiscovery getInstance() {
-        return placeBased(PlacesProvider.getInstance(), 30);
+        return placeBased(PlacesProvider.getInstance(), 100);
     }
 
     static LPMDiscovery placeBased(PlacesProvider placesProvider, int placeLimit) {
