@@ -1,4 +1,4 @@
-# Use a base image that has Java and Ant installed
+# Use a base image that has Java and Ant installed (name it builder)
 FROM openjdk:11-jdk-slim AS builder
 
 # Set environment variables for ANT and IVY versions
@@ -18,7 +18,7 @@ ENV PATH="${PATH}:${ANT_HOME}/bin"
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy the build.xml and ivy.xml files into the container
+# Copy the build.xml and ivy.xml files into the container. Make sure the build.xml has a target that installs ivy.
 COPY build-docker.xml ./build.xml
 COPY ivy.xml .
 COPY ivysettings.xml .
@@ -31,8 +31,8 @@ RUN ant -buildfile build.xml init-ivy
 RUN ant -buildfile build.xml make
 
 
-# Use a smaller OpenJDK image for running the application
-FROM openjdk:11-jre-slim
+# Use a smaller OpenJDK image for running the application (the name you choose here will be given to the created image)
+FROM openjdk:11-jre-slim AS lpm-wonderland
 
 # Set the working directory inside the container
 WORKDIR /app
