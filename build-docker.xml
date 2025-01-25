@@ -1,0 +1,105 @@
+<project name="LocalProcessModelDiscoveryByCombiningPlaces"
+         default="make"
+         basedir="."
+         xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <!-- Define properties -->
+    <property name="src.dir" value="src"/>
+    <property name="bin.dir" value="bin"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="manifest.file" value="${basedir}/META-INF/MANIFEST-clustering.MF"/>
+    <property name="lib.dir" value="dist/lib"/>
+
+    <property name="ivy.install.version" value="2.1.0-rc2" />
+    <condition property="ivy.home" value="${env.IVY_HOME}">
+        <isset property="env.IVY_HOME" />
+    </condition>
+    <property name="ivy.home" value="${user.home}/.ant" />
+    <property name="ivy.jar.dir" value="${ivy.home}/lib" />
+    <property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
+
+    <target name="download-ivy" unless="offline">
+
+        <mkdir dir="${ivy.jar.dir}"/>
+        <!-- download Ivy from web site so that it can be used even without any special installation -->
+        <get src="https://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+             dest="${ivy.jar.file}" usetimestamp="true"/>
+    </target>
+
+    <target name="init-ivy" depends="download-ivy">
+        <!-- try to load ivy here from ivy home, in case the user has not already dropped
+                it into ant's lib dir (note that the latter copy will always take precedence).
+                We will not fail as long as local lib dir exists (it may be empty) and
+                ivy is in at least one of ant's lib dir or the local lib dir. -->
+        <path id="ivy.lib.path">
+            <fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+
+        </path>
+        <taskdef resource="org/apache/ivy/ant/antlib.xml"
+                 uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/>
+    </target>
+
+    <!-- Target for retrieving dependencies -->
+    <target name="retrieve">
+        <mkdir dir="${lib.dir}"/>  <!-- Ensure lib directory exists -->
+        <ivy:retrieve pattern="${lib.dir}/[artifact]-[revision].[ext]" />
+    </target>
+
+    <!-- Target for compiling Java source files -->
+    <target name="compile">
+        <mkdir dir="${bin.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${bin.dir}">
+            <classpath>
+                <!-- Include all JARs from the lib directory (retrieved by Ivy) -->
+                <fileset dir="${lib.dir}">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="set-classpath" depends="retrieve, compile">
+        <manifestclasspath property="jar.classpath" jarfile="${dist.dir}/lpm-discovery.jar">
+            <classpath>
+                <fileset dir="${lib.dir}" includes="*.jar"/>
+            </classpath>
+        </manifestclasspath>
+    </target>
+
+
+    <!-- Target for creating the clustering JAR file with manifest -->
+    <target name="make-clust" depends="set-classpath">
+        <jar jarfile="${dist.dir}/lpm-clustering.jar" basedir="${bin.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="org.processmining.placebasedlpmdiscovery.runners.clustering.LPMClusteringRunner"/>
+                <attribute name="Class-Path" value="${jar.classpath}"/>
+            </manifest>
+        </jar>
+
+        <!-- Optionally print success message -->
+        <echo message="JAR created successfully for clustering"/>
+    </target>
+
+    <!-- Target for creating the JAR file with manifest -->
+    <target name="make-discovery" depends="set-classpath">
+        <jar jarfile="${dist.dir}/lpm-discovery.jar" basedir="${bin.dir}">
+            <manifest>
+                <attribute name="Main-Class"
+                           value="org.processmining.placebasedlpmdiscovery.runners.lpmdiscovery.LPMDiscoveryRunner"/>
+                <attribute name="Class-Path" value="${jar.classpath}"/>
+            </manifest>
+        </jar>
+
+        <!-- Optionally print success message -->
+        <echo message="JAR created successfully for discovery"/>
+    </target>
+
+    <target name="make" depends="make-clust, make-discovery"/>
+
+    <target name="clean">
+        <echo message="[build] Cleaning binaries and distributions" />
+        <delete dir="${bin.dir}" />
+        <delete dir="${dist.dir}" />
+    </target>
+
+</project>
