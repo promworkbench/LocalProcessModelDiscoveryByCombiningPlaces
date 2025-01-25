@@ -1,7 +1,7 @@
 <ivy-module version="2.0">
     <info organisation="prom" module="LocalProcessModelDiscoveryByCombiningPlaces" revision="latest">
     	<description>
-    		Version 6.15.24
+    		Version 6.15.25
     	</description>
     </info>
     <configurations>
@@ -23,6 +23,7 @@
 		<dependency org="prom" name="HeuristicsMiner" rev="latest" changing="true" transitive="true"/>
 		<dependency org="prom" name="AcceptingPetriNetRedundantPlacesReductor" rev="latest" changing="true"	transitive="true"/>
 		<dependency org="prom" name="AcceptingPetriNetClassicalReductor" rev="latest" changing="true" transitive="true"/>
+		<dependency org="prom" name="SPECpp" rev="latest" changing="true" transitive="true"/>
 		<!-- Third party libraries. These may span multiple lines. -->
     	<!-- Please uncomment the second line in the resolve target in your build.xml file
     	     if you have any third party libraries. -->
