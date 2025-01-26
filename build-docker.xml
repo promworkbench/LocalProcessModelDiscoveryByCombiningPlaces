@@ -43,40 +43,21 @@
     <target name="retrieve">
         <mkdir dir="${lib.dir}"/>  <!-- Ensure lib directory exists -->
         <ivy:retrieve type="jar,bundle" sync="true" haltonfailure="false" />
-        <ivy:retrieve pattern="${lib.dir}/[artifact]-[revision].[ext]" conf="lib" type="jar,bundle" sync="true"/>
+        <ivy:retrieve pattern="${lib.dir}/[artifact]-[revision].[ext]" conf="lib,default" type="jar,bundle"
+                      sync="true"/>
     </target>
-
-    <path id="classpath">
-        <pathelement path="${bin.dir}" />
-        <pathelement path="${java.class.path}" />
-        <fileset dir=".">
-            <include name="ivy/**/*.jar" />
-            <include name="lib/**/*.jar" />
-            <!--include name="stdlib/**/*.jar" />
-            <include name="packagelib/**/*.jar" /-->
-        </fileset>
-    </path>
 
     <!-- Target for compiling Java source files -->
     <target name="compile">
         <mkdir dir="${bin.dir}"/>
-<!--        <javac srcdir="${src.dir}" destdir="${bin.dir}">-->
-<!--            <classpath>-->
-<!--                &lt;!&ndash; Include all JARs from the lib directory (retrieved by Ivy) &ndash;&gt;-->
-<!--                <fileset dir="${lib.dir}">-->
-<!--                    <include name="*.jar"/>-->
-<!--                </fileset>-->
-<!--            </classpath>-->
-<!--        </javac>-->
-        <sequential>
-            <!-- Compile the java code from ${src}-@{module} into ${build} -->
-            <javac srcdir="${src.dir}" classpathref="classpath" destdir="${bin.dir}" nowarn="false" verbose="no"
-                   debug="true" debuglevel="lines,vars,source" deprecation="yes" source="1.8"
-                   target="1.8">
-                <!-- Check for unsafe operations -->
-                <compilerarg value="-Xlint:unchecked" />
-            </javac>
-        </sequential>
+        <javac srcdir="${src.dir}" destdir="${bin.dir}">
+            <classpath>
+                <!-- Include all JARs from the lib directory (retrieved by Ivy) -->
+                <fileset dir="${lib.dir}">
+                    <include name="*.jar"/>
+                </fileset>
+            </classpath>
+        </javac>
     </target>
 
     <target name="set-classpath" depends="retrieve, compile">
