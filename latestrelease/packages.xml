@@ -1,6 +1,6 @@
 
 					<packages>
-						<package name="LocalProcessModelDiscoveryByCombiningPlaces" version="6.15.26" os="all" url="LocalProcessModelDiscoveryByCombiningPlaces/LocalProcessModelDiscoveryByCombiningPlaces-6.15.26-all.zip" desc="LocalProcessModelDiscoveryByCombiningPlaces" org="RWTH Aachen" license="GPL" author="Viki Peeva" auto="false" hasPlugins="true" logo="prom_subtitle_hat_300.png">
+						<package name="LocalProcessModelDiscoveryByCombiningPlaces" version="6.15.27" os="all" url="LocalProcessModelDiscoveryByCombiningPlaces/LocalProcessModelDiscoveryByCombiningPlaces-6.15.27-all.zip" desc="LocalProcessModelDiscoveryByCombiningPlaces" org="RWTH Aachen" license="GPL" author="Viki Peeva" auto="false" hasPlugins="true" logo="prom_subtitle_hat_300.png">
 				    	<dependency org="prom" name="ProM-Plugins" rev="latest" changing="true" transitive="true" />
     	<dependency org="prom" name="BasicUtils" rev="latest" changing="true" transitive="true" />
     	<dependency org="prom" name="Widgets" rev="latest" changing="true" transitive="true" />
