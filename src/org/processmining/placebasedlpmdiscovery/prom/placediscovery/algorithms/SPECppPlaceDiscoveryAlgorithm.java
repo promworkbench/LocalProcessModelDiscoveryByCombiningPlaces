@@ -35,7 +35,7 @@ public class SPECppPlaceDiscoveryAlgorithm extends PlaceDiscoveryAlgorithm<SPECp
         try (ExecutionEnvironment ee = new ExecutionEnvironment(Runtime.getRuntime().availableProcessors())) {
             execution = ee.execute(specpp, ExecutionParameters.timeouts(
                     new ExecutionParameters.ExecutionTimeLimits(
-                            Duration.ofMinutes(5), Duration.ofMinutes(3), Duration.ofMinutes(10))));
+                            Duration.ofMinutes(5), Duration.ofMinutes(50), Duration.ofMinutes(60))));
 
             ee.addCompletionCallback(execution, ex -> {
                 ProMPetrinetWrapper petrinetWrapper = ex.getSPECpp().getPostProcessedResult();
