@@ -96,7 +96,21 @@
         <echo message="JAR created successfully for discovery"/>
     </target>
 
-    <target name="make" depends="make-clust, make-discovery"/>
+    <target name="make-dist" depends="set-classpath">
+        <jar jarfile="${dist.dir}/lpm-distance.jar" basedir="${bin.dir}">
+            <manifest>
+                <attribute name="Main-Class"
+                           value="org.processmining.placebasedlpmdiscovery.runners.distancerunner.DistanceComputationRunner"/>
+                <attribute name="Class-Path" value="${jar.classpath}"/>
+            </manifest>
+        </jar>
+
+        <!-- Optionally print success message -->
+        <echo message="JAR created successfully for clustering"/>
+    </target>
+
+
+    <target name="make" depends="make-clust, make-discovery, make-dist"/>
 
     <target name="clean">
         <echo message="[build] Cleaning binaries and distributions" />

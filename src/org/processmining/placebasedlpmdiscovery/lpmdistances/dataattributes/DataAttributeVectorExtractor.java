@@ -1,6 +1,5 @@
 package org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes;
 
-import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import org.apache.commons.lang3.ArrayUtils;
 import org.deckfour.xes.model.XLog;
@@ -12,6 +11,7 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummary;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.AttributeSummaryController;
 import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.LiteralAttributeSummary;
+import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -46,6 +46,9 @@ public class DataAttributeVectorExtractor {
 
     public DataAttributeVectorExtractor(XLog log, @Assisted Collection<String> attributes) {
         this.log = log;
+        if (attributes == null || attributes.isEmpty()) {
+            attributes = LogUtils.getEventAttributesKeys(this.log);
+        }
         this.attributeSummaryController = new AttributeSummaryController();
 
         this.defaultEventAttributeSummaries = new EventAttributeCollectorResult();

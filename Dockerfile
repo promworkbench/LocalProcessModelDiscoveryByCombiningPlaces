@@ -41,6 +41,7 @@ WORKDIR /app
 COPY --from=builder /app/dist/lib ./lib
 COPY --from=builder /app/dist/lpm-clustering.jar .
 COPY --from=builder /app/dist/lpm-discovery.jar .
+COPY --from=builder /app/dist/lpm-distance.jar .
 
 # Command for welcome
 # run a script for welcome message
