@@ -7,11 +7,11 @@ import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.traversals.L
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.parameters.LPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterSubject;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,11 +22,14 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 
     private final LPMBuildingAlg lpmBuildingAlg;
     private final LPMFiltrationController lpmFiltrationController;
+    private final LPMEvaluationController evaluationController;
 
     public StandardLPMDiscoveryAlg(LPMBuildingAlg lpmBuildingAlg,
-                                   LPMFiltrationController lpmFiltrationController) {
+                                   LPMFiltrationController lpmFiltrationController,
+                                   LPMEvaluationController evaluationController) {
         this.lpmBuildingAlg = lpmBuildingAlg;
         this.lpmFiltrationController = lpmFiltrationController;
+        this.evaluationController = evaluationController;
     }
 
     @Override
@@ -62,6 +65,7 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
                 }
             }
             result = new StandardLPMDiscoveryResult(lpms);
+            result.addAdditionalResults("eventCoverageSetLevel", this.evaluationController.getEventCoverageSetLevel());
 //            result = this.lpmCombination.combine(places, parameters.getLpmCount());
             result.keep(parameters.getLpmCount());
             result.setInput(input);

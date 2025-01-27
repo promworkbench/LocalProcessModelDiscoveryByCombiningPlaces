@@ -16,8 +16,8 @@ import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceService;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.dependencyinjection.LPMDistancesDependencyInjectionModule;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.serialization.ModelDistanceConfigDeserializer;
-import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerInput;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerOutput;
 import org.processmining.placebasedlpmdiscovery.runners.serialization.RunnerInputAdapter;
@@ -32,6 +32,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class DistanceComputationRunner {
@@ -86,13 +87,15 @@ public class DistanceComputationRunner {
         Table<String, String, Double> distanceTable = tableBuilder.build();
         try (CSVPrinter csvPrinter = CSVFormat.DEFAULT
                 .builder()
-                .setHeader(ArrayUtils.concatAll(new String[]{"LPM"}, lpms.stream().map(LocalProcessModel::getShortString).toArray(String[]::new)))
+                .setHeader(ArrayUtils.concatAll(new String[]{"LPM"},
+                        lpms.stream().map(LocalProcessModel::getShortString).sorted().toArray(String[]::new)))
                 .build()
                 .print(Paths.get(filePath), StandardCharsets.UTF_8)) {
             csvPrinter.printRecords(distanceTable.rowMap().entrySet()
                     .stream().map(entry -> ImmutableList.builder()
                             .add(entry.getKey())
-                            .addAll(entry.getValue().values())
+                            .addAll(entry.getValue().entrySet().stream().sorted(Map.Entry.comparingByKey())
+                                    .map(Map.Entry::getValue).collect(Collectors.toList()))
                             .build())
                     .collect(Collectors.toList()));
         }

@@ -8,6 +8,7 @@ import org.processmining.placebasedlpmdiscovery.model.exporting.Exportable;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Map;
 
 public interface LPMDiscoveryResult extends Exportable<LPMDiscoveryResult> {
     Collection<LocalProcessModel> getAllLPMs();
@@ -31,4 +32,8 @@ public interface LPMDiscoveryResult extends Exportable<LPMDiscoveryResult> {
     static LPMDiscoveryResult fromFile(String filePath) throws IOException {
         return new FromFileLPMDiscoveryResult(filePath);
     }
+
+    void addAdditionalResults(String key, Object additionalResult);
+
+    Map<String, Object> getAdditionalResults();
 }

@@ -10,7 +10,6 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltr
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.lpmevaluators.WindowLPMCollector;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollectorResult;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,7 +47,7 @@ public class LPMDiscoveryAlgBuilderImpl implements LPMDiscoveryAlgBuilder {
 
         StandardLPMDiscoveryAlg alg = new StandardLPMDiscoveryAlg(
                 this.lpmBuildingAlgFactory.createLPMBuildingAlg(this.lpmBuildingAlgType),
-                this.filtrationController);
+                this.filtrationController, this.evaluationController);
 
         return alg;
     }

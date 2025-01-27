@@ -1,11 +1,11 @@
 package org.processmining.placebasedlpmdiscovery.model.inout;
 
 import org.apache.commons.lang.NotImplementedException;
-import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
-import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryConfig;
 import org.processmining.placebasedlpmdiscovery.main.MultipleLPMDiscoveryResults;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.Exporter;
 
 import java.io.OutputStream;
@@ -63,5 +63,15 @@ public class TwoStandardLPMDiscoveryResults implements MultipleLPMDiscoveryResul
     @Override
     public void export(Exporter<LPMDiscoveryResult> exporter, OutputStream os) {
         exporter.export(this, os);
+    }
+
+    @Override
+    public void addAdditionalResults(String key, Object additionalResult) {
+        throw new NotImplementedException("Still not implemented.");
+    }
+
+    @Override
+    public Map<String, Object> getAdditionalResults() {
+        throw new NotImplementedException("Still not implemented.");
     }
 }

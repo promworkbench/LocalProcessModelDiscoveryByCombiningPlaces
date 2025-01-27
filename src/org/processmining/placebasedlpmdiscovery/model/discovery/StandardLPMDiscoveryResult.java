@@ -1,17 +1,19 @@
 package org.processmining.placebasedlpmdiscovery.model.discovery;
 
 import org.apache.commons.lang.NotImplementedException;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryConfig;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.Exporter;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.MainFPGrowthLPMTree;
 
 import java.io.OutputStream;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class StandardLPMDiscoveryResult implements LPMDiscoveryResult {
@@ -20,8 +22,11 @@ public class StandardLPMDiscoveryResult implements LPMDiscoveryResult {
 
     private transient LPMDiscoveryInput input;
 
+    private transient Map<String, Object> additionalResults;
+
     public StandardLPMDiscoveryResult(Collection<LocalProcessModel> lpms) {
         this.lpms = lpms;
+        this.additionalResults = new HashMap<>();
     }
 
     /**
@@ -57,6 +62,16 @@ public class StandardLPMDiscoveryResult implements LPMDiscoveryResult {
                         FittingWindowsEvaluationResult.class).getResult()))
                 .collect(Collectors.toList())
                 .subList(0, Math.min(getAllLPMs().size(), lpmCount));
+    }
+
+    @Override
+    public void addAdditionalResults(String key, Object additionalResult) {
+        this.additionalResults.put(key, additionalResult);
+    }
+
+    @Override
+    public Map<String, Object> getAdditionalResults() {
+        return this.additionalResults;
     }
 
     @Override
