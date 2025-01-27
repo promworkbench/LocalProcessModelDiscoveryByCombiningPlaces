@@ -38,6 +38,7 @@ public class LPMDiscoveryRunner {
         List<LPMDiscoveryRunnerConfig> runnerConfigs = readConfig(configPath);
 
         for (LPMDiscoveryRunnerConfig config : runnerConfigs) {
+            System.out.println(config.getInput().get("eventlog"));
             XLog log = LogUtils.readLogFromFile(config.getInput().get("eventlog"));
             LPMDiscoveryResult result = LPMDiscovery.getInstance().from(log);
             System.out.println(result.getAllLPMs().size());
