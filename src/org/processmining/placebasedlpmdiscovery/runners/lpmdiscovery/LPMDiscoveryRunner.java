@@ -8,6 +8,7 @@ import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig
 import org.processmining.placebasedlpmdiscovery.lpmdistances.serialization.ModelDistanceConfigDeserializer;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.CSVExporter;
+import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.ExporterFactory;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerInput;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerOutput;
 import org.processmining.placebasedlpmdiscovery.runners.serialization.RunnerInputAdapter;
@@ -17,6 +18,8 @@ import org.python.google.common.reflect.TypeToken;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 public class LPMDiscoveryRunner {
@@ -41,8 +44,8 @@ public class LPMDiscoveryRunner {
             LPMDiscoveryResult result = LPMDiscovery.getInstance().from(log);
             System.out.println(result.getAllLPMs().size());
             CSVExporter.export(result, config.getOutput().get("lpms"));
-//            result.export(ExporterFactory.createLPMDiscoveryResultExporter(),
-//                    Files.newOutputStream(Paths.get(config.getOutput().get("lpms"))));
+            result.export(ExporterFactory.createLPMDiscoveryResultExporter(),
+                    Files.newOutputStream(Paths.get(config.getOutput().get("lpms")+".json")));
 //            File coverageResFile = new File(config.getOutput().get("lpms").replaceFirst(".json", "-coverage.csv"));
 //            ((LPMEvaluationController.EventCoverageSetLevel) result.getAdditionalResults().get("eventCoverageSetLevel"))
 //                    .export(coverageResFile);
