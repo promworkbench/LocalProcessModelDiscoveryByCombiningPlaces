@@ -3,7 +3,6 @@ package org.processmining.placebasedlpmdiscovery.model;
 import org.processmining.models.graphbased.NodeID;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
 
-import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -208,8 +207,9 @@ public class LocalProcessModel implements Serializable, TextDescribable {
     @Override
     public String getShortString() {
         StringBuilder sb = new StringBuilder();
-        for (Place place : places)
-            sb.append(place.getShortString());
+        List<String> placeStrings = this.places.stream().map(Place::getShortString).sorted().collect(Collectors.toList());
+        for (String placeStr : placeStrings)
+            sb.append(placeStr);
         return sb.toString();
     }
 

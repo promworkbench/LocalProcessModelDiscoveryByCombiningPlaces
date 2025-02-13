@@ -59,7 +59,8 @@ public class LPMResultToZipWithCsvExportPlugin {
             String zfName = prefix + "." + lpm.getId() + ".pnml";
 
             // add the net file to the zip folder
-            ByteArrayOutputStream oos = Utils.exportAcceptingPetriNetToOutputStream(context, apn);
+            ByteArrayOutputStream oos = new ByteArrayOutputStream();
+            Utils.exportAcceptingPetriNetToOutputStream(context, apn, oos);
             addContentToZip(out, oos.toByteArray(), prefix + "." + lpm.getId() + ".pnml");
 
             // write an entry in the csv

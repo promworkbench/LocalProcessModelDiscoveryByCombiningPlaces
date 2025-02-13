@@ -4,10 +4,7 @@ import com.google.common.collect.Sets;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.PlaceAdditionalInfo;
 
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /***
@@ -91,11 +88,14 @@ public class Place implements Serializable, TextDescribable {
     public String getShortString() {
         StringBuilder sb = new StringBuilder();
         sb.append("(");
-        for (Transition tr : this.inputTransitions)
-            sb.append(tr.getLabel()).append(" ");
+        List<String> trStr = inputTransitions.stream().map(Transition::getLabel).sorted().collect(Collectors.toList());
+        for (String tr : trStr)
+            sb.append(tr).append(" ");
         sb.append("|");
-        for (Transition tr : this.outputTransitions)
-            sb.append(" ").append(tr.getLabel());
+
+        trStr = outputTransitions.stream().map(Transition::getLabel).sorted().collect(Collectors.toList());
+        for (String tr : trStr)
+            sb.append(" ").append(tr);
         sb.append(")");
 
         return sb.toString();

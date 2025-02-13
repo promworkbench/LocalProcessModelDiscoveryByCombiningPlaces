@@ -108,6 +108,7 @@ public class LPMEvaluationController implements EvaluatorHub {
             }
 
             Table<String, String, Integer> coverageTable = tableBuilder.build();
+            System.out.println(coverageTable.rowMap().size());
             try (CSVPrinter csvPrinter = CSVFormat.DEFAULT
                     .builder()
                     .setHeader(ArrayUtils.concatAll(new String[]{"LPM"},

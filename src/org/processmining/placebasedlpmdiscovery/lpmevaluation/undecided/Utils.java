@@ -4,9 +4,7 @@ import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.framework.connections.ConnectionCannotBeObtained;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.models.connections.GraphLayoutConnection;
-import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
-import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.plugins.pnml.base.FullPnmlElementFactory;
 import org.processmining.plugins.pnml.base.Pnml;
@@ -85,11 +83,12 @@ public class Utils {
         return resSet;
     }
 
-    public static ByteArrayOutputStream exportAcceptingPetriNetToOutputStream(AcceptingPetriNet apn) throws IOException {
-        return exportAcceptingPetriNetToOutputStream(apn, new GraphLayoutConnection(apn.getNet()));
+    public static void exportAcceptingPetriNetToOutputStream(AcceptingPetriNet apn, OutputStream os) throws IOException {
+        exportAcceptingPetriNetToOutputStream(apn, new GraphLayoutConnection(apn.getNet()), os);
     }
 
-    public static ByteArrayOutputStream exportAcceptingPetriNetToOutputStream(AcceptingPetriNet apn, GraphLayoutConnection layout) throws IOException {
+    public static void exportAcceptingPetriNetToOutputStream(AcceptingPetriNet apn, GraphLayoutConnection layout,
+                                                          OutputStream os) throws IOException {
         PnmlElementFactory factory = new FullPnmlElementFactory();
         Pnml pnml = new Pnml();
         synchronized(factory) {
@@ -100,11 +99,10 @@ public class Utils {
 
         String text = "<?xml version=\"1.0\" encoding=\"ISO-8859-1\"?>\n" + pnml.exportElement(pnml);
 
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
         os.write(text.getBytes());
-        return os;
     }
-    public static ByteArrayOutputStream exportAcceptingPetriNetToOutputStream(PluginContext context, AcceptingPetriNet apn) throws IOException {
+    public static void exportAcceptingPetriNetToOutputStream(PluginContext context,
+                                                                              AcceptingPetriNet apn, OutputStream os) throws IOException {
         GraphLayoutConnection layout;
         try {
             layout = (GraphLayoutConnection) context.getConnectionManager().getFirstConnection(GraphLayoutConnection.class, context, new Object[]{apn.getNet()});
@@ -112,7 +110,7 @@ public class Utils {
             layout = new GraphLayoutConnection(apn.getNet());
         }
 
-        return exportAcceptingPetriNetToOutputStream(apn, layout);
+        exportAcceptingPetriNetToOutputStream(apn, layout, os);
     }
 
     public static Map<String, Integer> getStringsToIntegerMap(Set<String> strings) {
