@@ -63,7 +63,9 @@ public class CSVExporter {
                 }
                 csvWriter.write(String.valueOf(aggregateOperation.aggregate(lpm.getAdditionalInfo().getEvaluationResults().values())));
                 csvWriter.endRecord();
+                csvWriter.flush();
             }
+            csvWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
