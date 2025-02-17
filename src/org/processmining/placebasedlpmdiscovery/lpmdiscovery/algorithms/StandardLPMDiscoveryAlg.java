@@ -67,6 +67,7 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
             result = new StandardLPMDiscoveryResult(lpms);
             result.addAdditionalResults("eventCoverageSetLevel", this.evaluationController.getEventCoverageSetLevel());
 //            result = this.lpmCombination.combine(places, parameters.getLpmCount());
+
             result.keep(parameters.getLpmCount());
             result.setInput(input);
 

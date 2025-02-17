@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.model.discovery;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryConfig;
@@ -25,7 +26,12 @@ public class StandardLPMDiscoveryResult implements LPMDiscoveryResult {
     private transient Map<String, Object> additionalResults;
 
     public StandardLPMDiscoveryResult(Collection<LocalProcessModel> lpms) {
-        this.lpms = lpms;
+        this.lpms = lpms.stream()
+                .sorted(Comparator.comparingDouble((LocalProcessModel lpm) ->
+                        lpm.getAdditionalInfo().getEvaluationResult(
+                                StandardLPMEvaluationResultId.TraceSupportEvaluationResult.name(),
+                                LPMEvaluationResult.class).getResult()))
+                .collect(Collectors.toList());
         this.additionalResults = new HashMap<>();
     }
 
