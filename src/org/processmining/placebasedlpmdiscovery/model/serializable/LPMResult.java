@@ -5,7 +5,6 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.L
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryConfig;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
-import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.Exporter;
 
 import java.io.OutputStream;
@@ -25,7 +24,7 @@ public class LPMResult extends SerializableList<LocalProcessModel> implements LP
     }
 
     // QA: How does one convert from one child to another of a superclass?
-    public LPMResult(StandardLPMDiscoveryResult result) {
+    public LPMResult(LPMDiscoveryResult result) {
         super(result.getAllLPMs());
         this.additionalResults = result.getAdditionalResults();
     }

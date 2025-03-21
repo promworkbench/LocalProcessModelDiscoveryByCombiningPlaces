@@ -8,10 +8,8 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.S
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.parameters.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
-import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
-import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.prom.PlacesProvider;
 
 import java.util.Set;
@@ -35,9 +33,11 @@ public class PlaceBasedLPMDiscovery implements LPMDiscovery {
 
         LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
         Set<Place> places = this.placesProvider.from(log);
+
         FPGrowthForPlacesLPMBuildingInput lpmBuildingInput = new FPGrowthForPlacesLPMBuildingInput(eventLog, places);
         StandardLPMDiscoveryInput discoveryInput =
                 new StandardLPMDiscoveryInput(eventLog, lpmBuildingInput);
-        return new LPMResult((StandardLPMDiscoveryResult) builder.build().run(discoveryInput, parameters));
+
+        return builder.build().run(discoveryInput, parameters);
     }
 }

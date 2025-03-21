@@ -8,6 +8,7 @@ import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.dependencyinjection.LPMDiscoveryResultGuiceModule;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.prom.dependencyinjection.PromGuiceModule;
 import org.processmining.placebasedlpmdiscovery.view.controllers.DefaultLPMDiscoveryResultViewController;
 
@@ -23,17 +24,24 @@ public class LPMDiscoveryResultVisualizer {
     @PluginVariant(requiredParameterLabels = {0})
     public JComponent visualize(UIPluginContext context, LPMDiscoveryResult result) {
 
-        Injector injector = Guice.createInjector(new LPMDiscoveryResultGuiceModule(result),
-                new PromGuiceModule(context));
+        if (result.getInput() != null && result.getInput().getLog() != null) {
+            Injector injector = Guice.createInjector(new LPMDiscoveryResultGuiceModule(result),
+                    new PromGuiceModule(context));
 
 //        DefaultLPMDiscoveryResultViewModel model = new DefaultLPMDiscoveryResultViewModel(result);
 //        DefaultLPMDiscoveryResultComponent view = new DefaultLPMDiscoveryResultComponent()
 
-        DefaultLPMDiscoveryResultViewController controller =
-                injector.getInstance(DefaultLPMDiscoveryResultViewController.class);
+            DefaultLPMDiscoveryResultViewController controller =
+                    injector.getInstance(DefaultLPMDiscoveryResultViewController.class);
 
-        controller.getView().display(controller.getModel());
+            controller.getView().display(controller.getModel());
 
-        return controller.getView();
+            return controller.getView();
+        }
+
+        // if no event log, complex operations are not possible
+        LPMResult lpmResult = new LPMResult(result);
+        LPMResultVisualizer visualizer = new LPMResultVisualizer();
+        return visualizer.visualize(context, lpmResult);
     }
 }

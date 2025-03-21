@@ -11,9 +11,10 @@ import org.processmining.framework.util.ui.wizard.ProMWizardStep;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.LPMDiscovery;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryAlgBuilder;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.StandardLPMDiscoveryInput;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryAlgBuilder;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.parameters.PlaceBasedLPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
@@ -39,6 +40,22 @@ import java.util.Map;
         help = "Builds Local Process Models"
 )
 public class LPMDiscoveryPlugin {
+
+    @UITopiaVariant(
+            affiliation = "RWTH - PADS",
+            author = "Viki Peeva",
+            email = "viki.peeva@rwth-aachen.de",
+            uiLabel = "Basic Local Process Models Discovery"
+    )
+    @PluginVariant(
+            variantLabel = "Basic Local Process Models Discovery",
+            requiredParameterLabels = {0}
+    )
+    public static LPMDiscoveryResult mineBasicLPMs(UIPluginContext context, XLog log) {
+        ContextKeeper.setUp(context);
+
+        return LPMDiscovery.getInstance().from(log);
+    }
 
     @UITopiaVariant(
             affiliation = "RWTH - PADS",
