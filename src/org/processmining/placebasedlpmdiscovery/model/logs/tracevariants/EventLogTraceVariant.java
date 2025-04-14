@@ -14,4 +14,6 @@ public interface EventLogTraceVariant<ELEMENT extends EventLogTraceVariantElemen
     int size();
 
     ELEMENT get(int position);
+
+    Integer getId();
 }

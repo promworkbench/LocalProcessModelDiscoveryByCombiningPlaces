@@ -36,6 +36,11 @@ public class ActivityBasedTotallyOrderedEventLogTraceVariant implements TotallyO
         return key.get(position);
     }
 
+    @Override
+    public Integer getId() {
+        return Objects.hash(key.toArray());
+    }
+
     public boolean addTrace(EventLogTrace<?> trace) {
         return this.traces.add(trace);
     }

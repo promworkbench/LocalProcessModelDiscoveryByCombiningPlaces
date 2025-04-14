@@ -133,4 +133,8 @@ public class LPMTemporaryWindowInfo {
                         p.getOutputs().stream().map(reverseLabelMap::get).collect(Collectors.toSet())))
                 .collect(Collectors.toSet());
     }
+
+    public Integer getTraceVariantId() {
+        return traceVariant.getId();
+    }
 }

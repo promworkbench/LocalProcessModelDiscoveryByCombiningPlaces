@@ -38,7 +38,7 @@ public class JsonImporter<T> implements Importer<T> {
                 .registerTypeAdapter(Activity.class, new GeneralInterfaceAdapter<Activity>())
                 .registerTypeAdapter(Event.class, new GeneralInterfaceAdapter<Event>())
                 .registerTypeAdapter(EventLogTrace.class, new GeneralInterfaceAdapter<EventLogTrace<?>>())
-                .registerTypeAdapter(EventLogTraceVariant.class, new GeneralInterfaceAdapter<EventLogTraceVariant<?>>());
+                .registerTypeAdapter(EventLogTraceVariant.class, new GeneralInterfaceAdapter<EventLogTraceVariant<?>>())
                 .registerTypeAdapter(Pair.class, new PairInstanceCreator())
                 .registerTypeAdapter(ClusteringConfig.class, new GeneralInterfaceAdapter<ClusteringConfig>());
         Gson gson = gsonBuilder.create();
