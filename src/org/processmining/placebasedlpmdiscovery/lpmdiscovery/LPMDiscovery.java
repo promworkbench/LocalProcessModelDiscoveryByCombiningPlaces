@@ -1,9 +1,6 @@
-package org.processmining.lpms.discovery;
+package org.processmining.placebasedlpmdiscovery.lpmdiscovery;
 
 import org.deckfour.xes.model.XLog;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.DiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.PlaceBasedLPMDiscovery;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.ProcessTreeBasedLPMDiscovery;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.prom.PlacesProvider;
 
