@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery;
 
 import org.deckfour.xes.model.XLog;
+import org.processmining.lpms.discovery.LPMDiscovery;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryAlgBuilder;
