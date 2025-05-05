@@ -10,9 +10,23 @@ public interface LPMDiscovery {
         return placeBased(PlacesProvider.getInstance(), 100);
     }
 
+    static LPMDiscovery treeBased() {return new ProcessTreeBasedLPMDiscovery(); }
+
+    static LPMDiscovery placeBased(PlacesProvider placesProvider) {
+        return new PlaceBasedLPMDiscovery(placesProvider);
+    }
+
     static LPMDiscovery placeBased(PlacesProvider placesProvider, int placeLimit) {
         return new PlaceBasedLPMDiscovery(placesProvider, placeLimit);
     }
 
-    LPMDiscoveryResult from(XLog log);
+    static LPMDiscovery placeBased(PlacesProvider placesProvider, int placeLimit, int concurrencyLimit) {
+        return new PlaceBasedLPMDiscovery(placesProvider, placeLimit, concurrencyLimit);
+    }
+
+    default LPMDiscoveryResult from(XLog log) {
+        return from(log, DiscoveryParameters.Default.proximity);
+    }
+
+    LPMDiscoveryResult from(XLog log, int proximity);
 }

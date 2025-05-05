@@ -18,18 +18,31 @@ public class PlaceBasedLPMDiscovery implements LPMDiscovery {
 
     private final int placeLimit;
     private final PlacesProvider placesProvider;
+    private final int concurrencyLimit;
+
+
+    public PlaceBasedLPMDiscovery(PlacesProvider placesProvider) {
+        this(placesProvider, 50);
+    }
 
     public PlaceBasedLPMDiscovery(PlacesProvider placesProvider, int placeLimit) {
+        this(placesProvider, placeLimit, 2);
+    }
+
+    public PlaceBasedLPMDiscovery(PlacesProvider placesProvider, int placeLimit, int concurrencyLimit) {
         this.placesProvider = placesProvider;
         this.placeLimit = placeLimit;
+        this.concurrencyLimit = concurrencyLimit;
     }
 
     @Override
-    public LPMDiscoveryResult from(XLog log) {
+    public LPMDiscoveryResult from(XLog log, int proximity) {
         EventLog eventLog = new XLogWrapper(log);
 
         PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(eventLog);
+        parameters.getLpmCombinationParameters().setLpmProximity(proximity);
         parameters.getPlaceChooserParameters().setPlaceLimit(this.placeLimit);
+        parameters.getLpmCombinationParameters().setConcurrencyCardinality(this.concurrencyLimit);
 
         LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
         Set<Place> places = this.placesProvider.from(log);
