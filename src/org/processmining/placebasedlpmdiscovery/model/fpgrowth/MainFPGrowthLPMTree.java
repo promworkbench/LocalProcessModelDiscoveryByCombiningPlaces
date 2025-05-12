@@ -14,6 +14,8 @@ import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
 import org.processmining.placebasedlpmdiscovery.model.interruptible.CanBeInterrupted;
 import org.processmining.placebasedlpmdiscovery.model.lpmstorage.GlobalLPMStorage;
+import org.processmining.placebasedlpmdiscovery.model.lpmstorage.traversals.GlobalLPMStorageTraversal;
+import org.processmining.placebasedlpmdiscovery.model.lpmstorage.traversals.LPMStorageTraversalFactory;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
 import java.util.*;
@@ -142,5 +144,15 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
     @Override
     public boolean add(LocalProcessModel lpm) {
         throw new NotImplementedException("This class should not be a global storage");
+    }
+
+    @Override
+    public Collection<LocalProcessModel> getAllLPMs() {
+        Collection<LocalProcessModel> lpms = new HashSet<>();
+        GlobalLPMStorageTraversal traversal = LPMStorageTraversalFactory.createTraversal(this);
+        while (traversal.hasNext()) {
+            lpms.add(traversal.next());
+        }
+        return lpms;
     }
 }

@@ -2,6 +2,8 @@ package org.processmining.placebasedlpmdiscovery.model.lpmstorage;
 
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
+import java.util.Collection;
+
 /**
  * Any class of this type should be able to store the discovered LPMs for the entire event log.
  */
@@ -21,4 +23,6 @@ public interface GlobalLPMStorage {
      * @return true if @lpm was successfully added, false otherwise
      */
     boolean add(LocalProcessModel lpm);
+
+    Collection<LocalProcessModel> getAllLPMs();
 }
