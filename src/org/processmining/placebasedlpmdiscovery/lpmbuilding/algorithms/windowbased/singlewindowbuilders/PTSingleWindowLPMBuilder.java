@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.windowbased.singlewindowbuilders;
 
-import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.windowbased.SingleWindowLPMBuilder;
+import org.processmining.lpms.discovery.builders.SingleWindowLPMBuilder;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowLPMStorage;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.IWindowInfo;
 import org.processmining.placebasedlpmdiscovery.model.lpmmodels.processtree.ProcessTree;
@@ -17,6 +17,4 @@ public class PTSingleWindowLPMBuilder implements SingleWindowLPMBuilder {
         ProcessTree pt = new ProcessTree(windowInfo.getWindow().get(windowInfo.getEndPos()));
         return null;
     }
-
-
 }

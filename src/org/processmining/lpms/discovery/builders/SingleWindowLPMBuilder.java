@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.windowbased;
+package org.processmining.lpms.discovery.builders;
 
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowLPMStorage;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.IWindowInfo;

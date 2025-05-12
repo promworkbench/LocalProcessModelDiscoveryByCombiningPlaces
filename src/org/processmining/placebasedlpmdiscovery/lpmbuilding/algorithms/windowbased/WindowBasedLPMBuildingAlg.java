@@ -1,5 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.windowbased;
 
+import org.processmining.lpms.discovery.builders.SingleWindowLPMBuilder;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlg;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.LPMBuildingInput;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.WindowBasedLPMBuildingInput;
