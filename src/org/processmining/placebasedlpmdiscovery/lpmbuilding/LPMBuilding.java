@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmbuilding;
 
 import org.deckfour.xes.model.XLog;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.DiscoveryParameters;
+import org.processmining.lpms.discovery.DiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.model.lpmstorage.LPMStorage;
 
 public interface LPMBuilding {
