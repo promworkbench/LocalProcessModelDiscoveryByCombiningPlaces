@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery;
 
 import org.deckfour.xes.model.XLog;
+import org.processmining.lpms.discovery.DiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.Main;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryAlgBuilder;
@@ -18,6 +19,7 @@ public class PlaceBasedLPMDiscovery implements LPMDiscovery {
 
     private final int placeLimit;
     private final PlacesProvider placesProvider;
+    private final int proximity;
     private final int concurrencyLimit;
 
 
@@ -26,17 +28,22 @@ public class PlaceBasedLPMDiscovery implements LPMDiscovery {
     }
 
     public PlaceBasedLPMDiscovery(PlacesProvider placesProvider, int placeLimit) {
-        this(placesProvider, placeLimit, 2);
+        this(placesProvider, placeLimit, DiscoveryParameters.Default.proximity);
     }
 
-    public PlaceBasedLPMDiscovery(PlacesProvider placesProvider, int placeLimit, int concurrencyLimit) {
+    public PlaceBasedLPMDiscovery(PlacesProvider placesProvider, int placeLimit, int proximity) {
+        this(placesProvider, placeLimit, proximity, 2);
+    }
+
+    public PlaceBasedLPMDiscovery(PlacesProvider placesProvider, int placeLimit, int proximity, int concurrencyLimit) {
         this.placesProvider = placesProvider;
         this.placeLimit = placeLimit;
+        this.proximity = proximity;
         this.concurrencyLimit = concurrencyLimit;
     }
 
     @Override
-    public LPMDiscoveryResult from(XLog log, int proximity) {
+    public LPMDiscoveryResult from(XLog log) {
         EventLog eventLog = new XLogWrapper(log);
 
         PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(eventLog);

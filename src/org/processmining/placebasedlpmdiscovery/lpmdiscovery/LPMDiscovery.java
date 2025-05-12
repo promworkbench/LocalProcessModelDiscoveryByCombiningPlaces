@@ -1,7 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery;
 
 import org.deckfour.xes.model.XLog;
-import org.processmining.lpms.discovery.DiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.prom.PlacesProvider;
 
@@ -25,9 +24,5 @@ public interface LPMDiscovery {
         return new PlaceBasedLPMDiscovery(placesProvider, placeLimit, concurrencyLimit);
     }
 
-    default LPMDiscoveryResult from(XLog log) {
-        return from(log, DiscoveryParameters.Default.proximity);
-    }
-
-    LPMDiscoveryResult from(XLog log, int proximity);
+    LPMDiscoveryResult from(XLog log);
 }
