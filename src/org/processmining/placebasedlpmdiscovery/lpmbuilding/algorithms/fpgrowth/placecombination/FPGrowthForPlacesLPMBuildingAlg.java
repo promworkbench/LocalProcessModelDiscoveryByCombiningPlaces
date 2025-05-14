@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth.placecombination;
 
 import org.apache.commons.math3.util.Pair;
+import org.processmining.eventlogs.window.WindowLogIterator;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LogAnalyzer;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlg;
@@ -15,7 +16,6 @@ import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingR
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowInfo;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLogTraversal;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.IntegerMappedLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.extra.AbstractActivityMapping;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
@@ -88,7 +88,7 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
 
         // traverse
         int maxWindowSize = parameters.getLpmProximity(); // max window size
-        WindowLogTraversal traversal = new WindowLogTraversal(log, maxWindowSize); // traversal
+        WindowLogIterator traversal = new WindowLogIterator(log, maxWindowSize); // traversal
         WindowLPMTree localTree = new WindowLPMTree(maxWindowSize); // window tree
         while (traversal.hasNext()) {
             WindowInfo windowInfo = traversal.next(); // next window

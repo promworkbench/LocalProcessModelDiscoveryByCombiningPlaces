@@ -1,5 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.windowbased;
 
+import org.processmining.eventlogs.window.WindowBasedEventLog;
 import org.processmining.lpms.discovery.builders.SingleWindowLPMBuilder;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlg;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.LPMBuildingInput;
@@ -11,7 +12,6 @@ import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingR
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowLPMStorage;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowToGlobalLPMStorageTransporter;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.IWindowInfo;
-import org.processmining.placebasedlpmdiscovery.model.logs.traversals.EventLogWindowTraversal;
 import org.processmining.placebasedlpmdiscovery.model.lpmstorage.GlobalLPMStorage;
 
 public class WindowBasedLPMBuildingAlg implements LPMBuildingAlg {
@@ -44,11 +44,10 @@ public class WindowBasedLPMBuildingAlg implements LPMBuildingAlg {
         WindowToGlobalLPMStorageTransporter storageTransporter = WindowToGlobalLPMStorageTransporter.getInstance();
 
         // traverse event log and build lpms
-        EventLogWindowTraversal traversal = EventLogWindowTraversal
+        WindowBasedEventLog windowBasedEventLog = WindowBasedEventLog
                 .getInstance(input.getEventLog(), parameters.getWindowSize());
         WindowLPMStorage windowStorage = null;
-        while (traversal.hasNext()) {
-            IWindowInfo windowInfo = traversal.next();
+        for (IWindowInfo windowInfo : windowBasedEventLog) {
             windowStorage = singleWindowLPMBuilder.build(windowInfo, windowStorage);
             storageTransporter.move(windowStorage, lpmStorage);
         }

@@ -1,18 +1,23 @@
-package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
+package org.processmining.eventlogs.window;
 
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowInfo;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
 import org.processmining.placebasedlpmdiscovery.model.logs.tracevariants.ActivityBasedTotallyOrderedEventLogTraceVariant;
 import org.processmining.placebasedlpmdiscovery.model.logs.tracevariants.extractors.ActivityBasedTotallyOrderedEventLogTraceVariantExtractor;
 import org.processmining.placebasedlpmdiscovery.model.logs.tracevariants.extractors.EventLogTraceVariantExtractor;
-import org.processmining.placebasedlpmdiscovery.model.logs.traversals.EventLogWindowTraversal;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Optional;
 
-public class WindowLogTraversal implements EventLogWindowTraversal {
+/**
+ * This class is used to traverse an event log using a sliding window. The idea is that given the log \
+ * <a, b, c, d\> and a window size of 3, there are the following windows <a>, <a, b>, <a, b, c>, <b, c, d>, <c, d>,
+ * and <d>.
+ */
+public class WindowLogIterator implements EventLogWindowIterator {
 
     private final EventLog log;
     private final int maxWindowSize;
@@ -24,7 +29,7 @@ public class WindowLogTraversal implements EventLogWindowTraversal {
     LinkedList<Activity> window;
 
 
-    public WindowLogTraversal(EventLog log, int maxWindowSize) {
+    public WindowLogIterator(EventLog log, int maxWindowSize) {
         this.log = log;
         this.maxWindowSize = maxWindowSize;
 

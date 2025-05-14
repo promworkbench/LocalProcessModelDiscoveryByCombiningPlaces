@@ -3,8 +3,8 @@ package src.org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
 import org.deckfour.xes.model.XLog;
 import org.junit.Assert;
 import org.junit.Test;
+import org.processmining.eventlogs.window.WindowLogIterator;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowInfo;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowLogTraversal;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.logs.activities.ActivityCache;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
@@ -18,7 +18,7 @@ public class WindowLogTraversalTest {
     @Test
     public void givenAbcdAnd3_whenHasNext_thenTrue() throws Exception {
         XLog log = LogUtils.readLogFromFile("data/test/logs/abcd.xes");
-        WindowLogTraversal wlt = new WindowLogTraversal(new XLogWrapper(log), 3);
+        WindowLogIterator wlt = new WindowLogIterator(new XLogWrapper(log), 3);
 
         Assert.assertTrue(wlt.hasNext());
     }
@@ -26,7 +26,7 @@ public class WindowLogTraversalTest {
     @Test
     public void givenAbcdAnd3_whenNext_thenA() throws Exception {
         XLog log = LogUtils.readLogFromFile("data/test/logs/abcd.xes");
-        WindowLogTraversal wlt = new WindowLogTraversal(new XLogWrapper(log), 3);
+        WindowLogIterator wlt = new WindowLogIterator(new XLogWrapper(log), 3);
 
         WindowInfo expected = new WindowInfo(new ArrayList<>(Collections.singletonList(ActivityCache.getInstance()
                 .getActivity("a"))), 1, 0, 0);
@@ -37,7 +37,7 @@ public class WindowLogTraversalTest {
     @Test
     public void givenAbcdAnd3After4Next_whenNext_thenCd() throws Exception {
         XLog log = LogUtils.readLogFromFile("data/test/logs/abcd.xes");
-        WindowLogTraversal wlt = new WindowLogTraversal(new XLogWrapper(log), 3);
+        WindowLogIterator wlt = new WindowLogIterator(new XLogWrapper(log), 3);
         executeNextXTimes(wlt, 4);
 
         WindowInfo expected = new WindowInfo(new ArrayList<>(Arrays.asList(
@@ -50,7 +50,7 @@ public class WindowLogTraversalTest {
     @Test
     public void givenAbcdAnd3After5Next_whenHasNext_thenTrue() throws Exception {
         XLog log = LogUtils.readLogFromFile("data/test/logs/abcd.xes");
-        WindowLogTraversal wlt = new WindowLogTraversal(new XLogWrapper(log), 3);
+        WindowLogIterator wlt = new WindowLogIterator(new XLogWrapper(log), 3);
         executeNextXTimes(wlt, 5);
 
         Assert.assertTrue(wlt.hasNext());
@@ -59,7 +59,7 @@ public class WindowLogTraversalTest {
     @Test
     public void givenAbcdAnd3After6Next_whenHasNext_thenFalse() throws Exception {
         XLog log = LogUtils.readLogFromFile("data/test/logs/abcd.xes");
-        WindowLogTraversal wlt = new WindowLogTraversal(new XLogWrapper(log), 3);
+        WindowLogIterator wlt = new WindowLogIterator(new XLogWrapper(log), 3);
         executeNextXTimes(wlt, 6);
 
         Assert.assertFalse(wlt.hasNext());
@@ -68,7 +68,7 @@ public class WindowLogTraversalTest {
     @Test
     public void givenAbcdAbceAnd3After6Next_whenHasNext_thenTrue() throws Exception {
         XLog log = LogUtils.readLogFromFile("data/test/logs/abcd-abce.xes");
-        WindowLogTraversal wlt = new WindowLogTraversal(new XLogWrapper(log), 3);
+        WindowLogIterator wlt = new WindowLogIterator(new XLogWrapper(log), 3);
         executeNextXTimes(wlt, 6);
 
         Assert.assertTrue(wlt.hasNext());
@@ -77,7 +77,7 @@ public class WindowLogTraversalTest {
     @Test
     public void givenAbcdAbceAnd3After6Next_whenNext_thenA() throws Exception {
         XLog log = LogUtils.readLogFromFile("data/test/logs/abcd-abce.xes");
-        WindowLogTraversal wlt = new WindowLogTraversal(new XLogWrapper(log), 3);
+        WindowLogIterator wlt = new WindowLogIterator(new XLogWrapper(log), 3);
         executeNextXTimes(wlt, 6);
 
         WindowInfo expected = new WindowInfo(new ArrayList<>(Collections.singletonList(
@@ -86,7 +86,7 @@ public class WindowLogTraversalTest {
         Assert.assertEquals(expected, wlt.next());
     }
 
-    private void executeNextXTimes(WindowLogTraversal wlt, int times) {
+    private void executeNextXTimes(WindowLogIterator wlt, int times) {
         while (times > 0) {
             wlt.next();
             times--;
