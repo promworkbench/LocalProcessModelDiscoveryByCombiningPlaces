@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
 
 import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
 import org.processmining.placebasedlpmdiscovery.model.logs.activities.ActivityCache;
+import org.processmining.placebasedlpmdiscovery.model.logs.tracevariants.ActivityBasedTotallyOrderedEventLogTraceVariant;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +14,14 @@ public class WindowInfo implements IWindowInfo {
     private final int windowCount;
     private final int startPos; // inclusive
     private final int endPos; // inclusive
+    private final ActivityBasedTotallyOrderedEventLogTraceVariant traceVariant;
 
-    public WindowInfo(ArrayList<Activity> window, int windowCount, int startPos, int endPos) {
+    public WindowInfo(ArrayList<Activity> window, int windowCount, int startPos, int endPos, ActivityBasedTotallyOrderedEventLogTraceVariant traceVariant) {
         this.window = window;
         this.windowCount = windowCount;
         this.startPos = startPos;
         this.endPos = endPos;
+        this.traceVariant = traceVariant;
     }
 
     public List<Activity> getWindow() {
@@ -76,5 +79,10 @@ public class WindowInfo implements IWindowInfo {
     public List<Integer> getIntWindow() {
         return this.window.stream().map(a -> ActivityCache.getInstance().getIntForActivityId(a.getId()))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public ActivityBasedTotallyOrderedEventLogTraceVariant getParentTraceVariant() {
+        return this.traceVariant;
     }
 }

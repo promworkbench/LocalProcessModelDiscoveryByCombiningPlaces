@@ -16,6 +16,6 @@ interface EventLogWindowIterator extends Iterator<IWindowInfo> {
      * @return a traversal object
      */
     static EventLogWindowIterator getInstance(EventLog eventLog, int windowSize) {
-        return new WindowLogIterator(eventLog, windowSize);
+        return new EventLogWindowIteratorImpl(eventLog, windowSize);
     }
 }

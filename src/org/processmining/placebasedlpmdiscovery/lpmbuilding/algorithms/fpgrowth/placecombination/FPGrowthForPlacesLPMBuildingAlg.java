@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth.placecombination;
 
 import org.apache.commons.math3.util.Pair;
-import org.processmining.eventlogs.window.WindowLogIterator;
+import org.processmining.eventlogs.window.WindowBasedEventLog;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LogAnalyzer;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlg;
@@ -15,7 +15,7 @@ import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.DefaultLPMBu
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingResult;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowInfo;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.IWindowInfo;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.IntegerMappedLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.extra.AbstractActivityMapping;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
@@ -88,11 +88,9 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
 
         // traverse
         int maxWindowSize = parameters.getLpmProximity(); // max window size
-        WindowLogIterator traversal = new WindowLogIterator(log, maxWindowSize); // traversal
+        WindowBasedEventLog windowBasedEventLog = WindowBasedEventLog.getInstance(log, maxWindowSize);
         WindowLPMTree localTree = new WindowLPMTree(maxWindowSize); // window tree
-        while (traversal.hasNext()) {
-            WindowInfo windowInfo = traversal.next(); // next window
-
+        for (IWindowInfo windowInfo : windowBasedEventLog) {
             windowTotalCounter.update(windowInfo.getIntWindow(), windowInfo.getWindowCount()); // update window counter
 
             if (windowInfo.getStartPos() == 0 && windowInfo.getEndPos() == 0) { // new trace variant new WindowLPMTree
@@ -124,7 +122,7 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
 
             // transfer built local process models to the main tree
             LPMTemporaryWindowInfoCreator lpmTempInfoCreator = new LPMTemporaryWindowInfoCreator(windowInfo,
-                    integerMappedLog, traversal.currentWindowParentSequence());
+                    integerMappedLog, windowInfo.getParentTraceVariant());
             addLocalTreeToMainTree(localTree, mainTree, parameters,
                     lpmTempInfoCreator, integerMappedLog.getMapping(), places);
         }

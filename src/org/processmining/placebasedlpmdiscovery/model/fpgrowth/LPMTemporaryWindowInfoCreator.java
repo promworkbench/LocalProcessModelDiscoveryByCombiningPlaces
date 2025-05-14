@@ -2,7 +2,7 @@ package org.processmining.placebasedlpmdiscovery.model.fpgrowth;
 
 import org.apache.commons.math3.util.Pair;
 import org.deckfour.xes.model.XTrace;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowInfo;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.IWindowInfo;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.IntegerMappedLog;
 import org.processmining.placebasedlpmdiscovery.model.SimplePlace;
 import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
@@ -19,10 +19,10 @@ import java.util.stream.Collectors;
 public class LPMTemporaryWindowInfoCreator {
 
     private final IntegerMappedLog log;
-    private final WindowInfo windowInfo;
+    private final IWindowInfo windowInfo;
     private final ActivityBasedTotallyOrderedEventLogTraceVariant parentSequence;
 
-    public LPMTemporaryWindowInfoCreator(WindowInfo windowInfo, IntegerMappedLog log,
+    public LPMTemporaryWindowInfoCreator(IWindowInfo windowInfo, IntegerMappedLog log,
                                          ActivityBasedTotallyOrderedEventLogTraceVariant parentSequence) {
         this.windowInfo = windowInfo;
         this.log = log;

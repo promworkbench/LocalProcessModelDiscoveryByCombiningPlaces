@@ -17,9 +17,8 @@ import java.util.Optional;
  * <a, b, c, d\> and a window size of 3, there are the following windows <a>, <a, b>, <a, b, c>, <b, c, d>, <c, d>,
  * and <d>.
  */
-public class WindowLogIterator implements EventLogWindowIterator {
+class EventLogWindowIteratorImpl implements EventLogWindowIterator {
 
-    private final EventLog log;
     private final int maxWindowSize;
 
     private final Collection<ActivityBasedTotallyOrderedEventLogTraceVariant> remainingTraceVariants;
@@ -29,14 +28,13 @@ public class WindowLogIterator implements EventLogWindowIterator {
     LinkedList<Activity> window;
 
 
-    public WindowLogIterator(EventLog log, int maxWindowSize) {
-        this.log = log;
+    public EventLogWindowIteratorImpl(EventLog log, int maxWindowSize) {
         this.maxWindowSize = maxWindowSize;
 
         ActivityBasedTotallyOrderedEventLogTraceVariantExtractor tvExtractor =
                 EventLogTraceVariantExtractor.getActivityBasedTotallyOrdered(
                 "concept:name");
-        this.remainingTraceVariants = tvExtractor.extract(this.log);
+        this.remainingTraceVariants = tvExtractor.extract(log);
         this.window = new LinkedList<>();
     }
 
@@ -63,7 +61,7 @@ public class WindowLogIterator implements EventLogWindowIterator {
             window.add(traceVariant.get(position++));
         }
 
-        return new WindowInfo(new ArrayList<>(window), windowCount, position - window.size(), position - 1);
+        return new WindowInfo(new ArrayList<>(window), windowCount, position - window.size(), position - 1, traceVariant);
     }
 
     private void startTraversingNewTraceVariant() {
