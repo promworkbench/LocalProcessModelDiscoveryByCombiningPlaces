@@ -34,4 +34,14 @@ public interface IWindowInfo {
     List<Integer> getIntWindow();
 
     ActivityBasedTotallyOrderedEventLogTraceVariant getParentTraceVariant();
+
+    /**
+     * Creates a new window that is a subwindow of the current one and returns it.
+     * @param fromIndex low endpoint (inclusive) of the subwindow
+     * @param toIndex high endpoint (exclusive) of the subwindow
+     * @return a new instance of {@link IWindowInfo}
+     * @throws IndexOutOfBoundsException for an illegal endpoint index value (fromIndex < 0 || toIndex > size)
+     * @throws IllegalArgumentException for fromIndex > toIndex
+     */
+    IWindowInfo subWindow(int fromIndex, int toIndex);
 }

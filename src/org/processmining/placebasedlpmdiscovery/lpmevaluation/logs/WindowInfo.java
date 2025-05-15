@@ -85,4 +85,17 @@ public class WindowInfo implements IWindowInfo {
     public ActivityBasedTotallyOrderedEventLogTraceVariant getParentTraceVariant() {
         return this.traceVariant;
     }
+
+    @Override
+    public IWindowInfo subWindow(int fromIndex, int toIndex) {
+        if (fromIndex > toIndex) {
+            throw new IllegalArgumentException("fromIndex > toIndex");
+        } else if (fromIndex < 0) {
+            throw new IllegalArgumentException("fromIndex < 0");
+        } else if (toIndex > window.size()) {
+            throw new IllegalArgumentException("toIndex > window.size()");
+        }
+        return new WindowInfo(new ArrayList<>(this.window.subList(fromIndex, toIndex)), this.windowCount,
+                this.startPos + fromIndex, this.startPos + toIndex - 1, this.traceVariant);
+    }
 }
