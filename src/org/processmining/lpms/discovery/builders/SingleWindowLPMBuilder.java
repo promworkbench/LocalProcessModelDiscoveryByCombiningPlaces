@@ -8,6 +8,10 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.IWindowInfo;
  */
 public interface SingleWindowLPMBuilder {
 
+    static SingleWindowLPMBuilder getInstance() {
+        return new LADASingleWindowLPMBuilder();
+    }
+
     /**
      * Builds LPMs for a single window independently of the rest.
      * @param windowInfo - the window info for which we want to build LPMs
