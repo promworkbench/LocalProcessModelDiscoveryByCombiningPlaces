@@ -1,6 +1,6 @@
 package org.processmining.eventlogs.window;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowInfo;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.SlidingWindowInfoImpl;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
 import org.processmining.placebasedlpmdiscovery.model.logs.tracevariants.ActivityBasedTotallyOrderedEventLogTraceVariant;
@@ -44,7 +44,9 @@ class EventLogWindowIteratorImpl implements EventLogWindowIterator {
                 || !this.remainingTraceVariants.isEmpty();
     }
 
-    public WindowInfo next() {
+    public SlidingWindowInfoImpl next() {
+        ArrayList<Activity> addedActivities = new ArrayList<>();
+        ArrayList<Activity> removedActivities = new ArrayList<>();
         boolean startNewVariant = traceVariant == null // hasn't started traversing
                 || position >= traceVariant.size() && window.size() == 1; // finishing a trace variant
         if (startNewVariant) {
@@ -53,15 +55,19 @@ class EventLogWindowIteratorImpl implements EventLogWindowIterator {
 
         // remove first event if no space in the window or at the end of the trace
         if (window.size() >= maxWindowSize || position >= traceVariant.size()) {
-            window.removeFirst();
+            Activity first = window.removeFirst();
+            removedActivities.add(first);
         }
 
         // add next event
         if (position < traceVariant.size()) {
-            window.add(traceVariant.get(position++));
+            window.add(traceVariant.get(position));
+            addedActivities.add(traceVariant.get(position));
+            position++;
         }
 
-        return new WindowInfo(new ArrayList<>(window), windowCount, position - window.size(), position - 1, traceVariant);
+        return new SlidingWindowInfoImpl(new ArrayList<>(window), windowCount,position - window.size(),position - 1
+                , traceVariant, addedActivities, removedActivities);
     }
 
     private void startTraversingNewTraceVariant() {

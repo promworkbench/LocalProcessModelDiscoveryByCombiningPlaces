@@ -11,7 +11,7 @@ import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.DefaultLPMBu
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingResult;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowLPMStorage;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowToGlobalLPMStorageTransporter;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.IWindowInfo;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.SlidingWindowInfo;
 import org.processmining.placebasedlpmdiscovery.model.lpmstorage.GlobalLPMStorage;
 
 public class WindowBasedLPMBuildingAlg implements LPMBuildingAlg {
@@ -47,7 +47,7 @@ public class WindowBasedLPMBuildingAlg implements LPMBuildingAlg {
         WindowBasedEventLog windowBasedEventLog = WindowBasedEventLog
                 .getInstance(input.getEventLog(), parameters.getWindowSize());
         WindowLPMStorage windowStorage = null;
-        for (IWindowInfo windowInfo : windowBasedEventLog) {
+        for (SlidingWindowInfo windowInfo : windowBasedEventLog) {
             windowStorage = singleWindowLPMBuilder.build(windowInfo, windowStorage);
             storageTransporter.move(windowStorage, lpmStorage);
         }

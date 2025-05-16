@@ -5,9 +5,23 @@ import org.processmining.placebasedlpmdiscovery.model.logs.tracevariants.Activit
 
 import java.util.List;
 
-public interface IWindowInfo {
+/**
+ * There are three different ways in which a current sliding window differs from the previous.
+ * (1) Only adding an element: [a] -> [a b], [a b] -> [a b c]; This occurs when the sliding window capacity is not
+ * completely filled, i.e., at the beginning of a sequence. To see which activities have been added use
+ * {@link #getAddedActivities()}.
+ * (2) Removing and adding an element: [a b c] ->  [b c b]; This occurs when the sliding window capacity is filled, so
+ * first an element has to be removed and then added.
+ * (3) Only removing an element: [b c b] -> [c b], [c b] -> [b]; This occurs when the sliding window is at the end of
+ * a sequence. To see which activities have been removed use {@link #getRemovedActivities()}.
+ */
+public interface SlidingWindowInfo {
 
     List<Activity> getWindow();
+
+    List<Activity> getAddedActivities();
+
+    List<Activity> getRemovedActivities();
 
     /**
      * Returns the start position of the window in the trace (inclusive)
@@ -34,14 +48,4 @@ public interface IWindowInfo {
     List<Integer> getIntWindow();
 
     ActivityBasedTotallyOrderedEventLogTraceVariant getParentTraceVariant();
-
-    /**
-     * Creates a new window that is a subwindow of the current one and returns it.
-     * @param fromIndex low endpoint (inclusive) of the subwindow
-     * @param toIndex high endpoint (exclusive) of the subwindow
-     * @return a new instance of {@link IWindowInfo}
-     * @throws IndexOutOfBoundsException for an illegal endpoint index value (fromIndex < 0 || toIndex > size)
-     * @throws IllegalArgumentException for fromIndex > toIndex
-     */
-    IWindowInfo subWindow(int fromIndex, int toIndex);
 }

@@ -9,23 +9,39 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class WindowInfo implements IWindowInfo {
+public class SlidingWindowInfoImpl implements SlidingWindowInfo {
     private final ArrayList<Activity> window;
     private final int windowCount;
     private final int startPos; // inclusive
     private final int endPos; // inclusive
     private final ActivityBasedTotallyOrderedEventLogTraceVariant traceVariant;
+    private final ArrayList<Activity> addedActivities;
+    private final ArrayList<Activity> removedActivities;
 
-    public WindowInfo(ArrayList<Activity> window, int windowCount, int startPos, int endPos, ActivityBasedTotallyOrderedEventLogTraceVariant traceVariant) {
+    public SlidingWindowInfoImpl(ArrayList<Activity> window, int windowCount, int startPos, int endPos,
+                                 ActivityBasedTotallyOrderedEventLogTraceVariant traceVariant,
+                                 ArrayList<Activity> addedActivities, ArrayList<Activity> removedActivities) {
         this.window = window;
         this.windowCount = windowCount;
         this.startPos = startPos;
         this.endPos = endPos;
         this.traceVariant = traceVariant;
+        this.addedActivities = addedActivities;
+        this.removedActivities = removedActivities;
     }
 
     public List<Activity> getWindow() {
         return this.window;
+    }
+
+    @Override
+    public List<Activity> getAddedActivities() {
+        return this.addedActivities;
+    }
+
+    @Override
+    public List<Activity> getRemovedActivities() {
+        return this.removedActivities;
     }
 
     /**
@@ -57,7 +73,7 @@ public class WindowInfo implements IWindowInfo {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        WindowInfo that = (WindowInfo) o;
+        SlidingWindowInfoImpl that = (SlidingWindowInfoImpl) o;
         return windowCount == that.windowCount && startPos == that.startPos && endPos == that.endPos && Objects.equals(window, that.window);
     }
 
@@ -84,18 +100,5 @@ public class WindowInfo implements IWindowInfo {
     @Override
     public ActivityBasedTotallyOrderedEventLogTraceVariant getParentTraceVariant() {
         return this.traceVariant;
-    }
-
-    @Override
-    public IWindowInfo subWindow(int fromIndex, int toIndex) {
-        if (fromIndex > toIndex) {
-            throw new IllegalArgumentException("fromIndex > toIndex");
-        } else if (fromIndex < 0) {
-            throw new IllegalArgumentException("fromIndex < 0");
-        } else if (toIndex > window.size()) {
-            throw new IllegalArgumentException("toIndex > window.size()");
-        }
-        return new WindowInfo(new ArrayList<>(this.window.subList(fromIndex, toIndex)), this.windowCount,
-                this.startPos + fromIndex, this.startPos + toIndex - 1, this.traceVariant);
     }
 }

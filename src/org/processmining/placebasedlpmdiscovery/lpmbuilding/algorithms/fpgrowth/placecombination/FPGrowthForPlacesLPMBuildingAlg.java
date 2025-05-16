@@ -15,7 +15,7 @@ import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.DefaultLPMBu
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.results.LPMBuildingResult;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.combination.LPMCombinationParameters;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.IWindowInfo;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.SlidingWindowInfo;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.IntegerMappedLog;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.enhanced.extra.AbstractActivityMapping;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
@@ -90,7 +90,7 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
         int maxWindowSize = parameters.getLpmProximity(); // max window size
         WindowBasedEventLog windowBasedEventLog = WindowBasedEventLog.getInstance(log, maxWindowSize);
         WindowLPMTree localTree = new WindowLPMTree(maxWindowSize); // window tree
-        for (IWindowInfo windowInfo : windowBasedEventLog) {
+        for (SlidingWindowInfo windowInfo : windowBasedEventLog) {
             windowTotalCounter.update(windowInfo.getIntWindow(), windowInfo.getWindowCount()); // update window counter
 
             if (windowInfo.getStartPos() == 0 && windowInfo.getEndPos() == 0) { // new trace variant new WindowLPMTree

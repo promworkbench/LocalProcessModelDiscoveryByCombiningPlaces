@@ -4,8 +4,8 @@ import org.deckfour.xes.model.XLog;
 import org.junit.Assert;
 import org.junit.Test;
 import org.processmining.eventlogs.window.WindowBasedEventLog;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.IWindowInfo;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.WindowInfo;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.SlidingWindowInfo;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.SlidingWindowInfoImpl;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.logs.activities.ActivityCache;
@@ -36,8 +36,10 @@ public class WindowLogTraversalTest {
                 new ActivityBasedTotallyOrderedEventLogTraceVariantExtractor("concept:name");
         WindowBasedEventLog wel = WindowBasedEventLog.getInstance(eventLog, 3);
 
-        WindowInfo expected = new WindowInfo(new ArrayList<>(Collections.singletonList(ActivityCache.getInstance()
-                .getActivity("a"))), 1, 0, 0, tvExtractor.extract(eventLog).iterator().next());
+        SlidingWindowInfoImpl expected = new SlidingWindowInfoImpl(new ArrayList<>(Collections.singletonList(ActivityCache.getInstance()
+                .getActivity("a"))), 1, 0, 0, tvExtractor.extract(eventLog).iterator().next(),
+                new ArrayList<>(Collections.singletonList(ActivityCache.getInstance().getActivity("a"))),
+                new ArrayList<>());
 
         Assert.assertEquals(expected, wel.iterator().next());
     }
@@ -49,12 +51,13 @@ public class WindowLogTraversalTest {
         ActivityBasedTotallyOrderedEventLogTraceVariantExtractor tvExtractor =
                 new ActivityBasedTotallyOrderedEventLogTraceVariantExtractor("concept:name");
         WindowBasedEventLog wel = WindowBasedEventLog.getInstance(eventLog, 3);
-        Iterator<IWindowInfo> wlt = wel.iterator();
+        Iterator<SlidingWindowInfo> wlt = wel.iterator();
         executeNextXTimes(wlt, 4);
 
-        WindowInfo expected = new WindowInfo(new ArrayList<>(Arrays.asList(
+        SlidingWindowInfoImpl expected = new SlidingWindowInfoImpl(new ArrayList<>(Arrays.asList(
                 ActivityCache.getInstance().getActivity("c"), ActivityCache.getInstance().getActivity("d")
-        )), 1, 2, 3, tvExtractor.extract(eventLog).iterator().next());
+        )), 1, 2, 3, tvExtractor.extract(eventLog).iterator().next(), new ArrayList<>(),
+                new ArrayList<>(Collections.singletonList(ActivityCache.getInstance().getActivity("b"))));
 
         Assert.assertEquals(expected, wlt.next());
     }
@@ -63,7 +66,7 @@ public class WindowLogTraversalTest {
     public void givenAbcdAnd3After5Next_whenHasNext_thenTrue() throws Exception {
         XLog log = LogUtils.readLogFromFile("data/test/logs/abcd.xes");
         WindowBasedEventLog wel = WindowBasedEventLog.getInstance(new XLogWrapper(log), 3);
-        Iterator<IWindowInfo> wlt = wel.iterator();
+        Iterator<SlidingWindowInfo> wlt = wel.iterator();
         executeNextXTimes(wlt, 5);
 
         Assert.assertTrue(wlt.hasNext());
@@ -73,7 +76,7 @@ public class WindowLogTraversalTest {
     public void givenAbcdAnd3After6Next_whenHasNext_thenFalse() throws Exception {
         XLog log = LogUtils.readLogFromFile("data/test/logs/abcd.xes");
         WindowBasedEventLog wel = WindowBasedEventLog.getInstance(new XLogWrapper(log), 3);
-        Iterator<IWindowInfo> wlt = wel.iterator();
+        Iterator<SlidingWindowInfo> wlt = wel.iterator();
         executeNextXTimes(wlt, 6);
 
         Assert.assertFalse(wlt.hasNext());
@@ -83,7 +86,7 @@ public class WindowLogTraversalTest {
     public void givenAbcdAbceAnd3After6Next_whenHasNext_thenTrue() throws Exception {
         XLog log = LogUtils.readLogFromFile("data/test/logs/abcd-abce.xes");
         WindowBasedEventLog wel = WindowBasedEventLog.getInstance(new XLogWrapper(log), 3);
-        Iterator<IWindowInfo> wlt = wel.iterator();
+        Iterator<SlidingWindowInfo> wlt = wel.iterator();
         executeNextXTimes(wlt, 6);
 
         Assert.assertTrue(wlt.hasNext());
@@ -98,16 +101,18 @@ public class WindowLogTraversalTest {
         Iterator<ActivityBasedTotallyOrderedEventLogTraceVariant> it = tvExtractor.extract(eventLog).iterator();
         it.next();
         WindowBasedEventLog wel = WindowBasedEventLog.getInstance(eventLog, 3);
-        Iterator<IWindowInfo> wlt = wel.iterator();
+        Iterator<SlidingWindowInfo> wlt = wel.iterator();
         executeNextXTimes(wlt, 6);
 
-        WindowInfo expected = new WindowInfo(new ArrayList<>(Collections.singletonList(
-                ActivityCache.getInstance().getActivity("a"))), 1,0, 0, it.next());
+        SlidingWindowInfoImpl expected = new SlidingWindowInfoImpl(new ArrayList<>(Collections.singletonList(
+                ActivityCache.getInstance().getActivity("a"))), 1,0, 0, it.next(),
+                new ArrayList<>(Collections.singletonList(ActivityCache.getInstance().getActivity("a"))),
+                new ArrayList<>());
 
         Assert.assertEquals(expected, wlt.next());
     }
 
-    private void executeNextXTimes(Iterator<IWindowInfo> wlt, int times) {
+    private void executeNextXTimes(Iterator<SlidingWindowInfo> wlt, int times) {
         while (times > 0) {
             wlt.next();
             times--;

@@ -7,7 +7,7 @@ import org.processmining.lpms.discovery.builders.SingleWindowLPMBuilder;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowLPMStorage;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowToGlobalLPMStorageTransporter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.LPMDiscovery;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.IWindowInfo;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.SlidingWindowInfo;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
@@ -37,7 +37,7 @@ public class LADA implements LPMDiscovery {
         WindowBasedEventLog windowBasedEventLog = WindowBasedEventLog.getInstance(eventLog, this.proximity);
         WindowLPMStorage windowStorage = null;
         SingleWindowLPMBuilder singleWindowLPMBuilder = SingleWindowLPMBuilder.getInstance();
-        for (IWindowInfo windowInfo : windowBasedEventLog) {
+        for (SlidingWindowInfo windowInfo : windowBasedEventLog) {
             windowStorage = singleWindowLPMBuilder.build(windowInfo, windowStorage);
             storageTransporter.move(windowStorage, lpmStorage);
         }

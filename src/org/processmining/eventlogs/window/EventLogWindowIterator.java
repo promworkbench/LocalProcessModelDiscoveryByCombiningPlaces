@@ -1,6 +1,6 @@
 package org.processmining.eventlogs.window;
 
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.IWindowInfo;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.SlidingWindowInfo;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 
 import java.util.Iterator;
@@ -8,7 +8,7 @@ import java.util.Iterator;
 /**
  * The classes of this type are used to traverse an event log using a sliding window.
  */
-interface EventLogWindowIterator extends Iterator<IWindowInfo> {
+interface EventLogWindowIterator extends Iterator<SlidingWindowInfo> {
     /**
      * Returns a default window traversal instance.
      * @param eventLog - the event log that should be traversed
