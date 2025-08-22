@@ -3,7 +3,6 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation;
 import com.google.common.collect.Sets;
 import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.model.SimplePlace;
-import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,6 +12,8 @@ public class ReplayableLocalProcessModel {
     // TODO: It doesn't support duplicate transitions
     private int constraintIdentifier;
     private final Map<Integer, Constraint> constraintMap; // every constraint has an integer id
+    private final Map<Integer, Constraint> optionalConstraintMap; // optional constraints don't have to be empty in
+    // the end
     private final Map<Integer, Set<Integer>> inputConstraints; // every transition has a set of input constraints
     private final Map<Integer, Set<Integer>> outputConstraints; // every transition has a set of output constraints
     private final Set<Integer> transitions; // every transition has an integer id
@@ -29,6 +30,7 @@ public class ReplayableLocalProcessModel {
         this.transitions = new HashSet<>();
         this.invisibleTransitions = new HashSet<>();
         this.constraintMap = new HashMap<>();
+        this.optionalConstraintMap = new HashMap<>();
         this.inputConstraints = new HashMap<>();
         this.outputConstraints = new HashMap<>();
         this.constraintIdentifier = 1;
@@ -42,6 +44,7 @@ public class ReplayableLocalProcessModel {
         this.transitions = transitions;
         this.invisibleTransitions = invisibleTransitions;
         this.constraintMap = new HashMap<>();
+        this.optionalConstraintMap = new HashMap<>();
         this.inputConstraints = new HashMap<>();
         this.outputConstraints = new HashMap<>();
         this.constraintIdentifier = 1;
@@ -57,6 +60,9 @@ public class ReplayableLocalProcessModel {
         this.constraintMap = rlpm.constraintMap.entrySet()
                 .stream()
                 .collect(Collectors.toMap(Map.Entry::getKey, x -> new Constraint(x.getValue())));
+        this.optionalConstraintMap = rlpm.optionalConstraintMap.entrySet()
+                        .stream()
+                        .collect(Collectors.toMap(Map.Entry::getKey, x -> new Constraint(x.getValue())));
         this.inputConstraints = new HashMap<>();
         for (Map.Entry<Integer, Set<Integer>> entry : rlpm.inputConstraints.entrySet()) {
             this.inputConstraints.put(entry.getKey(), new HashSet<>(entry.getValue()));
@@ -147,7 +153,12 @@ public class ReplayableLocalProcessModel {
      * @param haveAsOutputConstraint: the transition ids that have the constraint as output constraint
      */
     public void addConstraint(String id, int numTokens, Set<Integer> haveAsInputConstraint, Set<Integer> haveAsOutputConstraint) {
-//        // check if the transitions were added previously
+        addConstraint(id, numTokens, haveAsInputConstraint, haveAsOutputConstraint, false);
+    }
+
+    public void addConstraint(String id, int numTokens, Set<Integer> haveAsInputConstraint,
+                                      Set<Integer> haveAsOutputConstraint, boolean optional) {
+        // check if the transitions were added previously
 //        if (!Sets.union(this.transitions, this.invisibleTransitions)
 //                .containsAll(Sets.union(haveAsInputConstraint, haveAsOutputConstraint))) {
 //            throw new IllegalStateException("All transitions should be previously added to the model");
@@ -156,6 +167,9 @@ public class ReplayableLocalProcessModel {
         Constraint constraint = new Constraint(id, numTokens);
         // add it in the constraint map
         this.constraintMap.put(this.constraintIdentifier, constraint);
+        if (optional) {
+            this.optionalConstraintMap.put(this.constraintIdentifier, constraint);
+        }
 
         // add all transitions that have it as input constraint
         for (Integer trId : haveAsInputConstraint) {
@@ -272,8 +286,8 @@ public class ReplayableLocalProcessModel {
      * @return true if all are empty and false otherwise
      */
     public boolean isEmptyMarking() {
-        for (Constraint constraint : constraintMap.values()) {
-            if (constraint.getNumTokens() != 0)
+        for (Map.Entry<Integer, Constraint> constraint : constraintMap.entrySet()) {
+            if (!optionalConstraintMap.containsKey(constraint.getKey()) && constraint.getValue().getNumTokens() != 0)
                 return false;
         }
         return true;
@@ -318,6 +332,7 @@ public class ReplayableLocalProcessModel {
                 ", firingSequence=" + firingSequence +
                 '}';
     }
+
 }
 
 class Constraint {

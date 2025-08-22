@@ -12,7 +12,9 @@ import org.python.google.common.reflect.TypeToken;
 import src.org.processmining.mockobjects.MockLPMs;
 import src.org.processmining.mockobjects.MockPlaces;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -91,6 +93,31 @@ public class ReplayerTest {
                 }.getType());
         Map<String, Set<List<String>>> expectedPaths = paths.keySet().stream().collect(Collectors.toMap(
                 key -> key, key -> new HashSet<>(paths.get(key))));
+
+        // test
+        for (String id : expectedPaths.keySet()) {
+            Assert.assertEquals(expectedPaths.get(id), actualPaths.get(id));
+        }
+    }
+
+    @Test
+    public void givenPredefinedLPMs2_whenFindAllPaths_thenSameWithPredefinedLanguage() throws IOException {
+        // read models and paths
+        Gson gson = new Gson();
+        Map<String, List<List<String>>> modelsWithPaths = gson.fromJson(
+                new FileReader(Paths.get(
+                        new File("").getAbsolutePath(),
+                        "/data/test/replayer/predefined/models_with_paths.json").toFile()),
+                new TypeToken<Map<String, List<List<String>>>>() {
+                }.getType());
+        Map<String, Set<List<String>>> expectedPaths = modelsWithPaths.keySet().stream().collect(Collectors.toMap(
+                key -> key, key -> new HashSet<>(modelsWithPaths.get(key))));
+
+        // act
+        Map<String, Set<List<String>>> actualPaths = new HashMap<>();
+        for (String lpmKey : modelsWithPaths.keySet()) {
+            actualPaths.put(lpmKey, Replayer.findAllPaths(10, LocalProcessModel.from(lpmKey)));
+        }
 
         // test
         for (String id : expectedPaths.keySet()) {
