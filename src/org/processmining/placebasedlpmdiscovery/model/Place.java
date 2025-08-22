@@ -35,6 +35,18 @@ public class Place implements Serializable, TextDescribable {
         this.isFinal = false;
     }
 
+    public static Place from(String stringRepresentation) {
+        Place place = new Place();
+        String[] transitions = stringRepresentation.split(" \\| ");
+        for (String tr : transitions[0].split(" ")) {
+            place.addInputTransition(new Transition(tr, false));
+        }
+        for (String tr : transitions[1].split(" ")) {
+            place.addOutputTransition(new Transition(tr, false));
+        }
+        return place;
+    }
+
     public boolean isInputTransition(Transition transition) {
         return inputTransitions.contains(transition);
     }

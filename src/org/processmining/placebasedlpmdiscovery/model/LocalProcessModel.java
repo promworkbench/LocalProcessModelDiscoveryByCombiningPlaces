@@ -5,6 +5,8 @@ import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAddition
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -43,6 +45,16 @@ public class LocalProcessModel implements Serializable, TextDescribable {
     public LocalProcessModel(Place place) {
         this();
         this.addPlace(place);
+    }
+
+    public static LocalProcessModel from(String stringRepresenation) {
+        LocalProcessModel lpm = new LocalProcessModel();
+        Pattern pattern = Pattern.compile("\\(([^()]*)\\)");
+        Matcher matcher = pattern.matcher(stringRepresenation);
+        while (matcher.find()) {
+            lpm.addPlace(Place.from(matcher.group(1)));
+        }
+        return lpm;
     }
 
     /**
