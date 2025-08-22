@@ -83,6 +83,6 @@ public class EFOverlapModelDistance implements ModelDistance {
             }
         }
 
-        return 2.0 * Sets.intersection(ef1, ef2).size() / (ef1.size() + ef2.size());
+        return 1 - 2.0 * Sets.intersection(ef1, ef2).size() / (ef1.size() + ef2.size());
     }
 }
