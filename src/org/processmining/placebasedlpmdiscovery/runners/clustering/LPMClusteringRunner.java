@@ -1,14 +1,9 @@
 package org.processmining.placebasedlpmdiscovery.runners.clustering;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableTable;
-import com.google.common.collect.Table;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVPrinter;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.InputModule;
 import org.processmining.placebasedlpmdiscovery.grouping.ClusteringConfig;
@@ -33,11 +28,8 @@ import org.python.google.common.reflect.TypeToken;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class LPMClusteringRunner {
 
@@ -83,28 +75,30 @@ public class LPMClusteringRunner {
     }
 
     private static void writeClustering(ClusteringRunnerConfig config, List<LocalProcessModel> lpms) throws IOException {
-        ImmutableTable.Builder<String, String, Integer> tableBuilder = new ImmutableTable.Builder<>();
+        final String clusterTitle = config.getClusteringConfig().getIdentifier();
 
-        // store the groups
-        for (LocalProcessModel lpm : lpms) {
-            String clusterTitle = config.getClusteringConfig().getIdentifier();
-            int cluster = lpm.getAdditionalInfo().getGroupsInfo()
-                    .getGroupingProperty(clusterTitle);
-            tableBuilder.put(lpm.getShortString(), clusterTitle, cluster);
-        }
+        // Deterministic row order: sort by LPM short string, tie-break by original index
+        java.util.List<Integer> order = java.util.stream.IntStream.range(0, lpms.size())
+                .boxed()
+                .sorted(java.util.Comparator
+                        .comparing((java.util.function.Function<Integer, String>) i -> lpms.get(i).getShortString())
+                        .thenComparingInt(i -> i))
+                .collect(java.util.stream.Collectors.toList());
 
-        Table<String, String, Integer> clusteringTable = tableBuilder.build();
-        try (CSVPrinter csvPrinter = CSVFormat.DEFAULT
+        try (org.apache.commons.csv.CSVPrinter csv = org.apache.commons.csv.CSVFormat.DEFAULT
                 .builder()
-                .setHeader(new String[]{"LPM", config.getClusteringConfig().getIdentifier()})
+                .setHeader("LPM", clusterTitle)
                 .build()
-                .print(Paths.get(config.getOutput().get(RunnerOutput.CLUSTERING)), StandardCharsets.UTF_8)) {
-            csvPrinter.printRecords(clusteringTable.rowMap().entrySet()
-                    .stream().map(entry -> ImmutableList.builder()
-                            .add(entry.getKey())
-                            .addAll(entry.getValue().values())
-                            .build())
-                    .collect(Collectors.toList()));
+                .print(java.nio.file.Paths.get(config.getOutput().get(RunnerOutput.CLUSTERING)),
+                        java.nio.charset.StandardCharsets.UTF_8)) {
+
+            for (Integer i : order) {
+                LocalProcessModel lpm = lpms.get(i);
+                int cluster = lpm.getAdditionalInfo()
+                        .getGroupsInfo()
+                        .getGroupingProperty(clusterTitle);
+                csv.printRecord(lpm.getShortString(), cluster);
+            }
         }
     }
 
