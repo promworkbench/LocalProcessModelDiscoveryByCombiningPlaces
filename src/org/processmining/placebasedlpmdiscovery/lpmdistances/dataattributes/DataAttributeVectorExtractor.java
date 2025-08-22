@@ -67,19 +67,29 @@ public class DataAttributeVectorExtractor {
 
     public List<double[]> convertToVectors(List<LocalProcessModel> lpms) {
         List<double[]> orLpmVectors = new ArrayList<>();
+
+        // compute original vectors and min and max vectors
+        for (LocalProcessModel lpm : lpms) {
+            orLpmVectors.add(this.convertLPMToFeatureVector(lpm));
+        }
+
+        return orLpmVectors;
+    }
+
+    public List<double[]> convertToVectorsNormalized(List<LocalProcessModel> lpms) {
+        List<double[]> orLpmVectors = convertToVectors(lpms);
+
         double[] maxVector = new double[this.vectorSize];
         Arrays.fill(maxVector, Double.MIN_VALUE);
         double[] minVector = new double[this.vectorSize];
         Arrays.fill(minVector, Double.MAX_VALUE);
 
         // compute original vectors and min and max vectors
-        for (LocalProcessModel lpm : lpms) {
-            double[] featureVector = this.convertLPMToFeatureVector(lpm);
+        for (double[] featureVector : orLpmVectors) {
             for (int i = 0; i < vectorSize; ++i) {
                 maxVector[i] = Math.max(maxVector[i], featureVector[i]);
                 minVector[i] = Math.min(minVector[i], featureVector[i]);
             }
-            orLpmVectors.add(featureVector);
         }
 
         // normalize using min max and vector size
@@ -87,7 +97,11 @@ public class DataAttributeVectorExtractor {
         int ind = 0;
         for (double[] vec : orLpmVectors) {
             for (int i = 0; i < vec.length; ++i) {
-                vec[i] = (vec[i] - minVector[i]) / (maxVector[i] - minVector[i]); // min-max
+                if (maxVector[i] - minVector[i] == 0) {
+                    vec[i] = 0;
+                } else {
+                    vec[i] = (vec[i] - minVector[i]) / (maxVector[i] - minVector[i]); // min-max
+                }
                 int attrSize = i < this.vectorStructure[ind] ?
                         ind == 0 ? this.vectorStructure[ind] : this.vectorStructure[ind] - this.vectorStructure[ind - 1] :
                         this.vectorStructure[++ind] - this.vectorStructure[ind - 1];
