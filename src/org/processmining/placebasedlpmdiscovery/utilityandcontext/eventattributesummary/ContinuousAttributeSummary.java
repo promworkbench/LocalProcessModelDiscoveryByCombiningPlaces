@@ -72,8 +72,8 @@ public class ContinuousAttributeSummary extends RangeAttributeSummary<Double, XA
     @Override
     protected void initializeRepresentationFeatures() {
         this.representationFeatures = new HashMap<>();
-        this.representationFeatures.put(AttributeSummary.MIN, 0.0);
-        this.representationFeatures.put(AttributeSummary.MAX, 0.0);
+        this.representationFeatures.put(AttributeSummary.MIN, Double.MAX_VALUE);
+        this.representationFeatures.put(AttributeSummary.MAX, Double.MIN_VALUE);
         this.representationFeatures.put(AttributeSummary.MEAN, 0.0);
         this.representationFeatures.put(AttributeSummary.SUM, 0.0);
         this.representationFeatures.put(AttributeSummary.MEDIAN, 0.0);

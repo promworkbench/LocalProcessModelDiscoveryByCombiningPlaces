@@ -7,7 +7,7 @@ import org.deckfour.xes.model.*;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.AttributeCollectorResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventAttributeCollectorResult;
 
-import java.util.*;
+import java.util.Collection;
 
 /**
  * Class that summarizes information for the event attributes in the event log
@@ -43,9 +43,10 @@ public class AttributeSummaryController {
             summary = EventAttributeSummaryFactory.getEventAttributeSummary(attribute, false);
             if (summary != null) {
                 result.getAttributeValues().put(attribute.getKey(), summary);
-                summary.addValue(attribute);
             }
         }
+        assert summary != null;
+        summary.addValue(attribute);
     }
 
     public EventAttributeCollectorResult computeEventAttributeSummary(XLog log) {

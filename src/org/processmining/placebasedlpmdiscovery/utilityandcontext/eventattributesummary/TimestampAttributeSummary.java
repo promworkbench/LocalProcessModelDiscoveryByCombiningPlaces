@@ -78,8 +78,8 @@ public class TimestampAttributeSummary extends RangeAttributeSummary<Date, XAttr
     @Override
     protected void initializeRepresentationFeatures() {
         this.representationFeatures = new HashMap<>();
-        this.representationFeatures.put(AttributeSummary.MIN, 0L);
-        this.representationFeatures.put(AttributeSummary.MAX, 0L);
+        this.representationFeatures.put(AttributeSummary.MIN, Long.MAX_VALUE);
+        this.representationFeatures.put(AttributeSummary.MAX, Long.MIN_VALUE);
         this.representationFeatures.put(AttributeSummary.MEAN, 0L);
         this.representationFeatures.put(AttributeSummary.SUM, 0L);
         this.representationFeatures.put(AttributeSummary.MEDIAN, 0L);
