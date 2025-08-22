@@ -97,17 +97,23 @@ public class LocalProcessModelUtils {
 
         // adding initial marking
         Set<Integer> unconstrainedTransitions = replayable.getEnabledTransitions();
-        replayable.addConstraint(UUID.randomUUID().toString(), 1, unconstrainedTransitions, new HashSet<>());
+//        replayable.addConstraint(UUID.randomUUID().toString(), 1, unconstrainedTransitions, new HashSet<>());
 
-//        for (Place p : lpm.getPlaces()) {
-//            Set<Transition> pUnconstrainedTransitions = p.getInputTransitions().stream()
-//                    .filter(t -> unconstrainedTransitions.contains(labelMap.get(t.getLabel())))
-//                    .collect(Collectors.toSet());
-//            Set<Transition> pConstrainedTransitions = p.getInputTransitions().stream()
-//                    .filter(t -> !unconstrainedTransitions.contains(labelMap.get(t.getLabel())))
-//                    .collect(Collectors.toSet());
-//
-//        }
+        for (Place p : lpm.getPlaces()) {
+            Set<Integer> pUnconstrainedTransitions = p.getInputTransitions().stream()
+                    .filter(t -> unconstrainedTransitions.contains(labelMap.get(t.getLabel())))
+                    .map(t -> labelMap.get(t.getLabel()))
+                    .collect(Collectors.toSet());
+            if (!pUnconstrainedTransitions.isEmpty()) {
+                replayable.addConstraint(
+                        UUID.randomUUID().toString(),
+                        1,
+                        p.getInputTransitions().stream()
+                                .map(t -> labelMap.get(t.getLabel()))
+                                .collect(Collectors.toSet()),
+                        new HashSet<>(), true);
+            }
+        }
 
         return replayable;
     }

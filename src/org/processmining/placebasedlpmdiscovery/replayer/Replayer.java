@@ -2,7 +2,6 @@ package org.processmining.placebasedlpmdiscovery.replayer;
 
 import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.undecided.Utils;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 
@@ -176,19 +175,19 @@ public class Replayer {
             // if empty and has fired add it to possible paths
             if (current.isEmptyMarking() && !current.getFiringSequence().isEmpty()) {
                 paths.add(current.getFiringSequence().stream().map(integerToTransitionLabelMap::get).collect(Collectors.toList()));
-                continue;
+//                continue;
             }
 
-            // if the maximum path length limit is achieved don't continue with replay
+            // if the maximum path length limit is achieved, don't continue with replay
             if (current.getFiringSequence().size() >= pathLengthLimit) {
                 continue;
             }
 
             for (Integer tr : current.getEnabledTransitions()) {
-                // unconstrained transitions can fire once
-                if (unconstrainedTransitions.contains(tr) && current.getFiringSequence().contains(tr)) {
-                    continue;
-                }
+//                // unconstrained transitions can fire once
+//                if (unconstrainedTransitions.contains(tr) && current.getFiringSequence().contains(tr)) {
+//                    continue;
+//                }
                 ReplayableLocalProcessModel copy = new ReplayableLocalProcessModel(current);
                 copy.fire(tr);
                 queue.add(copy);
