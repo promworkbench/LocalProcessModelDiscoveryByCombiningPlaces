@@ -1,4 +1,4 @@
-package org.processmining.placebasedlpmdiscovery.runners;
+package org.processmining.placebasedlpmdiscovery.runners.configs;
 
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerInput;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerOutput;

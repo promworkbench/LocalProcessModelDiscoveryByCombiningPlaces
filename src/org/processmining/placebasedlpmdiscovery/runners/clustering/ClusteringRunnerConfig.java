@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.runners.clustering;
 
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingConfig;
-import org.processmining.placebasedlpmdiscovery.runners.AbstractRunnerConfig;
+import org.processmining.placebasedlpmdiscovery.runners.configs.AbstractRunnerConfig;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerInput;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerOutput;
 
