@@ -14,7 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.List;
 
-public class DataAttributeVectorExtractionRunnerMeetaConfigReader implements RunnerMetaConfigReader<DataAttributeVectorExtractionRunnerConfig> {
+public class DataAttributeVectorExtractionRunnerMetaConfigReader implements RunnerMetaConfigReader<DataAttributeVectorExtractionRunnerConfig> {
     @Override
     public RunnerMetaConfig<DataAttributeVectorExtractionRunnerConfig> readConfig(String configFilePath) throws FileNotFoundException {
         GsonBuilder gsonBuilder = new GsonBuilder()

@@ -1,26 +1,20 @@
 package org.processmining.placebasedlpmdiscovery.runners.distancerunner;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.processmining.placebasedlpmdiscovery.InputModule;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.results.FromFileLPMDiscoveryResult;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceService;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.dependencyinjection.LPMDistancesDependencyInjectionModule;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.serialization.ModelDistanceConfigDeserializer;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.runners.configs.RunnerMetaConfig;
+import org.processmining.placebasedlpmdiscovery.runners.configs.readers.RunnerMetaConfigReader;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerInput;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerOutput;
-import org.processmining.placebasedlpmdiscovery.runners.serialization.RunnerInputAdapter;
-import org.processmining.placebasedlpmdiscovery.runners.serialization.RunnerOutputDeserializer;
+import org.processmining.placebasedlpmdiscovery.runners.timemanagement.RunnerTimeManager;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
-import org.python.google.common.reflect.TypeToken;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +34,10 @@ public class DistanceComputationRunner {
 
     private static void run(String configPath) throws Exception {
         // read configs
-        List<DistanceRunnerConfig> runnerConfigs = readConfig(configPath);
+        RunnerMetaConfig<DistanceRunnerConfig> metaConfig = RunnerMetaConfigReader.distanceInstance().readConfig(configPath);
+        RunnerTimeManager timeManager = new RunnerTimeManager();
 
-        for (DistanceRunnerConfig config : runnerConfigs) {
+        for (DistanceRunnerConfig config : metaConfig.getRunnerConfigs()) {
             System.out.println(config);
             Injector injector = Guice.createInjector(
                     new InputModule(LogUtils
@@ -56,13 +51,16 @@ public class DistanceComputationRunner {
 
             System.out.println("LPMs imported");
 
+            timeManager.startTimer(config.getOutput().get(RunnerOutput.DISTANCE));
             ModelDistanceService modelDistanceService = injector.getInstance(ModelDistanceService.class);
             double[][] distances = modelDistanceService.getDistanceMatrix(lpms, config.getModelDistanceConfig());
+            timeManager.stopTimer(config.getOutput().get(RunnerOutput.DISTANCE));
 
             System.out.println("Distances computed");
 
             writeDistances(config.getOutput().get(RunnerOutput.DISTANCE), lpms, distances);
         }
+        timeManager.exportTimers(metaConfig.getMetaData().get(RunnerMetaConfig.META_DATA_OUTPUT_DIR) + "/times.csv");
     }
 
     private static void writeDistances(String filePath, List<LocalProcessModel> lpms, double[][] distances) throws IOException {
@@ -107,20 +105,5 @@ public class DistanceComputationRunner {
                 csv.printRecord(record);
             }
         }
-    }
-
-    private static List<DistanceRunnerConfig> readConfig(String configPath) throws FileNotFoundException {
-        GsonBuilder gsonBuilder = new GsonBuilder()
-                .registerTypeAdapter(ModelDistanceConfig.class, new ModelDistanceConfigDeserializer())
-                .registerTypeAdapter(RunnerInput.class, new RunnerInputAdapter())
-                .registerTypeAdapter(RunnerOutput.class, new RunnerOutputDeserializer());
-
-        Gson gson = gsonBuilder.create();
-        List<DistanceRunnerConfig> configs = gson.fromJson(
-                new FileReader(configPath),
-                new TypeToken<List<DistanceRunnerConfig>>() {
-                }.getType()
-        );
-        return configs;
     }
 }

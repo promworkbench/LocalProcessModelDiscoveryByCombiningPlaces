@@ -1,32 +1,23 @@
 package org.processmining.placebasedlpmdiscovery.runners.clustering;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.InputModule;
-import org.processmining.placebasedlpmdiscovery.grouping.ClusteringConfig;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingConfig;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingController;
 import org.processmining.placebasedlpmdiscovery.grouping.GroupingService;
-import org.processmining.placebasedlpmdiscovery.grouping.serialization.GroupingConfigDeserializer;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.results.FromFileLPMDiscoveryResult;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.ModelDistanceConfig;
 import org.processmining.placebasedlpmdiscovery.lpmdistances.dependencyinjection.LPMDistancesDependencyInjectionModule;
-import org.processmining.placebasedlpmdiscovery.lpmdistances.serialization.ModelDistanceConfigDeserializer;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
-import org.processmining.placebasedlpmdiscovery.model.exporting.gson.adapters.GeneralInterfaceAdapter;
+import org.processmining.placebasedlpmdiscovery.runners.configs.RunnerMetaConfig;
+import org.processmining.placebasedlpmdiscovery.runners.configs.readers.RunnerMetaConfigReader;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerInput;
 import org.processmining.placebasedlpmdiscovery.runners.io.RunnerOutput;
-import org.processmining.placebasedlpmdiscovery.runners.serialization.RunnerInputAdapter;
-import org.processmining.placebasedlpmdiscovery.runners.serialization.RunnerOutputDeserializer;
+import org.processmining.placebasedlpmdiscovery.runners.timemanagement.RunnerTimeManager;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
-import org.python.google.common.reflect.TypeToken;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,23 +36,30 @@ public class LPMClusteringRunner {
     }
 
     private static void run(String configPath) throws Exception {
-        List<ClusteringRunnerConfig> runnerConfigs = readConfig(configPath);
+        RunnerMetaConfig<ClusteringRunnerConfig> metaConfig = RunnerMetaConfigReader.clusteringInstance()
+                .readConfig(configPath);
+        RunnerTimeManager timeManager = new RunnerTimeManager();
 
-        for (ClusteringRunnerConfig config : runnerConfigs) {
+        for (ClusteringRunnerConfig config : metaConfig.getRunnerConfigs()) {
             LPMDiscoveryResult result = new FromFileLPMDiscoveryResult(config.getInput().get(RunnerInput.LPMS));
             List<LocalProcessModel> lpms = new ArrayList<>(result.getAllLPMs());
 
             System.out.println("LPMs imported");
 
             XLog eventLog = LogUtils.readLogFromFile(config.getInput().get(RunnerInput.EVENT_LOG));
+
+            timeManager.startTimer(config.getOutput().get(RunnerOutput.CLUSTERING));
             GroupingService groupingService = GroupingService.getInstance(eventLog);
             groupingService.groupLPMs(lpms, config.getClusteringConfig());
+            timeManager.stopTimer(config.getOutput().get(RunnerOutput.CLUSTERING));
+
 //            GroupingController groupingController = getGroupingController(config.getClusteringConfig(), eventLog);
 //            groupingController.groupLPMs(lpms, config.getClusteringConfig());
 
 
             writeClustering(config, lpms);
         }
+        timeManager.exportTimers(metaConfig.getMetaData().get(RunnerMetaConfig.META_DATA_OUTPUT_DIR) + "/times.csv");
     }
 
 
@@ -100,22 +98,5 @@ public class LPMClusteringRunner {
                 csv.printRecord(lpm.getShortString(), cluster);
             }
         }
-    }
-
-    private static List<ClusteringRunnerConfig> readConfig(String configPath) throws FileNotFoundException {
-        GsonBuilder gsonBuilder = new GsonBuilder()
-                .registerTypeAdapter(GroupingConfig.class, new GroupingConfigDeserializer())
-                .registerTypeAdapter(ModelDistanceConfig.class, new ModelDistanceConfigDeserializer())
-                .registerTypeAdapter(RunnerInput.class, new RunnerInputAdapter())
-                .registerTypeAdapter(RunnerOutput.class, new RunnerOutputDeserializer())
-                .registerTypeAdapter(ClusteringConfig.class, new GeneralInterfaceAdapter<ClusteringConfig>());
-
-        Gson gson = gsonBuilder.create();
-        List<ClusteringRunnerConfig> configs = gson.fromJson(
-                new FileReader(configPath),
-                new TypeToken<List<ClusteringRunnerConfig>>() {
-                }.getType()
-        );
-        return configs;
     }
 }

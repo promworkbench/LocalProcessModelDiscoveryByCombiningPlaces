@@ -11,5 +11,17 @@ public interface RunnerMetaConfigReader<T extends RunnerConfig> {
         return new LPMDiscoveryRunnerMetaConfigReader();
     }
 
+    static ClusteringRunnerMetaConfigReader clusteringInstance() {
+        return new ClusteringRunnerMetaConfigReader();
+    }
+
+    static DataAttributeVectorExtractionRunnerMetaConfigReader dataAttributeVectorExtractionInstance() {
+        return new DataAttributeVectorExtractionRunnerMetaConfigReader();
+    }
+
+    static DistanceRunnerMetaConfigReader distanceInstance() {
+        return new DistanceRunnerMetaConfigReader();
+    }
+
     RunnerMetaConfig<T> readConfig(String configFilePath) throws FileNotFoundException;
 }
