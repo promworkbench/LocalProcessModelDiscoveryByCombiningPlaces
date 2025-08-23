@@ -69,7 +69,7 @@ public class DataAttributeExtractorRunner {
                     vectorExtractor.convertToVectors(lpms));
 
         }
-        timeManager.exportTimers(metaConfig.getMetaData().get(RunnerMetaConfig.META_DATA_OUTPUT_DIR) + "/times.csv");
+        timeManager.exportTimers(metaConfig.getMetaData().get(RunnerMetaConfig.META_DATA_TIMED_EXECUTIONS));
     }
 
     private static void writeVectors(String filePath,

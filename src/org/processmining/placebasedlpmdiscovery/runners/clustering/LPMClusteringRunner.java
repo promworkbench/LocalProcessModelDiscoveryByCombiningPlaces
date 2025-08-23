@@ -59,7 +59,7 @@ public class LPMClusteringRunner {
 
             writeClustering(config, lpms);
         }
-        timeManager.exportTimers(metaConfig.getMetaData().get(RunnerMetaConfig.META_DATA_OUTPUT_DIR) + "/times.csv");
+        timeManager.exportTimers(metaConfig.getMetaData().get(RunnerMetaConfig.META_DATA_TIMED_EXECUTIONS));
     }
 
 

@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class RunnerMetaConfig<T extends RunnerConfig> {
 
-    public static final String META_DATA_OUTPUT_DIR = "outputDir";
+    public static final String META_DATA_TIMED_EXECUTIONS = "timedExecutions";
 
     private final Map<String, String> metaData;
     private final List<T> runnerConfigs;
