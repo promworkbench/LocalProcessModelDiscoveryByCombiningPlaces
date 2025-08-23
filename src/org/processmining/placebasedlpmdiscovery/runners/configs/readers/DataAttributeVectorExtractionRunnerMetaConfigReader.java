@@ -12,7 +12,6 @@ import org.python.google.common.reflect.TypeToken;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.List;
 
 public class DataAttributeVectorExtractionRunnerMetaConfigReader implements RunnerMetaConfigReader<DataAttributeVectorExtractionRunnerConfig> {
     @Override
@@ -24,7 +23,7 @@ public class DataAttributeVectorExtractionRunnerMetaConfigReader implements Runn
         Gson gson = gsonBuilder.create();
         RunnerMetaConfig<DataAttributeVectorExtractionRunnerConfig> config = gson.fromJson(
                 new FileReader(configFilePath),
-                new TypeToken<List<DataAttributeVectorExtractionRunnerConfig>>() {
+                new TypeToken<RunnerMetaConfig<DataAttributeVectorExtractionRunnerConfig>>() {
                 }.getType()
         );
         return config;

@@ -14,7 +14,6 @@ import org.python.google.common.reflect.TypeToken;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.List;
 
 public class DistanceRunnerMetaConfigReader implements RunnerMetaConfigReader<DistanceRunnerConfig> {
     @Override
@@ -27,7 +26,7 @@ public class DistanceRunnerMetaConfigReader implements RunnerMetaConfigReader<Di
         Gson gson = gsonBuilder.create();
         RunnerMetaConfig<DistanceRunnerConfig> config = gson.fromJson(
                 new FileReader(configFilePath),
-                new TypeToken<List<DistanceRunnerConfig>>() {
+                new TypeToken<RunnerMetaConfig<DistanceRunnerConfig>>() {
                 }.getType()
         );
         return config;
