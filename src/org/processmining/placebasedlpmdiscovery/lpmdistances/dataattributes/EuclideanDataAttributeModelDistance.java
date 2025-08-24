@@ -1,6 +1,5 @@
 package org.processmining.placebasedlpmdiscovery.lpmdistances.dataattributes;
 
-import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import smile.math.distance.EuclideanDistance;
 
@@ -25,7 +24,7 @@ public class EuclideanDataAttributeModelDistance extends DataAttributeModelDista
         EuclideanDistance euclidean = new EuclideanDistance();
         double[][] distances = new double[lpms.size()][lpms.size()];
 
-        List<double[]> vectors = this.dataAttrVecExtractor.convertToVectors(lpms);
+        List<double[]> vectors = this.dataAttrVecExtractor.convertToVectorsNormalized(lpms);
         for (int i = 0; i < vectors.size() - 1; ++i) {
             for (int j = i; j < vectors.size(); ++j) {
                 distances[i][j] = euclidean.d(vectors.get(i), vectors.get(j));
