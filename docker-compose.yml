@@ -2,10 +2,11 @@ version: '3.8'
 
 services:
   lpm-wonderland:
+    container_name: lpm-wonderland
     build:
       context: .               # Use current directory as build context
       dockerfile: Dockerfile    # Specify which Dockerfile to use
     volumes:
-      - ./data:/app/data          # Map local src directory to /app/src in the container
+      - ./data:/app/data          # Map local data directory to /app/data in the container
     stdin_open: true            # Keep STDIN open even if not attached
     tty: true                   # Allocate a pseudo-TTY for interactive use
