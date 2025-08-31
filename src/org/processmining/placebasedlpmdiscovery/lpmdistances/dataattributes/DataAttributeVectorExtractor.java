@@ -179,7 +179,7 @@ public class DataAttributeVectorExtractor {
                         .getRepresentationFeatures();
                 List<String> featureKeys = new ArrayList<>(representationFeatures.keySet());
 
-                // if the attribute is of type literal we need all values of that attribute to have vectors of same dimension
+                // if the attribute is of type literal, we need all values of that attribute to have vectors of the same dimension
                 if (defaultAttributeSummary instanceof LiteralAttributeSummary) {
                     featureKeys = this.literalValuesOrder.get(attributeKey);
 
@@ -192,23 +192,17 @@ public class DataAttributeVectorExtractor {
                         this.literalValuesOrder.put(attributeKey, featureKeys);
                     }
                 }
-//                if (defaultAttributeSummary instanceof LiteralAttributeSummary) {
-//                    featureKeys = this.literalValuesOrder.get(attributeKey);
-//
-//                    if (featureKeys == null) {
-//                        featureKeys = new ArrayList<>(
-//                                this.attributeSummaryController
-//                                        .computeEventAttributeSummary(this.log, attributeKey)
-//                                        .getRepresentationFeatures()
-//                                        .keySet());
-//                        this.literalValuesOrder.put(attributeKey, featureKeys);
-//                    }
-//                }
+
                 // sort representation features keys such that for each vector the same order is used
                 Collections.sort(featureKeys);
 
+                double sum = featureKeys.stream()
+                        .map(key -> Math.pow(representationFeatures.getOrDefault(key, 0).doubleValue(), 2))
+                        .mapToDouble(Number::doubleValue).sum();
+                double norm = sum == 0 ? 1 : Math.sqrt(sum);
+
                 for (String feature : featureKeys) {
-                    attributeVector.add(representationFeatures.getOrDefault(feature, 0).doubleValue());
+                    attributeVector.add(representationFeatures.getOrDefault(feature, 0).doubleValue() / norm);
                 }
 
             }
