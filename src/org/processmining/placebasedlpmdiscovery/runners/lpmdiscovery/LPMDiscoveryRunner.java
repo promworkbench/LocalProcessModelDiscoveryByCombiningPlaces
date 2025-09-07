@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.runners.lpmdiscovery;
 
 import org.deckfour.xes.model.XLog;
-import org.processmining.lpms.discovery.LPMDiscovery;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.LPMDiscovery;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.CSVExporter;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.ExporterFactory;

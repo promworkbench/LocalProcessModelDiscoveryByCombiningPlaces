@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.runners.lpmutils;
 
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
-import org.processmining.placebasedlpmdiscovery.replayer.Replayer;
+import org.processmining.placebasedlpmdiscovery.replayer.ReplayableLocalProcessModelReplayer;
 
 import java.util.List;
 import java.util.Set;
@@ -30,7 +30,7 @@ public class LPMLanguageGeneratorRunner {
     }
 
     private static void printPaths(LocalProcessModel lpm) {
-        Set<List<String>> paths = Replayer.findAllPaths(10, lpm);
+        Set<List<String>> paths = ReplayableLocalProcessModelReplayer.findAllPaths(10, lpm);
         for (List<String> path : paths) {
             System.out.println(path);
         }
