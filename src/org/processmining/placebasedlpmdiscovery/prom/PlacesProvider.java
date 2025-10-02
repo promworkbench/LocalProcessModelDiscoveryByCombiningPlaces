@@ -26,5 +26,13 @@ public interface PlacesProvider {
         return new DiscoveryPlacesProvider(parameters.getAlgorithm(factory));
     }
 
+    static PlacesProvider fromFile(String fileName) {
+        return new FromFilePlacesProvider(fileName);
+    }
+
+    static PlacesProvider fromSet(Set<Place> places) {
+        return log -> places;
+    }
+
     Set<Place> from(XLog log);
 }

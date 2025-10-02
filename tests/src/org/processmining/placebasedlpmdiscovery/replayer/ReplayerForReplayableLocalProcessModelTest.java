@@ -116,7 +116,7 @@ public class ReplayerForReplayableLocalProcessModelTest {
         // act
         Map<String, Set<List<String>>> actualPaths = new HashMap<>();
         for (String lpmKey : modelsWithPaths.keySet()) {
-            actualPaths.put(lpmKey, Replayer.findAllPaths(10, LocalProcessModel.from(lpmKey)));
+            actualPaths.put(lpmKey, ReplayableLocalProcessModelReplayer.findAllPaths(10, LocalProcessModel.from(lpmKey)));
         }
 
         // test
