@@ -37,6 +37,8 @@
 		<dependency conf="lib->default" org="com.google.inject.extensions" name="guice-assistedinject" rev="4.0" />
 		<dependency conf="lib->default" org="com.google.inject.extensions" name="guice-multibindings" rev="4.0" />
 		<dependency conf="lib->default" org="com.github.haifengl" name="smile-core" rev="3.0.2"/>
+		<!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+		<dependency org="org.assertj" name="assertj-core" rev="3.24.2"/>
 <!--		<dependency org="com.github.beamline" name="simple-pnml" rev="0.0.2"/>-->
     	<!-- dependency conf="lib->default" org="org.reflections" name="reflections" rev="0.9.10" /-->
     	<!-- Third party library downloaded from ProM library. -->
