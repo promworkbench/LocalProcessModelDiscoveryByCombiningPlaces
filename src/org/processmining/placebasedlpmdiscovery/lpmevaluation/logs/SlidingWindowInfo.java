@@ -8,9 +8,9 @@ import java.util.List;
 /**
  * There are three different ways in which a current sliding window differs from the previous.
  * (1) Only adding an element: [a] -> [a b], [a b] -> [a b c]; This occurs when the sliding window capacity is not
- * completely filled, i.e., at the beginning of a sequence. To see which activities have been added use
+ *  filled, i.e., at the beginning of a sequence. To see which activities have been added use
  * {@link #getAddedActivities()}.
- * (2) Removing and adding an element: [a b c] ->  [b c b]; This occurs when the sliding window capacity is filled, so
+ * (2) Removing and adding an element: [a b c] -> [b c b]; This occurs when the sliding window capacity is filled, so
  * first an element has to be removed and then added.
  * (3) Only removing an element: [b c b] -> [c b], [c b] -> [b]; This occurs when the sliding window is at the end of
  * a sequence. To see which activities have been removed use {@link #getRemovedActivities()}.
