@@ -8,10 +8,14 @@ import org.processmining.placebasedlpmdiscovery.prom.PlacesProvider;
 public interface LPMDiscovery {
 
     static LPMDiscovery getInstance() {
-        return placeBased(PlacesProvider.getInstance(), 100);
+        return placeBased();
     }
 
     static LPMDiscovery treeBased() {return new ProcessTreeBasedLPMDiscovery(); }
+
+    static LPMDiscovery placeBased() {
+        return new PlaceBasedLPMDiscovery();
+    }
 
     static LPMDiscovery placeBased(PlacesProvider placesProvider) {
         return new PlaceBasedLPMDiscovery(placesProvider);
