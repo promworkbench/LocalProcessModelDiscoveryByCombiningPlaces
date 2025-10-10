@@ -18,13 +18,16 @@ import java.util.Set;
 public class PlaceBasedLPMDiscovery implements LPMDiscovery {
 
     private final int placeLimit;
-    private final PlacesProvider placesProvider;
+    private PlacesProvider placesProvider;
     private final int proximity;
     private final int concurrencyLimit;
 
+    public PlaceBasedLPMDiscovery() {
+        this(null);
+    }
 
     public PlaceBasedLPMDiscovery(PlacesProvider placesProvider) {
-        this(placesProvider, 50);
+        this(placesProvider, DiscoveryParameters.PlaceBased.placeLimit);
     }
 
     public PlaceBasedLPMDiscovery(PlacesProvider placesProvider, int placeLimit) {
@@ -44,6 +47,9 @@ public class PlaceBasedLPMDiscovery implements LPMDiscovery {
 
     @Override
     public LPMDiscoveryResult from(XLog log) {
+        if (this.placesProvider == null) {
+            this.placesProvider = PlacesProvider.fromLog(log);
+        }
         EventLog eventLog = new XLogWrapper(log);
 
         PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(eventLog);
@@ -52,7 +58,7 @@ public class PlaceBasedLPMDiscovery implements LPMDiscovery {
         parameters.getLpmCombinationParameters().setConcurrencyCardinality(this.concurrencyLimit);
 
         LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
-        Set<Place> places = this.placesProvider.from(log);
+        Set<Place> places = this.placesProvider.provide();
 
         FPGrowthForPlacesLPMBuildingInput lpmBuildingInput = new FPGrowthForPlacesLPMBuildingInput(eventLog, places);
         StandardLPMDiscoveryInput discoveryInput =

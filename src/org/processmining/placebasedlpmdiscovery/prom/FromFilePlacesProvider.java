@@ -1,6 +1,5 @@
 package org.processmining.placebasedlpmdiscovery.prom;
 
-import org.deckfour.xes.model.XLog;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.exporting.importers.ImporterFactory;
@@ -23,7 +22,7 @@ public class FromFilePlacesProvider implements PlacesProvider {
     }
 
     @Override
-    public Set<Place> from(XLog log) {
+    public Set<Place> provide() {
         try {
             if (this.fileName.endsWith("pnml")) {
                 Petrinet net = PlaceUtils.extractPetriNet(fileName);
