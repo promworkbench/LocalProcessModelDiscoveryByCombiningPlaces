@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.windowbased;
 
 import org.processmining.eventlogs.window.WindowBasedEventLog;
-import org.processmining.lpms.discovery.builders.SingleWindowLPMBuilder;
+import org.processmining.lpms.discovery.builders.LADAWindowLPMBuilder;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlg;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.LPMBuildingInput;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.WindowBasedLPMBuildingInput;
@@ -16,10 +16,10 @@ import org.processmining.placebasedlpmdiscovery.model.lpmstorage.GlobalLPMStorag
 
 public class WindowBasedLPMBuildingAlg implements LPMBuildingAlg {
 
-    private final SingleWindowLPMBuilder singleWindowLPMBuilder;
+    private final LADAWindowLPMBuilder LADAWindowLPMBuilder;
 
-    public WindowBasedLPMBuildingAlg(SingleWindowLPMBuilder singleWindowLPMBuilder) {
-        this.singleWindowLPMBuilder = singleWindowLPMBuilder;
+    public WindowBasedLPMBuildingAlg(LADAWindowLPMBuilder LADAWindowLPMBuilder) {
+        this.LADAWindowLPMBuilder = LADAWindowLPMBuilder;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class WindowBasedLPMBuildingAlg implements LPMBuildingAlg {
                 .getInstance(input.getEventLog(), parameters.getWindowSize());
         WindowLPMStorage windowStorage = null;
         for (SlidingWindowInfo windowInfo : windowBasedEventLog) {
-            windowStorage = singleWindowLPMBuilder.build(windowInfo, windowStorage);
+            windowStorage = LADAWindowLPMBuilder.build(windowInfo, windowStorage);
             storageTransporter.move(windowStorage, lpmStorage);
         }
 

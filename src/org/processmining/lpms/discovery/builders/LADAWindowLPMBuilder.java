@@ -6,10 +6,18 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.SlidingWindow
 /**
  * Builds LPMs for a single window.
  */
-public interface SingleWindowLPMBuilder {
+public interface LADAWindowLPMBuilder {
 
-    static SingleWindowLPMBuilder getInstance() {
-        return new LADASingleWindowLPMBuilder();
+    static LADAWindowLPMBuilder getInstance() {
+        return placeBased();
+    }
+
+    static LADAWindowLPMBuilder placeBased() {
+        return new PBLADAWindowLPMBuilder();
+    }
+
+    static LADAWindowLPMBuilder treeBased() {
+        return new PTLADAWindowLPMBuilder();
     }
 
     /**
