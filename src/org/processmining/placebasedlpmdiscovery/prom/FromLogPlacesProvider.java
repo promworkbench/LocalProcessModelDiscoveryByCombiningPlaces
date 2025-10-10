@@ -24,6 +24,7 @@ public class FromLogPlacesProvider implements PlacesProvider {
         this.algorithm = algorithm;
     }
 
+    // QA: These methods (est and specpp) probably make no sense, since they won't be visible
     public PlacesProvider est() {
         PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
         EstMinerPlaceDiscoveryParameters parameters = new EstMinerPlaceDiscoveryParameters();
