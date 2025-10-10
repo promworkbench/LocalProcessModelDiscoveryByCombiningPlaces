@@ -37,12 +37,23 @@ public class Place implements Serializable, TextDescribable {
 
     public static Place from(String stringRepresentation) {
         Place place = new Place();
-        String[] transitions = stringRepresentation.split(" \\| ");
-        for (String tr : transitions[0].split(" ")) {
-            place.addInputTransition(new Transition(tr, false));
+        String[] transitions = stringRepresentation.trim().split("\\|",  -1);
+
+        if (transitions.length != 2) {
+            throw new IllegalArgumentException("The place string should include a single |.");
         }
-        for (String tr : transitions[1].split(" ")) {
-            place.addOutputTransition(new Transition(tr, false));
+
+        if (!transitions[0].trim().isEmpty()) {
+            String[] inTransitions = transitions[0].trim().split(" ");
+            for (String tr : inTransitions) {
+                place.addInputTransition(new Transition(tr, false));
+            }
+        }
+        if (!transitions[1].trim().isEmpty()) {
+            String[] outTransitions = transitions[1].trim().split(" ");
+            for (String tr : outTransitions) {
+                place.addOutputTransition(new Transition(tr, false));
+            }
         }
         return place;
     }
