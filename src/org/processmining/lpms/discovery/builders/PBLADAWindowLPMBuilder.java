@@ -3,7 +3,7 @@ package org.processmining.lpms.discovery.builders;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowLPMStorage;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.SlidingWindowInfo;
 
-public class LADASingleWindowLPMBuilder implements SingleWindowLPMBuilder {
+public class PBLADAWindowLPMBuilder implements LADAWindowLPMBuilder {
 
     @Override
     public WindowLPMStorage build(SlidingWindowInfo windowInfo, WindowLPMStorage prevWindowResult) {

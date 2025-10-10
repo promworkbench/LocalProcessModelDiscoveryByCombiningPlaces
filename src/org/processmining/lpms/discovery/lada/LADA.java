@@ -3,7 +3,7 @@ package org.processmining.lpms.discovery.lada;
 import org.deckfour.xes.model.XLog;
 import org.processmining.eventlogs.window.WindowBasedEventLog;
 import org.processmining.lpms.discovery.DiscoveryParameters;
-import org.processmining.lpms.discovery.builders.SingleWindowLPMBuilder;
+import org.processmining.lpms.discovery.builders.LADAWindowLPMBuilder;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowLPMStorage;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowToGlobalLPMStorageTransporter;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.LPMDiscovery;
@@ -36,9 +36,9 @@ public class LADA implements LPMDiscovery {
         // traverse event log and build lpms
         WindowBasedEventLog windowBasedEventLog = WindowBasedEventLog.getInstance(eventLog, this.proximity);
         WindowLPMStorage windowStorage = null;
-        SingleWindowLPMBuilder singleWindowLPMBuilder = SingleWindowLPMBuilder.getInstance();
+        LADAWindowLPMBuilder windowLPMBuilder = LADAWindowLPMBuilder.getInstance();
         for (SlidingWindowInfo windowInfo : windowBasedEventLog) {
-            windowStorage = singleWindowLPMBuilder.build(windowInfo, windowStorage);
+            windowStorage = windowLPMBuilder.build(windowInfo, windowStorage);
             storageTransporter.move(windowStorage, lpmStorage);
         }
 
