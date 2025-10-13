@@ -8,7 +8,7 @@ import java.util.Collection;
 /**
  * Stores discovered LPMs for one window.
  */
-public interface WindowLPMStorage {
+public interface WindowLPMStorage { // QA: Should not be called like this, the name should explain the type of storage.
 
     static WindowLPMStorage lada() {
         return new LADALocalTree();
