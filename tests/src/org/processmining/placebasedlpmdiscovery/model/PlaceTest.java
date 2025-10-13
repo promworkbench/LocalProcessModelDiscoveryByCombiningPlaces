@@ -127,4 +127,30 @@ public class PlaceTest {
             Assert.assertTrue(e.getMessage().contains("The place string should include a single |."));
         }
     }
+
+    @Test
+    public void givenNoDelimiters_whenFrom_thenThrowIllegalArgument() {
+        // given
+        String placeDescription = "a b";
+
+        try { // when
+            Place.from(placeDescription);
+        }
+        catch (IllegalArgumentException e) { // then
+            Assert.assertTrue(e.getMessage().contains("The place string should include a single |."));
+        }
+    }
+
+    @Test
+    public void givenEmptyString_whenFrom_thenThrowIllegalArgument() {
+        // given
+        String placeDescription = "";
+
+        try { // when
+            Place.from(placeDescription);
+        }
+        catch (IllegalArgumentException e) { // then
+            Assert.assertTrue(e.getMessage().contains("The place string should include a single |."));
+        }
+    }
 }
