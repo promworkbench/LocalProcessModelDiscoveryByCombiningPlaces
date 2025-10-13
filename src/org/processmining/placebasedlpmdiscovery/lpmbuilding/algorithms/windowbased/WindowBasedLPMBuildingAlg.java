@@ -16,10 +16,10 @@ import org.processmining.placebasedlpmdiscovery.model.lpmstorage.GlobalLPMStorag
 
 public class WindowBasedLPMBuildingAlg implements LPMBuildingAlg {
 
-    private final LADAWindowLPMBuilder LADAWindowLPMBuilder;
+    private final LADAWindowLPMBuilder ladaWindowLPMBuilder;
 
-    public WindowBasedLPMBuildingAlg(LADAWindowLPMBuilder LADAWindowLPMBuilder) {
-        this.LADAWindowLPMBuilder = LADAWindowLPMBuilder;
+    public WindowBasedLPMBuildingAlg(LADAWindowLPMBuilder ladaWindowLPMBuilder) {
+        this.ladaWindowLPMBuilder = ladaWindowLPMBuilder;
     }
 
     @Override
@@ -48,7 +48,7 @@ public class WindowBasedLPMBuildingAlg implements LPMBuildingAlg {
                 .getInstance(input.getEventLog(), parameters.getWindowSize());
         WindowLPMStorage windowStorage = null;
         for (SlidingWindowInfo windowInfo : windowBasedEventLog) {
-            windowStorage = LADAWindowLPMBuilder.build(windowInfo, windowStorage);
+            windowStorage = ladaWindowLPMBuilder.build(windowInfo, windowStorage);
             storageTransporter.move(windowStorage, lpmStorage);
         }
 
