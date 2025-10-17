@@ -48,7 +48,7 @@ public class PlaceBasedLPMDiscovery implements LPMDiscovery {
     @Override
     public LPMDiscoveryResult from(XLog log) {
         if (this.placesProvider == null) {
-            this.placesProvider = PlacesProvider.fromLog(log);
+            this.placesProvider = PlacesProvider.fromLog(log).specpp();
         }
         EventLog eventLog = new XLogWrapper(log);
 

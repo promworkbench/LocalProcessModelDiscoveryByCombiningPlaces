@@ -11,37 +11,38 @@ import java.util.Set;
 
 public class FromLogPlacesProvider implements PlacesProvider {
 
-
     private final XLog log;
-    private PlaceDiscoveryAlgorithm<?, ?> algorithm;
-
-    public FromLogPlacesProvider(XLog log) {
-        this.log = log;
-    }
+    private final PlaceDiscoveryAlgorithm<?, ?> algorithm;
 
     public FromLogPlacesProvider(XLog log, PlaceDiscoveryAlgorithm<?, ?> algorithm) {
         this.log = log;
         this.algorithm = algorithm;
     }
 
-    // QA: These methods (est and specpp) probably make no sense, since they won't be visible
-    public PlacesProvider est() {
-        PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
-        EstMinerPlaceDiscoveryParameters parameters = new EstMinerPlaceDiscoveryParameters();
-        return new FromLogPlacesProvider(this.log, parameters.getAlgorithm(factory));
-    }
-
-    public PlacesProvider specpp() {
-        PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
-        SPECppPlaceDiscoveryParameters parameters = new SPECppPlaceDiscoveryParameters();
-        return new FromLogPlacesProvider(this.log, parameters.getAlgorithm(factory));
-    }
-
     @Override
     public Set<Place> provide() {
-        if (algorithm == null) {
-            return specpp().provide();
+        return algorithm.getPlaces(this.log).getPlaces();
+    }
+
+
+    public static class FromLogPlacesProviderLogStage {
+
+        private final XLog log;
+
+        FromLogPlacesProviderLogStage(XLog log) {
+            this.log = log;
         }
-        return algorithm.getPlaces(log).getPlaces();
+
+        public PlacesProvider est() {
+            PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
+            EstMinerPlaceDiscoveryParameters parameters = new EstMinerPlaceDiscoveryParameters();
+            return new FromLogPlacesProvider(log, parameters.getAlgorithm(factory));
+        }
+
+        public PlacesProvider specpp() {
+            PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
+            SPECppPlaceDiscoveryParameters parameters = new SPECppPlaceDiscoveryParameters();
+            return new FromLogPlacesProvider(log, parameters.getAlgorithm(factory));
+        }
     }
 }

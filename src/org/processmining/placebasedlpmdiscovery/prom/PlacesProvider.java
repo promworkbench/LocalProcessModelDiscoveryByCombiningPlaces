@@ -15,8 +15,8 @@ public interface PlacesProvider {
         return () -> places;
     }
 
-    static PlacesProvider fromLog(XLog log) {
-        return new FromLogPlacesProvider(log);
+    static FromLogPlacesProvider.FromLogPlacesProviderLogStage fromLog(XLog log) {
+        return new FromLogPlacesProvider.FromLogPlacesProviderLogStage(log);
     }
 
     Set<Place> provide();
