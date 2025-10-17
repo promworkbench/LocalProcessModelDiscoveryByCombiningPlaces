@@ -2,37 +2,37 @@ package org.processmining.placebasedlpmdiscovery.prom;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.model.Place;
-import org.processmining.placebasedlpmdiscovery.prom.placediscovery.algorithms.PlaceDiscoveryAlgorithmFactory;
-import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.EstMinerPlaceDiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.SPECppPlaceDiscoveryParameters;
 
 import java.util.Set;
 
 public interface PlacesProvider {
 
-    static PlacesProvider getInstance() {
-        return specpp();
-    }
-
-    static PlacesProvider est() {
-        PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
-        EstMinerPlaceDiscoveryParameters parameters = new EstMinerPlaceDiscoveryParameters();
-        return new DiscoveryPlacesProvider(parameters.getAlgorithm(factory));
-    }
-
-    static PlacesProvider specpp() {
-        PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
-        SPECppPlaceDiscoveryParameters parameters = new SPECppPlaceDiscoveryParameters();
-        return new DiscoveryPlacesProvider(parameters.getAlgorithm(factory));
-    }
-
+    /**
+     * Creates a PlacesProvider that reads places from a file.
+     * @param fileName the name of the file to read places from
+     * @return a PlacesProvider that reads places from the specified file
+     */
     static PlacesProvider fromFile(String fileName) {
         return new FromFilePlacesProvider(fileName);
     }
 
+    /**
+     * Creates a PlacesProvider that provides the given set of places.
+     * @param places the set of places to provide
+     * @return a PlacesProvider that provides the given set of places
+     */
     static PlacesProvider fromSet(Set<Place> places) {
-        return log -> places;
+        return () -> places;
     }
 
-    Set<Place> from(XLog log);
+    /**
+     * Creates a FromLogPlacesProviderLogStage to configure place discovery from an XLog.
+     * @param log the XLog to discover places from
+     * @return a FromLogPlacesProviderLogStage to configure place discovery
+     */
+    static FromLogPlacesProvider.FromLogPlacesProviderVariantProvider fromLog(XLog log) {
+        return new FromLogPlacesProvider.FromLogPlacesProviderVariantProvider(log);
+    }
+
+    Set<Place> provide();
 }
