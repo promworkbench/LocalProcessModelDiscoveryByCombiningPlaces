@@ -31,6 +31,54 @@ public class PlaceTest {
     }
 
     @Test
+    public void givenOneInOneOutWords_whenFrom_thenPlaceWithOneInOneOut() {
+        // given
+        String placeDescription = "apple | banana";
+        String placeDescriptionWithComma = "apple, | banana";
+
+        // when
+        Place placeActual = Place.from(placeDescription);
+        Place placeActualWithComma = Place.from(placeDescriptionWithComma);
+
+        // then
+        Assert.assertEquals(1, placeActual.getInputTransitions().size());
+        Assert.assertEquals(1, placeActual.getOutputTransitions().size());
+        Assertions.assertThat(placeActual.getInputTransitions()).containsExactly(new Transition("apple", false));
+        Assertions.assertThat(placeActual.getOutputTransitions()).containsExactly(new Transition("banana", false));
+
+        Assert.assertEquals(1, placeActualWithComma.getInputTransitions().size());
+        Assert.assertEquals(1, placeActualWithComma.getOutputTransitions().size());
+        Assertions.assertThat(placeActualWithComma.getInputTransitions()).containsExactly(new Transition("apple", false));
+        Assertions.assertThat(placeActualWithComma.getOutputTransitions()).containsExactly(new Transition("banana", false));
+    }
+
+    @Test
+    public void givenOneInOneOutPhrases_whenFrom_thenPlaceWithOneInOneOut() {
+        // given
+        String placeDescription = "tasty apple | tasty banana";
+        String placeDescriptionWithComma = "tasty apple, | tasty banana";
+
+        // when
+        Place placeActual = Place.from(placeDescription);
+        Place placeActualWithComma = Place.from(placeDescriptionWithComma);
+
+        // then
+        Assert.assertEquals(1, placeActual.getInputTransitions().size());
+        Assert.assertEquals(1, placeActual.getOutputTransitions().size());
+        Assertions.assertThat(placeActual.getInputTransitions())
+                .containsExactly(new Transition("tasty apple", false));
+        Assertions.assertThat(placeActual.getOutputTransitions())
+                .containsExactly(new Transition("tasty banana", false));
+
+        Assert.assertEquals(1, placeActualWithComma.getInputTransitions().size());
+        Assert.assertEquals(1, placeActualWithComma.getOutputTransitions().size());
+        Assertions.assertThat(placeActualWithComma.getInputTransitions())
+                .containsExactly(new Transition("tasty apple", false));
+        Assertions.assertThat(placeActualWithComma.getOutputTransitions())
+                .containsExactly(new Transition("tasty banana", false));
+    }
+
+    @Test
     public void givenOneInTwoOutSingleLetter_whenFrom_thenPlaceWithOneInTwoOut() {
         // given
         String placeDescription = "a | b, c";
@@ -46,6 +94,42 @@ public class PlaceTest {
         Assertions.assertThat(placeActual.getOutputTransitions())
                 .containsExactlyInAnyOrder(new Transition("b", false),
                         new Transition("c", false));
+    }
+
+    @Test
+    public void givenOneInTwoOutWords_whenFrom_thenPlaceWithOneInTwoOut() {
+        // given
+        String placeDescription = "apple | banana, cherry";
+
+        // when
+        Place placeActual = Place.from(placeDescription);
+
+        // then
+        Assert.assertEquals(1, placeActual.getInputTransitions().size());
+        Assert.assertEquals(2, placeActual.getOutputTransitions().size());
+        Assertions.assertThat(placeActual.getInputTransitions())
+                .containsExactly(new Transition("apple", false));
+        Assertions.assertThat(placeActual.getOutputTransitions())
+                .containsExactlyInAnyOrder(new Transition("banana", false),
+                        new Transition("cherry", false));
+    }
+
+    @Test
+    public void givenOneInTwoOutPhrases_whenFrom_thenPlaceWithOneInTwoOut() {
+        // given
+        String placeDescription = "tasty apple | tasty banana, tasty cherry";
+
+        // when
+        Place placeActual = Place.from(placeDescription);
+
+        // then
+        Assert.assertEquals(1, placeActual.getInputTransitions().size());
+        Assert.assertEquals(2, placeActual.getOutputTransitions().size());
+        Assertions.assertThat(placeActual.getInputTransitions())
+                .containsExactly(new Transition("tasty apple", false));
+        Assertions.assertThat(placeActual.getOutputTransitions())
+                .containsExactlyInAnyOrder(new Transition("tasty banana", false),
+                        new Transition("tasty cherry", false));
     }
 
     @Test
