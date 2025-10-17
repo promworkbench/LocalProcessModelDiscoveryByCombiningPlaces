@@ -12,21 +12,28 @@ public class PlaceTest {
     public void givenOneInOneOutSingleLetter_whenFrom_thenPlaceWithOneInOneOut() {
         // given
         String placeDescription = "a | b";
+        String placeDescriptionWithComma = "a, | b";
 
         // when
         Place placeActual = Place.from(placeDescription);
+        Place placeActualWithComma = Place.from(placeDescriptionWithComma);
 
         // then
         Assert.assertEquals(1, placeActual.getInputTransitions().size());
         Assert.assertEquals(1, placeActual.getOutputTransitions().size());
         Assertions.assertThat(placeActual.getInputTransitions()).containsExactly(new Transition("a", false));
         Assertions.assertThat(placeActual.getOutputTransitions()).containsExactly(new Transition("b", false));
+
+        Assert.assertEquals(1, placeActualWithComma.getInputTransitions().size());
+        Assert.assertEquals(1, placeActualWithComma.getOutputTransitions().size());
+        Assertions.assertThat(placeActualWithComma.getInputTransitions()).containsExactly(new Transition("a", false));
+        Assertions.assertThat(placeActualWithComma.getOutputTransitions()).containsExactly(new Transition("b", false));
     }
 
     @Test
     public void givenOneInTwoOutSingleLetter_whenFrom_thenPlaceWithOneInTwoOut() {
         // given
-        String placeDescription = "a | b c";
+        String placeDescription = "a | b, c";
 
         // when
         Place placeActual = Place.from(placeDescription);
@@ -37,13 +44,14 @@ public class PlaceTest {
         Assertions.assertThat(placeActual.getInputTransitions())
                 .containsExactly(new Transition("a", false));
         Assertions.assertThat(placeActual.getOutputTransitions())
-                .containsExactly(new Transition("b", false), new Transition("c", false));
+                .containsExactlyInAnyOrder(new Transition("b", false),
+                        new Transition("c", false));
     }
 
     @Test
     public void givenTwoInOneOutSingleLetter_whenFrom_thenPlaceWithTwoInOneOut() {
         // given
-        String placeDescription = "a b | c";
+        String placeDescription = "a, b | c";
 
         // when
         Place placeActual = Place.from(placeDescription);
@@ -52,7 +60,8 @@ public class PlaceTest {
         Assert.assertEquals(2, placeActual.getInputTransitions().size());
         Assert.assertEquals(1, placeActual.getOutputTransitions().size());
         Assertions.assertThat(placeActual.getInputTransitions())
-                .containsExactly(new Transition("a", false), new Transition("b", false));
+                .containsExactlyInAnyOrder(new Transition("a", false),
+                        new Transition("b", false));
         Assertions.assertThat(placeActual.getOutputTransitions())
                 .containsExactly(new Transition("c", false));
     }
@@ -118,7 +127,7 @@ public class PlaceTest {
     @Test
     public void givenMultipleDelimiters_whenFrom_thenThrowIllegalArgument() {
         // given
-        String placeDescription = "a b | c | d";
+        String placeDescription = "a, b | c | d";
 
         try { // when
             Place.from(placeDescription);
@@ -131,7 +140,7 @@ public class PlaceTest {
     @Test
     public void givenNoDelimiters_whenFrom_thenThrowIllegalArgument() {
         // given
-        String placeDescription = "a b";
+        String placeDescription = "a, b";
 
         try { // when
             Place.from(placeDescription);

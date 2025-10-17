@@ -37,23 +37,21 @@ public class Place implements Serializable, TextDescribable {
 
     public static Place from(String stringRepresentation) {
         Place place = new Place();
-        String[] transitions = stringRepresentation.trim().split("\\|",  -1);
+        String[] inoutTransitions = stringRepresentation.trim().split("\\s*\\|\\s*",  -1);
 
-        if (transitions.length != 2) {
+        if (inoutTransitions.length != 2) {
             throw new IllegalArgumentException("The place string should include a single |.");
         }
 
-        if (!transitions[0].trim().isEmpty()) {
-            String[] inTransitions = transitions[0].trim().split(" ");
-            for (String tr : inTransitions) {
-                place.addInputTransition(new Transition(tr, false));
-            }
+        if (!inoutTransitions[0].trim().isEmpty()) {
+            Arrays.stream(inoutTransitions[0].trim().split(","))
+                    .map(String::trim).filter(s -> !s.isEmpty())
+                    .forEach(label -> place.addInputTransition(new Transition(label, false)));
         }
-        if (!transitions[1].trim().isEmpty()) {
-            String[] outTransitions = transitions[1].trim().split(" ");
-            for (String tr : outTransitions) {
-                place.addOutputTransition(new Transition(tr, false));
-            }
+        if (!inoutTransitions[1].trim().isEmpty()) {
+            Arrays.stream(inoutTransitions[1].trim().split(","))
+                    .map(String::trim).filter(s -> !s.isEmpty())
+                    .forEach(label -> place.addOutputTransition(new Transition(label, false)));
         }
         return place;
     }
