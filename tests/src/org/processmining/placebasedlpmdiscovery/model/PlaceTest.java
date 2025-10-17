@@ -13,21 +13,34 @@ public class PlaceTest {
         // given
         String placeDescription = "a | b";
         String placeDescriptionWithComma = "a, | b";
+        String placeDescriptionWithEnter = "a\n, | b";
 
         // when
         Place placeActual = Place.from(placeDescription);
         Place placeActualWithComma = Place.from(placeDescriptionWithComma);
+        Place placeActualWithEnter = Place.from(placeDescriptionWithEnter);
 
         // then
         Assert.assertEquals(1, placeActual.getInputTransitions().size());
         Assert.assertEquals(1, placeActual.getOutputTransitions().size());
-        Assertions.assertThat(placeActual.getInputTransitions()).containsExactly(new Transition("a", false));
-        Assertions.assertThat(placeActual.getOutputTransitions()).containsExactly(new Transition("b", false));
+        Assertions.assertThat(placeActual.getInputTransitions())
+                .containsExactly(new Transition("a", false));
+        Assertions.assertThat(placeActual.getOutputTransitions())
+                .containsExactly(new Transition("b", false));
 
         Assert.assertEquals(1, placeActualWithComma.getInputTransitions().size());
         Assert.assertEquals(1, placeActualWithComma.getOutputTransitions().size());
-        Assertions.assertThat(placeActualWithComma.getInputTransitions()).containsExactly(new Transition("a", false));
-        Assertions.assertThat(placeActualWithComma.getOutputTransitions()).containsExactly(new Transition("b", false));
+        Assertions.assertThat(placeActualWithComma.getInputTransitions())
+                .containsExactly(new Transition("a", false));
+        Assertions.assertThat(placeActualWithComma.getOutputTransitions())
+                .containsExactly(new Transition("b", false));
+
+        Assert.assertEquals(1, placeActualWithEnter.getInputTransitions().size());
+        Assert.assertEquals(1, placeActualWithEnter.getOutputTransitions().size());
+        Assertions.assertThat(placeActualWithEnter.getInputTransitions())
+                .containsExactly(new Transition("a", false));
+        Assertions.assertThat(placeActualWithEnter.getOutputTransitions())
+                .containsExactly(new Transition("b", false));
     }
 
     @Test
