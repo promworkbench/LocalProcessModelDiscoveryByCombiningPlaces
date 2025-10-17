@@ -35,6 +35,15 @@ public class Place implements Serializable, TextDescribable {
         this.isFinal = false;
     }
 
+    /**
+     * Create a place from its string representation. The string representation differentiates input and output transitions
+     * using a | character. For example, the string "a, b | c, d" represents a place with input transitions a and b,
+     * and output transitions c and d. Each transition is represented by its label and is assumed to be visible.
+     * Transitions are separated by commas. Whitespace around labels and the | character is ignored.
+     * @param stringRepresentation the string representation of the place
+     * @return a Place object corresponding to the string representation
+     * @throws IllegalArgumentException if the string representation is invalid
+     */
     public static Place from(String stringRepresentation) {
         Place place = new Place();
         String[] inoutTransitions = stringRepresentation.trim().split("\\s*\\|\\s*",  -1);
