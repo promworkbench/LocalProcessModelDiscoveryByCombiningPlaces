@@ -25,12 +25,16 @@ public class FromLogPlacesProvider implements PlacesProvider {
     }
 
 
-    public static class FromLogPlacesProviderLogStage {
+    public static class FromLogPlacesProviderVariantProvider {
 
         private final XLog log;
 
-        FromLogPlacesProviderLogStage(XLog log) {
+        FromLogPlacesProviderVariantProvider(XLog log) {
             this.log = log;
+        }
+
+        public PlacesProvider defaultProvider() {
+            return specpp();
         }
 
         public PlacesProvider est() {
