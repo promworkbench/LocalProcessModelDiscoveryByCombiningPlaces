@@ -22,10 +22,6 @@ public class PlaceBasedLPMDiscovery implements LPMDiscovery {
     private final int proximity;
     private final int concurrencyLimit;
 
-    public PlaceBasedLPMDiscovery() {
-        this(null);
-    }
-
     public PlaceBasedLPMDiscovery(PlacesProvider placesProvider) {
         this(placesProvider, DiscoveryParameters.PlaceBased.placeLimit);
     }
@@ -47,9 +43,6 @@ public class PlaceBasedLPMDiscovery implements LPMDiscovery {
 
     @Override
     public LPMDiscoveryResult from(XLog log) {
-        if (this.placesProvider == null) {
-            this.placesProvider = PlacesProvider.fromLog(log).specpp();
-        }
         EventLog eventLog = new XLogWrapper(log);
 
         PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(eventLog);

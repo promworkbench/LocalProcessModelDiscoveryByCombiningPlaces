@@ -26,12 +26,12 @@ public interface PlacesProvider {
     }
 
     /**
-     * Creates a FromLogPlacesProviderLogStage to configure place discovery from an XLog.
+     * Creates a PlacesProvider that provides the given set of places by discovering them in the event log.
      * @param log the XLog to discover places from
-     * @return a FromLogPlacesProviderLogStage to configure place discovery
+     * @return a PlacesProvider that discovers places from the given log
      */
-    static FromLogPlacesProvider.FromLogPlacesProviderVariantProvider fromLog(XLog log) {
-        return new FromLogPlacesProvider.FromLogPlacesProviderVariantProvider(log);
+    static PlacesProvider fromLog(XLog log) {
+        return new FromLogPlacesProvider.FromLogPlacesProviderVariantProvider(log).recommended();
     }
 
     Set<Place> provide();

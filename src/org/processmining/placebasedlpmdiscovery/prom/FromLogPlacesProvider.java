@@ -33,7 +33,7 @@ public class FromLogPlacesProvider implements PlacesProvider {
             this.log = log;
         }
 
-        public PlacesProvider defaultProvider() {
+        public PlacesProvider recommended() {
             return specpp();
         }
 
