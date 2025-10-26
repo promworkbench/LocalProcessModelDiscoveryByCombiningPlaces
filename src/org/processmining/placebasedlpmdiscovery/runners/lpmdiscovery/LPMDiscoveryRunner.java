@@ -5,7 +5,6 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.LPMDiscovery;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.CSVExporter;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.ExporterFactory;
-import org.processmining.placebasedlpmdiscovery.prom.PlacesProvider;
 import org.processmining.placebasedlpmdiscovery.runners.configs.RunnerMetaConfig;
 import org.processmining.placebasedlpmdiscovery.runners.configs.readers.RunnerMetaConfigReader;
 import org.processmining.placebasedlpmdiscovery.runners.timemanagement.RunnerTimeManager;
@@ -37,7 +36,7 @@ public class LPMDiscoveryRunner {
             XLog log = LogUtils.readLogFromFile(config.getInput().get("eventlog"));
 
             timeManager.startTimer(config.getOutput().get("lpms"));
-            LPMDiscoveryResult result = LPMDiscovery.placeBased(PlacesProvider.fromLog(log)).from(log);
+            LPMDiscoveryResult result = LPMDiscovery.getInstance().from(log);
             timeManager.stopTimer(config.getOutput().get("lpms"));
 
             System.out.println(result.getAllLPMs().size());

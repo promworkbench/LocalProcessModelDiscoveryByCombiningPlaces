@@ -21,7 +21,6 @@ import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
 import org.processmining.placebasedlpmdiscovery.prom.ContextKeeper;
-import org.processmining.placebasedlpmdiscovery.prom.PlacesProvider;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PetriNetPlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.StandardPlaceDiscovery;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.parameters.adapters.ParameterAdaptersUtils;
@@ -55,7 +54,7 @@ public class LPMDiscoveryPlugin {
     public static LPMDiscoveryResult mineBasicLPMs(UIPluginContext context, XLog log) {
         ContextKeeper.setUp(context);
 
-        return LPMDiscovery.placeBased(PlacesProvider.fromLog(log)).from(log);
+        return LPMDiscovery.getInstance().from(log);
     }
 
     @UITopiaVariant(
