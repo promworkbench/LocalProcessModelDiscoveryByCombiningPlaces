@@ -11,31 +11,31 @@ import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
-import org.processmining.placebasedlpmdiscovery.prom.PlacesProvider;
+import org.processmining.placebasedlpmdiscovery.prom.PlacesProviderFactory;
 
 import java.util.Set;
 
 public class PlaceBasedLPMDiscovery implements LPMDiscovery {
 
     private final int placeLimit;
-    private PlacesProvider placesProvider;
+    private final PlacesProviderFactory placesProviderFactory;
     private final int proximity;
     private final int concurrencyLimit;
 
-    public PlaceBasedLPMDiscovery(PlacesProvider placesProvider) {
-        this(placesProvider, DiscoveryParameters.PlaceBased.placeLimit);
+    public PlaceBasedLPMDiscovery(PlacesProviderFactory placesProviderFactory) {
+        this(placesProviderFactory, DiscoveryParameters.PlaceBased.placeLimit);
     }
 
-    public PlaceBasedLPMDiscovery(PlacesProvider placesProvider, int placeLimit) {
-        this(placesProvider, placeLimit, DiscoveryParameters.Default.proximity);
+    public PlaceBasedLPMDiscovery(PlacesProviderFactory placesProviderFactory, int placeLimit) {
+        this(placesProviderFactory, placeLimit, DiscoveryParameters.Default.proximity);
     }
 
-    public PlaceBasedLPMDiscovery(PlacesProvider placesProvider, int placeLimit, int proximity) {
-        this(placesProvider, placeLimit, proximity, 2);
+    public PlaceBasedLPMDiscovery(PlacesProviderFactory placesProviderFactory, int placeLimit, int proximity) {
+        this(placesProviderFactory, placeLimit, proximity, 2);
     }
 
-    public PlaceBasedLPMDiscovery(PlacesProvider placesProvider, int placeLimit, int proximity, int concurrencyLimit) {
-        this.placesProvider = placesProvider;
+    public PlaceBasedLPMDiscovery(PlacesProviderFactory placesProviderFactory, int placeLimit, int proximity, int concurrencyLimit) {
+        this.placesProviderFactory = placesProviderFactory;
         this.placeLimit = placeLimit;
         this.proximity = proximity;
         this.concurrencyLimit = concurrencyLimit;
@@ -51,7 +51,7 @@ public class PlaceBasedLPMDiscovery implements LPMDiscovery {
         parameters.getLpmCombinationParameters().setConcurrencyCardinality(this.concurrencyLimit);
 
         LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(log, parameters);
-        Set<Place> places = this.placesProvider.provide();
+        Set<Place> places = this.placesProviderFactory.create(log).provide();
 
         FPGrowthForPlacesLPMBuildingInput lpmBuildingInput = new FPGrowthForPlacesLPMBuildingInput(eventLog, places);
         StandardLPMDiscoveryInput discoveryInput =
