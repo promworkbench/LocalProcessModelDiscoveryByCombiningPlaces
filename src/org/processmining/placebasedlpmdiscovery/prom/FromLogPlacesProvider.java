@@ -24,29 +24,20 @@ public class FromLogPlacesProvider implements PlacesProvider {
         return algorithm.getPlaces(this.log).getPlaces();
     }
 
-
-    public static class FromLogPlacesProviderVariantProvider {
-
-        private final XLog log;
-
-        FromLogPlacesProviderVariantProvider(XLog log) {
-            this.log = log;
-        }
-
-        public PlacesProvider recommended() {
-            return specpp();
-        }
-
-        public PlacesProvider est() {
-            PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
-            EstMinerPlaceDiscoveryParameters parameters = new EstMinerPlaceDiscoveryParameters();
-            return new FromLogPlacesProvider(log, parameters.getAlgorithm(factory));
-        }
-
-        public PlacesProvider specpp() {
-            PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
-            SPECppPlaceDiscoveryParameters parameters = new SPECppPlaceDiscoveryParameters();
-            return new FromLogPlacesProvider(log, parameters.getAlgorithm(factory));
-        }
+    public static PlacesProvider recommended(XLog log) {
+        return specpp(log);
     }
+
+    public static PlacesProvider est(XLog log) {
+        PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
+        EstMinerPlaceDiscoveryParameters parameters = new EstMinerPlaceDiscoveryParameters();
+        return new FromLogPlacesProvider(log, parameters.getAlgorithm(factory));
+    }
+
+    public static PlacesProvider specpp(XLog log) {
+        PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
+        SPECppPlaceDiscoveryParameters parameters = new SPECppPlaceDiscoveryParameters();
+        return new FromLogPlacesProvider(log, parameters.getAlgorithm(factory));
+    }
+
 }

@@ -5,6 +5,10 @@ import org.processmining.placebasedlpmdiscovery.model.Place;
 
 import java.util.Set;
 
+/**
+ * A provider of places for LPM discovery. Implementations can provide places from various sources,
+ * such as files, sets, or by discovering them from an event log.
+ */
 public interface PlacesProvider {
 
     /**
@@ -31,8 +35,12 @@ public interface PlacesProvider {
      * @return a PlacesProvider that discovers places from the given log
      */
     static PlacesProvider fromLog(XLog log) {
-        return new FromLogPlacesProvider.FromLogPlacesProviderVariantProvider(log).recommended();
+        return FromLogPlacesProvider.recommended(log);
     }
 
+    /**
+     * Provides a set of places.
+     * @return a set of places
+     */
     Set<Place> provide();
 }
