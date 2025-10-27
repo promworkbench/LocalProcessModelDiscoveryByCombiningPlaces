@@ -4,7 +4,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.LPMDiscovery;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.PlaceBasedLPMDiscovery;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
@@ -37,7 +36,7 @@ public class TestPlaceBasedLPMDiscoveryGivenLogAbcWithPlacesAbAc {
     @Test
     public void givenDefault_whenFrom_thenLPMsAbAc() {
         // given
-        LPMDiscovery lpmDiscovery = new PlaceBasedLPMDiscovery(placesProvider);
+        LPMDiscovery lpmDiscovery = LPMDiscovery.placeBased(placesProvider);
 
         // when
         LPMDiscoveryResult result = lpmDiscovery.from(eventLog);
@@ -52,7 +51,7 @@ public class TestPlaceBasedLPMDiscoveryGivenLogAbcWithPlacesAbAc {
     @Test
     public void givenDefaultWithPlaceLimit_whenFrom_thenLPMsEmpty() {
         // given
-        LPMDiscovery lpmDiscovery = new PlaceBasedLPMDiscovery(placesProvider, 1);
+        LPMDiscovery lpmDiscovery = LPMDiscovery.placeBased(placesProvider, 1);
 
         // when
         LPMDiscoveryResult result = lpmDiscovery.from(eventLog);
