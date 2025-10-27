@@ -31,7 +31,7 @@ public class TestLPMDDeterminism {
         PlaceBasedLPMDiscoveryPluginParameters parameters = new PlaceBasedLPMDiscoveryPluginParameters(eventLog);
 
         // act: run discovery given the input
-        LPMDiscoveryResult expected = LPMDiscoveryResult.fromFile("./data/lpms/artificialBig.json");
+        LPMDiscoveryResult expected = LPMDiscoveryResult.fromFile("./data/test/lpms/artificialBig.json");
         LPMDiscoveryResult actual = LPMDiscoveryPlugin.getLpmDiscoveryResult(input, parameters);
 
         // assert: the same result should be returned as the saved lpms
