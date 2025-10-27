@@ -35,14 +35,32 @@ public class Place implements Serializable, TextDescribable {
         this.isFinal = false;
     }
 
+    /**
+     * Create a place from its string representation. The string representation differentiates input and output transitions
+     * using a | character. For example, the string "a, b | c, d" represents a place with input transitions a and b,
+     * and output transitions c and d. Each transition is represented by its label and is assumed to be visible.
+     * Transitions are separated by commas. Whitespace around labels and the | character is ignored.
+     * @param stringRepresentation the string representation of the place
+     * @return a Place object corresponding to the string representation
+     * @throws IllegalArgumentException if the string representation is invalid
+     */
     public static Place from(String stringRepresentation) {
         Place place = new Place();
-        String[] transitions = stringRepresentation.split(" \\| ");
-        for (String tr : transitions[0].split(" ")) {
-            place.addInputTransition(new Transition(tr, false));
+        String[] inoutTransitions = stringRepresentation.trim().split("\\s*\\|\\s*",  -1);
+
+        if (inoutTransitions.length != 2) {
+            throw new IllegalArgumentException("The place string should include a single |.");
         }
-        for (String tr : transitions[1].split(" ")) {
-            place.addOutputTransition(new Transition(tr, false));
+
+        if (!inoutTransitions[0].trim().isEmpty()) {
+            Arrays.stream(inoutTransitions[0].trim().split(","))
+                    .map(String::trim).filter(s -> !s.isEmpty())
+                    .forEach(label -> place.addInputTransition(new Transition(label, false)));
+        }
+        if (!inoutTransitions[1].trim().isEmpty()) {
+            Arrays.stream(inoutTransitions[1].trim().split(","))
+                    .map(String::trim).filter(s -> !s.isEmpty())
+                    .forEach(label -> place.addOutputTransition(new Transition(label, false)));
         }
         return place;
     }
