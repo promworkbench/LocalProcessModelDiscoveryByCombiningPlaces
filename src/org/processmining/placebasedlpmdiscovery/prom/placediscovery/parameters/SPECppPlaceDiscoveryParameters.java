@@ -11,7 +11,7 @@ import org.processmining.specpp.config.presets.BaseParameters;
 import org.processmining.specpp.config.presets.PlaceOracleComponentConfig;
 import org.processmining.specpp.config.presets.PlaceOracleParameters;
 
-public class SPECppPlaceDiscoveryParameters extends PlaceDiscoveryParameters {
+public class SPECppPlaceDiscoveryParameters implements PlaceDiscoveryParameters {
     private final SPECppConfigBundle configBundle;
 
     public SPECppPlaceDiscoveryParameters() {

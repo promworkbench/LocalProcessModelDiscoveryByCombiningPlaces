@@ -7,7 +7,7 @@ import org.processmining.placebasedlpmdiscovery.prom.placediscovery.algorithms.P
 import org.processmining.v7.postproc_after_tc.MyParameters;
 //import org.processmining.v8.eSTMinerGIT.Parameters;
 
-public class EstMinerPlaceDiscoveryParameters extends PlaceDiscoveryParameters {
+public class EstMinerPlaceDiscoveryParameters implements PlaceDiscoveryParameters {
     private MyParameters wrappedParameters;
 
     public EstMinerPlaceDiscoveryParameters() {
