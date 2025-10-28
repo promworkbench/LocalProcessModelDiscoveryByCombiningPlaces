@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.prom;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscoveryAlgorithmId;
 
 import java.util.Set;
 
@@ -36,6 +37,16 @@ public interface PlacesProvider {
      */
     static PlacesProvider fromLog(XLog log) {
         return FromLogPlacesProvider.recommended(log);
+    }
+
+    /**
+     * Creates a PlacesProvider that discovers places using the specified algorithm.
+     * @param log the XLog to discover places from
+     * @param algorithmId the algorithm to use for place discovery
+     * @return a PlacesProvider that discovers places using the specified algorithm
+     */
+    static PlacesProvider fromLog(XLog log, PlaceDiscoveryAlgorithmId algorithmId) {
+        return FromLogPlacesProvider.getInstance(log, algorithmId);
     }
 
     /**
