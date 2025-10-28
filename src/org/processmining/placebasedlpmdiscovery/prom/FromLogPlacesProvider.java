@@ -5,10 +5,7 @@ import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscoveryAlgorithmId;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.algorithms.PlaceDiscoveryAlgorithm;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.algorithms.PlaceDiscoveryAlgorithmFactory;
-import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.EstMinerPlaceDiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.HeuristicMinerPlaceDiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.InductiveMinerPlaceDiscoveryParameters;
-import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.SPECppPlaceDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.*;
 
 import java.util.Set;
 
@@ -39,6 +36,17 @@ public class FromLogPlacesProvider implements PlacesProvider {
             return inductiveMiner(log);
         }
         throw new IllegalArgumentException("Unsupported PlaceDiscoveryAlgorithmId: " + algorithmId);
+    }
+
+    /**
+     * Creates a PlacesProvider that discovers places using the specified parameters.
+     * @param log the XLog to discover places from
+     * @param placeDiscoveryParameters the parameters to use for place discovery
+     * @return a PlacesProvider that discovers places using the specified parameters
+     */
+    public static PlacesProvider getInstance(XLog log, PlaceDiscoveryParameters placeDiscoveryParameters) {
+        PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
+        return new FromLogPlacesProvider(log, placeDiscoveryParameters.getAlgorithm(factory));
     }
 
     @Override
