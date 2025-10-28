@@ -2,8 +2,16 @@ package org.processmining.placebasedlpmdiscovery.prom;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.NonSelfLoopPlacePredicate;
+import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.RankedPlace;
+import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.RankedPlaceComparator;
+import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.TransitionCountPlaceRankConverter;
+import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.IncludedActivitiesPlaceTransformer;
+import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.PassageUsagePlaceTransformer;
+import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * A provider of places for LPM discovery. Implementations can provide places from various sources,
@@ -36,6 +44,47 @@ public interface PlacesProvider {
      */
     static PlacesProvider fromLog(XLog log) {
         return FromLogPlacesProvider.recommended(log);
+    }
+
+    /**
+     * Creates a PlacesProvider that provides the top K ranked places from the base provider.
+     * @param baseProvider the base PlacesProvider to get places from
+     * @param k the number of top ranked places to provide
+     * @return a PlacesProvider that provides the top K ranked places
+     */
+    static PlacesProvider topK(PlacesProvider baseProvider, int k) {
+        return () -> baseProvider.provide().stream()
+                .map(p -> new RankedPlace(p,
+                        new TransitionCountPlaceRankConverter().convert(p)
+                        /*, new TotalPassageCoveragePlaceRankConverter(lefr).convert(p) */))
+                .sorted(new RankedPlaceComparator())
+                .map(RankedPlace::getPlace)
+                .limit(k)
+                .collect(Collectors.toSet());
+    }
+
+    static PlacesProvider noSelfLoopPlaces(PlacesProvider baseProvider) {
+        return () -> baseProvider.provide().stream()
+                .filter(new NonSelfLoopPlacePredicate())
+                .collect(Collectors.toSet());
+    }
+
+    static PlacesProvider noEmptyIOPlaces(PlacesProvider baseProvider) {
+        return () -> baseProvider.provide().stream()
+                .filter(new NonSelfLoopPlacePredicate())
+                .collect(Collectors.toSet());
+    }
+
+    static PlacesProvider onlyForActivities(PlacesProvider baseProvider, Set<String> activities) {
+        return () -> baseProvider.provide().stream()
+                .map(new IncludedActivitiesPlaceTransformer(activities))
+                .collect(Collectors.toSet());
+    }
+
+    static PlacesProvider onlyOccurringInProximity(PlacesProvider baseProvider, int proximity, XLog log) {
+        return () -> baseProvider.provide().stream()
+                .map(new PassageUsagePlaceTransformer(LogUtils.getFollowRelations(log, proximity)))
+                .collect(Collectors.toSet());
     }
 
     /**
