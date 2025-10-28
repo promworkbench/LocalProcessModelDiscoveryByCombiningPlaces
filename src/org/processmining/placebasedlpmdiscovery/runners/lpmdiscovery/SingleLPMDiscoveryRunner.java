@@ -1,18 +1,12 @@
 package org.processmining.placebasedlpmdiscovery.runners.lpmdiscovery;
 
-import org.processmining.placebasedlpmdiscovery.Main;
-import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algbuilder.LPMDiscoveryAlgBuilder;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.StandardLPMDiscoveryInput;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.parameters.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.LPMDiscovery;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
+import org.processmining.placebasedlpmdiscovery.prom.PlacesProvider;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PetriNetPlaceDiscovery;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.parameters.adapters.ParameterAdaptersUtils;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 
@@ -26,14 +20,8 @@ public class SingleLPMDiscoveryRunner {
         String resultPath = "data/lpms/artificialBig.json";
         EventLog eventLog = new XLogWrapper(LogUtils.readLogFromFile(logPath));
 
-        PlaceBasedLPMDiscoveryPluginParameters parameters = new PlaceBasedLPMDiscoveryPluginParameters(eventLog);
-        LPMDiscoveryInput input = new StandardLPMDiscoveryInput(eventLog,
-                new FPGrowthForPlacesLPMBuildingInput(eventLog, readPlaces(placesPath)));
-
-        PlaceBasedLPMDiscoveryParameters algParam = ParameterAdaptersUtils.transform(parameters, input.getLog());
-        LPMDiscoveryAlgBuilder builder = Main.createDefaultBuilder(input.getLog().getOriginalLog(), algParam);
-
-        LPMDiscoveryResult result = builder.build().run(input, algParam);
+        LPMDiscoveryResult result = LPMDiscovery.placeBased(PlacesProvider.fromFile(placesPath))
+                .from(eventLog.getOriginalLog());
         result.toFile(resultPath);
     }
 

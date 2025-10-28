@@ -6,19 +6,15 @@ import org.processmining.contexts.cli.CLIContext;
 import org.processmining.contexts.cli.CLIPluginContext;
 import org.processmining.framework.plugin.PluginContext;
 import org.processmining.placebasedlpmdiscovery.InputModule;
-import org.processmining.placebasedlpmdiscovery.Main;
-import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.StandardLPMDiscoveryInput;
-import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.parameters.PlaceBasedLPMDiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.LPMDiscovery;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.dependencyinjection.LPMDiscoveryGuiceModule;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.dependencyinjection.LPMDiscoveryResultGuiceModule;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.service.LPMDiscoveryService;
-import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
+import org.processmining.placebasedlpmdiscovery.prom.PlacesProvider;
 import org.processmining.placebasedlpmdiscovery.prom.dependencyinjection.PromGuiceModule;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.BaseLPMDiscoveryResultComponent;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
@@ -29,7 +25,6 @@ import org.processmining.placebasedlpmdiscovery.view.controllers.LPMDiscoveryRes
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.Set;
 
 public class MainGUI extends JFrame {
 
@@ -85,11 +80,8 @@ public class MainGUI extends JFrame {
 
     private LPMDiscoveryResult getDummyResult() throws Exception {
         EventLog log = getDummyLog();
-        Set<Place> places = PlaceUtils.extractPlaceNets("data/petrinets/artificialBig.pnml");
 
-        LPMDiscoveryInput input = new StandardLPMDiscoveryInput(log, new FPGrowthForPlacesLPMBuildingInput(log, places));
-
-        PlaceBasedLPMDiscoveryParameters parameters = new PlaceBasedLPMDiscoveryParameters(log);
-        return Main.createDefaultBuilder(log.getOriginalLog(), parameters).build().run(input, parameters);
+        return LPMDiscovery.placeBased(PlacesProvider.fromFile("data/petrinets/artificialBig.pnml"))
+                .from(log.getOriginalLog());
     }
 }
