@@ -69,9 +69,8 @@ public class FromLogPlacesProvider implements PlacesProvider {
      * @return a PlacesProvider that discovers places using the EST-Miner algorithm
      */
     public static PlacesProvider est(XLog log) {
-        PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
         EstMinerPlaceDiscoveryParameters parameters = new EstMinerPlaceDiscoveryParameters();
-        return new FromLogPlacesProvider(log, parameters.getAlgorithm(factory));
+        return getInstance(log, parameters);
     }
 
     /**
@@ -80,9 +79,8 @@ public class FromLogPlacesProvider implements PlacesProvider {
      * @return a PlacesProvider that discovers places using the SPECpp algorithm
      */
     public static PlacesProvider specpp(XLog log) {
-        PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
         SPECppPlaceDiscoveryParameters parameters = new SPECppPlaceDiscoveryParameters();
-        return new FromLogPlacesProvider(log, parameters.getAlgorithm(factory));
+        return getInstance(log, parameters);
     }
 
     /**
@@ -91,9 +89,8 @@ public class FromLogPlacesProvider implements PlacesProvider {
      * @return a PlacesProvider that discovers places using the Heuristic Miner algorithm
      */
     public static PlacesProvider heuristicMiner(XLog log) {
-        PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
         HeuristicMinerPlaceDiscoveryParameters parameters = new HeuristicMinerPlaceDiscoveryParameters();
-        return new FromLogPlacesProvider(log, parameters.getAlgorithm(factory));
+        return getInstance(log, parameters);
     }
 
     /**
@@ -102,8 +99,7 @@ public class FromLogPlacesProvider implements PlacesProvider {
      * @return a PlacesProvider that discovers places using the Inductive Miner algorithm
      */
     public static PlacesProvider inductiveMiner(XLog log) {
-        PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
         InductiveMinerPlaceDiscoveryParameters parameters = new InductiveMinerPlaceDiscoveryParameters();
-        return new FromLogPlacesProvider(log, parameters.getAlgorithm(factory));
+        return getInstance(log, parameters);
     }
 }
