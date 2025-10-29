@@ -7,6 +7,9 @@ public class MostKArcsPredicate implements PlacePredicate {
     private final int k;
 
     public MostKArcsPredicate(int k) {
+        if (k < 0) {
+            throw new IllegalArgumentException("k must be a non-negative integer.");
+        }
         this.k = k;
     }
 
