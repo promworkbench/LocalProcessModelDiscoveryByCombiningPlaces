@@ -2,14 +2,14 @@ package src.org.processmining.placebasedlpmdiscovery.placechooser.placepredicate
 
 import org.junit.Test;
 import org.processmining.placebasedlpmdiscovery.model.Place;
-import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.AndPredicate;
+import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.AndPlacePredicate;
 
 public class AndPlacePredicateTest {
 
     @Test
     public void givenAllTruePredicates_whenTestPlace_thenReturnsTrue() {
         // given
-        AndPredicate andPredicate = new AndPredicate((p) -> true, (p) -> true, (p) -> true);
+        AndPlacePredicate andPredicate = new AndPlacePredicate((p) -> true, (p) -> true, (p) -> true);
         Place mockPlace = Place.from("a | b");
 
         // when
@@ -22,7 +22,7 @@ public class AndPlacePredicateTest {
     @Test
     public void givenOneFalsePredicate_whenTestPlace_thenReturnsFalse() {
         // given
-        AndPredicate andPredicate = new AndPredicate((p) -> true, (p) -> false, (p) -> true);
+        AndPlacePredicate andPredicate = new AndPlacePredicate((p) -> true, (p) -> false, (p) -> true);
         Place mockPlace = Place.from("a | b");
 
         // when
@@ -35,7 +35,7 @@ public class AndPlacePredicateTest {
     @Test
     public void givenAllFalsePredicates_whenTestPlace_thenReturnsFalse() {
         // given
-        AndPredicate andPredicate = new AndPredicate((p) -> false, (p) -> false, (p) -> false);
+        AndPlacePredicate andPredicate = new AndPlacePredicate((p) -> false, (p) -> false, (p) -> false);
         Place mockPlace = Place.from("a | b");
 
         // when

@@ -6,22 +6,21 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class AndPredicate implements PlacePredicate {
-
+public class OrPlacePredicate implements PlacePredicate {
     Collection<PlacePredicate> predicates;
 
-    public AndPredicate (PlacePredicate ... predicates) {
+    public OrPlacePredicate(PlacePredicate ... predicates) {
         this.predicates = new ArrayList<>();
         this.predicates.addAll(Arrays.asList(predicates));
     }
     @Override
     public boolean testPlace(Place place) {
         for (PlacePredicate predicate : predicates) {
-            if (!predicate.testPlace(place)) {
-                return false;
+            if (predicate.testPlace(place)) {
+                return true;
             }
         }
-        return true;
+        return false;
     }
 
     @Override

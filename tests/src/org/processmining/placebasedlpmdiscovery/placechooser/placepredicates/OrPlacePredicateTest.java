@@ -2,14 +2,14 @@ package src.org.processmining.placebasedlpmdiscovery.placechooser.placepredicate
 
 import org.junit.Test;
 import org.processmining.placebasedlpmdiscovery.model.Place;
-import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.OrPredicate;
+import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.OrPlacePredicate;
 
 public class OrPlacePredicateTest {
 
     @Test
     public void givenAllFalsePredicates_whenTestPlace_thenReturnsFalse() {
         // given
-        OrPredicate orPredicate = new OrPredicate((p) -> false, (p) -> false, (p) -> false);
+        OrPlacePredicate orPredicate = new OrPlacePredicate((p) -> false, (p) -> false, (p) -> false);
         Place mockPlace = Place.from("a | b");
 
         // when
@@ -22,7 +22,7 @@ public class OrPlacePredicateTest {
     @Test
     public void givenOneTruePredicate_whenTestPlace_thenReturnsTrue() {
         // given
-        OrPredicate orPredicate = new OrPredicate((p) -> false, (p) -> true, (p) -> false);
+        OrPlacePredicate orPredicate = new OrPlacePredicate((p) -> false, (p) -> true, (p) -> false);
         Place mockPlace = Place.from("a | b");
 
         // when
@@ -35,7 +35,7 @@ public class OrPlacePredicateTest {
     @Test
     public void givenAllTruePredicates_whenTestPlace_thenReturnsTrue() {
         // given
-        OrPredicate orPredicate = new OrPredicate((p) -> true, (p) -> true, (p) -> true);
+        OrPlacePredicate orPredicate = new OrPlacePredicate((p) -> true, (p) -> true, (p) -> true);
         Place mockPlace = Place.from("a | b");
 
         // when
