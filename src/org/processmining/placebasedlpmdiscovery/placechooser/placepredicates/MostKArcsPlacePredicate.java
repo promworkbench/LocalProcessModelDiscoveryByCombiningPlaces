@@ -2,11 +2,11 @@ package org.processmining.placebasedlpmdiscovery.placechooser.placepredicates;
 
 import org.processmining.placebasedlpmdiscovery.model.Place;
 
-public class MostKArcsPredicate implements PlacePredicate {
+public class MostKArcsPlacePredicate implements PlacePredicate {
 
     private final int k;
 
-    public MostKArcsPredicate(int k) {
+    public MostKArcsPlacePredicate(int k) {
         if (k < 0) {
             throw new IllegalArgumentException("k must be a non-negative integer.");
         }

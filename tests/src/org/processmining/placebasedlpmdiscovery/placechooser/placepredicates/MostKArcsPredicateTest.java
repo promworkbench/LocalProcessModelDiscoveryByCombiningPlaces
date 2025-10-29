@@ -3,7 +3,7 @@ package src.org.processmining.placebasedlpmdiscovery.placechooser.placepredicate
 
 import org.junit.Test;
 import org.processmining.placebasedlpmdiscovery.model.Place;
-import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.MostKArcsPredicate;
+import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.MostKArcsPlacePredicate;
 
 public class MostKArcsPredicateTest {
 
@@ -11,7 +11,7 @@ public class MostKArcsPredicateTest {
     public void givenPlaceWithLessThanKArcs_whenTestPlace_thenReturnsTrue() {
         // given
         Place place = Place.from("a | b");
-        MostKArcsPredicate predicate = new MostKArcsPredicate(3);
+        MostKArcsPlacePredicate predicate = new MostKArcsPlacePredicate(3);
 
         // when
         boolean actual = predicate.testPlace(place);
@@ -24,7 +24,7 @@ public class MostKArcsPredicateTest {
     public void givenPlaceWithEqualToKArcs_whenTestPlace_thenReturnsTrue() {
         // given
         Place place = Place.from("a, b | c");
-        MostKArcsPredicate predicate = new MostKArcsPredicate(3);
+        MostKArcsPlacePredicate predicate = new MostKArcsPlacePredicate(3);
 
         // when
         boolean actual = predicate.testPlace(place);
@@ -37,7 +37,7 @@ public class MostKArcsPredicateTest {
     public void givenPlaceWithMoreThanKArcs_whenTestPlace_thenReturnsFalse() {
         // given
         Place place = Place.from("a, b | c, d");
-        MostKArcsPredicate predicate = new MostKArcsPredicate(3);
+        MostKArcsPlacePredicate predicate = new MostKArcsPlacePredicate(3);
 
         // when
         boolean actual = predicate.testPlace(place);
@@ -50,7 +50,7 @@ public class MostKArcsPredicateTest {
     public void givenPlaceWithNoArcs_whenTestPlace_thenReturnsTrue() {
         // given
         Place place = Place.from(" | ");
-        MostKArcsPredicate predicate = new MostKArcsPredicate(3);
+        MostKArcsPlacePredicate predicate = new MostKArcsPlacePredicate(3);
 
         // when
         boolean actual = predicate.testPlace(place);
@@ -62,7 +62,7 @@ public class MostKArcsPredicateTest {
     @Test
     public void givenNegativeK_whenCreatingPredicate_thenThrowsIllegalArgumentException() {
         try {
-            MostKArcsPredicate predicate = new MostKArcsPredicate(-1);
+            MostKArcsPlacePredicate predicate = new MostKArcsPlacePredicate(-1);
             assert false; // Should not reach this line
         } catch (IllegalArgumentException e) {
             assert true; // Expected exception

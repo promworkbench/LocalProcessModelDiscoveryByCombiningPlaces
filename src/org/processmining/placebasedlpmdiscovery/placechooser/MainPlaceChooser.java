@@ -3,7 +3,7 @@ package org.processmining.placebasedlpmdiscovery.placechooser;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.model.Place;
-import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.MostKArcsPredicate;
+import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.MostKArcsPlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.NonEmptyIOTransitionSetPlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.NonSelfLoopPlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.RankedPlace;
@@ -40,7 +40,7 @@ public class MainPlaceChooser implements PlaceChooser {
                 .map(new PassageUsagePlaceTransformer(LogUtils.getFollowRelations(log, placeChooserParameters.getFollowRelationsLimit()))) // TODO: this might be duplicate work, since the lefr should already contain it
                 .filter(new NonSelfLoopPlacePredicate())
                 .filter(new NonEmptyIOTransitionSetPlacePredicate())
-                .filter(new MostKArcsPredicate(5))
+                .filter(new MostKArcsPlacePredicate(5))
                 .map(p -> new RankedPlace(p, new TransitionCountPlaceRankConverter().convert(p) /*, new TotalPassageCoveragePlaceRankConverter(lefr).convert(p) */))
                 .sorted(new RankedPlaceComparator())
                 .map(RankedPlace::getPlace)
