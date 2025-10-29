@@ -45,7 +45,7 @@ public class FromLogPlacesProvider implements PlacesProvider {
      * @return a PlacesProvider that discovers places using the specified parameters
      */
     public static PlacesProvider getInstance(XLog log, PlaceDiscoveryParameters placeDiscoveryParameters) {
-        PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory();
+        PlaceDiscoveryAlgorithmFactory factory = PlaceDiscoveryAlgorithmFactory.getInstance();
         return new FromLogPlacesProvider(log, placeDiscoveryParameters.getAlgorithm(factory));
     }
 

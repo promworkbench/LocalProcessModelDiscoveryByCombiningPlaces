@@ -8,6 +8,10 @@ import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.S
 
 public class PlaceDiscoveryAlgorithmFactory {
 
+    public static PlaceDiscoveryAlgorithmFactory getInstance() {
+        return new PlaceDiscoveryAlgorithmFactory();
+    }
+
     public EstMinerPlaceDiscoveryAlgorithm createPlaceDiscoveryAlgorithm(EstMinerPlaceDiscoveryParameters parameters) {
         return new EstMinerPlaceDiscoveryAlgorithm(new PetriNetPlaceConverter(), parameters);
     }
