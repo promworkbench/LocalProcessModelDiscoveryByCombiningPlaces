@@ -1,7 +1,7 @@
 <ivy-module version="2.0">
     <info organisation="prom" module="LocalProcessModelDiscoveryByCombiningPlaces" revision="latest">
     	<description>
-    		Version 6.16.45
+    		Version 6.16.46
     	</description>
     </info>
     <configurations>
