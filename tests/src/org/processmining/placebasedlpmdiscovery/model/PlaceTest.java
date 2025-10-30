@@ -164,6 +164,24 @@ public class PlaceTest {
     }
 
     @Test
+    public void givenNoInNoOut_whenFrom_thenPlaceWithNoInNoOut() {
+        // given
+        String placeDescriptionEmptySpaces = "   |    ";
+        String placeDescriptionNoSpaces = "|";
+
+        // when
+        Place placeActualEmptySpaces = Place.from(placeDescriptionEmptySpaces);
+        Place placeActualNoSpaces = Place.from(placeDescriptionNoSpaces);
+
+        // then
+        Assert.assertEquals(0, placeActualEmptySpaces.getInputTransitions().size());
+        Assert.assertEquals(0, placeActualEmptySpaces.getOutputTransitions().size());
+
+        Assert.assertEquals(0, placeActualNoSpaces.getInputTransitions().size());
+        Assert.assertEquals(0, placeActualNoSpaces.getOutputTransitions().size());
+    }
+
+    @Test
     public void givenOneInNoOutSingleLetter_whenFrom_thenPlaceWithOneInNoOut() {
         // given
         String placeDescriptionEmptySpace = "a | ";
