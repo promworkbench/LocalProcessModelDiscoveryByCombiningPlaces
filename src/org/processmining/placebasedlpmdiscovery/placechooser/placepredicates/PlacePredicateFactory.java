@@ -26,9 +26,9 @@ public class PlacePredicateFactory { // TODO: Why is this not used?
 
     private PlacePredicate getComplexPredicate(PlacePredicateType type, PlacePredicate... subPredicates) {
         if (type == PlacePredicateType.AND) {
-            return new AndPredicate(subPredicates);
+            return new AndPlacePredicate(subPredicates);
         } else if (type == PlacePredicateType.OR) {
-            return new OrPredicate(subPredicates);
+            return new OrPlacePredicate(subPredicates);
         } else {
             throw new IllegalArgumentException("The type: " + type + " is not complex or it doesn't exist.");
         }
