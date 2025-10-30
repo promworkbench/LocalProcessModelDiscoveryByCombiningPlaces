@@ -1,16 +1,15 @@
-package src.org.processmining.placebasedlpmdiscovery.replayer;
+package org.processmining.placebasedlpmdiscovery.replayer;
 
 import com.google.gson.Gson;
 import org.junit.Assert;
 import org.junit.Test;
+import org.processmining.mockobjects.MockLPMs;
+import org.processmining.mockobjects.MockPlaces;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.exporting.importers.JsonImporter;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
-import org.processmining.placebasedlpmdiscovery.replayer.ReplayableLocalProcessModelReplayer;
 import org.python.google.common.reflect.TypeToken;
-import src.org.processmining.mockobjects.MockLPMs;
-import src.org.processmining.mockobjects.MockPlaces;
 
 import java.io.File;
 import java.io.FileReader;

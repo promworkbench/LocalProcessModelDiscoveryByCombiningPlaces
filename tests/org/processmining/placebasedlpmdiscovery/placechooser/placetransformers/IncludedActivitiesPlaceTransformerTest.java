@@ -1,10 +1,9 @@
-package src.org.processmining.placebasedlpmdiscovery.placechooser.placetransformers;
+package org.processmining.placebasedlpmdiscovery.placechooser.placetransformers;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
-import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.IncludedActivitiesPlaceTransformer;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,8 +1,7 @@
-package src.org.processmining.placebasedlpmdiscovery.placechooser.placepredicates;
+package org.processmining.placebasedlpmdiscovery.placechooser.placepredicates;
 
 import org.junit.Test;
 import org.processmining.placebasedlpmdiscovery.model.Place;
-import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.AndPlacePredicate;
 
 public class AndPlacePredicateTest {
 

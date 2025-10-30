@@ -1,11 +1,9 @@
-package src.org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
+package org.processmining.placebasedlpmdiscovery.lpmevaluation.logs;
 
 import org.deckfour.xes.model.XLog;
 import org.junit.Assert;
 import org.junit.Test;
 import org.processmining.eventlogs.window.WindowBasedEventLog;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.SlidingWindowInfo;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.SlidingWindowInfoImpl;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.logs.activities.ActivityCache;

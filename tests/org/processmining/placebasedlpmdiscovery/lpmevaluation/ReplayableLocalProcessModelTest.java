@@ -1,8 +1,7 @@
-package src.org.processmining.placebasedlpmdiscovery.lpmevaluation;
+package org.processmining.placebasedlpmdiscovery.lpmevaluation;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
 
 import java.util.Arrays;
 import java.util.Collections;

@@ -1,10 +1,8 @@
-package src.org.processmining.placebasedlpmdiscovery.model;
+package org.processmining.placebasedlpmdiscovery.model;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
-import org.processmining.placebasedlpmdiscovery.model.Place;
-import org.processmining.placebasedlpmdiscovery.model.Transition;
 
 public class PlaceTest {
 

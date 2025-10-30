@@ -1,4 +1,4 @@
-package src.org.processmining.mockobjects;
+package org.processmining.mockobjects;
 
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
