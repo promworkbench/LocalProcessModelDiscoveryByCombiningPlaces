@@ -7,7 +7,7 @@ import org.processmining.plugins.InductiveMiner.mining.MiningParameters;
 import org.processmining.plugins.InductiveMiner.mining.MiningParametersIM;
 import org.processmining.plugins.InductiveMiner.plugins.dialogs.IMMiningDialog;
 
-public class InductiveMinerPlaceDiscoveryParameters extends PlaceDiscoveryParameters {
+public class InductiveMinerPlaceDiscoveryParameters implements PlaceDiscoveryParameters {
     private MiningParameters miningParameters;
     private IMMiningDialog.Variant variant;
 

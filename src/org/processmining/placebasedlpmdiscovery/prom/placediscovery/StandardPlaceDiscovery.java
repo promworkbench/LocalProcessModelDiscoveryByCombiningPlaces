@@ -16,7 +16,8 @@ public class StandardPlaceDiscovery implements PlaceDiscovery {
         this.parameters = parameters;
     }
     public PlaceDiscoveryResult getPlaces() {
-        PlaceDiscoveryAlgorithmFactory factory = new PlaceDiscoveryAlgorithmFactory(); // TODO: Why not using the factory directly?
+        // TODO: Why not using the factory directly?
+        PlaceDiscoveryAlgorithmFactory factory = PlaceDiscoveryAlgorithmFactory.getInstance();
         PlaceDiscoveryAlgorithm<? extends PlaceDiscoveryParameters, ?> algorithm = parameters.getAlgorithm(factory);
         return algorithm.getPlaces(log);
     }

@@ -5,7 +5,7 @@ import org.processmining.placebasedlpmdiscovery.prom.placediscovery.algorithms.P
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.algorithms.PlaceDiscoveryAlgorithmFactory;
 import org.processmining.plugins.heuristicsnet.miner.heuristics.miner.settings.HeuristicsMinerSettings;
 
-public class HeuristicMinerPlaceDiscoveryParameters extends PlaceDiscoveryParameters {
+public class HeuristicMinerPlaceDiscoveryParameters implements PlaceDiscoveryParameters {
 
     private HeuristicsMinerSettings settings;
 
