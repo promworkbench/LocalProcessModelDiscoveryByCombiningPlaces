@@ -2,6 +2,7 @@ package org.processmining.lpms.discovery.builders;
 
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowLPMStorage;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.SlidingWindowInfo;
+import org.processmining.placebasedlpmdiscovery.prom.PlacesProvider;
 
 /**
  * Builds LPMs for a single window.
@@ -9,11 +10,11 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.SlidingWindow
 public interface LADAWindowLPMBuilder {
 
     static LADAWindowLPMBuilder getInstance() {
-        return placeBased();
+        return treeBased();
     }
 
-    static LADAWindowLPMBuilder placeBased() {
-        return new PBLADAWindowLPMBuilder();
+    static LADAWindowLPMBuilder placeBased(PlacesProvider placesProvider) {
+        return new PBLADAWindowLPMBuilder(placesProvider);
     }
 
     static LADAWindowLPMBuilder treeBased() {
