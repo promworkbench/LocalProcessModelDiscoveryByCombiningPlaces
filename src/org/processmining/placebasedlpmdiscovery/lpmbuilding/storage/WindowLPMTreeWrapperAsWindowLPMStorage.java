@@ -1,5 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmbuilding.storage;
 
+import org.apache.commons.lang3.NotImplementedException;
+import org.processmining.lpms.model.LPM;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.WindowLPMTree;
@@ -33,5 +35,15 @@ public class WindowLPMTreeWrapperAsWindowLPMStorage implements WindowLPMStorage 
     @Override
     public Collection<LocalProcessModel> getLPMs() {
         return getAllValidLPMs();
+    }
+
+    @Override
+    public boolean hasNext() {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public LPM next() {
+        throw new NotImplementedException();
     }
 }

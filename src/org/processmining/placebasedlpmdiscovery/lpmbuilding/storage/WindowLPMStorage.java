@@ -1,14 +1,17 @@
 package org.processmining.placebasedlpmdiscovery.lpmbuilding.storage;
 
+import org.processmining.lpms.model.LPM;
 import org.processmining.lpms.storage.LADALocalTree;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 
 import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Stores discovered LPMs for one window.
  */
-public interface WindowLPMStorage { // QA: Should not be called like this, the name should explain the type of storage.
+public interface WindowLPMStorage extends Iterator<LPM> { // QA: Should not be called like this, the name should
+    // explain the type of storage.
 
     static WindowLPMStorage lada() {
         return new LADALocalTree();
