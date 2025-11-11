@@ -6,8 +6,8 @@ import org.processmining.placebasedlpmdiscovery.model.lpmstorage.GlobalLPMStorag
 
 public class DefaultWindowToGlobalLPMStorageTransporter implements WindowToGlobalLPMStorageTransporter{
     @Override
-    public void move(WindowLPMStorage windowStorage, GlobalLPMStorage globalStorage) {
-        WindowLPMStorageTraversal traversal = WindowLPMStorageTraversal.getInstance(windowStorage);
+    public void move(WindowLPMStorage windowLPMStorage, GlobalLPMStorage globalStorage) {
+        WindowLPMStorageTraversal traversal = WindowLPMStorageTraversal.getInstance(windowLPMStorage);
         while (traversal.hasNext()) {
             LocalProcessModel lpm = traversal.next();
             globalStorage.add(lpm);
