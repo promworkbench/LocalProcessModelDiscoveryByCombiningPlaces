@@ -17,13 +17,19 @@ import org.processmining.placebasedlpmdiscovery.model.lpmstorage.GlobalLPMStorag
 public class LADA implements LPMDiscovery {
 
     private final int proximity;
+    private final LADAWindowLPMBuilder windowLPMBuilder;
 
     public LADA() {
         this(DiscoveryParameters.Default.proximity);
     }
 
     public LADA(int proximity) {
+        this(proximity, LADAWindowLPMBuilder.getInstance());
+    }
+
+    public LADA(int proximity, LADAWindowLPMBuilder windowLPMBuilder) {
         this.proximity = proximity;
+        this.windowLPMBuilder = windowLPMBuilder;
     }
 
     @Override
@@ -36,7 +42,6 @@ public class LADA implements LPMDiscovery {
         // traverse event log and build lpms
         WindowBasedEventLog windowBasedEventLog = WindowBasedEventLog.getInstance(eventLog, this.proximity);
         WindowLPMStorage windowStorage = null;
-        LADAWindowLPMBuilder windowLPMBuilder = LADAWindowLPMBuilder.getInstance();
         for (SlidingWindowInfo windowInfo : windowBasedEventLog) {
             windowStorage = windowLPMBuilder.build(windowInfo, windowStorage);
             storageTransporter.move(windowStorage, lpmStorage);
