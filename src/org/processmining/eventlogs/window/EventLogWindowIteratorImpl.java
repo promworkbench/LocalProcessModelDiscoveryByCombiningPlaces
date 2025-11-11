@@ -45,29 +45,28 @@ class EventLogWindowIteratorImpl implements EventLogWindowIterator {
     }
 
     public SlidingWindowInfoImpl next() {
-        ArrayList<Activity> addedActivities = new ArrayList<>();
-        ArrayList<Activity> removedActivities = new ArrayList<>();
+        Activity addedActivity = null;
+        Activity removedActivity = null;
         boolean startNewVariant = traceVariant == null // hasn't started traversing
                 || position >= traceVariant.size() && window.size() == 1; // finishing a trace variant
         if (startNewVariant) {
             startTraversingNewTraceVariant();
         }
 
-        // remove first event if no space in the window or at the end of the trace
+        // remove the first event if no space in the window or at the end of the trace
         if (window.size() >= maxWindowSize || position >= traceVariant.size()) {
-            Activity first = window.removeFirst();
-            removedActivities.add(first);
+            removedActivity = window.removeFirst();
         }
 
-        // add next event
+        // add the next event
         if (position < traceVariant.size()) {
             window.add(traceVariant.get(position));
-            addedActivities.add(traceVariant.get(position));
+            addedActivity = traceVariant.get(position);
             position++;
         }
 
         return new SlidingWindowInfoImpl(new ArrayList<>(window), windowCount,position - window.size(),position - 1
-                , traceVariant, addedActivities, removedActivities);
+                , traceVariant, addedActivity, removedActivity);
     }
 
     private void startTraversingNewTraceVariant() {

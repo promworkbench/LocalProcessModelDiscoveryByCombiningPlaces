@@ -15,19 +15,19 @@ public class SlidingWindowInfoImpl implements SlidingWindowInfo {
     private final int startPos; // inclusive
     private final int endPos; // inclusive
     private final ActivityBasedTotallyOrderedEventLogTraceVariant traceVariant;
-    private final ArrayList<Activity> addedActivities;
-    private final ArrayList<Activity> removedActivities;
+    private final Activity addedActivity;
+    private final Activity removedActivity;
 
     public SlidingWindowInfoImpl(ArrayList<Activity> window, int windowCount, int startPos, int endPos,
                                  ActivityBasedTotallyOrderedEventLogTraceVariant traceVariant,
-                                 ArrayList<Activity> addedActivities, ArrayList<Activity> removedActivities) {
+                                 Activity addedActivity, Activity removedActivity) {
         this.window = window;
         this.windowCount = windowCount;
         this.startPos = startPos;
         this.endPos = endPos;
         this.traceVariant = traceVariant;
-        this.addedActivities = addedActivities;
-        this.removedActivities = removedActivities;
+        this.addedActivity = addedActivity;
+        this.removedActivity = removedActivity;
     }
 
     public List<Activity> getWindow() {
@@ -35,13 +35,13 @@ public class SlidingWindowInfoImpl implements SlidingWindowInfo {
     }
 
     @Override
-    public List<Activity> getAddedActivities() {
-        return this.addedActivities;
+    public Activity getAddedActivity() {
+        return this.addedActivity;
     }
 
     @Override
-    public List<Activity> getRemovedActivities() {
-        return this.removedActivities;
+    public Activity getRemovedActivity() {
+        return this.removedActivity;
     }
 
     /**

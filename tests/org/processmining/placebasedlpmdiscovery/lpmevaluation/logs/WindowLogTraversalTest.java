@@ -36,8 +36,7 @@ public class WindowLogTraversalTest {
 
         SlidingWindowInfoImpl expected = new SlidingWindowInfoImpl(new ArrayList<>(Collections.singletonList(ActivityCache.getInstance()
                 .getActivity("a"))), 1, 0, 0, tvExtractor.extract(eventLog).iterator().next(),
-                new ArrayList<>(Collections.singletonList(ActivityCache.getInstance().getActivity("a"))),
-                new ArrayList<>());
+                ActivityCache.getInstance().getActivity("a"), null);
 
         Assert.assertEquals(expected, wel.iterator().next());
     }
@@ -54,8 +53,8 @@ public class WindowLogTraversalTest {
 
         SlidingWindowInfoImpl expected = new SlidingWindowInfoImpl(new ArrayList<>(Arrays.asList(
                 ActivityCache.getInstance().getActivity("c"), ActivityCache.getInstance().getActivity("d")
-        )), 1, 2, 3, tvExtractor.extract(eventLog).iterator().next(), new ArrayList<>(),
-                new ArrayList<>(Collections.singletonList(ActivityCache.getInstance().getActivity("b"))));
+        )), 1, 2, 3, tvExtractor.extract(eventLog).iterator().next(),
+                null, ActivityCache.getInstance().getActivity("b"));
 
         Assert.assertEquals(expected, wlt.next());
     }
@@ -104,8 +103,7 @@ public class WindowLogTraversalTest {
 
         SlidingWindowInfoImpl expected = new SlidingWindowInfoImpl(new ArrayList<>(Collections.singletonList(
                 ActivityCache.getInstance().getActivity("a"))), 1,0, 0, it.next(),
-                new ArrayList<>(Collections.singletonList(ActivityCache.getInstance().getActivity("a"))),
-                new ArrayList<>());
+                ActivityCache.getInstance().getActivity("a"), null);
 
         Assert.assertEquals(expected, wlt.next());
     }
