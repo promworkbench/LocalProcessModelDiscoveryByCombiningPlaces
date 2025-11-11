@@ -6,6 +6,7 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.WindowLPMTree;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.WindowLPMTreeNode;
+import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 
 import java.util.Collection;
@@ -35,6 +36,16 @@ public class WindowLPMTreeWrapperAsWindowLPMStorage implements WindowLPMStorage 
     @Override
     public Collection<LocalProcessModel> getLPMs() {
         return getAllValidLPMs();
+    }
+
+    @Override
+    public Collection<LPM> removeLPMsFor(Activity activity, int position) {
+        throw new NotImplementedException();
+    }
+
+    @Override
+    public boolean addLPMFor(Activity activity, int position, LPM lpm) {
+        throw new NotImplementedException();
     }
 
     @Override
