@@ -32,6 +32,12 @@ public class LADA implements LPMDiscovery {
         this.windowLPMBuilder = windowLPMBuilder;
     }
 
+    /**
+     * Build LPMs using the LADA approach. The event log is traversed using sliding windows of given proximity. For each window,
+     * LPMs are built using the provided window LPM builder. The LPMs from each window are then transported to a global storage.
+     * @param log - the event log to discover LPMs from
+     * @return the LPM discovery result containing all discovered LPMs
+     */
     @Override
     public LPMDiscoveryResult from(XLog log) {
         EventLog eventLog = new XLogWrapper(log);
