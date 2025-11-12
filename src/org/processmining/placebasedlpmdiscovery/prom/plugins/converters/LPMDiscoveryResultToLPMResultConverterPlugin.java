@@ -5,7 +5,7 @@ import org.processmining.contexts.uitopia.UIPluginContext;
 import org.processmining.contexts.uitopia.annotations.UITopiaVariant;
 import org.processmining.framework.plugin.annotations.Plugin;
 import org.processmining.framework.plugin.annotations.PluginVariant;
-import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 
 @Plugin(
@@ -28,7 +28,7 @@ public class LPMDiscoveryResultToLPMResultConverterPlugin {
             requiredParameterLabels = {0}
     )
     public static LPMResult convertStandardLPMDiscoveryResult(UIPluginContext context,
-                                                              StandardLPMDiscoveryResult result) {
+                                                              LPMDiscoveryResult result) {
         return new LPMResult(result);
     }
 }
