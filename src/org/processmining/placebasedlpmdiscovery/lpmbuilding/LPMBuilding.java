@@ -7,7 +7,7 @@ import org.processmining.placebasedlpmdiscovery.model.lpmstorage.LPMStorage;
 public interface LPMBuilding {
 
     static LPMBuilding getInstance() {
-        return windowBased(DiscoveryParameters.Default.proximity);
+        return windowBased(DiscoveryParameters.Default.windowSize);
     }
 
     static LPMBuilding windowBased(int proximity) {

@@ -1,8 +1,7 @@
-package org.processmining.lpms.discovery.lada;
+package org.processmining.lpms.discovery;
 
 import org.deckfour.xes.model.XLog;
 import org.processmining.eventlogs.window.WindowBasedEventLog;
-import org.processmining.lpms.discovery.DiscoveryParameters;
 import org.processmining.lpms.discovery.builders.LADAWindowLPMBuilder;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowLPMStorage;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowToGlobalLPMStorageTransporter;
@@ -14,26 +13,31 @@ import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.lpmstorage.GlobalLPMStorage;
 
-public class LADA implements LPMDiscovery {
+/**
+ * LPM discovery implementation that builds LPMs using a sliding window approach.
+ * For each window, LPMs are built using the provided window LPM builder.
+ * The LPMs from each window are then transported to a global storage.
+ */
+public class WindowLPMDiscovery implements LPMDiscovery {
 
-    private final int proximity;
+    private final int windowSize;
     private final LADAWindowLPMBuilder windowLPMBuilder;
 
-    public LADA() {
-        this(DiscoveryParameters.Default.proximity);
+    public WindowLPMDiscovery() {
+        this(DiscoveryParameters.Default.windowSize);
     }
 
-    public LADA(int proximity) {
-        this(proximity, LADAWindowLPMBuilder.getInstance());
+    public WindowLPMDiscovery(int windowSize) {
+        this(windowSize, LADAWindowLPMBuilder.getInstance());
     }
 
-    public LADA(int proximity, LADAWindowLPMBuilder windowLPMBuilder) {
-        this.proximity = proximity;
+    public WindowLPMDiscovery(int windowSize, LADAWindowLPMBuilder windowLPMBuilder) {
+        this.windowSize = windowSize;
         this.windowLPMBuilder = windowLPMBuilder;
     }
 
     /**
-     * Build LPMs using the LADA approach. The event log is traversed using sliding windows of given proximity. For each window,
+     * Build LPMs by traversing the event log with a sliding window and building LPMs for each of them. For each window,
      * LPMs are built using the provided window LPM builder. The LPMs from each window are then transported to a global storage.
      * @param log - the event log to discover LPMs from
      * @return the LPM discovery result containing all discovered LPMs
@@ -46,7 +50,7 @@ public class LADA implements LPMDiscovery {
         WindowToGlobalLPMStorageTransporter storageTransporter = WindowToGlobalLPMStorageTransporter.getInstance();
 
         // traverse event log and build lpms
-        WindowBasedEventLog windowBasedEventLog = WindowBasedEventLog.getInstance(eventLog, this.proximity);
+        WindowBasedEventLog windowBasedEventLog = WindowBasedEventLog.getInstance(eventLog, this.windowSize);
         WindowLPMStorage windowStorage = null;
         for (SlidingWindowInfo windowInfo : windowBasedEventLog) {
             windowStorage = windowLPMBuilder.build(windowInfo, windowStorage);

@@ -1,7 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.lpmdiscovery;
 
 import org.deckfour.xes.model.XLog;
-import org.processmining.lpms.discovery.lada.LADA;
+import org.processmining.lpms.discovery.WindowLPMDiscovery;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.prom.PlacesProvider;
 
@@ -30,7 +30,7 @@ public interface LPMDiscovery {
     }
 
     static LPMDiscovery ladaBased(int proximityLimit) {
-        return new LADA(proximityLimit);
+        return new WindowLPMDiscovery(proximityLimit);
     }
 
     LPMDiscoveryResult from(XLog log);

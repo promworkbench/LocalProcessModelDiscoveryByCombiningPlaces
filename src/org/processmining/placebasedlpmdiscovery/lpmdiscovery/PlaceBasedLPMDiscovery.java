@@ -27,7 +27,7 @@ public class PlaceBasedLPMDiscovery implements LPMDiscovery {
     }
 
     public PlaceBasedLPMDiscovery(PlacesProviderFactory placesProviderFactory, int placeLimit) {
-        this(placesProviderFactory, placeLimit, DiscoveryParameters.Default.proximity);
+        this(placesProviderFactory, placeLimit, DiscoveryParameters.Default.windowSize);
     }
 
     public PlaceBasedLPMDiscovery(PlacesProviderFactory placesProviderFactory, int placeLimit, int proximity) {

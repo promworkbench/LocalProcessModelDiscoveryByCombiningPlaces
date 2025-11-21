@@ -6,6 +6,6 @@ public class DiscoveryParameters {
     }
 
     public static class Default {
-        public static int proximity = 7;
+        public static int windowSize = 7;
     }
 }
