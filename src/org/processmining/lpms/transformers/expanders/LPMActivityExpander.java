@@ -5,7 +5,7 @@ import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
 
 import java.util.Collection;
 
-public interface LPMActivityExpander {
+public interface LPMActivityExpander<T extends LPM> {
 
-    Collection<LPM> expand(LPM lpm, Activity activity);
+    Collection<T> expand(T lpm, Activity activity);
 }

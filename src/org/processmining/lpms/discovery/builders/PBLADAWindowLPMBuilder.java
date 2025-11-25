@@ -9,31 +9,29 @@ import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
 import org.processmining.placebasedlpmdiscovery.prom.PlacesProvider;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
-public class PBLADAWindowLPMBuilder implements LADAWindowLPMBuilder {
+public class PBLADAWindowLPMBuilder<T extends LPM> implements LADAWindowLPMBuilder<T> {
 
     private final Set<Place> places;
-    private final LPMActivityExpander activityExpander;
+    private final LPMActivityExpander<T> activityExpander;
 
-    public PBLADAWindowLPMBuilder(PlacesProvider placesProvider, LPMActivityExpander activityExpander) {
+    public PBLADAWindowLPMBuilder(PlacesProvider placesProvider, LPMActivityExpander<T> activityExpander) {
         this.places = placesProvider.provide();
         this.activityExpander = activityExpander;
     }
 
     @Override
-    public WindowLPMStorage build(SlidingWindowInfo windowInfo, WindowLPMStorage prevWindowResult) {
-        WindowLPMStorage newStorage = prevWindowResult;
+    public WindowLPMStorage<T> build(SlidingWindowInfo windowInfo, WindowLPMStorage<T> prevWindowResult) {
+        WindowLPMStorage<T> newStorage = prevWindowResult;
         if (windowInfo.getRemovedActivity() != null) {
             newStorage.removeLPMsFor(windowInfo.getRemovedActivity(), windowInfo.getStartPos() - 1);
         }
         if (windowInfo.getAddedActivity() != null) {
             Activity activity = windowInfo.getAddedActivity();
             while (newStorage.hasNext()) {
-                LPM lpm = newStorage.next();
-                Iterable<LPM> extensions = this.activityExpander.expand(lpm, activity);
+                T lpm = newStorage.next();
+                Iterable<T> extensions = this.activityExpander.expand(lpm, activity);
                 newStorage.addLPMsFor(activity, windowInfo.getEndPos(), extensions);
 
                 extendByAddingInitial(lpm, activity);

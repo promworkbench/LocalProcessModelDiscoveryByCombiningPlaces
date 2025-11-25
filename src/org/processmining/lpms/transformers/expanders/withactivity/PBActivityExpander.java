@@ -1,6 +1,6 @@
 package org.processmining.lpms.transformers.expanders.withactivity;
 
-import org.processmining.lpms.model.LPM;
+import org.processmining.lpms.model.petrinets.PetriNet;
 import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
 
 import java.util.Collection;
@@ -17,7 +17,7 @@ public class PBActivityExpander implements PNActivityExpander {
     }
 
     @Override
-    public Collection<LPM> expand(LPM lpm, Activity activity) {
+    public Collection<PetriNet> expand(PetriNet lpm, Activity activity) {
         return expanders.stream()
                 .map(e -> e.expand(lpm, activity))
                 .flatMap(Collection::stream)

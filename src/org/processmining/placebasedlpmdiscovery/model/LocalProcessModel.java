@@ -1,5 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.model;
 
+import org.processmining.lpms.model.LPM;
 import org.processmining.models.graphbased.NodeID;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.ReplayableLocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
  * The LocalProcessModel class is used to represent the logic for local process models. It contains places,
  * transitions and arcs between them.
  */
-public class LocalProcessModel implements Serializable, TextDescribable, LPMModel<ReplayableLocalProcessModel> {
+public class LocalProcessModel implements Serializable, TextDescribable, LPMModel<ReplayableLocalProcessModel>, LPM {
     private static final long serialVersionUID = -2415080755970445804L;
 
     private String id;

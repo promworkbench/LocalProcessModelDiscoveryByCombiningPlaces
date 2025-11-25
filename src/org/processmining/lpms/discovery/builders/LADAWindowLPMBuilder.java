@@ -1,5 +1,6 @@
 package org.processmining.lpms.discovery.builders;
 
+import org.processmining.lpms.model.LPM;
 import org.processmining.lpms.transformers.expanders.withactivity.PBActivityExpander;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowLPMStorage;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.logs.SlidingWindowInfo;
@@ -8,17 +9,17 @@ import org.processmining.placebasedlpmdiscovery.prom.PlacesProvider;
 /**
  * Builds LPMs for a single window.
  */
-public interface LADAWindowLPMBuilder {
+public interface LADAWindowLPMBuilder<T extends LPM> {
 
-    static LADAWindowLPMBuilder getInstance() {
+    static LADAWindowLPMBuilder<?> getInstance() {
         return treeBased();
     }
 
-    static LADAWindowLPMBuilder placeBased(PlacesProvider placesProvider) {
-        return new PBLADAWindowLPMBuilder(placesProvider, new PBActivityExpander());
+    static LADAWindowLPMBuilder<?> placeBased(PlacesProvider placesProvider) {
+        return new PBLADAWindowLPMBuilder<>(placesProvider, new PBActivityExpander());
     }
 
-    static LADAWindowLPMBuilder treeBased() {
+    static LADAWindowLPMBuilder<?> treeBased() {
         return new PTLADAWindowLPMBuilder();
     }
 
@@ -28,5 +29,5 @@ public interface LADAWindowLPMBuilder {
      * @param prevWindowResult -  the previous window result to reuse overlapping LPMs
      * @return a window storage that contains LPMs for the provided window
      */
-    WindowLPMStorage build(SlidingWindowInfo windowInfo, WindowLPMStorage prevWindowResult);
+    WindowLPMStorage<T> build(SlidingWindowInfo windowInfo, WindowLPMStorage<T> prevWindowResult);
 }

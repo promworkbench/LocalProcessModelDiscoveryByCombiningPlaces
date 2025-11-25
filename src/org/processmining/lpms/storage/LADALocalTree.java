@@ -1,7 +1,6 @@
 package org.processmining.lpms.storage;
 
 import org.apache.commons.lang3.NotImplementedException;
-import org.processmining.lpms.model.LPM;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.storage.WindowLPMStorage;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
@@ -9,7 +8,7 @@ import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
 import java.util.Collection;
 import java.util.Collections;
 
-public class LADALocalTree implements WindowLPMStorage {
+public class LADALocalTree implements WindowLPMStorage<LocalProcessModel> {
 
     @Override
     public Collection<LocalProcessModel> getLPMs() {
@@ -17,12 +16,12 @@ public class LADALocalTree implements WindowLPMStorage {
     }
 
     @Override
-    public Collection<LPM> removeLPMsFor(Activity activity, int position) {
+    public Collection<LocalProcessModel> removeLPMsFor(Activity activity, int position) {
         throw new NotImplementedException();
     }
 
     @Override
-    public boolean addLPMFor(Activity activity, int position, LPM lpm) {
+    public boolean addLPMFor(Activity activity, int position, LocalProcessModel lpm) {
         throw new NotImplementedException();
     }
 
@@ -32,7 +31,7 @@ public class LADALocalTree implements WindowLPMStorage {
     }
 
     @Override
-    public LPM next() {
+    public LocalProcessModel next() {
         throw new NotImplementedException();
     }
 }
