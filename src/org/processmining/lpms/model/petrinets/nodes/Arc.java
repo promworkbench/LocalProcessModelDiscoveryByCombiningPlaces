@@ -5,4 +5,8 @@ public interface Arc {
     Node getSource();
 
     Node getTarget();
+
+    static Arc of(Node source, Node target) {
+        return new DefaultArc(source, target);
+    }
 }

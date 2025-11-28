@@ -5,7 +5,6 @@ import org.processmining.lpms.model.petrinets.nodes.Arc;
 import org.processmining.lpms.model.petrinets.nodes.Node;
 import org.processmining.lpms.model.petrinets.nodes.Place;
 import org.processmining.lpms.model.petrinets.nodes.Transition;
-import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
 
 import java.util.Collection;
 
@@ -24,5 +23,21 @@ public interface PetriNet extends LPM {
 
     Collection<Arc> getArcsTo(Node node);
 
-    boolean addInitialPlaceWithActivity(Activity activity);
+    Collection<Node> getPreset(Node node);
+
+    Collection<Node> getPostset(Node node);
+
+    Place addPlace();
+
+    Place addPlace(Collection<Transition> inputTransitions, Collection<Transition> outputTransitions);
+
+    Transition addTransition(String label);
+
+    Transition addInvisibleTransition();
+
+    Transition addTransition(Collection<Place> inputPlaces, Collection<Place> outputPlaces, String label);
+
+    Transition addInvisibleTransition(Collection<Place> inputPlaces, Collection<Place> outputPlaces);
+
+    NodePosition getNodePosition(Node node);
 }

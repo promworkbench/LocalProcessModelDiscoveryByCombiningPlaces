@@ -7,10 +7,18 @@ public class DefaultTransition implements Transition {
 
     private final UUID id;
     private final String label;
+    private final boolean visible;
 
-    public DefaultTransition(String label) {
+    DefaultTransition() {
+        this.label = null;
+        this.id = UUID.randomUUID();
+        this.visible = false;
+    }
+
+    DefaultTransition(String label) {
         this.label = label;
         this.id = UUID.randomUUID();
+        this.visible = true;
     }
 
     @Override
@@ -23,5 +31,10 @@ public class DefaultTransition implements Transition {
     @Override
     public int hashCode() {
         return Objects.hash(id, label);
+    }
+
+    @Override
+    public boolean isVisible() {
+        return this.visible;
     }
 }
