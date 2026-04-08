@@ -7,6 +7,7 @@ import org.jgrapht.graph.SimpleDirectedGraph;
 import org.processmining.lpms.model.petrinets.nodes.*;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.stream.Collectors;
 
 public class DefaultPetriNet implements PetriNet {
@@ -15,6 +16,13 @@ public class DefaultPetriNet implements PetriNet {
     private final Collection<Transition> transitions;
     private final BiMap<Node, NodePosition> nodePositions;
     private final DirectedGraph<Node, Arc> graph;
+
+    public DefaultPetriNet() {
+        this.places = new HashSet<>();
+        this.transitions = new HashSet<>();
+        this.nodePositions = HashBiMap.create();
+        this.graph = new SimpleDirectedGraph<>(Arc::of);
+    }
 
     public DefaultPetriNet(Collection<Place> places, Collection<Transition> transitions) {
         this.places = places;
