@@ -65,7 +65,7 @@ public class MainGUI extends JFrame {
         Injector guice = Guice.createInjector(new InputModule(getDummyLog().getOriginalLog()), new LPMDiscoveryGuiceModule());
         LPMDiscoveryService lpmDiscoveryService = guice.getInstance(LPMDiscoveryService.class);
         LPMDiscoveryResult result = lpmDiscoveryService.runLPMDiscovery(getDummyLog(),
-                new PlaceSet(PlaceUtils.extractPlaceNets("data/placenets/bpi2012_res10939.json")));
+                new PlaceSet(PlaceUtils.extractPlaceNets("data/petrinets/artificialBig.pnml")));
 
         // visualization
         guice = Guice.createInjector(new LPMDiscoveryResultGuiceModule(result), new PromGuiceModule(getDummyContext()));
@@ -80,7 +80,7 @@ public class MainGUI extends JFrame {
     }
 
     private EventLog getDummyLog() throws Exception {
-        return new XLogWrapper(LogUtils.readLogFromFile("data/logs/bpi2012_res10939.xes"));
+        return new XLogWrapper(LogUtils.readLogFromFile("data/logs/artificialBig.xes"));
     }
 
     private LPMDiscoveryResult getDummyResult() throws Exception {
