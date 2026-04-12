@@ -139,13 +139,13 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
                                         AbstractActivityMapping<Integer> labelMapping,
                                         Set<Place> places) {
         // create lpms from tree
-        Map<LocalProcessModel, LPMTemporaryWindowInfo> lpms = new HashMap<>();
+        Map<UUID, Pair<LocalProcessModel, LPMTemporaryWindowInfo>> lpms = new HashMap<>();
         WindowLPMTreeValidLPMsRandomTraversal treeTraversal = new WindowLPMTreeValidLPMsRandomTraversal(localTree);
         while (treeTraversal.hasNext()) {
             WindowLPMTreeNode n = treeTraversal.next();
             LocalProcessModel lpm = LocalProcessModelUtils.convertReplayableToLPM(
                     n.getLpm(), labelMapping.getReverseLabelMap(), places);
-            lpms.put(lpm, lpmTempInfoCreator.createTempInfo(n));
+            lpms.put(n.getUuid(), new Pair<>(lpm, lpmTempInfoCreator.createTempInfo(n)));
         }
 
         // extend with concurrency
@@ -155,7 +155,7 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
 
 
         // give the lpm and the temp info to the main tree, so it can update itself
-        for (Map.Entry<LocalProcessModel, LPMTemporaryWindowInfo> lpmEntry : lpms.entrySet()) {
+        for (Pair<LocalProcessModel, LPMTemporaryWindowInfo> lpmEntry : lpms.values()) {
             LocalProcessModel lpm = lpmEntry.getKey();
             if (lpm.getPlaces().size() >= parameters.getMinNumPlaces() &&
                     lpm.getPlaces().size() <= parameters.getMaxNumPlaces() &&
@@ -172,38 +172,39 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
         }
     }
 
-    private void addBranchCombinations(Map<LocalProcessModel, LPMTemporaryWindowInfo> lpmFiringSequenceMap,
+    private void addBranchCombinations(Map<UUID, Pair<LocalProcessModel, LPMTemporaryWindowInfo>> lpmFiringSequenceMap,
                                        int concurrencyCardinality,
                                        LPMFromBranchCombinationValidityChecker lpmValidityChecker,
                                        LPMTemporaryWindowInfoCreator creator) {
         // TODO: We combine only by two LPMs, but more can be done
         if (concurrencyCardinality == 1)
             return;
-        List<LocalProcessModel> lpms = new ArrayList<>(lpmFiringSequenceMap.keySet());
-        for (int i = 0; i < lpms.size(); ++i) {
-            addBranchCombinations(lpms.get(i), lpms, i + 1, lpmFiringSequenceMap, 2, concurrencyCardinality,
-                    lpmValidityChecker, creator);
+        List<UUID> lpmIds = new ArrayList<>(lpmFiringSequenceMap.keySet());
+        for (int i = 0; i < lpmIds.size(); ++i) {
+            addBranchCombinations(lpmIds.get(i), lpmIds, i + 1,
+                    lpmFiringSequenceMap, 2, concurrencyCardinality, lpmValidityChecker, creator);
         }
     }
 
-    private void addBranchCombinations(LocalProcessModel lpm, List<LocalProcessModel> lpms, int from,
-                                       Map<LocalProcessModel, LPMTemporaryWindowInfo> lpmWithTemporaryInfo,
+    private void addBranchCombinations(UUID lpmId, List<UUID> lpmIds, int from,
+                                       Map<UUID, Pair<LocalProcessModel, LPMTemporaryWindowInfo>> lpmWithTemporaryInfo,
                                        int currIteration, int lastIteration,
                                        LPMFromBranchCombinationValidityChecker lpmValidityChecker,
                                        LPMTemporaryWindowInfoCreator creator) {
-        LPMTemporaryWindowInfo lpmTemporaryWindowInfo = lpmWithTemporaryInfo.get(lpm);
+        LocalProcessModel lpm = lpmWithTemporaryInfo.get(lpmId).getFirst();
+        LPMTemporaryWindowInfo lpmTemporaryWindowInfo = lpmWithTemporaryInfo.get(lpmId).getSecond();
 
-        for (int i = from; i < lpms.size(); ++i) {
+        for (int i = from; i < lpmIds.size(); ++i) {
             // first check if considering the two temp infos it makes sense to merge the two models
-            LPMTemporaryWindowInfo iLpmTemporaryWindowInfo = lpmWithTemporaryInfo.get(lpms.get(i));
+            LPMTemporaryWindowInfo iLpmTemporaryWindowInfo = lpmWithTemporaryInfo.get(lpmIds.get(i)).getSecond();
             if (lpmValidityChecker.shouldNotMerge(lpmTemporaryWindowInfo, iLpmTemporaryWindowInfo)) {
                 continue;
             }
 
             // merge models and temp infos
-            LocalProcessModel resLpm = LocalProcessModelUtils.join(lpms.get(i), lpm);
+            LocalProcessModel resLpm = LocalProcessModelUtils.join(lpmWithTemporaryInfo.get(lpmIds.get(i)).getFirst(), lpm);
             LPMTemporaryWindowInfo resTempInfo = creator
-                    .createTempInfo(lpmTemporaryWindowInfo, lpmWithTemporaryInfo.get(lpms.get(i)));
+                    .createTempInfo(lpmTemporaryWindowInfo, lpmWithTemporaryInfo.get(lpmIds.get(i)).getSecond());
 
             if (lpmWithTemporaryInfo.containsKey(resLpm)) { // if already in the models do nothing
                 continue;
@@ -211,10 +212,11 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
 
             // check validity of the merged model
             if (lpmValidityChecker.checkValidity(resLpm, resTempInfo)) {
-                lpmWithTemporaryInfo.put(resLpm, resTempInfo);
+                UUID mergedLPMId = UUID.randomUUID();
+                lpmWithTemporaryInfo.put(mergedLPMId, new Pair<>(resLpm, resTempInfo));
 
                 if (currIteration < lastIteration) { // do additional combinations if necessary
-                    addBranchCombinations(resLpm, lpms, i + 1, lpmWithTemporaryInfo,
+                    addBranchCombinations(mergedLPMId, lpmIds, i + 1, lpmWithTemporaryInfo,
                             currIteration + 1, lastIteration, lpmValidityChecker, creator);
                 }
             }
