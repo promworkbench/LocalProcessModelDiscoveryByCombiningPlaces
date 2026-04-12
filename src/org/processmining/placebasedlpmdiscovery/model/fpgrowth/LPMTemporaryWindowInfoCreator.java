@@ -54,20 +54,25 @@ public class LPMTemporaryWindowInfoCreator {
     public LPMTemporaryWindowInfo createTempInfo(LPMTemporaryWindowInfo tempInfo1,
                                                  LPMTemporaryWindowInfo tempInfo2) {
         List<Integer> replayedEventIndices = new ArrayList<>();
-        replayedEventIndices.addAll(tempInfo1.getReplayedEventsIndices());
-        replayedEventIndices.addAll(tempInfo2.getReplayedEventsIndices());
+        replayedEventIndices.addAll(tempInfo1.getReplayedEventsIndices()); // add replayed indices from the first lpm
+        replayedEventIndices.addAll(tempInfo2.getReplayedEventsIndices()); // add replayed indices from the second lpm
+        // Finally keep only distinct and sort indices
         replayedEventIndices = replayedEventIndices.stream().distinct().sorted().collect(Collectors.toList());
         List<Activity> sequence = getFiringSequence(replayedEventIndices, windowInfo.getWindow(),
-                tempInfo1.getWindowLastEventPos());
+                tempInfo1.getWindowLastEventPos()); // translate the indices to a firing sequence of activities
 
+        // Collect used passages from both lpms
         Set<Pair<Integer, Integer>> usedPassages = new HashSet<>();
         usedPassages.addAll(tempInfo1.getIntegerUsedPassages());
         usedPassages.addAll(tempInfo2.getIntegerUsedPassages());
 
+        // Collect used places from both lpms
         Set<SimplePlace<Integer>> usedPlaces = new HashSet<>();
         usedPlaces.addAll(tempInfo1.getIntegerUsedPlaces());
         usedPlaces.addAll(tempInfo2.getIntegerUsedPlaces());
 
+        // Create temporary window for the merged lpm. Use the trace info from one of the models since it is window
+        // dependent and not model dependent.
         return new LPMTemporaryWindowInfo(
                 sequence,
                 replayedEventIndices,

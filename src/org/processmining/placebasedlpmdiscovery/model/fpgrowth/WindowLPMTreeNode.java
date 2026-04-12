@@ -42,6 +42,10 @@ public class WindowLPMTreeNode {
         this.replayedEventsIndices = replayedEventsIndices;
     }
 
+    public UUID getUuid() {
+        return uuid;
+    }
+
     public void tryAddPlace(int inEvent, int inPos, int outEvent, int outPos, Place place,
                             Function<String, Integer> labelMapper) {
         if (!canAddPlace(inEvent, place, labelMapper))
