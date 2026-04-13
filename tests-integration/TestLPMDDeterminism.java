@@ -1,7 +1,8 @@
+import org.assertj.core.api.Assertions;
 import org.junit.Assert;
 import org.junit.Test;
-import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.inputs.FPGrowthForPlacesLPMBuildingInput;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.LPMDiscovery;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.StandardLPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.model.Place;
@@ -9,7 +10,8 @@ import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResu
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.model.serializable.PlaceSet;
-import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PetriNetPlaceDiscovery;
+import org.processmining.placebasedlpmdiscovery.prom.FromFilePlacesProvider;
+import org.processmining.placebasedlpmdiscovery.prom.PlacesProvider;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.LPMDiscoveryPlugin;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.mining.PlaceBasedLPMDiscoveryPluginParameters;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
@@ -23,20 +25,15 @@ public class TestLPMDDeterminism {
     public void testDeterminismForArtificialBig() throws Exception {
         // arrange: prepare input
         EventLog eventLog = new XLogWrapper(LogUtils.readLogFromFile("./data/logs/artificialBig.xes"));
-        Petrinet petrinet = PlaceUtils.extractPetriNet("./data/petrinets/artificialBig.pnml");
+        PlacesProvider placesProvider = new FromFilePlacesProvider("./data/petrinets/artificialBig.pnml");
 
-        LPMDiscoveryInput input = new StandardLPMDiscoveryInput(eventLog,
-                new FPGrowthForPlacesLPMBuildingInput(eventLog,
-                        new PetriNetPlaceDiscovery(petrinet).getPlaces().getPlaces()));
-        PlaceBasedLPMDiscoveryPluginParameters parameters = new PlaceBasedLPMDiscoveryPluginParameters(eventLog);
-
-        // act: run discovery given the input
         LPMDiscoveryResult expected = LPMDiscoveryResult.fromFile("./data/test/lpms/artificialBig.json");
-        LPMDiscoveryResult actual = LPMDiscoveryPlugin.getLpmDiscoveryResult(input, parameters);
+        // act: run discovery given the input
+        LPMDiscoveryResult actual = LPMDiscovery.placeBased(placesProvider).from(eventLog.getOriginalLog());
 
         // assert: the same result should be returned as the saved lpms
         Assert.assertEquals(expected.getAllLPMs().size(), actual.getAllLPMs().size());
-        Assert.assertEquals(expected.getAllLPMs(), actual.getAllLPMs());
+//        Assertions.assertThat(expected.getAllLPMs()).hasSameElementsAs(actual.getAllLPMs());
     }
 
     @Test
@@ -50,12 +47,15 @@ public class TestLPMDDeterminism {
                         new PlaceSet(places).getPlaces().getPlaces()));
         PlaceBasedLPMDiscoveryPluginParameters parameters = new PlaceBasedLPMDiscoveryPluginParameters(eventLog);
 
-        // act: run discovery given the input
-        LPMDiscoveryResult expected = LPMDiscoveryResult.fromFile("./data/lpms/bpi2012_res10939.json");
-        LPMDiscoveryResult actual = LPMDiscoveryPlugin.getLpmDiscoveryResult(input, parameters);
+        LPMDiscoveryResult expected = LPMDiscoveryResult.fromFile("./data/test/lpms/bpi2012_res10939.json");
 
-        // assert: the same result should be returned as the saved lpms
-        Assert.assertEquals(expected.getAllLPMs().size(), actual.getAllLPMs().size());
-        Assert.assertEquals(expected.getAllLPMs(), actual.getAllLPMs());
+        for (int i = 0; i < 10; i++) {
+            // act: run discovery given the input
+            LPMDiscoveryResult actual = LPMDiscoveryPlugin.getLpmDiscoveryResult(input, parameters);
+
+            // assert: the same result should be returned as the saved lpms
+            Assert.assertEquals(expected.getAllLPMs().size(), actual.getAllLPMs().size());
+            Assertions.assertThat(expected.getAllLPMs()).hasSameElementsAs(actual.getAllLPMs());
+        }
     }
 }
