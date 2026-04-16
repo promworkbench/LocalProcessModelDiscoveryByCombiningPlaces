@@ -33,7 +33,7 @@ public class TestLPMDDeterminism {
 
         // assert: the same result should be returned as the saved lpms
         Assert.assertEquals(expected.getAllLPMs().size(), actual.getAllLPMs().size());
-//        Assertions.assertThat(expected.getAllLPMs()).hasSameElementsAs(actual.getAllLPMs());
+        Assertions.assertThat(expected.getAllLPMs()).hasSameElementsAs(actual.getAllLPMs());
     }
 
     @Test
