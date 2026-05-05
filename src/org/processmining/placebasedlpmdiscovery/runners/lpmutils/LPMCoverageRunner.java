@@ -1,4 +1,4 @@
-package org.processmining.lpms.quality.alignments;
+package org.processmining.placebasedlpmdiscovery.runners.lpmutils;
 
 import nl.tue.astar.AStarException;
 import org.deckfour.xes.model.XLog;
@@ -6,6 +6,7 @@ import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.lpms.discovery.DiscoveryParameters;
 import org.processmining.lpms.occurrence.LPMOccurrenceList;
 import org.processmining.lpms.occurrence.OccurrenceExtraction;
+import org.processmining.lpms.quality.alignments.PNAlignments;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LogAnalyzer;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.LPMDiscovery;
@@ -29,7 +30,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class TestAlignment {
+public class LPMCoverageRunner {
 
     public static LPMOccurrenceList singleLPMtoLogAlignmentTax(LocalProcessModel lpm, EventLog log) throws AStarException {
         AcceptingPetriNet apn = LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
@@ -72,15 +73,15 @@ public class TestAlignment {
             }
         });
 
-        LPMOccurrenceList placeOccurrence = LPMOccurrenceList.standard();
-        placeLPMs.forEach(lpm -> {
-            try {
-                LPMOccurrenceList occurrenceList = singleLPMtoLogAlignmentTax(lpm, log);
-                occurrenceList.forEach(v -> placeOccurrence.push(v.getFirst(), v.getSecond()));
-            } catch (AStarException e) {
-                throw new RuntimeException(e);
-            }
-        });
+//        LPMOccurrenceList placeOccurrence = LPMOccurrenceList.standard();
+//        placeLPMs.forEach(lpm -> {
+//            try {
+//                LPMOccurrenceList occurrenceList = singleLPMtoLogAlignmentTax(lpm, log);
+//                occurrenceList.forEach(v -> placeOccurrence.push(v.getFirst(), v.getSecond()));
+//            } catch (AStarException e) {
+//                throw new RuntimeException(e);
+//            }
+//        });
 
         LPMOccurrenceList completeOccurrenceDiscovered = LPMOccurrenceList.standard();
         discoveredLpms.getAllLPMs().forEach(lpm -> {
@@ -104,8 +105,8 @@ public class TestAlignment {
 
         System.out.println("Covered Events Read LPMs:" + completeOccurrence.size());
         System.out.println("LPMs in Total: " + savedLpms.getAllLPMs().size());
-        System.out.println("Place Covered Events:" + placeOccurrence.size());
-        System.out.println("Place LPMs in Total: " + placeLPMs.size());
+//        System.out.println("Place Covered Events:" + placeOccurrence.size());
+//        System.out.println("Place LPMs in Total: " + placeLPMs.size());
         System.out.println("Covered Events Discovered LPMs:" + completeOccurrenceDiscovered.size());
         System.out.println("Discovered LPMs in Total: " + discoveredLpms.getAllLPMs().size());
         System.out.println("Used Place Covered Events:" + placeOccurrenceUsed.size());

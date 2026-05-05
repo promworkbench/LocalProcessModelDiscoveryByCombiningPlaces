@@ -8,7 +8,6 @@ import org.deckfour.xes.info.impl.XLogInfoImpl;
 import org.deckfour.xes.model.XLog;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.lpm.adjustedalignments.NBestOptAlignmentsNoModelMoveGraphSamplingAlg;
-import org.processmining.lpms.quality.alignments.temp.PNLogConnector;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.plugins.connectionfactories.logpetrinet.TransEvClassMapping;
@@ -47,7 +46,7 @@ public class TaxPNAlignments implements PNAlignments {
             }
         }
 
-        TransEvClassMapping transEvMapping = PNLogConnector.instantiateTransEventMappingEqualName(
+        TransEvClassMapping transEvMapping = instantiateTransEventMappingEqualName(
                 eventClasses, dummy, pn);
 
         Object[] params = new Object[] { transCost, 200000, evCost, 1 };
@@ -58,5 +57,43 @@ public class TaxPNAlignments implements PNAlignments {
 
         return alg.replayLog(null, pn, apn.getInitialMarking(), apn.getFinalMarkings().stream().findFirst().get(),
                 log, transEvMapping, params);
+    }
+
+    /**
+     * Compute a transition to event class mapping based on the name (name
+     * classifier not considering lifecycle).
+     *
+     * @param eventClasses Event classes to which transitions should be mapped.
+     * @param dummy        Dummy event class to which silent transitions are mapped.
+     * @param pn           Petri net whose transition should be mapped
+     * @return Mapping from Transition to Event Class
+     */
+    public static TransEvClassMapping instantiateTransEventMappingEqualName(
+            XEventClasses eventClasses, XEventClass dummy, Petrinet pn) {
+        TransEvClassMapping mapping;
+        mapping = new TransEvClassMapping(eventClasses.getClassifier(), dummy);
+        int sucessfulVisMapping = 0;
+        int visTransitions = 0;
+        for (Transition t : pn.getTransitions()) {
+            if (t.isInvisible()) {
+                mapping.put(t, dummy);
+            } else {
+                XEventClass eventClass = eventClasses.getByIdentity(t.getLabel());
+                if (eventClass != null) {
+                    mapping.put(t, eventClass);
+                    sucessfulVisMapping++;
+                } else {
+                    System.out.println(t.getLabel());
+                }
+                visTransitions++;
+            }
+        }
+
+        if (sucessfulVisMapping != visTransitions) {
+            throw new IllegalArgumentException("Some labels of visible transitions do not exist in the event log.");
+        }
+
+        return mapping;
+
     }
 }
