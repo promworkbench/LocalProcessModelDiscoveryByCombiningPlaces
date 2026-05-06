@@ -1,6 +1,7 @@
 package org.processmining.placebasedlpmdiscovery.placechooser;
 
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.PlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.PlaceRankConverter;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.RankedPlace;
@@ -11,6 +12,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Fluent builder for {@link PlaceChooser}.
+ *
+ * <p>Assemble an ordered pipeline of {@link PlaceTransformer}s and {@link PlacePredicate}s,
+ * plus exactly one {@link PlaceRankConverter}, then call {@link #build()} to obtain a
+ * {@code PlaceChooser} that executes them in registration order.
+ *
+ * <p>Pipeline semantics:
+ * <ul>
+ *   <li><b>Transformers</b> mutate the place representation seen by subsequent steps.</li>
+ *   <li><b>Filters</b> drop places that fail the predicate; dropped places are not ranked.</li>
+ *   <li><b>Rank converter</b> scores each surviving place; lower scores sort first.</li>
+ * </ul>
+ *
+ * <p>Example:
+ * <pre>{@code
+ * PlaceChooser chooser = PlaceChooser.builder()
+ *         .withTransformer(new IncludedActivitiesPlaceTransformer(activities))
+ *         .withFilter(new NonSelfLoopPlacePredicate())
+ *         .withRankConverter(new TransitionCountPlaceRankConverter())
+ *         .build();
+ * }</pre>
+ *
+ * @see PlaceChooser#builder()
+ * @see PlaceChooser#getDefault(EventLog)
+ */
 public class PlaceChooserBuilder {
 
     private enum StepType { TRANSFORMER, FILTER }
@@ -20,23 +47,60 @@ public class PlaceChooserBuilder {
     private final List<StepType> order = new ArrayList<>();
     private PlaceRankConverter rankConverter;
 
+    /**
+     * Appends a transformer to the pipeline.
+     *
+     * <p>The transformer is applied to the current place representation before any subsequent
+     * step sees it. Transformers run in the order they are registered.
+     *
+     * @param transformer the transformer to add
+     * @return this builder
+     */
     public PlaceChooserBuilder withTransformer(PlaceTransformer transformer) {
         transformers.add(transformer);
         order.add(StepType.TRANSFORMER);
         return this;
     }
 
+    /**
+     * Appends a filter to the pipeline.
+     *
+     * <p>Filters run in the order they are registered. If the predicate returns {@code false},
+     * the place is immediately discarded and no later steps in the pipeline run for it.
+     *
+     * @param filter the predicate a place must satisfy to proceed
+     * @return this builder
+     */
     public PlaceChooserBuilder withFilter(PlacePredicate filter) {
         filters.add(filter);
         order.add(StepType.FILTER);
         return this;
     }
 
+    /**
+     * Sets the rank converter used to score surviving places.
+     *
+     * <p>Exactly one rank converter is required; calling this method more than once replaces the previous value.
+     *
+     * @param rankConverter converts a place to a numeric score (lower scores are returned first)
+     * @return this builder
+     */
     public PlaceChooserBuilder withRankConverter(PlaceRankConverter rankConverter) {
         this.rankConverter = rankConverter;
         return this;
     }
 
+    /**
+     * Builds the {@link PlaceChooser}.
+     *
+     * <p>The returned {@code PlaceChooser} runs each candidate place through the registered pipeline in
+     * registration order: transformers rewrite the place, filters drop it if the predicate fails.
+     * Surviving places are scored with the rank converter, sorted ascending, and the top {@code count}
+     * are returned by {@link PlaceChooser#choose}.
+     *
+     * @return a new {@link PlaceChooser} that encapsulates the configured pipeline
+     * @throws IllegalStateException if no rank converter has been set
+     */
     public PlaceChooser build() {
         if (rankConverter == null) {
             throw new IllegalStateException("A rank converter is required");

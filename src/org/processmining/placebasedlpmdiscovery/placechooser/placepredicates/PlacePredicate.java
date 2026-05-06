@@ -4,12 +4,20 @@ import org.processmining.placebasedlpmdiscovery.model.Place;
 
 import java.util.function.Predicate;
 
+/**
+ * A boolean condition on a {@link Place} used to filter candidates in a
+ * {@link org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser PlaceChooser} pipeline.
+ *
+ * <p>Implement {@link #testPlace} with the filtering logic. If the predicate returns {@code false},
+ * the place is immediately discarded and no later pipeline steps run for it.
+ */
 public interface PlacePredicate extends Predicate<Place> {
 
     /**
-     * Returns whether a certain predicate is satisfied for a given place
-     * @param place that we want to check for filtering
-     * @return true when the predicate is satisfied and false otherwise
+     * Returns {@code true} if the place satisfies this predicate and should proceed through the pipeline.
+     *
+     * @param place the place to evaluate
+     * @return {@code true} if the place satisfies the predicate, {@code false} if it doesn't
      */
     boolean testPlace(Place place);
 
