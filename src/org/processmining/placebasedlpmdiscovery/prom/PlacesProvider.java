@@ -1,7 +1,9 @@
 package org.processmining.placebasedlpmdiscovery.prom;
 
 import org.deckfour.xes.model.XLog;
+import org.processmining.lpms.discovery.DiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.PlaceDiscoveryAlgorithmId;
 import org.processmining.placebasedlpmdiscovery.prom.placediscovery.parameters.PlaceDiscoveryParameters;
 
@@ -65,4 +67,23 @@ public interface PlacesProvider {
      * @return a set of places
      */
     Set<Place> provide();
+
+    /**
+     * Provides a set of places as chosen by the given place chooser
+     * @param chooser the place chooser deciding which of the places will be provided
+     * @return a subset of places that satisfy the chooser's requirements
+     */
+    default Set<Place> provide(PlaceChooser chooser) {
+        return this.provide(chooser, DiscoveryParameters.PlaceBased.placeLimit);
+    }
+
+    /**
+     * Provides a set of places as chosen by the given place chooser
+     * @param chooser the place chooser deciding which of the places will be provided
+     * @param placeLimit tells how many places should the place chooser return
+     * @return a subset of places that satisfy the chooser's requirements
+     */
+    default Set<Place> provide(PlaceChooser chooser, int placeLimit) {
+        return chooser.choose(this.provide(), placeLimit);
+    }
 }
