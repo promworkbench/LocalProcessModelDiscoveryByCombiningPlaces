@@ -132,8 +132,9 @@ public class PlaceChooserBuilder {
             }
             ranked.sort(new RankedPlaceComparator());
             return ranked.stream()
-                    .limit(count)
                     .map(RankedPlace::getPlace)
+                    .distinct()
+                    .limit(count)
                     .collect(Collectors.toSet());
         };
     }

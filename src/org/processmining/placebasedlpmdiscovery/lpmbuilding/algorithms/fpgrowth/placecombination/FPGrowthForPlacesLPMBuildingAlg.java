@@ -25,9 +25,9 @@ import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.*;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
-import org.processmining.placebasedlpmdiscovery.placechooser.MainPlaceChooser;
 import org.processmining.placebasedlpmdiscovery.placechooser.PlaceChooser;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
+import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 
 import java.util.*;
@@ -60,8 +60,10 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
         // choose places
         LogAnalyzer logAnalyzer = new LogAnalyzer(cInput.getLog().getOriginalLog());
         LEFRMatrix lefrMatrix = logAnalyzer.getLEFRMatrix(cParameters.getLPMCombinationParameters().getLpmProximity());
-        PlaceChooser placeChooser = new MainPlaceChooser(cInput.getLog().getOriginalLog(),
-                cParameters.getPlaceChooserParameters(), lefrMatrix);
+        PlaceChooser placeChooser =
+                PlaceChooser.getDefault(cParameters.getPlaceChooserParameters().getChosenActivities(),
+                LogUtils.getFollowRelations(cInput.getLog().getOriginalLog(),
+                        cParameters.getPlaceChooserParameters().getFollowRelationsLimit()), 5);
         Set<Place> places = placeChooser.choose(cInput.getPlaces(),
                 cParameters.getPlaceChooserParameters().getPlaceLimit());
 
