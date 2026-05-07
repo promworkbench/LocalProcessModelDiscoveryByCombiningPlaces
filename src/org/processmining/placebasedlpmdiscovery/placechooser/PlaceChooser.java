@@ -8,6 +8,7 @@ import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
 import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.MostKArcsPlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.NonEmptyIOTransitionSetPlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.NonSelfLoopPlacePredicate;
+import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.PlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.TransitionCountPlaceRankConverter;
 import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.IncludedActivitiesPlaceTransformer;
 import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.PassageUsagePlaceTransformer;
@@ -70,9 +71,9 @@ public interface PlaceChooser {
         return PlaceChooser.builder()
                 .withTransformer(new IncludedActivitiesPlaceTransformer(chosenActivities))
                 .withTransformer(new PassageUsagePlaceTransformer(followRelations))
-                .withFilter(new NonSelfLoopPlacePredicate())
-                .withFilter(new NonEmptyIOTransitionSetPlacePredicate())
-                .withFilter(new MostKArcsPlacePredicate(arcsLimit))
+                .withFilter(PlacePredicate.selfLoop())
+                .withFilter(PlacePredicate.emptyIOTransitionSet())
+                .withFilter(PlacePredicate.mostKArcs(arcsLimit))
                 .withRankConverter(new TransitionCountPlaceRankConverter())
                 .build();
     }

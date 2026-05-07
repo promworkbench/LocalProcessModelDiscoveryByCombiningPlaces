@@ -25,4 +25,15 @@ public interface PlacePredicate extends Predicate<Place> {
     default boolean test(Place place) {
         return testPlace(place);
     }
+
+    static PlacePredicate selfLoop() {
+        return new NonSelfLoopPlacePredicate();
+    }
+
+    static PlacePredicate emptyIOTransitionSet() {
+        return new NonEmptyIOTransitionSetPlacePredicate();
+    }
+
+    static PlacePredicate mostKArcs(int k) { return new MostKArcsPlacePredicate(k); }
+
 }

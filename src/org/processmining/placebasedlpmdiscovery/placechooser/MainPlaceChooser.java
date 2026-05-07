@@ -3,9 +3,7 @@ package org.processmining.placebasedlpmdiscovery.placechooser;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.model.Place;
-import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.MostKArcsPlacePredicate;
-import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.NonEmptyIOTransitionSetPlacePredicate;
-import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.NonSelfLoopPlacePredicate;
+import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.PlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.RankedPlace;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.RankedPlaceComparator;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.TransitionCountPlaceRankConverter;
@@ -38,9 +36,9 @@ public class MainPlaceChooser implements PlaceChooser {
         return places.stream()
                 .map(new IncludedActivitiesPlaceTransformer(this.placeChooserParameters.getChosenActivities()))
                 .map(new PassageUsagePlaceTransformer(LogUtils.getFollowRelations(log, placeChooserParameters.getFollowRelationsLimit()))) // TODO: this might be duplicate work, since the lefr should already contain it
-                .filter(new NonSelfLoopPlacePredicate())
-                .filter(new NonEmptyIOTransitionSetPlacePredicate())
-                .filter(new MostKArcsPlacePredicate(5))
+                .filter(PlacePredicate.selfLoop())
+                .filter(PlacePredicate.emptyIOTransitionSet())
+                .filter(PlacePredicate.mostKArcs(5))
                 .map(p -> new RankedPlace(p, new TransitionCountPlaceRankConverter().convert(p) /*, new TotalPassageCoveragePlaceRankConverter(lefr).convert(p) */))
                 .sorted(new RankedPlaceComparator())
                 .map(RankedPlace::getPlace)
