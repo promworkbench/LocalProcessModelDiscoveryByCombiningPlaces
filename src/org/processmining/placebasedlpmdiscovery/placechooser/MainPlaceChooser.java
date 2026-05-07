@@ -42,6 +42,7 @@ public class MainPlaceChooser implements PlaceChooser {
                 .map(p -> new RankedPlace(p, new TransitionCountPlaceRankConverter().convert(p) /*, new TotalPassageCoveragePlaceRankConverter(lefr).convert(p) */))
                 .sorted(new RankedPlaceComparator())
                 .map(RankedPlace::getPlace)
+                .distinct()
                 .limit(count)
                 .collect(Collectors.toSet());
     }
