@@ -4,9 +4,16 @@ import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.L
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 
+/**
+ * Ranks places by how frequently their passages are observed in the event log.
+ *
+ * <p>The score is the sum of LEFR counts over every visible (input, output) transition pair of the
+ * place.
+ * Invisible transitions are excluded from the sum.
+ */
 public class TotalPassageCoveragePlaceRankConverter implements PlaceRankConverter {
 
-    private final LEFRMatrix lefr; // TODO: should this class know about the lefr?
+    private final LEFRMatrix lefr;
 
     public TotalPassageCoveragePlaceRankConverter(LEFRMatrix lefr) {
         this.lefr = lefr;

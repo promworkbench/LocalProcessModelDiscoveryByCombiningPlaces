@@ -1,10 +1,12 @@
 package org.processmining.placebasedlpmdiscovery.placechooser;
 
+import org.apache.commons.math3.util.Pair;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.PlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.PlaceRankConverter;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.RankedPlaceComparator;
+import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.SortOrder;
 import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.PlaceTransformer;
 
 import java.util.ArrayList;
@@ -45,7 +47,7 @@ public class PlaceChooserBuilder {
     private final List<PlaceTransformer> transformers = new ArrayList<>();
     private final List<PlacePredicate> filters = new ArrayList<>();
     private final List<StepType> order = new ArrayList<>();
-    private final List<PlaceRankConverter> rankConverters = new ArrayList<>();
+    private final List<Pair<PlaceRankConverter, SortOrder>> rankConverters = new ArrayList<>();
 
     /**
      * Appends a transformer to the pipeline.
@@ -78,16 +80,31 @@ public class PlaceChooserBuilder {
     }
 
     /**
-     * Appends a ranking criterion to the ordered list of rank converters.
+     * Appends a ranking criterion with ascending order (lower scores returned first).
      *
      * <p>Criteria are applied in registration order: the first is the primary sort key,
      * the second breaks ties, and so on. At least one criterion is required.
      *
-     * @param rankConverter converts a place to a numeric score (lower scores are returned first)
+     * @param rankConverter converts a place to a numeric score
      * @return this builder
      */
     public PlaceChooserBuilder rankBy(PlaceRankConverter rankConverter) {
-        this.rankConverters.add(rankConverter);
+        return rankBy(rankConverter, SortOrder.ASCENDING);
+    }
+
+    /**
+     * Appends a ranking criterion with an explicit sort order.
+     *
+     * <p>Criteria are applied in registration order: the first is the primary sort key,
+     * the second breaks ties, and so on. At least one criterion is required.
+     *
+     * @param rankConverter converts a place to a numeric score
+     * @param order         {@link SortOrder#ASCENDING} returns lower scores first;
+     *                      {@link SortOrder#DESCENDING} returns higher scores first
+     * @return this builder
+     */
+    public PlaceChooserBuilder rankBy(PlaceRankConverter rankConverter, SortOrder order) {
+        this.rankConverters.add(new Pair<>(rankConverter, order));
         return this;
     }
 
@@ -109,7 +126,7 @@ public class PlaceChooserBuilder {
         List<PlaceTransformer> capturedTransformers = new ArrayList<>(transformers);
         List<PlacePredicate> capturedFilters = new ArrayList<>(filters);
         List<StepType> capturedOrder = new ArrayList<>(order);
-        List<PlaceRankConverter> capturedConverters = new ArrayList<>(rankConverters);
+        List<Pair<PlaceRankConverter, SortOrder>> capturedConverters = new ArrayList<>(rankConverters);
 
         return (places, count) -> {
             List<Place> survivors = new ArrayList<>();

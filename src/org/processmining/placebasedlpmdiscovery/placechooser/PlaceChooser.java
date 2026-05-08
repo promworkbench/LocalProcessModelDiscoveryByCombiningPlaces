@@ -10,6 +10,7 @@ import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.Non
 import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.NonSelfLoopPlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.PlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.PlaceRankConverter;
+import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.SortOrder;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.TotalPassageCoveragePlaceRankConverter;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.TransitionCountPlaceRankConverter;
 import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.IncludedActivitiesPlaceTransformer;
@@ -77,7 +78,7 @@ public interface PlaceChooser {
                 .withFilter(PlacePredicate.emptyIOTransitionSet())
                 .withFilter(PlacePredicate.mostKArcs(arcsLimit))
                 .rankBy(new TransitionCountPlaceRankConverter())
-                .rankBy(new TotalPassageCoveragePlaceRankConverter(lefrMatrix))
+                .rankBy(new TotalPassageCoveragePlaceRankConverter(lefrMatrix), SortOrder.DESCENDING)
                 .build();
     }
 
