@@ -3,7 +3,6 @@ package org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth
 import org.apache.commons.math3.util.Pair;
 import org.processmining.eventlogs.window.WindowBasedEventLog;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
-import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LogAnalyzer;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.LPMBuildingAlg;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth.placecombination.utils.LPMFromBranchCombinationValidityChecker;
 import org.processmining.placebasedlpmdiscovery.lpmbuilding.algorithms.fpgrowth.placecombination.utils.WindowLPMTreeValidLPMsRandomTraversal;
@@ -57,8 +56,8 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
         FPGrowthForPlacesLPMBuildingInput cInput = (FPGrowthForPlacesLPMBuildingInput) input;
 
         // choose places
-        LogAnalyzer logAnalyzer = new LogAnalyzer(cInput.getLog().getOriginalLog());
-        LEFRMatrix lefrMatrix = logAnalyzer.getLEFRMatrix(cParameters.getLPMCombinationParameters().getLpmProximity());
+        LEFRMatrix lefrMatrix = new LEFRMatrix(cInput.getLog().getOriginalLog(),
+                cParameters.getLPMCombinationParameters().getLpmProximity());
         PlaceChooser placeChooser = PlaceChooser.getDefault(
                 cParameters.getPlaceChooserParameters().getChosenActivities(), lefrMatrix, 5);
         Set<Place> places = placeChooser.choose(cInput.getPlaces(),

@@ -2,7 +2,6 @@ package org.processmining.placebasedlpmdiscovery.placechooser;
 
 import org.processmining.lpms.discovery.DiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
-import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LogAnalyzer;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
@@ -57,7 +56,7 @@ public interface PlaceChooser {
     static PlaceChooser getDefault(EventLog eventLog) {
         return getDefault(
                 eventLog.getActivities().stream().map(Activity::getName).collect(Collectors.toSet()),
-                (new LogAnalyzer(eventLog.getOriginalLog())).getLEFRMatrix(DiscoveryParameters.Default.proximity),
+                (new LEFRMatrix(eventLog.getOriginalLog(), DiscoveryParameters.Default.proximity)),
                 5);
     }
 
