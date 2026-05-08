@@ -57,9 +57,10 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
 
         // choose places
         LEFRMatrix lefrMatrix = new LEFRMatrix(cInput.getLog().getOriginalLog(),
-                cParameters.getLPMCombinationParameters().getLpmProximity());
+                cParameters.getPlaceChooserParameters().getFollowRelationsLimit());
         PlaceChooser placeChooser = PlaceChooser.getDefault(
-                cParameters.getPlaceChooserParameters().getChosenActivities(), lefrMatrix, 5);
+                cParameters.getPlaceChooserParameters().getChosenActivities(), lefrMatrix,
+                cParameters.getPlaceChooserParameters().getPlaceArcLimit());
         Set<Place> places = placeChooser.choose(cInput.getPlaces(),
                 cParameters.getPlaceChooserParameters().getPlaceLimit());
 

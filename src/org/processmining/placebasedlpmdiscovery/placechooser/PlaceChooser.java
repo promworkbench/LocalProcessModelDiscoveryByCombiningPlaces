@@ -57,7 +57,7 @@ public interface PlaceChooser {
         return getDefault(
                 eventLog.getActivities().stream().map(Activity::getName).collect(Collectors.toSet()),
                 (new LEFRMatrix(eventLog.getOriginalLog(), DiscoveryParameters.Default.proximity)),
-                5);
+                DiscoveryParameters.PlaceBased.arcsLimit);
     }
 
     /**

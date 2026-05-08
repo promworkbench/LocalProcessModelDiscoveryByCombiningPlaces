@@ -1,7 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.placechooser;
 
-import org.deckfour.xes.model.XLog;
-import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
+import org.processmining.lpms.discovery.DiscoveryParameters;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -14,13 +13,15 @@ public class PlaceChooserParameters {
     private Set<String> chosenActivities;
     private int followRelationsLimit;
     private double coveredPassagesThreshold;
+    private final int placeArcLimit;
 
     public PlaceChooserParameters(Set<String> chosenActivities) {
         this.placeLimit = 50;
         this.averagePlaceDegree = Integer.MAX_VALUE;
         this.chosenActivities = chosenActivities;
         this.coveredPassagesThreshold = 0.3;
-        this.followRelationsLimit = 7;
+        this.followRelationsLimit = DiscoveryParameters.Default.proximity;
+        this.placeArcLimit = DiscoveryParameters.PlaceBased.arcsLimit;
     }
 
     public int getPlaceLimit() {
@@ -72,5 +73,9 @@ public class PlaceChooserParameters {
                 ", followRelationsLimit=" + followRelationsLimit +
                 ", coveredPassagesThreshold=" + coveredPassagesThreshold +
                 '}';
+    }
+
+    public int getPlaceArcLimit() {
+        return placeArcLimit;
     }
 }
