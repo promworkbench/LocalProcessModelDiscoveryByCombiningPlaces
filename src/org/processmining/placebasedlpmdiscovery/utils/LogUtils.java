@@ -1,6 +1,5 @@
 package org.processmining.placebasedlpmdiscovery.utils;
 
-import org.apache.commons.math3.util.Pair;
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventNameClassifier;
 import org.deckfour.xes.extension.std.XConceptExtension;
@@ -14,10 +13,12 @@ import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -73,29 +74,6 @@ public class LogUtils {
         return parser.parse(is).get(0);
     }
 
-    /**
-     * Given the log take all pairs of events (their names in particular) that occur together in some specified
-     * distance limit.
-     *
-     * @param log:                          the log from which we want to get all follow relations given some distance limit
-     * @param followRelationsDistanceLimit: the distance limit in which the follow relation can happen
-     * @return set of pairs, where each pair is consisted of the events that are in a follow relation
-     */
-    public static Set<Pair<String, String>> getFollowRelations(XLog log, int followRelationsDistanceLimit) {
-        Set<Pair<String, String>> resSet = new HashSet<>();
-        for (XTrace trace : log) {
-            List<String> events = trace
-                    .stream()
-                    .map(event -> ((XAttributeLiteral) event.getAttributes().get(XConceptExtension.KEY_NAME)).getValue())
-                    .collect(Collectors.toList());
-            for (int i = 1; i < events.size(); ++i) {
-                for (int j = Math.max(0, i + 1 - followRelationsDistanceLimit); j < i; ++j) {
-                    resSet.add(new Pair<>(events.get(j), events.get(i)));
-                }
-            }
-        }
-        return resSet;
-    }
 
     /**
      * Extract the event log name given the event log.

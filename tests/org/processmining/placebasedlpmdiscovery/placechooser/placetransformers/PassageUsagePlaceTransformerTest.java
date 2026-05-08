@@ -3,10 +3,12 @@ package org.processmining.placebasedlpmdiscovery.placechooser.placetransformers;
 import org.apache.commons.math3.util.Pair;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
+import org.processmining.mockobjects.MockLEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PassageUsagePlaceTransformerTest {
 
@@ -14,7 +16,7 @@ public class PassageUsagePlaceTransformerTest {
     public void givenEmptyPassageUsageSet_whenAdapt_thenAllTransitionsAreRemoved() {
         // given
         Place place = Place.from("a | b");
-        PassageUsagePlaceTransformer transformer = new PassageUsagePlaceTransformer(new HashSet<>());
+        PassageUsagePlaceTransformer transformer = new PassageUsagePlaceTransformer(MockLEFRMatrix.returning(0));
 
         // when
         Place adaptedPlace = transformer.adapt(place);
@@ -28,10 +30,11 @@ public class PassageUsagePlaceTransformerTest {
     public void givenNonEmptyPassageUsageSetWithAllTransitions_whenAdapt_thenNothingIsRemoved() {
         // given
         Place place = Place.from("a, b | c, d");
-        HashSet<Pair<String, String>> passageUsageSet = new HashSet<>();
-        passageUsageSet.add(new Pair<>("a", "c"));
-        passageUsageSet.add(new Pair<>("b", "d"));
-        PassageUsagePlaceTransformer transformer = new PassageUsagePlaceTransformer(passageUsageSet);
+        Map<Pair<String, String>, Integer> passageUsageSet = new HashMap<>();
+        passageUsageSet.put(new Pair<>("a", "c"), 1);
+        passageUsageSet.put(new Pair<>("b", "d"), 1);
+        PassageUsagePlaceTransformer transformer =
+                new PassageUsagePlaceTransformer(MockLEFRMatrix.returning(passageUsageSet));
 
         // when
         Place adaptedPlace = transformer.adapt(place);
@@ -49,17 +52,19 @@ public class PassageUsagePlaceTransformerTest {
     public void givenNonEmptyPassageUsageSetWithOneMissingTransition_whenAdapt_thenOnlyMissingTransitionIsRemoved() {
         // given
         Place place = Place.from("a, b | c, d");
-        HashSet<Pair<String, String>> passageUsageSet = new HashSet<>();
-        passageUsageSet.add(new Pair<>("a", "c"));
-        passageUsageSet.add(new Pair<>("b", "c"));
-        PassageUsagePlaceTransformer transformer = new PassageUsagePlaceTransformer(passageUsageSet);
+        Map<Pair<String, String>, Integer> passageUsageSet = new HashMap<>();
+        passageUsageSet.put(new Pair<>("a", "c"), 1);
+        passageUsageSet.put(new Pair<>("b", "c"), 1);
+        PassageUsagePlaceTransformer transformer =
+                new PassageUsagePlaceTransformer(MockLEFRMatrix.returning(passageUsageSet));
 
         Place placeBigger = Place.from("a, b, e | c, d, f");
-        HashSet<Pair<String, String>> passageUsageSetBigger = new HashSet<>();
-        passageUsageSetBigger.add(new Pair<>("a", "c"));
-        passageUsageSetBigger.add(new Pair<>("b", "c"));
-        passageUsageSetBigger.add(new Pair<>("e", "f"));
-        PassageUsagePlaceTransformer transformerBigger = new PassageUsagePlaceTransformer(passageUsageSetBigger);
+        Map<Pair<String, String>, Integer> passageUsageSetBigger = new HashMap<>();
+        passageUsageSetBigger.put(new Pair<>("a", "c"), 1);
+        passageUsageSetBigger.put(new Pair<>("b", "c"), 1);
+        passageUsageSetBigger.put(new Pair<>("e", "f"), 1);
+        PassageUsagePlaceTransformer transformerBigger =
+                new PassageUsagePlaceTransformer(MockLEFRMatrix.returning(passageUsageSetBigger));
 
         // when
         Place adaptedPlace = transformer.adapt(place);

@@ -1,6 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.placechooser.placetransformers;
 
-import org.apache.commons.math3.util.Pair;
+import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.Transition;
 
@@ -9,30 +9,28 @@ import java.util.stream.Collectors;
 
 public class PassageUsagePlaceTransformer implements PlaceTransformer {
 
-    private final Set<Pair<String, String>> locallyOccurringPassages;
+    //    private final Set<Pair<String, String>> locallyOccurringPassages;
+    private final LEFRMatrix lefrMatrix;
 
-    public PassageUsagePlaceTransformer(Set<Pair<String, String>> locallyOccurringPassages) {
-        this.locallyOccurringPassages = locallyOccurringPassages;
+    public PassageUsagePlaceTransformer(LEFRMatrix lefrMatrix) {
+        this.lefrMatrix = lefrMatrix;
     }
 
     @Override
     public Place adapt(Place place) {
-        // used input transitions given the proximity
-        Set<String> usedInputTransitionLabels =
-                locallyOccurringPassages.stream().map(Pair::getKey).collect(Collectors.toSet());
-        // used output transitions given the proximity
-        Set<String> usedOutputTransitionLabels =
-                locallyOccurringPassages.stream().map(Pair::getValue).collect(Collectors.toSet());
-
         // unused input transition labels
-        Set<String> unusedInputTransitionLabels = place.getInputTransitions().stream()
+        Set<String> unusedInputTransitionLabels = place.getInputTransitions()
+                .stream()
                 .map(Transition::getLabel)
-                .filter(label -> !usedInputTransitionLabels.contains(label))
+                .filter(ti -> place.getOutputTransitions().stream().map(Transition::getLabel)
+                        .noneMatch(to -> lefrMatrix.get(ti, to) > 0))
                 .collect(Collectors.toSet());
         // unused output transition labels
-        Set<String> unusedOutputTransitionLabels = place.getOutputTransitions().stream()
+        Set<String> unusedOutputTransitionLabels = place.getOutputTransitions()
+                .stream()
                 .map(Transition::getLabel)
-                .filter(label -> !usedOutputTransitionLabels.contains(label))
+                .filter(to -> place.getInputTransitions().stream().map(Transition::getLabel)
+                        .noneMatch(ti -> lefrMatrix.get(ti, to) > 0))
                 .collect(Collectors.toSet());
 
         // remove unused input transitions

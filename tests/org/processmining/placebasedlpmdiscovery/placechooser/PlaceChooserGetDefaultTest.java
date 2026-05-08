@@ -2,13 +2,11 @@ package org.processmining.placebasedlpmdiscovery.placechooser;
 
 import org.apache.commons.math3.util.Pair;
 import org.junit.Test;
+import org.processmining.mockobjects.MockLEFRMatrix;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class PlaceChooserGetDefaultTest {
 
@@ -131,14 +129,20 @@ public class PlaceChooserGetDefaultTest {
 
     // --- getDefault(chosenActivities, followRelations, arcsLimit) ---
 
+    private static Map<Pair<String, String>, Integer> knownPairs() {
+        Map<Pair<String, String>, Integer> values = new HashMap<>();
+        values.put(new Pair<>("a", "c"), 3);
+        values.put(new Pair<>("a", "d"), 2);
+        values.put(new Pair<>("b", "c"), 1);
+        values.put(new Pair<>("b", "d"), 4);
+        return values;
+    }
+
     @Test
     public void givenArcsLimitBelowPlaceSize_whenChoose_thenFiltered() {
         // given: arcsLimit=3; place "a, b | c, d" has 4 arcs → filtered
         Set<String> activities = new HashSet<>(Arrays.asList("a", "b", "c", "d"));
-        Set<Pair<String, String>> followRelations = new HashSet<>(Arrays.asList(
-                new Pair<>("a", "c"), new Pair<>("a", "d"),
-                new Pair<>("b", "c"), new Pair<>("b", "d")));
-        PlaceChooser chooser = PlaceChooser.getDefault(activities, followRelations, 3);
+        PlaceChooser chooser = PlaceChooser.getDefault(activities, MockLEFRMatrix.returning(knownPairs()), 3);
 
         // when
         Set<Place> result = chooser.choose(
@@ -152,10 +156,7 @@ public class PlaceChooserGetDefaultTest {
     public void givenArcsLimitAbovePlaceSize_whenChoose_thenIncluded() {
         // given: arcsLimit=4; place "a, b | c, d" has exactly 4 arcs → passes
         Set<String> activities = new HashSet<>(Arrays.asList("a", "b", "c", "d"));
-        Set<Pair<String, String>> followRelations = new HashSet<>(Arrays.asList(
-                new Pair<>("a", "c"), new Pair<>("a", "d"),
-                new Pair<>("b", "c"), new Pair<>("b", "d")));
-        PlaceChooser chooser = PlaceChooser.getDefault(activities, followRelations, 4);
+        PlaceChooser chooser = PlaceChooser.getDefault(activities, MockLEFRMatrix.returning(knownPairs()), 4);
 
         // when
         Set<Place> result = chooser.choose(
@@ -171,9 +172,9 @@ public class PlaceChooserGetDefaultTest {
         // given: only (a,b) is a follow relation — "to" = {b};
         // output c is not in {b} → stripped by PassageUsagePlaceTransformer → empty output → filtered
         Set<String> activities = new HashSet<>(Arrays.asList("a", "b", "c"));
-        Set<Pair<String, String>> followRelations = new HashSet<>(
-                Collections.singletonList(new Pair<>("a", "b")));
-        PlaceChooser chooser = PlaceChooser.getDefault(activities, followRelations, 5);
+        Map<Pair<String, String>, Integer> usedPassages = new HashMap<>();
+        usedPassages.put(new Pair<>("a", "b"), 3);
+        PlaceChooser chooser = PlaceChooser.getDefault(activities, MockLEFRMatrix.returning(usedPassages), 5);
 
         // when
         Set<Place> result = chooser.choose(
@@ -187,10 +188,8 @@ public class PlaceChooserGetDefaultTest {
     public void givenPlaceWithActivityNotInChosenActivities_whenChoose_thenActivityStrippedAndTransformedPlaceReturned() {
         // given: x is not in chosenActivities — stripped by IncludedActivitiesTransformer;
         // the remaining place "a | b" passes all filters and is what gets returned
-        Set<String> activities = new HashSet<>(Arrays.asList("a", "b", "c"));
-        Set<Pair<String, String>> followRelations = new HashSet<>(Arrays.asList(
-                new Pair<>("a", "b"), new Pair<>("a", "c"), new Pair<>("b", "c")));
-        PlaceChooser chooser = PlaceChooser.getDefault(activities, followRelations, 5);
+        Set<String> activities = new HashSet<>(Arrays.asList("a", "b", "c", "d"));
+        PlaceChooser chooser = PlaceChooser.getDefault(activities, MockLEFRMatrix.returning(1), 5);
 
         // when
         Set<Place> result = chooser.choose(
@@ -208,9 +207,11 @@ public class PlaceChooserGetDefaultTest {
         // in no follow-relation pair with none of the activities on the other side of the place
         // PassageUsagePlaceTransformer strips it → "a, d | b" becomes "a | b" → passes all filters
         Set<String> activities = new HashSet<>(Arrays.asList("a", "b", "c", "d"));
-        Set<Pair<String, String>> followRelations = new HashSet<>(Arrays.asList(
-                new Pair<>("a", "b"), new Pair<>("a", "c"), new Pair<>("b", "c")));
-        PlaceChooser chooser = PlaceChooser.getDefault(activities, followRelations, 5);
+        Map<Pair<String, String>, Integer> usedPassages = new HashMap<>();
+        usedPassages.put(new Pair<>("a", "b"), 3);
+        usedPassages.put(new Pair<>("a", "c"), 3);
+        usedPassages.put(new Pair<>("b", "c"), 3);
+        PlaceChooser chooser = PlaceChooser.getDefault(activities, MockLEFRMatrix.returning(usedPassages), 5);
 
         // when
         Set<Place> result = chooser.choose(
@@ -229,9 +230,11 @@ public class PlaceChooserGetDefaultTest {
         // after IncludedActivitiesTransformer — the count is high enough that it cannot be the reason
         // only one place is returned; deduplication is the only explanation
         Set<String> activities = new HashSet<>(Arrays.asList("a", "b", "c"));
-        Set<Pair<String, String>> followRelations = new HashSet<>(Arrays.asList(
-                new Pair<>("a", "b"), new Pair<>("a", "c"), new Pair<>("b", "c")));
-        PlaceChooser chooser = PlaceChooser.getDefault(activities, followRelations, 5);
+        Map<Pair<String, String>, Integer> usedPassages = new HashMap<>();
+        usedPassages.put(new Pair<>("a", "b"), 3);
+        usedPassages.put(new Pair<>("a", "c"), 3);
+        usedPassages.put(new Pair<>("b", "c"), 3);
+        PlaceChooser chooser = PlaceChooser.getDefault(activities, MockLEFRMatrix.returning(usedPassages), 5);
         Set<Place> places = new HashSet<>(Arrays.asList(
                 Place.from("a, x | b"),
                 Place.from("a, y | b")));

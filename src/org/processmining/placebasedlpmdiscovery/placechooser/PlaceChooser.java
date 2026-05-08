@@ -1,7 +1,8 @@
 package org.processmining.placebasedlpmdiscovery.placechooser;
 
-import org.apache.commons.math3.util.Pair;
 import org.processmining.lpms.discovery.DiscoveryParameters;
+import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LEFRMatrix;
+import org.processmining.placebasedlpmdiscovery.analysis.analyzers.loganalyzer.LogAnalyzer;
 import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.model.logs.activities.Activity;
@@ -9,10 +10,12 @@ import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.Mos
 import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.NonEmptyIOTransitionSetPlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.NonSelfLoopPlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.PlacePredicate;
+import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.PlaceRankConverter;
+import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.TotalPassageCoveragePlaceRankConverter;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.TransitionCountPlaceRankConverter;
 import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.IncludedActivitiesPlaceTransformer;
 import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.PassageUsagePlaceTransformer;
-import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
+import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.PlaceTransformer;
 
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -21,14 +24,14 @@ import java.util.stream.Collectors;
  * Selects a ranked subset of places from a candidate set.
  *
  * <p>A {@code PlaceChooser} processes each place through an ordered pipeline of
- * {@link org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.PlaceTransformer PlaceTransformer}s
- * and {@link org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.PlacePredicate PlacePredicate}s,
+ * {@link PlaceTransformer PlaceTransformer}s
+ * and {@link PlacePredicate PlacePredicate}s,
  * ranks the survivors with a
- * {@link org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.PlaceRankConverter PlaceRankConverter},
+ * {@link PlaceRankConverter PlaceRankConverter},
  * and returns at most {@code count} top-ranked places.
  *
  * <p>Use {@link #builder()} to compose a custom pipeline, or {@link #getDefault(EventLog)} /
- * {@link #getDefault(Set, Set, int)} for the standard configuration.
+ * {@link #getDefault(Set, LEFRMatrix, int)} for the standard configuration.
  */
 public interface PlaceChooser {
 
@@ -54,7 +57,7 @@ public interface PlaceChooser {
     static PlaceChooser getDefault(EventLog eventLog) {
         return getDefault(
                 eventLog.getActivities().stream().map(Activity::getName).collect(Collectors.toSet()),
-                LogUtils.getFollowRelations(eventLog.getOriginalLog(), DiscoveryParameters.Default.proximity),
+                (new LogAnalyzer(eventLog.getOriginalLog())).getLEFRMatrix(DiscoveryParameters.Default.proximity),
                 5);
     }
 
@@ -62,19 +65,20 @@ public interface PlaceChooser {
      * Creates a default {@code PlaceChooser} with explicit activity and relation parameters.
      *
      * @param chosenActivities the set of activity names that places may reference
-     * @param followRelations  directly-follows pairs used to weight passage usage
+     * @param lefrMatrix  eventually-follows pairs until some distance used to weight passage usage
      * @param arcsLimit        maximum number of arcs a place may have to pass the arc filter
      * @return a fully configured {@code PlaceChooser}
      */
-    static PlaceChooser getDefault(Set<String> chosenActivities, Set<Pair<String, String>> followRelations,
+    static PlaceChooser getDefault(Set<String> chosenActivities, LEFRMatrix lefrMatrix,
                                    int arcsLimit) {
         return PlaceChooser.builder()
                 .withTransformer(new IncludedActivitiesPlaceTransformer(chosenActivities))
-                .withTransformer(new PassageUsagePlaceTransformer(followRelations))
+                .withTransformer(new PassageUsagePlaceTransformer(lefrMatrix))
                 .withFilter(PlacePredicate.selfLoop())
                 .withFilter(PlacePredicate.emptyIOTransitionSet())
                 .withFilter(PlacePredicate.mostKArcs(arcsLimit))
                 .rankBy(new TransitionCountPlaceRankConverter())
+                .rankBy(new TotalPassageCoveragePlaceRankConverter(lefrMatrix))
                 .build();
     }
 
