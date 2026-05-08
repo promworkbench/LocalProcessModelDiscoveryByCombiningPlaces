@@ -4,7 +4,6 @@ import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.logs.EventLog;
 import org.processmining.placebasedlpmdiscovery.placechooser.placepredicates.PlacePredicate;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.PlaceRankConverter;
-import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.RankedPlace;
 import org.processmining.placebasedlpmdiscovery.placechooser.placerankconverters.RankedPlaceComparator;
 import org.processmining.placebasedlpmdiscovery.placechooser.placetransformers.PlaceTransformer;
 
@@ -16,7 +15,7 @@ import java.util.stream.Collectors;
  * Fluent builder for {@link PlaceChooser}.
  *
  * <p>Assemble an ordered pipeline of {@link PlaceTransformer}s and {@link PlacePredicate}s,
- * plus exactly one {@link PlaceRankConverter}, then call {@link #build()} to obtain a
+ * plus one or more {@link PlaceRankConverter}s, then call {@link #build()} to obtain a
  * {@code PlaceChooser} that executes them in registration order.
  *
  * <p>Pipeline semantics:
@@ -31,7 +30,8 @@ import java.util.stream.Collectors;
  * PlaceChooser chooser = PlaceChooser.builder()
  *         .withTransformer(new IncludedActivitiesPlaceTransformer(activities))
  *         .withFilter(new NonSelfLoopPlacePredicate())
- *         .withRankConverter(new TransitionCountPlaceRankConverter())
+ *         .rankBy(new TransitionCountPlaceRankConverter())   // primary key
+ *         .rankBy(new TotalPassageCoveragePlaceRankConverter(lefr)) // tie-breaker
  *         .build();
  * }</pre>
  *
@@ -45,7 +45,7 @@ public class PlaceChooserBuilder {
     private final List<PlaceTransformer> transformers = new ArrayList<>();
     private final List<PlacePredicate> filters = new ArrayList<>();
     private final List<StepType> order = new ArrayList<>();
-    private PlaceRankConverter rankConverter;
+    private final List<PlaceRankConverter> rankConverters = new ArrayList<>();
 
     /**
      * Appends a transformer to the pipeline.
@@ -78,15 +78,16 @@ public class PlaceChooserBuilder {
     }
 
     /**
-     * Sets the rank converter used to score surviving places.
+     * Appends a ranking criterion to the ordered list of rank converters.
      *
-     * <p>Exactly one rank converter is required; calling this method more than once replaces the previous value.
+     * <p>Criteria are applied in registration order: the first is the primary sort key,
+     * the second breaks ties, and so on. At least one criterion is required.
      *
      * @param rankConverter converts a place to a numeric score (lower scores are returned first)
      * @return this builder
      */
-    public PlaceChooserBuilder withRankConverter(PlaceRankConverter rankConverter) {
-        this.rankConverter = rankConverter;
+    public PlaceChooserBuilder rankBy(PlaceRankConverter rankConverter) {
+        this.rankConverters.add(rankConverter);
         return this;
     }
 
@@ -102,16 +103,16 @@ public class PlaceChooserBuilder {
      * @throws IllegalStateException if no rank converter has been set
      */
     public PlaceChooser build() {
-        if (rankConverter == null) {
-            throw new IllegalStateException("A rank converter is required");
+        if (rankConverters.isEmpty()) {
+            throw new IllegalStateException("At least one rank converter is required");
         }
         List<PlaceTransformer> capturedTransformers = new ArrayList<>(transformers);
         List<PlacePredicate> capturedFilters = new ArrayList<>(filters);
         List<StepType> capturedOrder = new ArrayList<>(order);
-        PlaceRankConverter capturedConverter = rankConverter;
+        List<PlaceRankConverter> capturedConverters = new ArrayList<>(rankConverters);
 
         return (places, count) -> {
-            List<RankedPlace> ranked = new ArrayList<>();
+            List<Place> survivors = new ArrayList<>();
             for (Place place : places) {
                 Place current = place;
                 boolean kept = true;
@@ -127,12 +128,11 @@ public class PlaceChooserBuilder {
                     }
                 }
                 if (kept) {
-                    ranked.add(new RankedPlace(current, capturedConverter.convert(current)));
+                    survivors.add(current);
                 }
             }
-            ranked.sort(new RankedPlaceComparator());
-            return ranked.stream()
-                    .map(RankedPlace::getPlace)
+            survivors.sort(new RankedPlaceComparator(capturedConverters));
+            return survivors.stream()
                     .distinct()
                     .limit(count)
                     .collect(Collectors.toSet());

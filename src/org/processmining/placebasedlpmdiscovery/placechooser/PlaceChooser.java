@@ -74,7 +74,7 @@ public interface PlaceChooser {
                 .withFilter(PlacePredicate.selfLoop())
                 .withFilter(PlacePredicate.emptyIOTransitionSet())
                 .withFilter(PlacePredicate.mostKArcs(arcsLimit))
-                .withRankConverter(new TransitionCountPlaceRankConverter())
+                .rankBy(new TransitionCountPlaceRankConverter())
                 .build();
     }
 
