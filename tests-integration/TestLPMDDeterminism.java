@@ -24,6 +24,9 @@ public class TestLPMDDeterminism {
 
     @Test
     public void testDeterminismForBpi2012Res10939() throws Exception {
+        // TODO (Newest): The test is failing because there was an error in PassageUsagePlaceTransformer. However,
+        //  now the question is whether just to update the saved file or find a way in which some tracking of the
+        //  obtained results can be made
         // arrange: prepare input
         EventLog eventLog = new XLogWrapper(LogUtils.readLogFromFile("./data/logs/bpi2012_res10939.xes"));
         Set<Place> places = PlaceUtils.extractPlaceNets("./data/placenets/bpi2012_res10939.json");
