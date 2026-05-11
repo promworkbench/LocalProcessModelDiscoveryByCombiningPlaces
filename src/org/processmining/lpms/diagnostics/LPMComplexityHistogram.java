@@ -16,7 +16,7 @@ public class LPMComplexityHistogram {
         this.transitionCountDistribution = new HashMap<>();
         for (LocalProcessModel lpm : lpms) {
             placeCountDistribution.merge(lpm.getPlaces().size(), 1, Integer::sum);
-            transitionCountDistribution.merge(lpm.getVisibleTransitions().size(), 1, Integer::sum);
+            transitionCountDistribution.merge(lpm.getTransitions().size(), 1, Integer::sum);
         }
     }
 
