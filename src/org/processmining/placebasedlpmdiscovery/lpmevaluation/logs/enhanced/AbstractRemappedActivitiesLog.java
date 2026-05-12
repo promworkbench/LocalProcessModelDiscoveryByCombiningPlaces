@@ -92,4 +92,9 @@ public abstract class AbstractRemappedActivitiesLog<T> extends AbstractEnhancedL
     public Set<Activity> getActivities() {
         return this.mapping.getLabelMap().values().stream().map(RemappedActivity<T>::new).collect(Collectors.toSet());
     }
+
+    @Override
+    public int getEventCount() {
+        return traceVariants.entrySet().stream().mapToInt(e -> e.getKey().size() * e.getValue()).sum();
+    }
 }

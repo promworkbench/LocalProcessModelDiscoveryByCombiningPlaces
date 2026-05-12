@@ -3,6 +3,7 @@ package org.processmining.placebasedlpmdiscovery.model.logs;
 import org.deckfour.xes.extension.std.XConceptExtension;
 import org.deckfour.xes.factory.XFactory;
 import org.deckfour.xes.factory.XFactoryRegistry;
+import org.deckfour.xes.info.XLogInfoFactory;
 import org.deckfour.xes.model.XEvent;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
@@ -38,6 +39,10 @@ public class XLogWrapper implements EventLog {
         return new XLogWrapper(log);
     }
 
+    public static XLogWrapper fromFile(String path) throws Exception {
+        return new XLogWrapper(LogUtils.readLogFromFile(path));
+    }
+
     @Override
     public Set<Activity> getActivities() {
         return LogUtils.getActivitiesFromLog(this.log).stream().map(l -> ActivityCache.getInstance().getActivity(l)).collect(Collectors.toSet());
@@ -46,5 +51,10 @@ public class XLogWrapper implements EventLog {
     @Override
     public XLog getOriginalLog() {
         return this.log;
+    }
+
+    @Override
+    public int getEventCount() {
+        return XLogInfoFactory.createLogInfo(this.log).getNumberOfEvents();
     }
 }

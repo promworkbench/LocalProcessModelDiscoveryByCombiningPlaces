@@ -9,4 +9,6 @@ public interface EventLog {
     Set<Activity> getActivities();
 
     XLog getOriginalLog();
+
+    int getEventCount();
 }
