@@ -10,10 +10,10 @@ import java.io.IOException;
 
 public class PlaceUsageHistogramRunner extends PBLPMDFrame {
 
-    public PlaceUsageHistogramRunner() throws IOException {
+    public PlaceUsageHistogramRunner() throws Exception {
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         PBLPMDFrame frame = new PlaceUsageHistogramRunner();
         frame.setVisible(true);
     }

@@ -3,17 +3,16 @@ package org.processmining.placebasedlpmdiscovery.runners.GUI;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.io.IOException;
 
 public abstract class PBLPMDFrame extends JFrame {
 
     protected JPanel contentPane;
 
-    public PBLPMDFrame() throws IOException {
+    public PBLPMDFrame() throws Exception {
         initFrame();
     }
 
-    protected void initFrame() throws IOException {
+    protected void initFrame() throws Exception {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setMinimumSize(new Dimension(800, 600));
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -24,6 +23,6 @@ public abstract class PBLPMDFrame extends JFrame {
         contentPane.add(getComponent(), BorderLayout.CENTER);
     }
 
-    protected abstract JComponent getComponent() throws IOException;
+    protected abstract JComponent getComponent() throws Exception;
 
 }

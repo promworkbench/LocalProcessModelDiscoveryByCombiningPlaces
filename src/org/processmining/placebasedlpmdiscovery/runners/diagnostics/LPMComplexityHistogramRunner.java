@@ -10,10 +10,10 @@ import java.io.IOException;
 
 public class LPMComplexityHistogramRunner extends PBLPMDFrame {
 
-    public LPMComplexityHistogramRunner() throws IOException {
+    public LPMComplexityHistogramRunner() throws Exception {
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         PBLPMDFrame frame = new LPMComplexityHistogramRunner();
         frame.setVisible(true);
     }

@@ -10,10 +10,10 @@ import java.io.IOException;
 
 public class TransitionUsageHistogramRunner extends PBLPMDFrame {
 
-    public TransitionUsageHistogramRunner() throws IOException {
+    public TransitionUsageHistogramRunner() throws Exception {
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         PBLPMDFrame frame = new TransitionUsageHistogramRunner();
         frame.setVisible(true);
     }
