@@ -2,8 +2,7 @@
 
 **Status:** Draft  
 **Date:** 2026-04-17  
-**Authors:** VikiPeeva  
-**Reviewers:** @alkuzman, @david, @lukas  
+**Authors:** VikiPeeva 
 **Replaces:** –  
 **Superseded by:**
 
