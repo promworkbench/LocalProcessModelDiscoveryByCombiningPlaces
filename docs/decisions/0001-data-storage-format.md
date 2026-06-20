@@ -1,12 +1,13 @@
-# ADR-0001: Data Storage Format
-
-**Status:** Draft  
-**Date:** 2026-04-17  
-**Authors:** VikiPeeva 
-**Replaces:** –  
-**Superseded by:**
-
 ---
+Status: Draft  
+Date: 2026-04-17  
+Authors: VikiPeeva 
+Reviewers: 
+Replaces:  
+Superseded by:
+---
+
+# ADR-0001: Data Storage Format
 
 ## Context
 
