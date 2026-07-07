@@ -109,12 +109,11 @@ $lpm2$: a -> b -> d
 **Cons**
 
 - Complete occurrence lists need to be reconstructed from the language of the model.
-  > Consider the sequence model $a
-  \rightarrow b$ and the log $L = [\langle e1:a, e2:a, e3:b \rangle]$. Each event will be covered by the model, but if
-  one
-  wants to reconstruct the occurrence list, one should get $[\langle e1:a, e3:b \rangle, \langle e2:a, e3:b \rangle]
-  $ and cannot simply just take all events covered by the model. The only way to do this would be to lookup at the
-  model's language or do a replay on the model, both of which are not cheap operations.
+  > Consider the sequence model $a \rightarrow b$ and the log $L = [\langle e1:a, e2:a, e3:b \rangle]$. Each event
+  > will be covered by the model, but if one wants to reconstruct the occurrence list, one should get $[\langle
+  > e1:a, e3:b \rangle, \langle e2:a, e3:b \rangle]$ and cannot simply just take all events covered by the model.
+  > The only way to do this would be to do a lookup at the model's language or do a replay on the model, both of which
+  > are not cheap operations.
 - Additional attributes for the models cannot be stored
 - Misusing the xes standard
 
