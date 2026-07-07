@@ -7,7 +7,7 @@ Replaces:
 Superseded by:
 ---
 
-# ADR-0001: Data Storage Format
+# ADR-0001: LPM Set - Log Alignment Data Storage Format
 
 ## Context
 
@@ -37,9 +37,15 @@ Expected access patterns for the data currently are:
 - Query-based read/write
 
 There also exist various ways one can align LPMs to an event log:
+
+- The occurrence must occur within a locality window
+- Aligned events must be adjacent
+- One event can be used in multiple alignments
+- etc.
+
+Taking these variations into consideration, we have two options regarding the storage:
 - The storage focuses on one variation
-- The storage includes occurrence lists for multiple variations
-![Alignment Variations](assets/lpm-to-log-alignment-options.png)
+- The storage includes occurrence lists for multiple (or all possible) variations
 
 ## Options Considered
 
@@ -101,7 +107,14 @@ $lpm2$: a -> b -> d
 - Using only existing formats
 
 **Cons**
-- Complete occurrence lists need to be reconstructed
+
+- Complete occurrence lists need to be reconstructed from the language of the model.
+  > Consider the sequence model $a
+  \rightarrow b$ and the log $L = [\langle e1:a, e2:a, e3:b \rangle]$. Each event will be covered by the model, but if
+  one
+  wants to reconstruct the occurrence list, one should get $[\langle e1:a, e3:b \rangle, \langle e2:a, e3:b \rangle]
+  $ and cannot simply just take all events covered by the model. The only way to do this would be to lookup at the
+  model's language or do a replay on the model, both of which are not cheap operations.
 - Additional attributes for the models cannot be stored
 - Misusing the xes standard
 
@@ -113,16 +126,25 @@ can be used only for storing the additional attributes.
 ### Option B: Separate Full Alignments File in Human-Readable Format (e.g., JSON)
 
 For each set of models for which an occurrence list is computed, a report is generated that includes:
-- lpm set info,
+
+- lpm set info (lpm set title, lpm set filename, lpm set count, etc.),
 - event log info,
 - aligned traces per LPM
 
 #### Example:
-$L = \langle a, b, a, c, d\rangle, \langle a, x, d\rangle$
 
-$lpm1$: a -> d
+$L = \langle e1:a, e2:b, e3:a, e4:c, e5:d\rangle, \langle e6:a, e7:x, e8:d\rangle$ (file1)
 
-$lpm2$: a -> b -> d
+$lpm1$: a -> d (file2)
+
+$lpm2$: a -> b -> d (file3) (or all lpms in one file)
+
+Alignments, i.e., occurrence lists:
+
+- For $lpm1$: $\{\langle e1:a, e5:d \rangle,\langle e3:a, e5:d \rangle, \langle e6:a, e8:d \rangle\}$
+- For $lpm2$: $\{\langle e1:a, e2:b, e5:d \rangle\}$
+
+in proposed file format:
 
 ```json
  {
@@ -168,11 +190,14 @@ $lpm2$: a -> b -> d
 - Alignments are directly available
 
 **Cons**
-- Problematic when one event is in two alignments of the same LPM
+
+- Problematic when one event is in two alignments of the same LPM. Reconstruction needs to be done.
 - The entire event log is duplicated for each LPM
 
 **Alternatives**
-Same as with Option A, where each event occurs once, but in a separate alignment file in JSON format.
+
+- Same as with Option A, where each event occurs once, but in a separate alignment file in JSON format.
+- Same as this option, but if each event has a unique id, there will be no need for the traces in the hierarchy.
 
 ### Option C: Separate Occurrence List File in Human-Readable Format (e.g., JSON)
 
