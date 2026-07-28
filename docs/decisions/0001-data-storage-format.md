@@ -73,12 +73,23 @@ result/
 └── aligned_log.xes
 ```
 
+The aligned event log `aligned_log.xes` is stored in the traditional XES format, but each event has an additional
+attribute `covering-lpms` that lists all LPMs covering the event.
+
+For each lpm, the concrete occurrence lists need to be reconstructed from the covered events.
+
 #### Example:
+
+**Input:**
+
 $L = \langle a, b, a, c, d\rangle, \langle a, x, d\rangle$
 
 $lpm1$: a -> d
 
 $lpm2$: a -> b -> d
+
+**Output:** The aligned event log is stored in the traditional XES format, but each event has an additional attribute
+`covering-lpms` that lists all LPMs covering the event.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" ?>
@@ -165,7 +176,14 @@ result/
 └── alignments.json
 ```
 
+The alignment between the event log and the lpms is stored in a `json` file that contains an alignment between each pair
+of an lpm and trace. For each event, it is stored whether a synchronous move (t_x) or a move on log (<<) was performed.
+The event ids are used to denote the events in `log.xes` and the lpm ids are from the `lpms/` directory.
+
+For each lpm, the concrete occurrence lists need to be reconstructed from the stored alignments.
 #### Example:
+
+**Input:**
 
 $L = \langle e1:a, e2:b, e3:a, e4:c, e5:d\rangle, \langle e6:a, e7:x, e8:d\rangle$ (file1)
 
@@ -173,12 +191,9 @@ $lpm1$: a -> d (file2)
 
 $lpm2$: a -> b -> d (file3) (or all lpms in one file)
 
-Alignments, i.e., occurrence lists:
+**Output:**
 
-- For $lpm1$: $\{\langle e1:a, e5:d \rangle,\langle e3:a, e5:d \rangle, \langle e6:a, e8:d \rangle\}$
-- For $lpm2$: $\{\langle e1:a, e2:b, e5:d \rangle\}$
-
-in proposed file format:
+Alignments in proposed file format:
 
 ```json
  {
@@ -220,6 +235,11 @@ in proposed file format:
 }
 ```
 
+The reconstructed occurrence lists would be:
+
+- For $lpm1$: $\{\langle e1:a, e5:d \rangle,\langle e3:a, e5:d \rangle, \langle e6:a, e8:d \rangle\}$
+- For $lpm2$: $\{\langle e1:a, e2:b, e5:d \rangle\}$
+
 **Pros**
 - Alignments are directly available
 
@@ -258,13 +278,22 @@ result/
 └── alignments.json
 ```
 
+The alignment between the event log and the lpms is stored in a `json` file that contains all optimal alignments between
+each pair of an lpm and trace. The event ids are used to denote the events in `log.xes` and the lpm ids are from the
+`lpms/` directory.
+
+For each lpm, the concrete occurrence are directly available.
 #### Example:
+
+**Input:**
+
 $L = \langle a, b, a, c, d\rangle, \langle a, x, d\rangle$
 
 $lpm1$: a -> d
 
 $lpm2$: a -> b -> d
 
+**Output:**
 ```json
 { 
  "meta": {
