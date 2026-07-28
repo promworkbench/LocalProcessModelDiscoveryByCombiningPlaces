@@ -56,6 +56,23 @@ pt, etc.). The occurrence list is stored directly in the event log such that for
 there is an attribute `covering-lpms` where all LPM ids of the LPMs covering the event are listed. We use the file 
 name of each LPM as the id to denote it in the list.
 
+#### Input
+
+- Event log `log.xes` (XES format)
+- LPM set (ZIP of PNML files)
+
+#### Output
+
+```ascii
+result/
+├── lpms/
+│   ├── lpm_1.pnml
+│   ├── lpm_2.pnml
+│   ├── ...
+│   ├── lpm_n.pnml
+└── aligned_log.xes
+```
+
 #### Example:
 $L = \langle a, b, a, c, d\rangle, \langle a, x, d\rangle$
 
@@ -129,6 +146,24 @@ For each set of models for which an occurrence list is computed, a report is gen
 - lpm set info (lpm set title, lpm set filename, lpm set count, etc.),
 - event log info,
 - aligned traces per LPM
+
+#### Input
+
+- Event log `log.xes` (XES format)
+- LPM set (ZIP of PNML files)
+
+#### Output
+
+```ascii
+result/
+├── lpms/
+│   ├── lpm_1.pnml
+│   ├── lpm_2.pnml
+│   ├── ...
+│   ├── lpm_n.pnml
+├── log.xes
+└── alignments.json
+```
 
 #### Example:
 
@@ -204,6 +239,24 @@ For each set of models for which an occurrence list is computed, a report is gen
 - lpm set info,
 - event log info,
 - occurrence list
+
+#### Input
+
+- Event log `log.xes` (XES format)
+- LPM set (ZIP of PNML files)
+
+#### Output
+
+```ascii
+result/
+├── lpms/
+│   ├── lpm_1.pnml
+│   ├── lpm_2.pnml
+│   ├── ...
+│   ├── lpm_n.pnml
+├── log.xes
+└── alignments.json
+```
 
 #### Example:
 $L = \langle a, b, a, c, d\rangle, \langle a, x, d\rangle$
