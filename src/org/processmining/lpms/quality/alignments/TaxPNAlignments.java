@@ -4,8 +4,11 @@ import nl.tue.astar.AStarException;
 import org.deckfour.xes.classification.XEventClass;
 import org.deckfour.xes.classification.XEventClasses;
 import org.deckfour.xes.classification.XEventNameClassifier;
+import org.deckfour.xes.factory.XFactory;
+import org.deckfour.xes.factory.XFactoryNaiveImpl;
 import org.deckfour.xes.info.impl.XLogInfoImpl;
 import org.deckfour.xes.model.XLog;
+import org.deckfour.xes.model.XTrace;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.lpm.adjustedalignments.NBestOptAlignmentsNoModelMoveGraphSamplingAlg;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
@@ -40,7 +43,7 @@ public class TaxPNAlignments implements PNAlignments {
         Map<XEventClass, Integer> evCost = new HashMap<>();
         for (XEventClass ec : eventClasses.getClasses()) {
             if (lpmAlphabet.contains(ec.getId())) {
-                evCost.put(ec, 5); // penalize skipping events the LPM knows about
+                evCost.put(ec, 0); // penalize skipping events the LPM knows about
             } else {
                 evCost.put(ec, 0); // free to skip events outside LPM alphabet
             }
@@ -49,7 +52,8 @@ public class TaxPNAlignments implements PNAlignments {
         TransEvClassMapping transEvMapping = instantiateTransEventMappingEqualName(
                 eventClasses, dummy, pn);
 
-        Object[] params = new Object[] { transCost, 200000, evCost, 1 };
+        // [0] mapTransition2Cost [1] maxNumOfStates [2] mapEventClass2Cost [3] numOfSamples
+        Object[] params = new Object[] { transCost, 200000, evCost, 10 };
 
         // Run
         NBestOptAlignmentsNoModelMoveGraphSamplingAlg alg =
@@ -57,6 +61,14 @@ public class TaxPNAlignments implements PNAlignments {
 
         return alg.replayLog(null, pn, apn.getInitialMarking(), apn.getFinalMarkings().stream().findFirst().get(),
                 log, transEvMapping, params);
+    }
+
+    @Override
+    public PNMatchInstancesRepResult compute(AcceptingPetriNet apn, XTrace trace) throws AStarException {
+        XFactory factory = new XFactoryNaiveImpl();
+        XLog log = factory.createLog();
+        log.add(trace);
+        return compute(apn, log);
     }
 
     /**
