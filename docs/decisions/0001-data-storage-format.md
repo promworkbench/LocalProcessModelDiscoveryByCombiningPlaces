@@ -20,6 +20,25 @@ manual annotations.
 If one wants to be future-proof, a pessimistic estimation for size could be event logs processed by Celonis 
 (from a couple of hundreds GB to TB of data).
 
+#### Input
+
+- Event log `log.xes` (XES format)
+- LPM set (ZIP of PNML files)
+
+For now, we make an assumption that the event log is an XES file and the set of LPMs is in a zip, where each individual
+LPM is in a PNML format (the format can also be any of the other process model formats: BPMN, process tree, etc.).
+
+The directory tree of the input files is as follows:
+
+```ascii
+├── lpms.zip
+│   ├── lpm_1.pnml
+│   ├── lpm_2.pnml
+│   ├── ...
+│   ├── lpm_n.pnml
+└── log.xes
+```
+
 ## Decision Drivers
 
 The choice affects:
@@ -51,15 +70,8 @@ Taking these variations into consideration, we have two options regarding the st
 
 ### Option A: ZIP of models and XES
 
-Each LPM is stored in a separate file (the format can be any of the process model formats, pnml, bpmn, 
-pt, etc.). The occurrence list is stored directly in the event log such that for each event in the XES  
-there is an attribute `covering-lpms` where all LPM ids of the LPMs covering the event are listed. We use the file 
-name of each LPM as the id to denote it in the list.
-
-#### Input
-
-- Event log `log.xes` (XES format)
-- LPM set (ZIP of PNML files)
+The occurrence list is stored directly in the event log such that for each event in the XES there is an attribute
+`covering-lpms` where all LPM ids of the LPMs covering the event are listed. We use the file name of each LPM as the id to denote it in the list.
 
 #### Output
 
@@ -158,11 +170,6 @@ For each set of models for which an occurrence list is computed, a report is gen
 - event log info,
 - aligned traces per LPM
 
-#### Input
-
-- Event log `log.xes` (XES format)
-- LPM set (ZIP of PNML files)
-
 #### Output
 
 ```ascii
@@ -259,11 +266,6 @@ For each set of models for which an occurrence list is computed, a report is gen
 - lpm set info,
 - event log info,
 - occurrence list
-
-#### Input
-
-- Event log `log.xes` (XES format)
-- LPM set (ZIP of PNML files)
 
 #### Output
 
