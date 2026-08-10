@@ -12,14 +12,8 @@ import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.plugins.petrinet.replayresult.PNMatchInstancesRepResult;
 import org.processmining.plugins.petrinet.replayresult.StepTypes;
-import org.processmining.plugins.replayer.replayresult.AllSyncReplayResult;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TaxPNAlignmentsTest {
@@ -29,23 +23,17 @@ public class TaxPNAlignmentsTest {
         return LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
     }
 
-    @Test
-    public void givenPerfectlyFittingTrace_whenComputeOnTrace_thenAllStepsAreSynchronousMoves() throws AStarException {
-        // set input
-        AcceptingPetriNet apn = sequenceAbcNet();
-        XLog log = XLogWrapper.fromListOfTracesAsListStrings(
-                Collections.singletonList(Arrays.asList("a", "b", "c"))).getOriginalLog();
-        XTrace trace = log.get(0);
+    private static List<StepTypes> stepsWithSyncAt(int length, int... syncPositions) {
+        Set<Integer> syncIndices = new HashSet<>();
+        for (int pos : syncPositions) {
+            syncIndices.add(pos);
+        }
 
-        // act
-        PNMatchInstancesRepResult result = PNAlignments.tax().compute(apn, trace);
-
-        // set expected result
-        List<StepTypes> expectedSteps = Arrays.asList(StepTypes.LMGOOD, StepTypes.LMGOOD, StepTypes.LMGOOD);
-
-        // test
-        Assert.assertEquals(1, result.size());
-        Assert.assertEquals(expectedSteps, result.iterator().next().getStepTypesLst().get(0));
+        List<StepTypes> steps = new ArrayList<>();
+        for (int i = 0; i < length; i++) {
+            steps.add(syncIndices.contains(i) ? StepTypes.LMGOOD : StepTypes.L);
+        }
+        return steps;
     }
 
     @Test
@@ -67,26 +55,46 @@ public class TaxPNAlignmentsTest {
     }
 
     @Test
+    public void givenPerfectlyFittingTrace_whenComputeOnTrace_thenAllStepsAreSynchronousMoves() throws AStarException {
+        // set input
+        AcceptingPetriNet apn = sequenceAbcNet();
+        XLog log = XLogWrapper.fromListOfTracesAsListStrings(
+                Collections.singletonList(Arrays.asList("a", "b", "c"))).getOriginalLog();
+        XTrace trace = log.get(0);
+
+        // act
+        PNMatchInstancesRepResult result = PNAlignments.tax().compute(apn, trace);
+
+        // set expected result
+        List<StepTypes> expectedSteps = Arrays.asList(StepTypes.LMGOOD, StepTypes.LMGOOD, StepTypes.LMGOOD);
+
+        // test
+        Assert.assertEquals(1, result.iterator().next().getStepTypesLst().size());
+        Assert.assertEquals(expectedSteps, result.iterator().next().getStepTypesLst().get(0));
+    }
+
+    @Test
     public void givenLogWithNonFittingTrace_whenCompute_thenTraceHasNonSynchronousStep() throws AStarException {
         // set input
         AcceptingPetriNet apn = sequenceAbcNet();
         XLog log = XLogWrapper.fromListOfTracesAsListStrings(Arrays.asList(
                 Arrays.asList("a", "b", "c"),
-                Arrays.asList("a", "c") // missing "b"
+                Arrays.asList("a", "n", "b", "c") // extra "n"
         )).getOriginalLog();
 
         // act
         PNMatchInstancesRepResult result = PNAlignments.tax().compute(apn, log);
 
         // set expected result
-        AllSyncReplayResult nonFittingResult = result.stream()
-                .filter(r -> r.getTraceIndex().contains(1))
-                .findFirst()
-                .orElseThrow(() -> new AssertionError("No alignment found for the non-fitting trace"));
+        Set<List<StepTypes>> expectedAlignments = new HashSet<>(Arrays.asList(
+                stepsWithSyncAt(3, 0, 1, 2),
+                stepsWithSyncAt(4, 0, 2, 3)));
 
         // test
-        Assert.assertTrue(nonFittingResult.getStepTypesLst().get(0).stream()
-                .anyMatch(step -> step != StepTypes.LMGOOD));
+        Set<List<StepTypes>> actualAlignments = result.stream()
+                .flatMap(r -> r.getStepTypesLst().stream())
+                .collect(Collectors.toSet());
+        Assert.assertEquals(expectedAlignments, actualAlignments);
     }
 
     @Test
@@ -101,14 +109,15 @@ public class TaxPNAlignmentsTest {
         // act
         PNMatchInstancesRepResult result = PNAlignments.tax().compute(apn, trace);
 
-        // set expected result: every increasing (a, b, c) index triple is a valid, equally optimal occurrence
+        // set expected result: every increasing (a, b, c) index triple is a valid, equally optimal
+        // occurrence. The all-log (zero-sync) alignment is also tied for optimal cost, but
+        // PNAlignments.tax() filters it out since it never uses the model at all.
         Set<List<StepTypes>> expectedAlignments = new HashSet<>(Arrays.asList(
-                stepsWithSyncAt(),
-                stepsWithSyncAt(0, 1, 2),
-                stepsWithSyncAt(0, 1, 5),
-                stepsWithSyncAt(0, 4, 5),
-                stepsWithSyncAt(3, 4, 5),
-                stepsWithSyncAt(0, 1, 2, 3, 4, 5)));
+                stepsWithSyncAt(6, 0, 1, 2),
+                stepsWithSyncAt(6, 0, 1, 5),
+                stepsWithSyncAt(6, 0, 4, 5),
+                stepsWithSyncAt(6, 3, 4, 5),
+                stepsWithSyncAt(6, 0, 1, 2, 3, 4, 5)));
 
         // test
         Assert.assertEquals(result.first().getStepTypesLst().toString(),
@@ -117,18 +126,5 @@ public class TaxPNAlignmentsTest {
                 .flatMap(r -> r.getStepTypesLst().stream())
                 .collect(Collectors.toSet());
         Assert.assertEquals(expectedAlignments, actualAlignments);
-    }
-
-    private static List<StepTypes> stepsWithSyncAt(int... syncPositions) {
-        Set<Integer> syncIndices = new HashSet<>();
-        for (int pos : syncPositions) {
-            syncIndices.add(pos);
-        }
-
-        List<StepTypes> steps = new ArrayList<>();
-        for (int i = 0; i < 6; i++) {
-            steps.add(syncIndices.contains(i) ? StepTypes.LMGOOD : StepTypes.L);
-        }
-        return steps;
     }
 }

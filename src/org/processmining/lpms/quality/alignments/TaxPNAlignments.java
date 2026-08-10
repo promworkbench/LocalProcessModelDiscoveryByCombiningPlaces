@@ -10,18 +10,41 @@ import org.deckfour.xes.info.impl.XLogInfoImpl;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
-import org.processmining.lpm.adjustedalignments.NBestOptAlignmentsNoModelMoveGraphSamplingAlg;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.plugins.connectionfactories.logpetrinet.TransEvClassMapping;
+import org.processmining.plugins.petrinet.replayer.matchinstances.InfoObjectConst;
 import org.processmining.plugins.petrinet.replayresult.PNMatchInstancesRepResult;
+import org.processmining.plugins.petrinet.replayresult.StepTypes;
+import org.processmining.plugins.replayer.replayresult.AllSyncReplayResult;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class TaxPNAlignments implements PNAlignments {
+    /**
+     * evCost is 0 for every event class above, so an alignment made entirely of log moves is
+     * always tied for optimal cost - it never uses the model at all, so it's not a meaningful
+     * representative for LPM quality computation. Drop it from each trace's alignment set.
+     */
+    @SuppressWarnings("unchecked")
+    private static void removeAlignmentsWithoutSyncMoves(PNMatchInstancesRepResult result) {
+        for (AllSyncReplayResult r : result) {
+            List<List<StepTypes>> stepTypesLst = r.getStepTypesLst();
+            List<List<Object>> nodeInstanceLst = r.getNodeInstanceLst();
+            List<Integer> numRepresented = r.getInfoObject() == null ? null
+                    : (List<Integer>) r.getInfoObject().get(InfoObjectConst.NUMREPRESENTEDALIGNMENT);
+            for (int i = stepTypesLst.size() - 1; i >= 0; i--) {
+                if (!stepTypesLst.get(i).contains(StepTypes.LMGOOD)) {
+                    stepTypesLst.remove(i);
+                    nodeInstanceLst.remove(i);
+                    if (numRepresented != null && i < numRepresented.size()) {
+                        numRepresented.remove(i);
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public PNMatchInstancesRepResult compute(AcceptingPetriNet apn, XLog log) throws AStarException {
         Petrinet pn = apn.getNet();
@@ -55,12 +78,15 @@ public class TaxPNAlignments implements PNAlignments {
         // [0] mapTransition2Cost [1] maxNumOfStates [2] mapEventClass2Cost [3] numOfSamples
         Object[] params = new Object[] { transCost, 200000, evCost, 10 };
 
-        // Run
-        NBestOptAlignmentsNoModelMoveGraphSamplingAlg alg =
-                new NBestOptAlignmentsNoModelMoveGraphSamplingAlg();
+        // Run. TieAwareNBestAlignmentsAlg is a drop-in replacement for
+        // NBestOptAlignmentsNoModelMoveGraphSamplingAlg that recovers optimal alignments the
+        // upstream search silently drops on ties - see TieCapturingSamplingThread.
+        TieAwareNBestAlignmentsAlg alg = new TieAwareNBestAlignmentsAlg();
 
-        return alg.replayLog(null, pn, apn.getInitialMarking(), apn.getFinalMarkings().stream().findFirst().get(),
-                log, transEvMapping, params);
+        PNMatchInstancesRepResult result = alg.replayLog(null, pn, apn.getInitialMarking(),
+                apn.getFinalMarkings().stream().findFirst().get(), log, transEvMapping, params);
+        removeAlignmentsWithoutSyncMoves(result);
+        return result;
     }
 
     @Override
