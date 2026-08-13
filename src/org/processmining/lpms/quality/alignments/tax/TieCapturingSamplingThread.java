@@ -1,4 +1,4 @@
-package org.processmining.lpms.quality.alignments;
+package org.processmining.lpms.quality.alignments.tax;
 
 import nl.tue.astar.*;
 import nl.tue.astar.impl.DijkstraTail;

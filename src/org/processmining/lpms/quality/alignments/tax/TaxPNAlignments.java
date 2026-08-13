@@ -1,4 +1,4 @@
-package org.processmining.lpms.quality.alignments;
+package org.processmining.lpms.quality.alignments.tax;
 
 import nl.tue.astar.AStarException;
 import org.deckfour.xes.classification.XEventClass;
@@ -10,6 +10,7 @@ import org.deckfour.xes.info.impl.XLogInfoImpl;
 import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
+import org.processmining.lpms.quality.alignments.PNAlignments;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.elements.Transition;
 import org.processmining.plugins.connectionfactories.logpetrinet.TransEvClassMapping;
