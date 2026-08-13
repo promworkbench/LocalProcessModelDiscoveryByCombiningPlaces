@@ -19,6 +19,13 @@ public class MockPlaces {
         return p;
     }
 
+    public static Place getSequencePlace_ac() {
+        Place p = new Place();
+        p.addInputTransition(new Transition("a", false));
+        p.addOutputTransition(new Transition("c", false));
+        return p;
+    }
+
     public static Place getChoiceOutPlace() {
         Place p = new Place();
         p.addInputTransition(new Transition("a", false));

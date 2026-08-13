@@ -23,6 +23,16 @@ public class TaxPNAlignmentsTest {
         return LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
     }
 
+    private static AcceptingPetriNet choiceNet() {
+        LocalProcessModel lpm = MockLPMs.getChoiceLPM_aXbc();
+        return LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
+    }
+
+    private static AcceptingPetriNet concurrentNet() {
+        LocalProcessModel lpm = MockLPMs.getConcurrentLPM_aANDbc();
+        return LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
+    }
+
     private static List<StepTypes> stepsWithSyncAt(int length, int... syncPositions) {
         Set<Integer> syncIndices = new HashSet<>();
         for (int pos : syncPositions) {
@@ -98,7 +108,7 @@ public class TaxPNAlignmentsTest {
     }
 
     @Test
-    public void givenTraceWithRepeatedPattern_whenCompute_thenAllFourOptimalAlignmentsAreReturned() throws AStarException {
+    public void givenTraceWithRepeatedPattern_whenCompute_thenAllFiveOptimalAlignmentsAreReturned() throws AStarException {
         // set input
         AcceptingPetriNet apn = sequenceAbcNet();
         // trace positions: a0, b1, c2, a3, b4, c5
@@ -126,5 +136,108 @@ public class TaxPNAlignmentsTest {
                 .flatMap(r -> r.getStepTypesLst().stream())
                 .collect(Collectors.toSet());
         Assert.assertEquals(expectedAlignments, actualAlignments);
+    }
+
+    @Test
+    public void givenTraceWithThreeRepeatedPatterns_whenCompute_thenAllTwentyOneOptimalAlignmentsAreReturned()
+            throws AStarException {
+        // set input
+        AcceptingPetriNet apn = sequenceAbcNet();
+        // trace positions: a0, b1, c2, a3, b4, c5, a6, b7, c8
+        XLog log = XLogWrapper.fromListOfTracesAsListStrings(
+                        Collections.singletonList(Arrays.asList("a", "b", "c", "a", "b", "c", "a", "b", "c")))
+                .getOriginalLog();
+        XTrace trace = log.get(0);
+
+        // act
+        PNMatchInstancesRepResult result = PNAlignments.tax().compute(apn, trace);
+
+        // set expected result: every combination of a-, b- and c-occurrences that forms a valid
+        // increasing (a before b before c, per matched cycle) sync selection is equally optimal -
+        // one cycle synced (10 combinations), two cycles synced (10 combinations), or all three
+        // cycles synced (1 combination) - for 21 total. As with the two-repetition case above, the
+        // all-log (zero-sync) alignment is tied for optimal cost too but is filtered out by
+        // PNAlignments.tax() since it never uses the model at all.
+        Set<List<StepTypes>> expectedAlignments = new HashSet<>(Arrays.asList(
+                // one cycle synced
+                stepsWithSyncAt(9, 0, 1, 2),
+                stepsWithSyncAt(9, 0, 1, 5),
+                stepsWithSyncAt(9, 0, 1, 8),
+                stepsWithSyncAt(9, 0, 4, 5),
+                stepsWithSyncAt(9, 0, 4, 8),
+                stepsWithSyncAt(9, 0, 7, 8),
+                stepsWithSyncAt(9, 3, 4, 5),
+                stepsWithSyncAt(9, 3, 4, 8),
+                stepsWithSyncAt(9, 3, 7, 8),
+                stepsWithSyncAt(9, 6, 7, 8),
+                // two cycles synced
+                stepsWithSyncAt(9, 3, 4, 5, 6, 7, 8),
+                stepsWithSyncAt(9, 0, 4, 5, 6, 7, 8),
+                stepsWithSyncAt(9, 0, 3, 4, 5, 7, 8),
+                stepsWithSyncAt(9, 0, 1, 5, 6, 7, 8),
+                stepsWithSyncAt(9, 0, 1, 2, 6, 7, 8),
+                stepsWithSyncAt(9, 0, 1, 3, 5, 7, 8),
+                stepsWithSyncAt(9, 0, 1, 2, 3, 7, 8),
+                stepsWithSyncAt(9, 0, 1, 3, 4, 5, 8),
+                stepsWithSyncAt(9, 0, 1, 2, 3, 4, 8),
+                stepsWithSyncAt(9, 0, 1, 2, 3, 4, 5),
+                // all three cycles synced
+                stepsWithSyncAt(9, 0, 1, 2, 3, 4, 5, 6, 7, 8)));
+
+        // test
+        Assert.assertEquals(result.first().getStepTypesLst().toString(),
+                expectedAlignments.size(), result.first().getStepTypesLst().size());
+        Set<List<StepTypes>> actualAlignments = result.stream()
+                .flatMap(r -> r.getStepTypesLst().stream())
+                .collect(Collectors.toSet());
+        Assert.assertEquals(expectedAlignments, actualAlignments);
+    }
+
+    @Test
+    public void givenChoiceBetweenBranches_whenCompute_thenBothBranchAlignmentsAreReturned() throws AStarException {
+        // set input
+        AcceptingPetriNet apn = choiceNet();
+        // trace positions: a0, b1, c2 - the model's single place only holds one token from "a",
+        // so at most one of b/c can be a synchronous move
+        XLog log = XLogWrapper.fromListOfTracesAsListStrings(
+                Collections.singletonList(Arrays.asList("a", "b", "c"))).getOriginalLog();
+        XTrace trace = log.get(0);
+
+        // act
+        PNMatchInstancesRepResult result = PNAlignments.tax().compute(apn, trace);
+
+        // set expected result: syncing "a" with either "b" or "c" is equally optimal, forcing the
+        // other branch's event to be a log move. The all-log (zero-sync) alignment is tied for
+        // optimal cost too but is filtered out by PNAlignments.tax(), as in the sequence tests above
+        Set<List<StepTypes>> expectedAlignments = new HashSet<>(Arrays.asList(
+                stepsWithSyncAt(3, 0, 1),
+                stepsWithSyncAt(3, 0, 2)));
+
+        // test
+        Set<List<StepTypes>> actualAlignments = result.stream()
+                .flatMap(r -> r.getStepTypesLst().stream())
+                .collect(Collectors.toSet());
+        Assert.assertEquals(expectedAlignments, actualAlignments);
+    }
+
+    @Test
+    public void givenConcurrentBranches_whenComputeOnEitherEventOrder_thenAllStepsAreSynchronousMoves()
+            throws AStarException {
+        // set input
+        AcceptingPetriNet apn = concurrentNet();
+        // b and c each only depend on a, with no place ordering them relative to each other, so
+        // either trace order should align fully synchronously
+        XLog log = XLogWrapper.fromListOfTracesAsListStrings(Arrays.asList(
+                Arrays.asList("a", "b", "c"),
+                Arrays.asList("a", "c", "b"))).getOriginalLog();
+
+        List<StepTypes> expectedSteps = Arrays.asList(StepTypes.LMGOOD, StepTypes.LMGOOD, StepTypes.LMGOOD);
+
+        // act & test
+        for (XTrace trace : log) {
+            PNMatchInstancesRepResult result = PNAlignments.tax().compute(apn, trace);
+            Assert.assertEquals(1, result.iterator().next().getStepTypesLst().size());
+            Assert.assertEquals(expectedSteps, result.iterator().next().getStepTypesLst().get(0));
+        }
     }
 }
