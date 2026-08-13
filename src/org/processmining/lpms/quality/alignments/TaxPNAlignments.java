@@ -76,7 +76,7 @@ public class TaxPNAlignments implements PNAlignments {
                 eventClasses, dummy, pn);
 
         // [0] mapTransition2Cost [1] maxNumOfStates [2] mapEventClass2Cost [3] numOfSamples
-        Object[] params = new Object[] { transCost, 200000, evCost, 10 };
+        Object[] params = new Object[]{transCost, 200000, evCost, 100};
 
         // Run. TieAwareNBestAlignmentsAlg is a drop-in replacement for
         // NBestOptAlignmentsNoModelMoveGraphSamplingAlg that recovers optimal alignments the
