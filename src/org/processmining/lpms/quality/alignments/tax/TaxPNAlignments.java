@@ -22,20 +22,16 @@ import org.processmining.plugins.replayer.replayresult.AllSyncReplayResult;
 import java.util.*;
 
 public class TaxPNAlignments implements PNAlignments {
-    /**
-     * evCost is 0 for every event class above, so an alignment made entirely of log moves is
-     * always tied for optimal cost - it never uses the model at all, so it's not a meaningful
-     * representative for LPM quality computation. Drop it from each trace's alignment set.
-     */
+
     @SuppressWarnings("unchecked")
-    private static void removeAlignmentsWithoutSyncMoves(PNMatchInstancesRepResult result) {
+    private static void removeIncompleteAlignmentsOrWithoutSyncMoves(PNMatchInstancesRepResult result) {
         for (AllSyncReplayResult r : result) {
             List<List<StepTypes>> stepTypesLst = r.getStepTypesLst();
             List<List<Object>> nodeInstanceLst = r.getNodeInstanceLst();
             List<Integer> numRepresented = r.getInfoObject() == null ? null
                     : (List<Integer>) r.getInfoObject().get(InfoObjectConst.NUMREPRESENTEDALIGNMENT);
             for (int i = stepTypesLst.size() - 1; i >= 0; i--) {
-                if (!stepTypesLst.get(i).contains(StepTypes.LMGOOD)) {
+                if (!r.isReliable() || !stepTypesLst.get(i).contains(StepTypes.LMGOOD)) {
                     stepTypesLst.remove(i);
                     nodeInstanceLst.remove(i);
                     if (numRepresented != null && i < numRepresented.size()) {
@@ -86,7 +82,7 @@ public class TaxPNAlignments implements PNAlignments {
 
         PNMatchInstancesRepResult result = alg.replayLog(null, pn, apn.getInitialMarking(),
                 apn.getFinalMarkings().stream().findFirst().get(), log, transEvMapping, params);
-        removeAlignmentsWithoutSyncMoves(result);
+        removeIncompleteAlignmentsOrWithoutSyncMoves(result);
         return result;
     }
 

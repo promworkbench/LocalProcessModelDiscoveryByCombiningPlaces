@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.mockobjects.MockLPMs;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.Place;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.plugins.petrinet.replayresult.PNMatchInstancesRepResult;
@@ -30,6 +31,20 @@ public class TaxPNAlignmentsTest {
 
     private static AcceptingPetriNet concurrentNet() {
         LocalProcessModel lpm = MockLPMs.getConcurrentLPM_aANDbc();
+        return LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
+    }
+
+    // a single initial token is shared by a and b (only one can ever fire), but c requires a
+    // token from both of their output places at once - so c, and the empty final marking, can
+    // never be reached
+    private static AcceptingPetriNet choiceIntoUnreachableJoinNet() {
+        Place choicePlace = Place.from("| a, b");
+        choicePlace.setNumTokens(1);
+
+        LocalProcessModel lpm = new LocalProcessModel();
+        lpm.addPlace(choicePlace);
+        lpm.addPlace(Place.from("a | c"));
+        lpm.addPlace(Place.from("b | c"));
         return LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
     }
 
@@ -239,5 +254,22 @@ public class TaxPNAlignmentsTest {
             Assert.assertEquals(1, result.iterator().next().getStepTypesLst().size());
             Assert.assertEquals(expectedSteps, result.iterator().next().getStepTypesLst().get(0));
         }
+    }
+
+    @Test
+    public void givenChoiceIntoUnreachableJoin_whenCompute_thenNoOptimalAlignmentsAreReturned() throws AStarException {
+        // set input
+        AcceptingPetriNet apn = choiceIntoUnreachableJoinNet();
+        // c can never fire (see choiceIntoUnreachableJoinNet), so the model's final marking is
+        // unreachable regardless of the trace or how it's aligned
+        XLog log = XLogWrapper.fromListOfTracesAsListStrings(
+                Collections.singletonList(Arrays.asList("a", "b", "c"))).getOriginalLog();
+        XTrace trace = log.get(0);
+
+        // act
+        PNMatchInstancesRepResult result = PNAlignments.tax().compute(apn, trace);
+
+        // test
+        Assert.assertTrue(result.iterator().next().getStepTypesLst().isEmpty());
     }
 }
