@@ -21,6 +21,7 @@ public final class DnfConverter {
     private DnfConverter() {
     }
 
+    // Recursively distributes AND over OR; leaves and already-DNF subtrees pass through unchanged.
     public static DependencyExpression toDnf(DependencyExpression expression) {
         if (expression instanceof OrDependency) {
             List<DependencyExpression> disjuncts = new ArrayList<>();
@@ -50,6 +51,7 @@ public final class DnfConverter {
         return expression;
     }
 
+    // Views a DNF expression as its list of disjuncts, wrapping a non-OR term as a singleton list.
     private static List<DependencyExpression> disjunctsOf(DependencyExpression dnf) {
         if (dnf instanceof OrDependency) {
             return ((OrDependency) dnf).getChildren();
@@ -57,6 +59,7 @@ public final class DnfConverter {
         return Collections.singletonList(dnf);
     }
 
+    // Views a disjunct as its list of literals, wrapping a non-AND term as a singleton list.
     private static List<DependencyExpression> literalsOf(DependencyExpression term) {
         if (term instanceof AndDependency) {
             return ((AndDependency) term).getChildren();
@@ -64,14 +67,17 @@ public final class DnfConverter {
         return Collections.singletonList(term);
     }
 
+    // Wraps literals in an AndDependency, unless there's only one, in which case it's returned bare.
     private static DependencyExpression andOf(List<DependencyExpression> literals) {
         return literals.size() == 1 ? literals.get(0) : new AndDependency(literals);
     }
 
+    // Wraps disjuncts in an OrDependency, unless there's only one, in which case it's returned bare.
     private static DependencyExpression orOf(List<DependencyExpression> disjuncts) {
         return disjuncts.size() == 1 ? disjuncts.get(0) : new OrDependency(disjuncts);
     }
 
+    // Computes the Cartesian product of the given lists, i.e. all ways to pick one element from each.
     private static List<List<DependencyExpression>> crossProduct(List<List<DependencyExpression>> lists) {
         List<List<DependencyExpression>> combinations = new ArrayList<>();
         combinations.add(new ArrayList<>());

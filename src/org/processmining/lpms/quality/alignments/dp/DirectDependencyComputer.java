@@ -44,24 +44,61 @@ public final class DirectDependencyComputer {
             List<DependencyExpression> andChildren = new ArrayList<>();
             for (PetrinetEdge<?, ?> inEdge : inEdges) {
                 Place inputPlace = (Place) inEdge.getSource();
-
-                List<DependencyExpression> orChildren = net.getInEdges(inputPlace).stream()
-                        .map(edge -> (Transition) edge.getSource())
-                        .map(ActivityDependency::new)
-                        .collect(Collectors.toList());
-
-                if (initialMarking.contains(inputPlace)) {
-                    orChildren.add(SingleExecutionDependency.INSTANCE);
+                DependencyExpression placeDependency = dependencyForPlace(net, initialMarking, inputPlace);
+                if (placeDependency != null) {
+                    andChildren.add(placeDependency);
                 }
-
-                if (orChildren.isEmpty()) {
-                    continue;
-                }
-                andChildren.add(orChildren.size() == 1 ? orChildren.get(0) : new OrDependency(orChildren));
             }
             result.put(transition, andChildren.size() == 1 ? andChildren.get(0) : new AndDependency(andChildren));
         }
 
         return result;
+    }
+
+    /**
+     * The dependency expression describing what is needed to have a token in every place of
+     * {@code marking} simultaneously: the AND, across the marking's distinct places, of each
+     * place's own dependency (see {@link #dependencyForPlace}). Places are considered without
+     * multiplicity, consistent with {@link #compute}'s treatment of arcs as weight-1.
+     */
+    public static DependencyExpression computeForMarking(AcceptingPetriNet apn, Marking marking) {
+        Petrinet net = apn.getNet();
+        Marking initialMarking = apn.getInitialMarking();
+
+        List<DependencyExpression> andChildren = new ArrayList<>();
+        for (Place place : marking.baseSet()) {
+            DependencyExpression placeDependency = dependencyForPlace(net, initialMarking, place);
+            if (placeDependency != null) {
+                andChildren.add(placeDependency);
+            }
+        }
+
+        // TODO: in general, an empty marking should be NoDependency, but for now we assume it is
+        //  enabled once, consistent with compute()'s treatment of transitions with no input places
+        if (andChildren.isEmpty()) {
+            return null;
+        }
+        return andChildren.size() == 1 ? andChildren.get(0) : new AndDependency(andChildren);
+    }
+
+    /**
+     * The dependency expression for a single place holding a token: an OR across the
+     * transitions that can produce a token there, plus the trivially-enabled option if the
+     * place already holds a token in the initial marking. {@code null} if neither applies.
+     */
+    private static DependencyExpression dependencyForPlace(Petrinet net, Marking initialMarking, Place place) {
+        List<DependencyExpression> orChildren = net.getInEdges(place).stream()
+                .map(edge -> (Transition) edge.getSource())
+                .map(ActivityDependency::new)
+                .collect(Collectors.toList());
+
+        if (initialMarking.contains(place)) {
+            orChildren.add(SingleExecutionDependency.INSTANCE);
+        }
+
+        if (orChildren.isEmpty()) {
+            return null;
+        }
+        return orChildren.size() == 1 ? orChildren.get(0) : new OrDependency(orChildren);
     }
 }
