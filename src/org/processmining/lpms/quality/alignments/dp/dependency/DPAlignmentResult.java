@@ -75,8 +75,8 @@ public class DPAlignmentResult {
         return false;
     }
 
-    public static DPAlignmentResult createAllLogMoves(int multiplicity, int length) {
-        DPAlignmentResult result = new DPAlignmentResult(length);
+    public static DPAlignmentResult createAllLogMoves(int length) {
+        DPAlignmentResult result = new DPAlignmentResult(length, false);
         for (int i = 0; i < length; ++i) {
             result.insert(LOG_MOVE);
         }

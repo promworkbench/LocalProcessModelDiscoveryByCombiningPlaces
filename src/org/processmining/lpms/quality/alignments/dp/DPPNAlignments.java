@@ -160,7 +160,8 @@ public class DPPNAlignments implements PNAlignments {
                                                                           Map<Transition, Integer> transitionToIndex,
                                                                           List<DPAlignmentResult> alignmentsPerTransitionLast) {
         if (dependencyExpression.equals(SingleExecutionDependency.INSTANCE)) {
-            return new Pair<>(1, alignmentsPerTransitionLast.get(row));
+            return new Pair<>(1,
+                    DPAlignmentResult.createAllLogMoves(alignmentsPerTransitionLast.get(0).alignmentLength()));
         }
         if (dependencyExpression instanceof ActivityDependency) {
             int depIndex = transitionToIndex.get(((ActivityDependency) dependencyExpression).getTransition());
@@ -194,7 +195,7 @@ public class DPPNAlignments implements PNAlignments {
 
             double product = 1;
             DPAlignmentResult crossProd = DPAlignmentResult.createAllLogMoves(
-                    1, alignmentsPerTransitionLast.get(0).alignmentLength());
+                    alignmentsPerTransitionLast.get(0).alignmentLength());
             Set<Transition> covered = new HashSet<>();
             for (Transition transition : dependentTransitions) {
                 Set<DPAlignmentResult> mustShare = sharedDependencies.entrySet().stream()
@@ -266,7 +267,7 @@ public class DPPNAlignments implements PNAlignments {
 
             double product = 1;
             DPAlignmentResult crossProd = DPAlignmentResult.createAllLogMoves(
-                    1, alignmentsPerTransitionLast.get(0).alignmentLength());
+                    alignmentsPerTransitionLast.get(0).alignmentLength());
             Set<Transition> covered = new HashSet<>();
             for (Transition transition : dependentTransitions) {
                 Set<DPAlignmentResult> mustShare = sharedDependencies.entrySet().stream()
