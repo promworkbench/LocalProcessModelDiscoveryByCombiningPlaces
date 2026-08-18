@@ -1,5 +1,6 @@
 package org.processmining.placebasedlpmdiscovery.utils;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.models.graphbased.directed.petrinet.Petrinet;
 import org.processmining.models.graphbased.directed.petrinet.PetrinetEdge;
@@ -10,6 +11,24 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class PetriNetUtils {
+
+    public static AcceptingPetriNet getWorkflowNetRepresentation(AcceptingPetriNet apn) {
+//        Map<PetrinetNode, DependencyExpression> netDependencies = DirectDependencyComputer.computeAll(apn);
+//
+//        // compute the transitions with no input constraints and those with no output constraints
+//        Set<Transition> inTransitions = apn.getNet().getTransitions().stream()
+//                .filter(t -> apn.getNet().getInEdges(t).isEmpty()).collect(Collectors.toSet());
+//        Set<Transition> outTransitions = apn.getNet().getTransitions().stream()
+//                .filter(t -> apn.getNet().getOutEdges(t).isEmpty()).collect(Collectors.toSet());
+//
+//        // if there are multiple
+//        if (inTransitions.size() > 1) {
+//
+//        }
+
+        throw new NotImplementedException("getWorkflowNetRepresentation is not implemented yet. It should transform " +
+                "the given AcceptingPetriNet into a workflow net representation if possible.");
+    }
 
     /**
      * Checks whether the net is a (structural) workflow net: it has exactly one source place
