@@ -303,36 +303,49 @@ public class PlaceUtils {
     }
 
     public static Petrinet extractPetriNet(String petriNetFileName) throws XmlPullParserException, IOException {
-        FullPnmlElementFactory pnmlFactory = new FullPnmlElementFactory();
         Petrinet net = PetrinetFactory.newPetrinet("place nets");
-
-        FileInputStream input = new FileInputStream(petriNetFileName);
-
-        XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
-        factory.setNamespaceAware(true);
-        XmlPullParser xpp = factory.newPullParser();
-        xpp.setInput(input, (String) null);
-        int eventType = xpp.getEventType();
-        Pnml pnml = new Pnml();
-        synchronized (pnmlFactory) {
-            Pnml.setFactory(pnmlFactory);
-
-            while (eventType != 2) {
-                eventType = xpp.next();
-            }
-
-            if (xpp.getName().equals("pnml")) {
-                pnml.importElement(xpp, pnml);
-            } else {
-                pnml.log("pnml", xpp.getLineNumber(), "Expected pnml");
-            }
-
-
-            Marking marking = new Marking();
-            GraphLayoutConnection layout = new GraphLayoutConnection(net);
-            pnml.convertToNet(net, marking, layout);
-        }
+        readPnmlIntoNet(petriNetFileName, net, new Marking(), new TreeSet<>());
         return net;
+    }
+
+    public static AcceptingPetriNet extractAcceptingPetriNet(String petriNetFileName)
+            throws XmlPullParserException, IOException {
+        Petrinet net = PetrinetFactory.newPetrinet("place nets");
+        Marking initialMarking = new Marking();
+        Collection<Marking> finalMarkings = new TreeSet<>();
+        readPnmlIntoNet(petriNetFileName, net, initialMarking, finalMarkings);
+        return new AcceptingPetriNetImpl(net, initialMarking, finalMarkings.toArray(new Marking[0]));
+    }
+
+    private static void readPnmlIntoNet(String petriNetFileName, Petrinet net, Marking marking,
+                                        Collection<Marking> finalMarkings)
+            throws XmlPullParserException, IOException {
+        FullPnmlElementFactory pnmlFactory = new FullPnmlElementFactory();
+
+        try (InputStream input = Files.newInputStream(Paths.get(petriNetFileName))) {
+            XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
+            factory.setNamespaceAware(true);
+            XmlPullParser xpp = factory.newPullParser();
+            xpp.setInput(input, (String) null);
+            int eventType = xpp.getEventType();
+            Pnml pnml = new Pnml();
+            synchronized (pnmlFactory) {
+                Pnml.setFactory(pnmlFactory);
+
+                while (eventType != XmlPullParser.START_TAG) {
+                    eventType = xpp.next();
+                }
+
+                if (xpp.getName().equals("pnml")) {
+                    pnml.importElement(xpp, pnml);
+                } else {
+                    pnml.log("pnml", xpp.getLineNumber(), "Expected pnml");
+                }
+
+                GraphLayoutConnection layout = new GraphLayoutConnection(net);
+                pnml.convertToNet(net, marking, finalMarkings, layout);
+            }
+        }
     }
 
     /**

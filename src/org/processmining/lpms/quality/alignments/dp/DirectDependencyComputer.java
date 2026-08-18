@@ -37,6 +37,28 @@ public final class DirectDependencyComputer {
     }
 
     /**
+     * Computes, for every transition in the net, a boolean expression over the other
+     * transitions it directly depends on structurally: a transition needs a token in
+     * every one of its input places (AND across places), and each place's token can come
+     * from any of its producing transitions, or from the initial marking if the place
+     * already holds a token there (OR across producers and the initial marking).
+     */
+    public static Map<Transition, DependencyExpression> computeVisibleTransitionsOnly(AcceptingPetriNet apn) {
+        Petrinet net = apn.getNet();
+        Marking initialMarking = apn.getInitialMarking();
+        Map<Transition, DependencyExpression> result = new HashMap<>();
+
+        for (Transition transition : net.getTransitions()) {
+            if (transition.isInvisible()) {
+                continue;
+            }
+            result.put(transition, dependencyForTransition(net, initialMarking, transition));
+        }
+
+        return result;
+    }
+
+    /**
      * Computes, for every node in the net (transitions and places), a direct boolean
      * dependency expression over the other kind of node: a transition depends on an AND of
      * its input places, and a place depends on an OR of its producing transitions, plus the
@@ -145,7 +167,13 @@ public final class DirectDependencyComputer {
     private static DependencyExpression dependencyForPlace(Petrinet net, Marking initialMarking, Place place) {
         List<DependencyExpression> orChildren = net.getInEdges(place).stream()
                 .map(edge -> (Transition) edge.getSource())
-                .map(ActivityDependency::new)
+                .map(t -> {
+                    if (t.isInvisible()) {
+                        return dependencyForTransition(net, initialMarking, t);
+                    } else {
+                        return new ActivityDependency(t);
+                    }
+                })
                 .collect(Collectors.toList());
 
         if (initialMarking.contains(place)) {

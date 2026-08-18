@@ -15,7 +15,11 @@ public class DPAlignmentResult {
     private int cursor;
 
     public DPAlignmentResult(int length) {
-        this(length, true);
+        this(length, 0);
+    }
+
+    public DPAlignmentResult(int length, int cursor) {
+        this(length, cursor, true);
     }
 
     private DPAlignmentResult(List<Integer[]> alignments, int length, int cursor) {
@@ -25,9 +29,13 @@ public class DPAlignmentResult {
     }
 
     public DPAlignmentResult(int length, boolean empty) {
+        this(length, 0, empty);
+    }
+
+    public DPAlignmentResult(int length, int cursor, boolean empty) {
         this.alignments = new ArrayList<>();
         this.length = length;
-        this.cursor = 0;
+        this.cursor = cursor;
         if (!empty) {
             this.alignments.add(new Integer[length]);
         }
@@ -35,7 +43,11 @@ public class DPAlignmentResult {
 
     public static DPAlignmentResult crossProduct(DPAlignmentResult left, DPAlignmentResult right,
                                                  Set<DPAlignmentResult> mustShare) {
-        DPAlignmentResult crossProduct = new DPAlignmentResult(left.length);
+        if (left == null || right == null) {
+            return null;
+        }
+
+        DPAlignmentResult crossProduct = new DPAlignmentResult(left.length, left.cursor);
         for (Integer[] leftA : left.alignments) {
             for (Integer[] rightA : right.alignments) {
                 boolean shareAll = true;
@@ -83,6 +95,10 @@ public class DPAlignmentResult {
         return result;
     }
 
+    public static DPAlignmentResult createEmpty(int length) {
+        return new DPAlignmentResult(length, length, true);
+    }
+
     public List<Integer[]> getAlignments() {
         return alignments;
     }
@@ -125,5 +141,21 @@ public class DPAlignmentResult {
         for (Integer[] alignment : from.getAlignments()) {
             this.add(alignment);
         }
+    }
+
+    public DPAlignmentResult copy() {
+        List<Integer[]> copiedAlignments = new ArrayList<>(this.alignments.size());
+        for (Integer[] alignment : this.alignments) {
+            copiedAlignments.add(Arrays.copyOf(alignment, alignment.length));
+        }
+        return new DPAlignmentResult(copiedAlignments, this.length, this.cursor);
+    }
+
+    public boolean isEmpty() {
+        return this.alignments.isEmpty();
+    }
+
+    public void createNew() {
+        this.alignments.add(new Integer[length]);
     }
 }

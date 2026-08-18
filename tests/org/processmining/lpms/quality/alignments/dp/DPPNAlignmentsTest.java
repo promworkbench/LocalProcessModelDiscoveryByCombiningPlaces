@@ -10,8 +10,11 @@ import org.processmining.lpms.quality.alignments.PNAlignments;
 import org.processmining.mockobjects.MockLPMs;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.Place;
+import org.processmining.placebasedlpmdiscovery.model.Transition;
 import org.processmining.placebasedlpmdiscovery.model.logs.XLogWrapper;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
+import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
+import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 import org.processmining.plugins.petrinet.replayresult.PNMatchInstancesRepResult;
 import org.processmining.plugins.petrinet.replayresult.StepTypes;
 
@@ -21,6 +24,7 @@ import java.util.stream.Collectors;
 public class DPPNAlignmentsTest {
 
     private static final PNAlignments ALIGNMENTS = new DPPNAlignments();
+    private static final int DETERMINISM_RUNS = 1000;
 
     private static AcceptingPetriNet sequenceAbcNet() {
         LocalProcessModel lpm = MockLPMs.getSequenceLPM_abc();
@@ -48,6 +52,25 @@ public class DPPNAlignmentsTest {
         lpm.addPlace(choicePlace);
         lpm.addPlace(Place.from("a | c"));
         lpm.addPlace(Place.from("b | c"));
+        return LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
+    }
+
+    // a, then a choice between "b" (visible) and an invisible "skip" transition that lets a trace
+    // omit "b" for free, then c - both branches feed the same place before c
+    private static AcceptingPetriNet invisibleSkipNet() {
+        Place beforeChoice = new Place();
+        beforeChoice.addInputTransition(new Transition("a", false));
+        beforeChoice.addOutputTransition(new Transition("b", false));
+        beforeChoice.addOutputTransition(new Transition("skip", true));
+
+        Place afterChoice = new Place();
+        afterChoice.addInputTransition(new Transition("b", false));
+        afterChoice.addInputTransition(new Transition("skip", true));
+        afterChoice.addOutputTransition(new Transition("c", false));
+
+        LocalProcessModel lpm = new LocalProcessModel();
+        lpm.addPlace(beforeChoice);
+        lpm.addPlace(afterChoice);
         return LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
     }
 
@@ -242,6 +265,99 @@ public class DPPNAlignmentsTest {
             PNMatchInstancesRepResult result = ALIGNMENTS.compute(apn, trace);
             Assert.assertEquals(1, result.iterator().next().getStepTypesLst().size());
             Assert.assertEquals(expectedSteps, result.iterator().next().getStepTypesLst().get(0));
+        }
+    }
+
+    @Test
+    public void givenTraceSkippingOptionalActivityViaInvisibleTransition_whenCompute_thenAllStepsAreSynchronousMoves()
+            throws AStarException {
+        // set input
+        AcceptingPetriNet apn = invisibleSkipNet();
+        // "b" is skipped by silently firing the invisible "skip" transition instead, so both "a"
+        // and "c" should be able to synchronize even though the model never fires "b"
+        XLog log = XLogWrapper.fromListOfTracesAsListStrings(
+                Collections.singletonList(Arrays.asList("a", "c"))).getOriginalLog();
+        XTrace trace = log.get(0);
+
+        // act
+        PNMatchInstancesRepResult result = ALIGNMENTS.compute(apn, trace);
+
+        // set expected result: the invisible transition fires for free and does not appear in the
+        // reported alignment, so both trace events synchronize with the model
+        List<StepTypes> expectedSteps = Arrays.asList(StepTypes.LMGOOD, StepTypes.LMGOOD);
+
+        // test
+        Assert.assertEquals(1, result.iterator().next().getStepTypesLst().size());
+        Assert.assertEquals(expectedSteps, result.iterator().next().getStepTypesLst().get(0));
+    }
+
+    @Test
+    public void givenTraceSkippingOptionalActivityViaInvisibleTransition_whenComputeRepeatedly_thenResultIsDeterministic()
+            throws AStarException {
+        // set input: same model/trace as
+        // givenTraceSkippingOptionalActivityViaInvisibleTransition_whenCompute_thenAllStepsAreSynchronousMoves
+        AcceptingPetriNet apn = invisibleSkipNet();
+        XLog log = XLogWrapper.fromListOfTracesAsListStrings(
+                Collections.singletonList(Arrays.asList("a", "c"))).getOriginalLog();
+        XTrace trace = log.get(0);
+
+        // act & test: every run should produce the same single optimal alignment
+        List<StepTypes> firstAlignment = null;
+        for (int run = 0; run < DETERMINISM_RUNS; run++) {
+            List<List<StepTypes>> alignments = ALIGNMENTS.compute(apn, trace).iterator().next().getStepTypesLst();
+            Assert.assertEquals("run " + run + " of " + DETERMINISM_RUNS, 1, alignments.size());
+            if (firstAlignment == null) {
+                firstAlignment = alignments.get(0);
+            } else {
+                Assert.assertEquals("run " + run + " of " + DETERMINISM_RUNS, firstAlignment, alignments.get(0));
+            }
+        }
+    }
+
+    @Test
+    public void givenLpmAndLogFilesAndTraceIndex_whenCompute_thenAlignmentsAreComputedForThatPair() throws Exception {
+        // TODO: point these at the lpm/log files and trace index to debug.
+        String lpmFile = "./data/test/lpms/tax/artificialBig/tax_artificialBig_23.pnml";
+        String logFile = "./data/logs/artificialBig.xes";
+        int traceIndex = 2;
+
+        // set input
+        AcceptingPetriNet apn = PlaceUtils.extractAcceptingPetriNet(lpmFile);
+        XLog log = LogUtils.readLogFromFile(logFile);
+        XTrace trace = log.get(traceIndex);
+
+        // act
+        PNMatchInstancesRepResult result = ALIGNMENTS.compute(apn, trace);
+
+        // report so the computed alignment(s) can be inspected manually
+        List<List<StepTypes>> alignments = result.iterator().next().getStepTypesLst();
+        System.out.printf("Computed %d optimal alignment(s) for trace %d of %s against %s:%n",
+                alignments.size(), traceIndex, logFile, lpmFile);
+        alignments.forEach(System.out::println);
+    }
+
+    @Test
+    public void givenLpmAndLogFilesAndTraceIndex_whenComputeRepeatedly_thenResultIsDeterministic() throws Exception {
+        // set input: same lpm/log/trace index as
+        // givenLpmAndLogFilesAndTraceIndex_whenCompute_thenAlignmentsAreComputedForThatPair
+        String lpmFile = "./data/test/lpms/tax/artificialBig/tax_artificialBig_37.pnml";
+        String logFile = "./data/logs/artificialBig.xes";
+        int traceIndex = 0;
+
+        AcceptingPetriNet apn = PlaceUtils.extractAcceptingPetriNet(lpmFile);
+        XLog log = LogUtils.readLogFromFile(logFile);
+        XTrace trace = log.get(traceIndex);
+
+        // act & test: every run should produce the same set of optimal alignments
+        Set<List<StepTypes>> firstAlignments = null;
+        for (int run = 0; run < DETERMINISM_RUNS; run++) {
+            Set<List<StepTypes>> alignments = new HashSet<>(
+                    ALIGNMENTS.compute(apn, trace).iterator().next().getStepTypesLst());
+            if (firstAlignments == null) {
+                firstAlignments = alignments;
+            } else {
+                Assert.assertEquals("run " + run + " of " + DETERMINISM_RUNS, firstAlignments, alignments);
+            }
         }
     }
 

@@ -42,6 +42,44 @@ public class TaxPNAlignments implements PNAlignments {
         }
     }
 
+    /**
+     * Compute a transition to event class mapping based on the name (name
+     * classifier not considering lifecycle).
+     *
+     * @param eventClasses Event classes to which transitions should be mapped.
+     * @param dummy        Dummy event class to which silent transitions are mapped.
+     * @param pn           Petri net whose transition should be mapped
+     * @return Mapping from Transition to Event Class
+     */
+    public static TransEvClassMapping instantiateTransEventMappingEqualName(
+            XEventClasses eventClasses, XEventClass dummy, Petrinet pn) {
+        TransEvClassMapping mapping;
+        mapping = new TransEvClassMapping(eventClasses.getClassifier(), dummy);
+        int sucessfulVisMapping = 0;
+        int visTransitions = 0;
+        for (Transition t : pn.getTransitions()) {
+            if (t.isInvisible()) {
+                mapping.put(t, dummy);
+            } else {
+                XEventClass eventClass = eventClasses.getByIdentity(t.getLabel());
+                if (eventClass != null) {
+                    mapping.put(t, eventClass);
+                    sucessfulVisMapping++;
+                } else {
+//                    System.out.println(t.getLabel());
+                }
+                visTransitions++;
+            }
+        }
+
+//        if (sucessfulVisMapping != visTransitions) {
+//            throw new IllegalArgumentException("Some labels of visible transitions do not exist in the event log.");
+//        }
+
+        return mapping;
+
+    }
+
     @Override
     public PNMatchInstancesRepResult compute(AcceptingPetriNet apn, XLog log) throws AStarException {
         Petrinet pn = apn.getNet();
@@ -83,6 +121,7 @@ public class TaxPNAlignments implements PNAlignments {
         PNMatchInstancesRepResult result = alg.replayLog(null, pn, apn.getInitialMarking(),
                 apn.getFinalMarkings().stream().findFirst().get(), log, transEvMapping, params);
         removeIncompleteAlignmentsOrWithoutSyncMoves(result);
+        removeInvisibleMoves(result);
         return result;
     }
 
@@ -94,41 +133,20 @@ public class TaxPNAlignments implements PNAlignments {
         return compute(apn, log);
     }
 
-    /**
-     * Compute a transition to event class mapping based on the name (name
-     * classifier not considering lifecycle).
-     *
-     * @param eventClasses Event classes to which transitions should be mapped.
-     * @param dummy        Dummy event class to which silent transitions are mapped.
-     * @param pn           Petri net whose transition should be mapped
-     * @return Mapping from Transition to Event Class
-     */
-    public static TransEvClassMapping instantiateTransEventMappingEqualName(
-            XEventClasses eventClasses, XEventClass dummy, Petrinet pn) {
-        TransEvClassMapping mapping;
-        mapping = new TransEvClassMapping(eventClasses.getClassifier(), dummy);
-        int sucessfulVisMapping = 0;
-        int visTransitions = 0;
-        for (Transition t : pn.getTransitions()) {
-            if (t.isInvisible()) {
-                mapping.put(t, dummy);
-            } else {
-                XEventClass eventClass = eventClasses.getByIdentity(t.getLabel());
-                if (eventClass != null) {
-                    mapping.put(t, eventClass);
-                    sucessfulVisMapping++;
-                } else {
-                    System.out.println(t.getLabel());
+    private void removeInvisibleMoves(PNMatchInstancesRepResult result) {
+        for (AllSyncReplayResult r : result) {
+            List<List<StepTypes>> stepTypesLst = r.getStepTypesLst();
+            List<List<Object>> nodeInstanceLst = r.getNodeInstanceLst();
+            for (int i = 0; i < stepTypesLst.size(); i++) {
+                List<StepTypes> steps = stepTypesLst.get(i);
+                List<Object> nodeInstances = nodeInstanceLst.get(i);
+                for (int j = steps.size() - 1; j >= 0; j--) {
+                    if (steps.get(j) == StepTypes.MINVI) {
+                        steps.remove(j);
+                        nodeInstances.remove(j);
+                    }
                 }
-                visTransitions++;
             }
         }
-
-        if (sucessfulVisMapping != visTransitions) {
-            throw new IllegalArgumentException("Some labels of visible transitions do not exist in the event log.");
-        }
-
-        return mapping;
-
     }
 }
