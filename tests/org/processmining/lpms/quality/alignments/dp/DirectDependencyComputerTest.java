@@ -31,7 +31,7 @@ public class DirectDependencyComputerTest {
         AcceptingPetriNet apn = acceptingPetriNetFrom("(a | b)(b | c)");
 
         // when
-        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.compute(apn);
+        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.computeTransitionsOnly(apn);
 
         // then
         Transition a = transitionWithLabel(dependencies, "a");
@@ -49,7 +49,7 @@ public class DirectDependencyComputerTest {
         AcceptingPetriNet apn = acceptingPetriNetFrom("(a, b | c)");
 
         // when
-        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.compute(apn);
+        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.computeTransitionsOnly(apn);
 
         // then
         Transition a = transitionWithLabel(dependencies, "a");
@@ -68,7 +68,7 @@ public class DirectDependencyComputerTest {
         AcceptingPetriNet apn = acceptingPetriNetFrom("(a | c)(b | c)");
 
         // when
-        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.compute(apn);
+        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.computeTransitionsOnly(apn);
 
         // then
         Transition a = transitionWithLabel(dependencies, "a");
@@ -87,7 +87,7 @@ public class DirectDependencyComputerTest {
         AcceptingPetriNet apn = acceptingPetriNetFrom("(a | a)");
 
         // when
-        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.compute(apn);
+        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.computeTransitionsOnly(apn);
 
         // then
         Transition a = transitionWithLabel(dependencies, "a");
@@ -100,7 +100,7 @@ public class DirectDependencyComputerTest {
         AcceptingPetriNet apn = acceptingPetriNetFrom("(a, b | b, c)");
 
         // when
-        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.compute(apn);
+        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.computeTransitionsOnly(apn);
 
         // then
         Transition a = transitionWithLabel(dependencies, "a");
@@ -119,7 +119,7 @@ public class DirectDependencyComputerTest {
         AcceptingPetriNet apn = acceptingPetriNetFrom("(a | c)(b | b, c)");
 
         // when
-        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.compute(apn);
+        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.computeTransitionsOnly(apn);
 
         // then
         Transition a = transitionWithLabel(dependencies, "a");
@@ -140,7 +140,7 @@ public class DirectDependencyComputerTest {
         AcceptingPetriNet apn = LocalProcessModelUtils.getAcceptingPetriNetRepresentation(new LocalProcessModel(place));
 
         // when
-        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.compute(apn);
+        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.computeTransitionsOnly(apn);
 
         // then
         Transition a = transitionWithLabel(dependencies, "a");
@@ -165,7 +165,7 @@ public class DirectDependencyComputerTest {
         AcceptingPetriNet apn = LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
 
         // when
-        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.compute(apn);
+        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.computeTransitionsOnly(apn);
 
         // then
         Transition z = transitionWithLabel(dependencies, "z");
@@ -205,7 +205,7 @@ public class DirectDependencyComputerTest {
         AcceptingPetriNet apn = LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
 
         // when
-        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.compute(apn);
+        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.computeTransitionsOnly(apn);
 
         // then
         Transition a = transitionWithLabel(dependencies, "a");
@@ -236,7 +236,7 @@ public class DirectDependencyComputerTest {
         AcceptingPetriNet apn = LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
 
         // when
-        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.compute(apn);
+        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.computeTransitionsOnly(apn);
 
         // then
         Transition a = transitionWithLabel(dependencies, "a");
@@ -263,7 +263,7 @@ public class DirectDependencyComputerTest {
         AcceptingPetriNet apn = LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
 
         // when
-        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.compute(apn);
+        Map<Transition, DependencyExpression> dependencies = DirectDependencyComputer.computeTransitionsOnly(apn);
 
         // then
         Transition a = transitionWithLabel(dependencies, "a");

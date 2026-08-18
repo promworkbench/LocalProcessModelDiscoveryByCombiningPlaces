@@ -50,7 +50,8 @@ public class DPPNAlignments implements PNAlignments {
                 transitionToIndex.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
         // transition index to dependency
         Map<Integer, DependencyExpression> transitionDependencyMap = new HashMap<>();
-        for (Map.Entry<Transition, DependencyExpression> entry : DirectDependencyComputer.compute(apn).entrySet()) {
+        for (Map.Entry<Transition, DependencyExpression> entry :
+                DirectDependencyComputer.computeTransitionsOnly(apn).entrySet()) {
             transitionDependencyMap.put(transitionToIndex.get(entry.getKey()), DnfConverter.toDnf(entry.getValue()));
         }
 
