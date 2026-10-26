@@ -14,6 +14,7 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Map;
 
 public class FromFileLPMDiscoveryResult implements LPMDiscoveryResult {
@@ -46,8 +47,8 @@ public class FromFileLPMDiscoveryResult implements LPMDiscoveryResult {
     }
 
     @Override
-    public void keep(int lpmCount) {
-        this.lpmResult.keep(lpmCount);
+    public void keep(int lpmCount, Comparator<LocalProcessModel> ranking) {
+        this.lpmResult.keep(lpmCount, ranking);
     }
 
     @Override

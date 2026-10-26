@@ -4,7 +4,6 @@ import org.apache.commons.lang.NotImplementedException;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.LPMDiscoveryInput;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.main.LPMDiscoveryConfig;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.Exporter;
@@ -61,13 +60,11 @@ public class StandardLPMDiscoveryResult implements LPMDiscoveryResult {
     }
 
     @Override
-    public void keep(int lpmCount) {
-        this.lpms = getAllLPMs().stream().sorted(
-                Comparator.comparingDouble(lpm -> lpm.getAdditionalInfo().getEvaluationResult(
-                        StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
-                        FittingWindowsEvaluationResult.class).getResult()))
-                .collect(Collectors.toList())
-                .subList(0, Math.min(getAllLPMs().size(), lpmCount));
+    public void keep(int lpmCount, Comparator<LocalProcessModel> ranking) {
+        this.lpms = getAllLPMs().stream()
+                .sorted(ranking)
+                .limit(lpmCount)
+                .collect(Collectors.toList());
     }
 
     @Override

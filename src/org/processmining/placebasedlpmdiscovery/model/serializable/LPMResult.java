@@ -9,8 +9,10 @@ import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.Export
 
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 public class LPMResult extends SerializableList<LocalProcessModel> implements LPMDiscoveryResult {
@@ -52,6 +54,14 @@ public class LPMResult extends SerializableList<LocalProcessModel> implements LP
     @Override
     public LPMDiscoveryConfig getConfig() {
         throw new NotImplementedException("Still not implemented.");
+    }
+
+    @Override
+    public void keep(int lpmCount, Comparator<LocalProcessModel> ranking) {
+        this.elements = this.elements.stream()
+                .sorted(ranking)
+                .limit(lpmCount)
+                .collect(Collectors.toList());
     }
 
     @Override

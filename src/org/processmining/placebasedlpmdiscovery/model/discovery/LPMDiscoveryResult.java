@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Map;
 
 public interface LPMDiscoveryResult extends Exportable<LPMDiscoveryResult> {
@@ -30,7 +31,10 @@ public interface LPMDiscoveryResult extends Exportable<LPMDiscoveryResult> {
     
     LPMDiscoveryConfig getConfig();
 
-    void keep(int lpmCount);
+    /**
+     * Keeps only the first lpmCount LPMs according to the given ranking; the rest are discarded.
+     */
+    void keep(int lpmCount, Comparator<LocalProcessModel> ranking);
 
     static LPMDiscoveryResult fromFile(String filePath) throws IOException {
         return new FromFileLPMDiscoveryResult(filePath);

@@ -46,8 +46,8 @@ public class TwoStandardLPMDiscoveryResults implements MultipleLPMDiscoveryResul
     }
 
     @Override
-    public void keep(int lpmCount) {
-        resMap.values().forEach(lpmRes -> lpmRes.keep(lpmCount));
+    public void keep(int lpmCount, Comparator<LocalProcessModel> ranking) {
+        resMap.values().forEach(lpmRes -> lpmRes.keep(lpmCount, ranking));
     }
 
     @Override

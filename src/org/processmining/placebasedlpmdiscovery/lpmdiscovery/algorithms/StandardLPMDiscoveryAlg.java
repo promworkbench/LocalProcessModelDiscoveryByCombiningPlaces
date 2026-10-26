@@ -6,6 +6,8 @@ import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.inputs.L
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.algorithms.parameters.LPMDiscoveryParameters;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.filtration.LPMFiltrationController;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.LPMEvaluationController;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.TraceSupportEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.discovery.StandardLPMDiscoveryResult;
@@ -13,10 +15,7 @@ import org.processmining.placebasedlpmdiscovery.model.interruptible.InterrupterS
 import org.processmining.placebasedlpmdiscovery.model.lpmstorage.traversals.GlobalLPMStorageTraversal;
 import org.processmining.placebasedlpmdiscovery.model.lpmstorage.traversals.LPMStorageTraversalFactory;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 
 public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
 
@@ -68,7 +67,10 @@ public class StandardLPMDiscoveryAlg implements LPMDiscoveryAlg {
             result.addAdditionalResults("eventCoverageSetLevel", this.evaluationController.getEventCoverageSetLevel());
 //            result = this.lpmCombination.combine(places, parameters.getLpmCount());
 
-            result.keep(parameters.getLpmCount());
+            result.keep(parameters.getLpmCount(),
+                    Comparator.comparingDouble((LocalProcessModel lpm) -> lpm.getAdditionalInfo().getEvaluationResult(
+                            StandardLPMEvaluationResultId.TraceSupportEvaluationResult.name(),
+                            TraceSupportEvaluationResult.class).getResult()).reversed());
             result.setInput(input);
 
             // post-process lpms
