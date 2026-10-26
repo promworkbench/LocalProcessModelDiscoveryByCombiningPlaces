@@ -12,7 +12,8 @@ public class ComponentId {
         Grouping,
         Clustering,
         LPMSimilarity,
-        BasicLPMEvalMetrics
+        BasicLPMEvalMetrics,
+        LPMContext
     }
 
     private final Type type;
