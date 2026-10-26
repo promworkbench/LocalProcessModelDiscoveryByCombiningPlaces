@@ -6,10 +6,10 @@ import org.processmining.placebasedlpmdiscovery.grouping.dependencyinjection.Gro
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.*;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.ComplexEvaluationResultPanel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.DefaultSettablePanelFactory;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.LPMContextPanel;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelFactory;
 import org.processmining.placebasedlpmdiscovery.service.dependencyinjection.ServiceGuiceModule;
 import org.processmining.placebasedlpmdiscovery.view.components.settablepanels.grouping.GroupingSetupPanel;
-import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelFactory;
-import org.processmining.placebasedlpmdiscovery.view.components.settablepanels.grouping.lpmsimilarity.*;
 import org.processmining.placebasedlpmdiscovery.view.controllers.DefaultLPMDiscoveryResultViewController;
 import org.processmining.placebasedlpmdiscovery.view.controllers.LPMDiscoveryResultViewController;
 import org.processmining.placebasedlpmdiscovery.view.datacommunication.dependencyinjection.DataCommunicationGuiceModuleVM;
@@ -31,6 +31,7 @@ public class PromViewGuiceModule extends AbstractModule {
                 ComponentId.Type.class, JPanel.class);
         mapBinderSettablePanels.addBinding(ComponentId.Type.BasicLPMEvalMetrics).to(ComplexEvaluationResultPanel.class);
         mapBinderSettablePanels.addBinding(ComponentId.Type.Grouping).to(GroupingSetupPanel.class);
+        mapBinderSettablePanels.addBinding(ComponentId.Type.LPMContext).to(LPMContextPanel.class);
 
         MapBinder<LPMDViewComponentType, LPMDViewComponent> mapBinderLPMDViewComponents =
                 MapBinder.newMapBinder(binder(), LPMDViewComponentType.class, LPMDViewComponent.class);

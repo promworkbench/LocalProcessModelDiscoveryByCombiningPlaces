@@ -2,7 +2,9 @@ package org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.comp
 
 import com.google.inject.Inject;
 import org.apache.commons.math3.util.Pair;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMCollectorResultId;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.ComplexEvaluationResultPanel;
+import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.LPMContextPanel;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelContainer;
 import org.processmining.placebasedlpmdiscovery.prom.plugins.visualization.components.settablepanels.SettablePanelFactory;
 import org.processmining.placebasedlpmdiscovery.view.components.ComponentFactory;
@@ -53,6 +55,10 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
         container = this.settablePanels.get(new Pair<>(2, 1));
         container.setComponentId(new ComponentId(ComponentId.Type.Grouping));
         container.setContent(this.settablePanelFactory.getSettablePanel(ComponentId.Type.Grouping));
+
+        container = this.settablePanels.get(new Pair<>(2, 2));
+        container.setComponentId(new ComponentId(ComponentId.Type.LPMContext));
+        container.setContent(this.settablePanelFactory.getSettablePanel(ComponentId.Type.LPMContext));
     }
 
     @Override
@@ -94,6 +100,9 @@ public class DefaultLPMDiscoveryResultComponent extends BaseLPMDiscoveryResultCo
         for (SettablePanelContainer container : this.settablePanels.values()) {
             if (container.getComponentId().getType().equals(ComponentId.Type.BasicLPMEvalMetrics)) {
                 ((ComplexEvaluationResultPanel) container.getContent()).setModel(model.getSelectedLPM().getAdditionalInfo().getEvaluationResults());
+            } else if (container.getComponentId().getType().equals(ComponentId.Type.LPMContext)) {
+                ((LPMContextPanel) container.getContent()).setModel(model.getSelectedLPM().getAdditionalInfo()
+                        .getCollectorResults().get(StandardLPMCollectorResultId.EventAttributeCollectorResult.name()));
             }
         }
     }
