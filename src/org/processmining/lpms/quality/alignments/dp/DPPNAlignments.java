@@ -118,6 +118,15 @@ public class DPPNAlignments implements PNAlignments {
         DependencyExpression endDependency = computeEndDependency(apn, transitionToIndex);
         Pair<Integer, DPAlignmentResult> finalResult = computeCountOfNewOccurrences(dp, transitionDependencyMap,
                 endDependency, trace.size(), indexToTransition, transitionToIndex, alignmentsPerTransitionCurrent);
+        if (finalResult.getFirst() != 0 || finalResult.getSecond() != null) {
+            if (finalResult.getFirst() == 0 && finalResult.getSecond() != null ||
+                    finalResult.getFirst() != 0 && finalResult.getSecond() == null ||
+                    finalResult.getFirst() != finalResult.getSecond().getAlignments().size() ||
+                    finalResult.getFirst() != new HashSet<>(finalResult.getSecond().getAlignments()).size()) {
+                throw new IllegalStateException("The number computed in the DP matrix and returned alignments must " +
+                        "match.");
+            }
+        }
         return convertResult(finalResult.getSecond(), traceIndex);
     }
 
@@ -251,100 +260,5 @@ public class DPPNAlignments implements PNAlignments {
         }
         throw new IllegalArgumentException("Unknown dependency expression type: " + dependencyExpression.getClass().getName());
     }
-
-//    private Pair<Integer, DPAlignmentResult> computeCountOfNewOccurrences(int[][] dp,
-//                                                                          Map<Integer, DependencyExpression>
-//                                                                          transitionDependencyMap,
-//                                                                          DependencyExpression dependencyExpression,
-//                                                                          int column,
-//                                                                          Map<Integer, Transition> indexToTransition,
-//                                                                          Map<Transition, Integer> transitionToIndex,
-//                                                                          List<DPAlignmentResult>
-//                                                                          alignmentsPerTransitionLast) {
-//        if (dependencyExpression instanceof ActivityDependency) {
-//            int depIndex = transitionToIndex.get(((ActivityDependency) dependencyExpression).getTransition());
-//            return new Pair<>(dp[depIndex][column - 1], alignmentsPerTransitionLast.get(depIndex));
-//        }
-//        if (dependencyExpression instanceof OrDependency) {
-//            int sum = 0;
-//            DPAlignmentResult collectedAlignments =
-//                    new DPAlignmentResult(alignmentsPerTransitionLast.get(0).alignmentLength(),
-//                            alignmentsPerTransitionLast.get(0).alignmentLength());
-//            for (DependencyExpression disjunt : ((OrDependency) dependencyExpression).getChildren()) {
-//                Pair<Integer, DPAlignmentResult> resultPair = computeCountOfNewOccurrences(dp,
-//                        transitionDependencyMap, disjunt, column, indexToTransition,
-//                        transitionToIndex, alignmentsPerTransitionLast);
-//                sum += resultPair.getFirst();
-//                collectedAlignments.addAll(resultPair.getSecond());
-//            }
-//            return new Pair<>(sum, collectedAlignments);
-//        }
-//        if (dependencyExpression instanceof AndDependency) {
-//            List<Transition> dependentTransitions = ((AndDependency) dependencyExpression).getChildren().stream()
-//                    .map(child -> ((ActivityDependency) child).getTransition())
-//                    .collect(Collectors.toList());
-//
-//            Map<Transition, DependencyExpression> commonDependencies = transitionDependencyMap.entrySet().stream()
-//                    .filter(entry -> dependentTransitions.contains(indexToTransition.get(entry.getKey())))
-//                    .collect(Collectors.toMap(entry -> indexToTransition.get(entry.getKey()), Map.Entry::getValue));
-//
-//            Map<Transition, Set<Transition>> sharedDependencies =
-//                    SharedDependencyFinder.sharedDependencies(dependentTransitions,
-//                            commonDependencies);
-//
-//            double product = 1;
-//            DPAlignmentResult crossProd = DPAlignmentResult.createAllLogMoves(
-//                    alignmentsPerTransitionLast.get(0).alignmentLength());
-//            Set<Transition> covered = new HashSet<>();
-//            for (Transition transition : dependentTransitions) {
-//                Set<DPAlignmentResult> mustShare = sharedDependencies.entrySet().stream()
-//                        .filter(e -> e.getValue().contains(transition)
-//                                && e.getValue().stream().anyMatch(covered::contains))
-//                        .map(Map.Entry::getKey)
-//                        .map(t -> alignmentsPerTransitionLast.get(transitionToIndex.get(t)))
-//                        .collect(Collectors.toSet());
-//
-//                int depIndex = transitionToIndex.get(transition);
-//                crossProd = DPAlignmentResult.crossProduct(crossProd, alignmentsPerTransitionLast.get(depIndex),
-//                        mustShare);
-//                product *= dp[transitionToIndex.get(transition)][column - 1];
-//
-//                covered.add(transition); // the alignments for this transition have been covered
-//            }
-//
-//            for (Map.Entry<Transition, Set<Transition>> entry : sharedDependencies.entrySet()) {
-//                product /= Math.pow(dp[transitionToIndex.get(entry.getKey())][column - 1], entry.getValue().size()
-//                - 1);
-//            }
-//            int parsedProduct = (int) Math.rint(product);
-//            if (Math.abs(product - parsedProduct) > 1e-9) {
-//                throw new IllegalStateException("Product of counts is not an integer: " + product);
-//            }
-//            if (crossProd.getAlignments().size() != parsedProduct) {
-//                throw new IllegalStateException("The number of created alignments should match the computed product
-//                .");
-//            }
-//            return new Pair<>(parsedProduct, crossProd);
-//        }
-//        throw new IllegalArgumentException("Unknown dependency expression type: " + dependencyExpression.getClass()
-//        .getName());
-//    }
-
-//    private DPAlignmentResult reconstructAlignmentsFromDp(int[][] dp, int row, int col, DPAlignmentResult result) {
-//        // if we iterated through the entire matrix return the result
-//        if (row < 0 || col < 0) {
-//            return result;
-//        }
-//        // if the current cell is not greater than the one in the left nothing changed for that event so push a log
-//        // move and continue reconstructing from that position
-//        if (col > 0 && dp[row][col] == dp[row][col - 1]) {
-//            result.insert(DPAlignmentResult.LOG_MOVE);
-//            return reconstructAlignmentsFromDp(dp, row, col - 1, result);
-//        }
-//        // left is smaller than me -> new occurrences were noted
-//
-//
-//        // there is no left
-//    }
 
 }

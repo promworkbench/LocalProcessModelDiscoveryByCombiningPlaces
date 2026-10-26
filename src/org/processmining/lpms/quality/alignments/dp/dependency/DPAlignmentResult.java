@@ -7,8 +7,8 @@ import java.util.Set;
 
 public class DPAlignmentResult {
 
-    public static int SYNC_MOVE = 0;
-    public static int LOG_MOVE = 1;
+    public static final int SYNC_MOVE = 0;
+    public static final int LOG_MOVE = 1;
 
     private final List<Integer[]> alignments;
     private final int length;
@@ -63,7 +63,8 @@ public class DPAlignmentResult {
 
                 Integer[] combined = new Integer[left.length];
                 for (int i = 0; i < left.alignmentLength(); ++i) {
-                    combined[i] = leftA[i] * rightA[i];
+                    // a position is a sync move in the combined alignment if either branch synced there
+                    combined[i] = leftA[i] == SYNC_MOVE || rightA[i] == SYNC_MOVE ? SYNC_MOVE : LOG_MOVE;
                 }
                 crossProduct.add(combined);
             }
