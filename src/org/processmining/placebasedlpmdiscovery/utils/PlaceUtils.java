@@ -303,10 +303,23 @@ public class PlaceUtils {
     }
 
     public static Petrinet extractPetriNet(String petriNetFileName) throws XmlPullParserException, IOException {
-        FullPnmlElementFactory pnmlFactory = new FullPnmlElementFactory();
-        Petrinet net = PetrinetFactory.newPetrinet("place nets");
+        try (FileInputStream input = new FileInputStream(petriNetFileName)) {
+            return extractAcceptingPetriNet(input, "place nets").getNet();
+        }
+    }
 
-        FileInputStream input = new FileInputStream(petriNetFileName);
+    /**
+     * Parses a PNML document into an accepting Petri net, keeping the initial marking.
+     *
+     * @param input   the stream with the PNML content; it is not closed by this method
+     * @param netName the label given to the created Petri net
+     * @return the parsed accepting Petri net
+     */
+    public static AcceptingPetriNet extractAcceptingPetriNet(InputStream input, String netName)
+            throws XmlPullParserException, IOException {
+        FullPnmlElementFactory pnmlFactory = new FullPnmlElementFactory();
+        Petrinet net = PetrinetFactory.newPetrinet(netName);
+        Marking marking = new Marking();
 
         XmlPullParserFactory factory = XmlPullParserFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -328,11 +341,10 @@ public class PlaceUtils {
             }
 
 
-            Marking marking = new Marking();
             GraphLayoutConnection layout = new GraphLayoutConnection(net);
             pnml.convertToNet(net, marking, layout);
         }
-        return net;
+        return new AcceptingPetriNetImpl(net, marking);
     }
 
     /**

@@ -35,6 +35,14 @@ public class LocalProcessModel implements Serializable, TextDescribable, LPMMode
 //        this.additionalInfo.setLogFrequency(0);
     }
 
+    /**
+     * Creates an empty LPM with a given id, e.g. when restoring an LPM that was previously exported.
+     */
+    public LocalProcessModel(String id) {
+        this();
+        this.id = Objects.requireNonNull(id);
+    }
+
     public LocalProcessModel(LocalProcessModel lpm) {
         this(); // TODO: this is not a deep copy, both lpms will contain the same places
 

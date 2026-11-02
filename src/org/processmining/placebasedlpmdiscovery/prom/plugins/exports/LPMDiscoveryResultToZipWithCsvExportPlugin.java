@@ -64,8 +64,9 @@ public class LPMDiscoveryResultToZipWithCsvExportPlugin {
             // write an entry in the csv
             csvWriter.write(zfName);
             for (LPMEvaluationResultId id : ids) {
-                csvWriter.write(String.valueOf(lpm.getAdditionalInfo()
-                        .getEvaluationResult(id.name(), LPMEvaluationResult.class).getResult()));
+                LPMEvaluationResult result = lpm.getAdditionalInfo()
+                        .getEvaluationResult(id.name(), LPMEvaluationResult.class);
+                csvWriter.write(result == null ? "" : String.valueOf(result.getResult()));
             }
             csvWriter.write(String.valueOf(aggregateOperation.aggregate(lpm.getAdditionalInfo().getEvaluationResults().values())));
             csvWriter.endRecord();

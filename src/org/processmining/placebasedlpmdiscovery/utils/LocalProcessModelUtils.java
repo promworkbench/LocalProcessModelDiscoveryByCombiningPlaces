@@ -350,11 +350,27 @@ public class LocalProcessModelUtils {
     }
 
     public static LocalProcessModel getLPMFromAcceptingPetriNetRepresentation(AcceptingPetriNet net) {
-        LocalProcessModel lpm = new LocalProcessModel();
+        return getLPMFromAcceptingPetriNetRepresentation(net, new LocalProcessModel());
+    }
 
-        Map<String, Transition> transitionMap = net.getNet().getTransitions()
+    public static LocalProcessModel getLPMFromAcceptingPetriNetRepresentation(AcceptingPetriNet net, String lpmId) {
+        return getLPMFromAcceptingPetriNetRepresentation(net, new LocalProcessModel(lpmId));
+    }
+
+    private static LocalProcessModel getLPMFromAcceptingPetriNetRepresentation(AcceptingPetriNet net,
+                                                                               LocalProcessModel lpm) {
+        // invisible transitions sharing a label (e.g. several "tau") would collapse into one, so make them unique
+        Map<String, Long> labelCounts = net.getNet().getTransitions()
                 .stream()
-                .collect(Collectors.toMap(AbstractGraphElement::getLabel, x -> new Transition(x.getLabel(), x.isInvisible())));
+                .collect(Collectors.groupingBy(AbstractGraphElement::getLabel, Collectors.counting()));
+        Map<org.processmining.models.graphbased.directed.petrinet.elements.Transition, Transition> transitionMap =
+                new HashMap<>();
+        for (org.processmining.models.graphbased.directed.petrinet.elements.Transition t :
+                net.getNet().getTransitions()) {
+            String label = t.isInvisible() && labelCounts.get(t.getLabel()) > 1 ?
+                    t.getLabel() + "-" + t.getId().toString() : t.getLabel();
+            transitionMap.put(t, new Transition(label, t.isInvisible()));
+        }
 
         for (org.processmining.models.graphbased.directed.petrinet.elements.Place p : net.getNet().getPlaces()) {
 
@@ -362,11 +378,11 @@ public class LocalProcessModelUtils {
             place.setNumTokens(net.getInitialMarking().occurrences(p));
 
             for (PetrinetEdge<?, ?> edge : net.getNet().getInEdges(p)) {
-                place.addInputTransition(transitionMap.get(edge.getSource().getLabel()));
+                place.addInputTransition(transitionMap.get(edge.getSource()));
             }
 
             for (PetrinetEdge<?, ?> edge : net.getNet().getOutEdges(p)) {
-                place.addOutputTransition(transitionMap.get(edge.getTarget().getLabel()));
+                place.addOutputTransition(transitionMap.get(edge.getTarget()));
             }
 
             lpm.addPlace(place);
@@ -421,8 +437,9 @@ public class LocalProcessModelUtils {
             // write an entry in the csv
             csvWriter.write(zfName);
             for (LPMEvaluationResultId id : ids) {
-                csvWriter.write(String.valueOf(lpm.getAdditionalInfo()
-                        .getEvaluationResult(id.name(), LPMEvaluationResult.class).getResult()));
+                LPMEvaluationResult result = lpm.getAdditionalInfo()
+                        .getEvaluationResult(id.name(), LPMEvaluationResult.class);
+                csvWriter.write(result == null ? "" : String.valueOf(result.getResult()));
             }
             csvWriter.write(String.valueOf(aggregateOperation.aggregate(lpm.getAdditionalInfo().getEvaluationResults().values())));
             csvWriter.endRecord();

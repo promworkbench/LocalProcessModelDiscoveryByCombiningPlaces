@@ -13,6 +13,10 @@ public class LPMAdditionalInfoDeserializer implements JsonDeserializer<LPMAdditi
     private static LPMCollectorResult deserializeSingleCollectorResult(JsonDeserializationContext context,
                                                                        String key,
                                                                        JsonElement evalRes) {
+        // imported results are stored under the standard keys but only hold the final score
+        if (evalRes.isJsonObject() && evalRes.getAsJsonObject().has(ImportedEvaluationResult.RESULT_FIELD_NAME))
+            return context.deserialize(evalRes, ImportedEvaluationResult.class);
+
         LPMCollectorResult lpmCollectorResult;
         switch (key) {
             case "FittingWindowsEvaluationResult":

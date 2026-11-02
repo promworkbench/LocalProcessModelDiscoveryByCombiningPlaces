@@ -58,8 +58,9 @@ public class CSVExporter {
                 csvWriter.write(apnFileName);
                 csvWriter.write(lpm.getShortString());
                 for (LPMEvaluationResultId id : ids) {
-                    csvWriter.write(String.format("%.5f", lpm.getAdditionalInfo()
-                            .getEvaluationResult(id.name(), LPMEvaluationResult.class).getResult()));
+                    LPMEvaluationResult result = lpm.getAdditionalInfo()
+                            .getEvaluationResult(id.name(), LPMEvaluationResult.class);
+                    csvWriter.write(result == null ? "" : String.format("%.5f", result.getResult()));
                 }
                 csvWriter.write(String.valueOf(aggregateOperation.aggregate(lpm.getAdditionalInfo().getEvaluationResults().values())));
                 csvWriter.endRecord();
