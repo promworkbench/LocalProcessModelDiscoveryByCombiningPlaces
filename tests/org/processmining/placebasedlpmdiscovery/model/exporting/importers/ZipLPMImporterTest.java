@@ -19,8 +19,8 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.undecided.Utils;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.ExporterFactory;
+import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.ZipLPMExporter;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
-import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -115,7 +115,7 @@ public class ZipLPMImporterTest {
         Assert.assertEquals(1, importer.getWarnings().size());
 
         // re-exporting LPMs without scores must not fail
-        LocalProcessModelUtils.exportResult(result, tmp.newFile("reexport.zip"));
+        ZipLPMExporter.export(result, tmp.newFile("reexport.zip"), null);
     }
 
     @Test
@@ -231,7 +231,7 @@ public class ZipLPMImporterTest {
         LPMResult result = new LPMResult();
         result.addAll(Arrays.asList(lpms));
         File zip = new File(tmp.getRoot(), fileName);
-        LocalProcessModelUtils.exportResult(result, zip);
+        ZipLPMExporter.export(result, zip, null);
         return zip;
     }
 

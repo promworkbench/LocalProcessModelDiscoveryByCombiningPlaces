@@ -16,14 +16,17 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 /**
- * Imports LPMs from a zip file as written by the zip export plugins: one pnml file per LPM, named
- * {@code <prefix>.<lpmId>.pnml}, and optionally a csv file with the scores of the LPMs. Without the csv (or for
+ * Imports LPMs from a zip file as written by the
+ * {@link org.processmining.placebasedlpmdiscovery.model.exporting.exporters.ZipLPMExporter}: one pnml file per LPM,
+ * named {@code <prefix>.<lpmId>.pnml}, and optionally a csv file with the scores of the LPMs. Without the csv (or for
  * LPMs that have no row in it) the LPMs are imported without evaluation results.
  */
 public class ZipLPMImporter {
 
     private static final String PNML_EXTENSION = ".pnml";
     private static final String CSV_EXTENSION = ".csv";
+    // the event coverage written by the export is not imported
+    private static final String COVERAGE_SUFFIX = "-coverage.csv";
     private static final String NAME_COLUMN = "Name";
     private static final Map<String, StandardLPMEvaluationResultId> SCORE_COLUMNS = new LinkedHashMap<>();
 
@@ -88,7 +91,9 @@ public class ZipLPMImporter {
                 continue;
 
             String lowerCaseName = fileName.toLowerCase(Locale.ROOT);
-            if (lowerCaseName.endsWith(PNML_EXTENSION)) {
+            if (lowerCaseName.endsWith(COVERAGE_SUFFIX)) {
+                continue;
+            } else if (lowerCaseName.endsWith(PNML_EXTENSION)) {
                 if (lpms.containsKey(fileName)) {
                     warnings.add("Skipping " + entry.getName() + ": a net with the same file name was already " +
                             "imported.");

@@ -3,13 +3,14 @@ package org.processmining.placebasedlpmdiscovery.runners.lpmdiscovery;
 import org.deckfour.xes.model.XLog;
 import org.processmining.placebasedlpmdiscovery.lpmdiscovery.LPMDiscovery;
 import org.processmining.placebasedlpmdiscovery.model.discovery.LPMDiscoveryResult;
-import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.CSVExporter;
 import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.ExporterFactory;
+import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.ZipLPMExporter;
 import org.processmining.placebasedlpmdiscovery.runners.configs.RunnerMetaConfig;
 import org.processmining.placebasedlpmdiscovery.runners.configs.readers.RunnerMetaConfigReader;
 import org.processmining.placebasedlpmdiscovery.runners.timemanagement.RunnerTimeManager;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -40,7 +41,7 @@ public class LPMDiscoveryRunner {
             timeManager.stopTimer(config.getOutput().get("lpms"));
 
             System.out.println(result.getAllLPMs().size());
-            CSVExporter.export(result, config.getOutput().get("lpms"));
+            ZipLPMExporter.export(result, new File(config.getOutput().get("lpms") + ".zip"), null);
             result.export(ExporterFactory.createLPMDiscoveryResultExporter(),
                     Files.newOutputStream(Paths.get(config.getOutput().get("lpms")+".json")));
 

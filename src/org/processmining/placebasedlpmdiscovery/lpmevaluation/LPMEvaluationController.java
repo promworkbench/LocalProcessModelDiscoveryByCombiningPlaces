@@ -1,8 +1,5 @@
 package org.processmining.placebasedlpmdiscovery.lpmevaluation;
 
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableTable;
-import com.google.common.collect.Table;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.lang3.tuple.Pair;
@@ -16,11 +13,9 @@ import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
 import org.processmining.placebasedlpmdiscovery.model.fpgrowth.LPMTemporaryWindowInfo;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.function.Function;
 
 public class LPMEvaluationController implements EvaluatorHub {
     private LPMCollectorFactory evaluatorFactory;
@@ -95,34 +90,33 @@ public class LPMEvaluationController implements EvaluatorHub {
             traceVariantsCount.putIfAbsent(tempInfo.getTraceVariantId(), tempInfo.getWindowCount());
         }
 
-        public void export(File outputFile) throws IOException {
-            Set<String> lpms = coverageMap.values().stream().flatMap(Collection::stream).collect(Collectors.toSet());
-            ImmutableTable.Builder<String, String, Integer> tableBuilder = new ImmutableTable.Builder<>();
+        /**
+         * Writes a csv with one row per given LPM and one column per event (named {@code <variantId>_<eventIndex>})
+         * covered by any evaluated LPM. A cell holds the count of the event's trace variant if the LPM covers the
+         * event and 0 otherwise. The coverage is recorded per short string, so LPMs are matched by their short string.
+         *
+         * @param rowName gives the name in the first column of the LPM's row
+         */
+        public void export(Appendable out, Collection<LocalProcessModel> lpms,
+                           Function<LocalProcessModel, String> rowName) throws IOException {
+            Map<String, Pair<Integer, Integer>> events = new TreeMap<>();
+            coverageMap.keySet().forEach(event -> events.put(event.getKey() + "_" + event.getValue(), event));
 
-            for (String lpm : lpms) {
-                for (Pair<Integer, Integer> event : coverageMap.keySet()) {
-                    String eventId = event.getKey() + "_" +event.getValue();
-                    tableBuilder.put(lpm, eventId,
-                            coverageMap.get(event).contains(lpm) ? traceVariantsCount.get(event.getKey()) : 0);
-                }
-            }
-
-            Table<String, String, Integer> coverageTable = tableBuilder.build();
-            System.out.println(coverageTable.rowMap().size());
-            try (CSVPrinter csvPrinter = CSVFormat.DEFAULT
+            CSVPrinter csvPrinter = CSVFormat.DEFAULT
                     .builder()
-                    .setHeader(ArrayUtils.concatAll(new String[]{"LPM"},
-                            coverageTable.columnKeySet().stream().sorted().toArray(String[]::new)))
+                    .setHeader(ArrayUtils.concatAll(new String[]{"LPM"}, events.keySet().toArray(new String[0])))
                     .build()
-                    .print(outputFile, StandardCharsets.UTF_8)) {
-                csvPrinter.printRecords(coverageTable.rowMap().entrySet()
-                        .stream().map(entry -> ImmutableList.builder()
-                                .add(entry.getKey())
-                                .addAll(entry.getValue().entrySet().stream().sorted(Map.Entry.comparingByKey())
-                                        .map(Map.Entry::getValue).collect(Collectors.toList()))
-                                .build())
-                        .collect(Collectors.toList()));
+                    .print(out);
+            for (LocalProcessModel lpm : lpms) {
+                String shortString = lpm.getShortString();
+                List<Object> record = new ArrayList<>();
+                record.add(rowName.apply(lpm));
+                for (Pair<Integer, Integer> event : events.values())
+                    record.add(coverageMap.get(event).contains(shortString) ? traceVariantsCount.get(event.getKey())
+                            : 0);
+                csvPrinter.printRecord(record);
             }
+            csvPrinter.flush();
         }
     }
 }
