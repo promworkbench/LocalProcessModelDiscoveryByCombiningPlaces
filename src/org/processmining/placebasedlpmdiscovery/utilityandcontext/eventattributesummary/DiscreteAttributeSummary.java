@@ -2,10 +2,13 @@ package org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattribut
 
 import org.deckfour.xes.model.XAttribute;
 import org.deckfour.xes.model.impl.XAttributeDiscreteImpl;
+import org.processmining.placebasedlpmdiscovery.utilityandcontext.eventattributesummary.utils.QuartileTracker;
 
 import java.util.HashMap;
 
 public class DiscreteAttributeSummary extends RangeAttributeSummary<Long, XAttributeDiscreteImpl> {
+
+    private final QuartileTracker quartiles = new QuartileTracker();
 
     public DiscreteAttributeSummary(String key, boolean completeList) {
         super(key, completeList);
@@ -58,9 +61,8 @@ public class DiscreteAttributeSummary extends RangeAttributeSummary<Long, XAttri
         // mean
         this.representationFeatures.put(AttributeSummary.MEAN, sum / count);
 
-        // median (running median algorithm)
-        long median = (long) this.representationFeatures.getOrDefault(AttributeSummary.MEDIAN, 0L);
-        this.representationFeatures.put(AttributeSummary.MEDIAN, median + (value - median) / count);
+        // quartiles and median (P² estimates)
+        this.quartiles.add(value, this.representationFeatures);
     }
 
     @Override
@@ -76,6 +78,8 @@ public class DiscreteAttributeSummary extends RangeAttributeSummary<Long, XAttri
         this.representationFeatures.put(AttributeSummary.MEAN, 0.0);
         this.representationFeatures.put(AttributeSummary.SUM, 0L);
         this.representationFeatures.put(AttributeSummary.MEDIAN, 0L);
+        this.representationFeatures.put(AttributeSummary.Q1, 0L);
+        this.representationFeatures.put(AttributeSummary.Q3, 0L);
         this.representationFeatures.put(AttributeSummary.COUNT, 0);
     }
 
@@ -88,10 +92,9 @@ public class DiscreteAttributeSummary extends RangeAttributeSummary<Long, XAttri
         this.representationFeatures.put(AttributeSummary.SUM, this.values.stream().mapToLong(v -> v).sum());
         this.representationFeatures.put(AttributeSummary.COUNT, this.values.size());
 
-        double median =
-                this.values.size() % 2 == 0 ?
-                this.values.stream().mapToLong(v -> v).sorted().skip(this.values.size() / 2 - 1).limit(2).average().orElse(Long.MIN_VALUE) :
-                this.values.stream().mapToLong(v -> v).sorted().skip(this.values.size() / 2).findFirst().orElse(Long.MIN_VALUE);
-        this.representationFeatures.put(AttributeSummary.MEDIAN, median);
+        double[] sorted = this.values.stream().mapToDouble(v -> v).sorted().toArray();
+        this.representationFeatures.put(AttributeSummary.Q1, QuartileTracker.exactQuantile(sorted, 0.25));
+        this.representationFeatures.put(AttributeSummary.MEDIAN, QuartileTracker.exactQuantile(sorted, 0.5));
+        this.representationFeatures.put(AttributeSummary.Q3, QuartileTracker.exactQuantile(sorted, 0.75));
     }
 }

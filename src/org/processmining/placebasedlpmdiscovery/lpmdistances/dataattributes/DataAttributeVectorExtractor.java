@@ -177,7 +177,10 @@ public class DataAttributeVectorExtractor {
                         .getAttributeSummaryForAttributeKey(attributeKey)
                         .orElse(defaultAttributeSummary)
                         .getRepresentationFeatures();
-                List<String> featureKeys = new ArrayList<>(representationFeatures.keySet());
+                // take the keys from the default summary so that all vectors have the same dimension, also for
+                // summaries loaded from files written before some features existed
+                List<String> featureKeys =
+                        new ArrayList<>(defaultAttributeSummary.getRepresentationFeatures().keySet());
 
                 // if the attribute is of type literal, we need all values of that attribute to have vectors of the same dimension
                 if (defaultAttributeSummary instanceof LiteralAttributeSummary) {

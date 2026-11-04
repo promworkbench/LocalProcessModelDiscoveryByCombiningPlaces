@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 
 /**
  * Read-only visualization of the event attribute context of the selected LPM: a bar chart of value counts for
- * literal/boolean attributes and a min-max range strip for numeric/timestamp attributes.
+ * literal/boolean attributes and a box plot for numeric/timestamp attributes.
  */
 public class LPMContextPanel extends JPanel {
 
@@ -82,7 +82,7 @@ public class LPMContextPanel extends JPanel {
         if (summary instanceof DistinctValuesAttributeSummary) {
             return createBarChart(key, features);
         } else if (summary instanceof RangeAttributeSummary) {
-            return createRangeStrip(key, features, summary instanceof TimestampAttributeSummary);
+            return createRangeStrip(key, (RangeAttributeSummary<?, ?>) summary);
         }
         return new JLabel(key + ": unsupported attribute type " + summary.getClass().getSimpleName());
     }
@@ -139,7 +139,8 @@ public class LPMContextPanel extends JPanel {
         return chartPanel;
     }
 
-    private JComponent createRangeStrip(String key, Map<String, Number> features, boolean isTimestamp) {
+    private JComponent createRangeStrip(String key, RangeAttributeSummary<?, ?> summary) {
+        Map<String, Number> features = summary.getRepresentationFeatures();
         Number min = features.get(AttributeSummary.MIN);
         Number max = features.get(AttributeSummary.MAX);
         // initial (empty) summaries have min > max, failed computations NaN
@@ -149,35 +150,67 @@ public class LPMContextPanel extends JPanel {
         }
         Number count = features.get(AttributeSummary.COUNT);
         String title = count != null ? key + " (" + count + " events)" : key;
-        // the median is not shown since the incrementally computed MEDIAN feature equals the running mean
+        // quartiles are missing for summaries loaded from files written before they were part of the features
+        Number q1 = features.get(AttributeSummary.Q1);
+        Number q3 = features.get(AttributeSummary.Q3);
+        double[] quartiles = q1 == null || q3 == null ? null :
+                new double[]{q1.doubleValue(), toDouble(features.get(AttributeSummary.MEDIAN)), q3.doubleValue()};
         return new RangeStripComponent(title, min.doubleValue(), max.doubleValue(),
-                toDouble(features.get(AttributeSummary.MEAN)), isTimestamp);
+                toDouble(features.get(AttributeSummary.MEAN)), quartiles,
+                summary instanceof TimestampAttributeSummary);
     }
 
     /**
-     * Draws a horizontal line from min to max with a marker for the mean.
+     * Draws a box plot: whiskers from min to max, a box from the first to the third quartile with a line for the
+     * median, and a marker for the mean.
      */
     private static class RangeStripComponent extends JComponent {
 
-        private static final int HEIGHT = 72;
+        private static final int HEIGHT = 78;
+        private static final int EXTRA_LINE_HEIGHT = 16;
         private static final int PADDING = 10;
+        private static final int BOX_HALF_HEIGHT = 8;
+        private static final Color BOX_COLOR = new Color(200, 215, 235);
 
         private final String title;
         private final double min;
         private final double max;
         private final double mean;
+        private final double[] quartiles;
         private final boolean isTimestamp;
 
-        RangeStripComponent(String title, double min, double max, double mean, boolean isTimestamp) {
+        RangeStripComponent(String title, double min, double max, double mean, double[] quartiles,
+                            boolean isTimestamp) {
             this.title = title;
             this.min = min;
             this.max = max;
             this.mean = mean;
+            this.quartiles = quartiles;
             this.isTimestamp = isTimestamp;
 
-            this.setPreferredSize(new Dimension(250, HEIGHT));
-            this.setMaximumSize(new Dimension(Integer.MAX_VALUE, HEIGHT));
-            this.setToolTipText(String.format("min: %s, mean: %s, max: %s", format(min), format(mean), format(max)));
+            int height = HEIGHT + (getStatsLines().length - 1) * EXTRA_LINE_HEIGHT;
+            this.setPreferredSize(new Dimension(250, height));
+            this.setMaximumSize(new Dimension(Integer.MAX_VALUE, height));
+            this.setToolTipText(quartiles == null ?
+                    String.format("min: %s, mean: %s, max: %s", format(min), format(mean), format(max)) :
+                    String.format("min: %s, Q1: %s, median: %s, Q3: %s, max: %s, mean: %s", format(min),
+                            format(quartiles[0]), format(quartiles[1]), format(quartiles[2]), format(max),
+                            format(mean)));
+        }
+
+        private String[] getStatsLines() {
+            String meanPart = "mean " + format(this.mean);
+            if (this.quartiles == null) {
+                return new String[]{meanPart};
+            }
+            // formatted timestamps are too long to fit in one line
+            if (this.isTimestamp) {
+                return new String[]{
+                        String.format("Q1 %s   Q3 %s", format(this.quartiles[0]), format(this.quartiles[2])),
+                        String.format("median %s   %s", format(this.quartiles[1]), meanPart)};
+            }
+            return new String[]{String.format("Q1 %s   median %s   Q3 %s   %s", format(this.quartiles[0]),
+                    format(this.quartiles[1]), format(this.quartiles[2]), meanPart)};
         }
 
         private String format(double value) {
@@ -209,35 +242,52 @@ public class LPMContextPanel extends JPanel {
             g2.setColor(Color.DARK_GRAY);
             g2.drawString(this.title, PADDING, fm.getAscent() + 2);
 
+            // the values as text, since the box plot alone does not show them
+            g2.setColor(Color.GRAY);
+            String[] statsLines = getStatsLines();
+            for (int i = 0; i < statsLines.length; ++i) {
+                g2.drawString(statsLines[i], PADDING, (i + 1) * fm.getHeight() + fm.getAscent() + 2);
+            }
+
             String minLabel = format(this.min);
             String maxLabel = format(this.max);
             int left = PADDING;
             int right = getWidth() - PADDING;
-            int lineY = 2 * fm.getHeight() + 12;
+            int lineY = (statsLines.length + 1) * fm.getHeight() + BOX_HALF_HEIGHT + 8;
 
-            // min-max line with end ticks
+            // min-max whiskers with end ticks
             g2.setStroke(new BasicStroke(2f));
             g2.setColor(BAR_COLOR);
             g2.drawLine(left, lineY, right, lineY);
             g2.drawLine(left, lineY - 5, left, lineY + 5);
             g2.drawLine(right, lineY - 5, right, lineY + 5);
 
-            // min and max labels below the ends of the line
-            g2.setColor(Color.DARK_GRAY);
-            int labelY = lineY + 8 + fm.getAscent();
-            g2.drawString(minLabel, left, labelY);
-            g2.drawString(maxLabel, right - fm.stringWidth(maxLabel), labelY);
+            // Q1-Q3 box with the median line
+            if (this.quartiles != null) {
+                int q1X = toX(this.quartiles[0], left, right);
+                int q3X = toX(this.quartiles[2], left, right);
+                int medianX = toX(this.quartiles[1], left, right);
+                g2.setColor(BOX_COLOR);
+                g2.fillRect(q1X, lineY - BOX_HALF_HEIGHT, Math.max(q3X - q1X, 1), 2 * BOX_HALF_HEIGHT);
+                g2.setColor(BAR_COLOR);
+                g2.drawRect(q1X, lineY - BOX_HALF_HEIGHT, Math.max(q3X - q1X, 1), 2 * BOX_HALF_HEIGHT);
+                g2.setStroke(new BasicStroke(3f));
+                g2.drawLine(medianX, lineY - BOX_HALF_HEIGHT, medianX, lineY + BOX_HALF_HEIGHT);
+                g2.setStroke(new BasicStroke(2f));
+            }
 
-            // mean marker with its value above it
+            // mean marker
             if (!Double.isNaN(this.mean)) {
                 int x = toX(this.mean, left, right);
                 g2.setColor(MEAN_COLOR);
-                g2.fillOval(x - 5, lineY - 5, 10, 10);
-                String meanLabel = "mean " + format(this.mean);
-                int labelX = Math.max(left, Math.min(x - fm.stringWidth(meanLabel) / 2,
-                        right - fm.stringWidth(meanLabel)));
-                g2.drawString(meanLabel, labelX, lineY - 8);
+                g2.fillOval(x - 4, lineY - 4, 8, 8);
             }
+
+            // min and max labels below the ends of the whiskers
+            g2.setColor(Color.DARK_GRAY);
+            int labelY = lineY + BOX_HALF_HEIGHT + 4 + fm.getAscent();
+            g2.drawString(minLabel, left, labelY);
+            g2.drawString(maxLabel, right - fm.stringWidth(maxLabel), labelY);
             g2.dispose();
         }
     }

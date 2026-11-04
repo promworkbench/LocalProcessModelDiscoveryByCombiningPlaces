@@ -12,6 +12,8 @@ public abstract class AttributeSummary<T, C extends XAttribute> {
     public static final String SUM = "sum";
     public static final String MEAN = "mean";
     public static final String MEDIAN = "median";
+    public static final String Q1 = "q1";
+    public static final String Q3 = "q3";
 
 
     /**
