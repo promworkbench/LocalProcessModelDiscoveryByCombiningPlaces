@@ -41,6 +41,7 @@ public class ZipLPMExporter {
     static {
         SCORE_COLUMNS.put("Fitting Windows Score", StandardLPMEvaluationResultId.FittingWindowsEvaluationResult);
         SCORE_COLUMNS.put("Trace Support Score", StandardLPMEvaluationResultId.TraceSupportEvaluationResult);
+        SCORE_COLUMNS.put("Lift Score", StandardLPMEvaluationResultId.LiftEvaluationResult);
     }
 
     /**

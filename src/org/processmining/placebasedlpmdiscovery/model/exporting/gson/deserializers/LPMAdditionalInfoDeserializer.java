@@ -40,6 +40,9 @@ public class LPMAdditionalInfoDeserializer implements JsonDeserializer<LPMAdditi
             case "TraceSupportEvaluationResult":
                 lpmCollectorResult = context.deserialize(evalRes, TraceSupportEvaluationResult.class);
                 break;
+            case "LiftEvaluationResult":
+                lpmCollectorResult = context.deserialize(evalRes, LiftEvaluationResult.class);
+                break;
             case "EventAttributeCollectorResult":
                 lpmCollectorResult = context.deserialize(evalRes, EventAttributeCollectorResult.class);
                 break;

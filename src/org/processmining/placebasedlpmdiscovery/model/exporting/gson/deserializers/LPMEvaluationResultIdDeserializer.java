@@ -27,6 +27,8 @@ public class LPMEvaluationResultIdDeserializer implements JsonDeserializer<LPMEv
                 return StandardLPMEvaluationResultId.TransitionOverlappingEvaluationResult;
             case "TraceSupportEvaluationResult":
                 return StandardLPMEvaluationResultId.TraceSupportEvaluationResult;
+            case "LiftEvaluationResult":
+                return StandardLPMEvaluationResultId.LiftEvaluationResult;
             default:
                 throw new IllegalArgumentException("No evaluation result id exists with the following name: " + json.getAsString());
         }

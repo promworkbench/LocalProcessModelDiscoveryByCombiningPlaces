@@ -7,5 +7,6 @@ public enum StandardLPMEvaluatorId implements LPMEvaluatorId {
     PassageCoverageEvaluator,
     TransitionCoverageEvaluator,
     TraceSupportCountEvaluator,
-    EventCoverageEvaluator
+    EventCoverageEvaluator,
+    LiftEvaluator
 }

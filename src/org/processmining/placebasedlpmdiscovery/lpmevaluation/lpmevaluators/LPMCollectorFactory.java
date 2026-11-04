@@ -28,6 +28,8 @@ public class LPMCollectorFactory {
             return new TransitionCoverageCollector();
         if (collectorId == StandardLPMEvaluatorId.EventCoverageEvaluator)
             return new EventCoverageCollector();
+        if (collectorId == StandardLPMEvaluatorId.LiftEvaluator)
+            return new LiftCollector();
         if (collectorId == StandardLPMCollectorId.EventAttributeCollector)
             return new EventAttributeCollector();
         if (collectorId == StandardLPMCollectorId.PlaceVisitsCollector)

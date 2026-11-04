@@ -33,6 +33,7 @@ public class ZipLPMImporter {
     static {
         SCORE_COLUMNS.put("Fitting Windows Score", StandardLPMEvaluationResultId.FittingWindowsEvaluationResult);
         SCORE_COLUMNS.put("Trace Support Score", StandardLPMEvaluationResultId.TraceSupportEvaluationResult);
+        SCORE_COLUMNS.put("Lift Score", StandardLPMEvaluationResultId.LiftEvaluationResult);
     }
 
     private final List<String> warnings = new ArrayList<>();

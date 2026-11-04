@@ -82,7 +82,7 @@ public class ZipLPMExporterTest {
         String pnmlName = "lpms." + lpm.getId() + ".pnml";
         Assert.assertEquals(Arrays.asList(pnmlName, "lpms.csv"), new ArrayList<>(entries.keySet()));
         List<String> csv = lines(entries.get("lpms.csv"));
-        Assert.assertEquals("Name,Short String,Fitting Windows Score,Trace Support Score,Aggregated Score",
+        Assert.assertEquals("Name,Short String,Fitting Windows Score,Trace Support Score,Lift Score,Aggregated Score",
                 csv.get(0));
         Assert.assertTrue(csv.get(1), csv.get(1).startsWith(pnmlName + ","));
         Assert.assertTrue(csv.get(1), csv.get(1).contains(",0.25,0.75,"));

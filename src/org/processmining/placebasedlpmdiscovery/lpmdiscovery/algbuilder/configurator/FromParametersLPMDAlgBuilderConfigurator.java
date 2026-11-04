@@ -31,6 +31,8 @@ public class FromParametersLPMDAlgBuilderConfigurator implements LPMDAlgBuilderC
                 evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.TraceSupportCountEvaluator));
         builder.registerLPMWindowCollector(StandardLPMEvaluatorId.EventCoverageEvaluator.name(),
                 evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.EventCoverageEvaluator));
+        builder.registerLPMWindowCollector(StandardLPMEvaluatorId.LiftEvaluator.name(),
+                evaluatorFactory.getWindowEvaluator(StandardLPMEvaluatorId.LiftEvaluator));
         builder.registerLPMWindowCollector(StandardLPMCollectorId.EventAttributeCollector.name(),
                 evaluatorFactory.getWindowEvaluator(StandardLPMCollectorId.EventAttributeCollector));
 

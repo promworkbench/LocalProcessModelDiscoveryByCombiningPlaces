@@ -2,8 +2,8 @@ package org.processmining.placebasedlpmdiscovery.view.components.lpmsetdisplay;
 
 import com.google.inject.Inject;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.aggregateoperations.EvaluationResultAggregateOperation;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
@@ -63,6 +63,7 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
                         "Passage Coverage Score",
                         "Passage Repetition Score",
                         "Trace Support",
+                        "Lift",
                         "Aggregate Result"
                 },
                 (ind, lpm) -> new Object[]{
@@ -74,6 +75,7 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
                         df.format(getResultOrDefault(lpm, StandardLPMEvaluationResultId.PassageCoverageEvaluationResult)),
                         df.format(getResultOrDefault(lpm, StandardLPMEvaluationResultId.PassageRepetitionEvaluationResult)),
                         df.format(getResultOrDefault(lpm, StandardLPMEvaluationResultId.TraceSupportEvaluationResult)),
+                        df.format(getResultOrDefault(lpm, StandardLPMEvaluationResultId.LiftEvaluationResult)),
                         df.format(new EvaluationResultAggregateOperation().aggregate(lpm.getAdditionalInfo().getEvaluationResults().values()))
                 });
     }

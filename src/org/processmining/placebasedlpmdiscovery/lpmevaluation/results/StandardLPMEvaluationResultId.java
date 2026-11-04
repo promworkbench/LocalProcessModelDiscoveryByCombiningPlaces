@@ -7,5 +7,6 @@ public enum StandardLPMEvaluationResultId implements LPMEvaluationResultId {
     PassageCoverageEvaluationResult,
     PassageRepetitionEvaluationResult,
     TraceSupportEvaluationResult,
-    EventCoverageEvaluationResult
+    EventCoverageEvaluationResult,
+    LiftEvaluationResult
 }

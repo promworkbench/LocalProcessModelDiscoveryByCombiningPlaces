@@ -2,6 +2,7 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete;
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 
 import java.util.Objects;
 
@@ -28,6 +29,9 @@ public class ImportedEvaluationResult extends SimpleEvaluationResult {
 
     @Override
     public double getNormalizedResult() {
+        // lift is unbounded, so it is normalized the same way as when it is computed
+        if (StandardLPMEvaluationResultId.LiftEvaluationResult.equals(getId()))
+            return LiftEvaluationResult.normalize(importedResult);
         return importedResult;
     }
 

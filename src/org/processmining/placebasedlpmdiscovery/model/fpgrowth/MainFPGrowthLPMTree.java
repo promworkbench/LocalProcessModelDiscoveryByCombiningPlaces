@@ -7,6 +7,7 @@ import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMCollect
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.EventCoverageEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.FittingWindowsEvaluationResult;
+import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.LiftEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.TraceSupportEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.helpers.WindowTotalCounter;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
@@ -114,6 +115,7 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         return sorted;
     }
 
+    // TODO: Should this be in this class?
     public void updateAllTotalCount(WindowTotalCounter windowTotalCounter, Integer totalTraceCount, XLog log) {
         for (MainFPGrowthLPMTreeNode node : this.nodes) {
             for (LPMCollectorResult res : node.getAdditionalInfo().getCollectorResults().values()) {
@@ -123,6 +125,10 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
                     ((TraceSupportEvaluationResult) res).setTotalTraceCount(totalTraceCount);
                 } else if (StandardLPMEvaluationResultId.EventCoverageEvaluationResult.equals(res.getId())) {
                     ((EventCoverageEvaluationResult) res).setEventCountPerActivity(LogUtils.getEventCountPerActivity(log));
+                } else if (StandardLPMEvaluationResultId.LiftEvaluationResult.equals(res.getId())) {
+                    LiftEvaluationResult liftResult = (LiftEvaluationResult) res;
+                    liftResult.setTotal(windowTotalCounter.getWindowCount());
+                    liftResult.setWindowsContainingActivity(windowTotalCounter.getWindowsContainingActivityCount());
                 }
             }
         }
