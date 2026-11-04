@@ -2,24 +2,26 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete;
 
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.LPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.SimpleEvaluationResult;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 
 import java.util.Objects;
 
 /**
- * Evaluation result whose value was read from a file (e.g. the csv in an exported zip) instead of being computed
- * on a log. Only the final score is known, so it is used as the normalized result as well.
+ * Evaluation result whose values were read from a file (e.g. the csv in an exported zip) instead of being computed
+ * on a log. Only the final score and its normalized value are known.
  */
 public class ImportedEvaluationResult extends SimpleEvaluationResult {
 
-    // the field name is used by the json deserializer to recognize imported results
+    // the field names are used by the json deserializer to recognize imported results
     public static final String RESULT_FIELD_NAME = "importedResult";
+    public static final String NORMALIZED_RESULT_FIELD_NAME = "importedNormalizedResult";
     private static final long serialVersionUID = 4127663512077095142L;
     private final double importedResult;
+    private final double importedNormalizedResult;
 
-    public ImportedEvaluationResult(LPMEvaluationResultId id, double importedResult) {
+    public ImportedEvaluationResult(LPMEvaluationResultId id, double importedResult, double importedNormalizedResult) {
         super(id);
         this.importedResult = importedResult;
+        this.importedNormalizedResult = importedNormalizedResult;
     }
 
     @Override
@@ -29,10 +31,7 @@ public class ImportedEvaluationResult extends SimpleEvaluationResult {
 
     @Override
     public double getNormalizedResult() {
-        // lift is unbounded, so it is normalized the same way as when it is computed
-        if (StandardLPMEvaluationResultId.LiftEvaluationResult.equals(getId()))
-            return LiftEvaluationResult.normalize(importedResult);
-        return importedResult;
+        return importedNormalizedResult;
     }
 
     @Override
@@ -40,11 +39,13 @@ public class ImportedEvaluationResult extends SimpleEvaluationResult {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ImportedEvaluationResult that = (ImportedEvaluationResult) o;
-        return Double.compare(importedResult, that.importedResult) == 0 && getId().equals(that.getId());
+        return Double.compare(importedResult, that.importedResult) == 0 &&
+                Double.compare(importedNormalizedResult, that.importedNormalizedResult) == 0 &&
+                getId().equals(that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), importedResult);
+        return Objects.hash(getId(), importedResult, importedNormalizedResult);
     }
 }

@@ -46,16 +46,23 @@ public class ZipLPMImporterTest {
     @Rule
     public TemporaryFolder tmp = new TemporaryFolder();
 
-    private static LocalProcessModel withScores(LocalProcessModel lpm, double fittingWindows, double traceSupport) {
+    // the normalized fitting windows score differs from the score, as it does when computed (min-max over the LPMs)
+    private static LocalProcessModel withScores(LocalProcessModel lpm, double fittingWindows,
+                                                double normalizedFittingWindows, double traceSupport) {
         lpm.getAdditionalInfo().addCollectorResult(FITTING_WINDOWS, new ImportedEvaluationResult(
-                StandardLPMEvaluationResultId.FittingWindowsEvaluationResult, fittingWindows));
+                StandardLPMEvaluationResultId.FittingWindowsEvaluationResult, fittingWindows,
+                normalizedFittingWindows));
         lpm.getAdditionalInfo().addCollectorResult(TRACE_SUPPORT, new ImportedEvaluationResult(
-                StandardLPMEvaluationResultId.TraceSupportEvaluationResult, traceSupport));
+                StandardLPMEvaluationResultId.TraceSupportEvaluationResult, traceSupport, traceSupport));
         return lpm;
     }
 
     private static double score(LocalProcessModel lpm, String key) {
         return lpm.getAdditionalInfo().getEvaluationResult(key, LPMEvaluationResult.class).getResult();
+    }
+
+    private static double normalizedScore(LocalProcessModel lpm, String key) {
+        return lpm.getAdditionalInfo().getEvaluationResult(key, LPMEvaluationResult.class).getNormalizedResult();
     }
 
     private static List<String> tokens(LocalProcessModel lpm) {
@@ -69,11 +76,17 @@ public class ZipLPMImporterTest {
         return result.getElements().stream().collect(Collectors.toMap(LocalProcessModel::getId, Function.identity()));
     }
 
+    private static LocalProcessModel reloadFromJson(String json) throws Exception {
+        LPMDiscoveryResult reloaded = ImporterFactory.createLPMDiscoveryResultJsonImporter()
+                .read(LPMDiscoveryResult.class, new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8)));
+        return reloaded.getAllLPMs().iterator().next();
+    }
+
     @Test
     public void givenExportedZipWithCsv_whenRead_thenStructureIdsAndScoresAreRestored() throws Exception {
         // given
-        LocalProcessModel sequence = withScores(MockLPMs.getSequenceLPM_abc(), 0.25, 0.75);
-        LocalProcessModel choice = withScores(new LocalProcessModel(MockPlaces.getChoiceOutPlace()), 0.5, 0.125);
+        LocalProcessModel sequence = withScores(MockLPMs.getSequenceLPM_abc(), 0.25, 0.0, 0.75);
+        LocalProcessModel choice = withScores(new LocalProcessModel(MockPlaces.getChoiceOutPlace()), 0.5, 1.0, 0.125);
         choice.getPlaces().iterator().next().setNumTokens(1);
         File zip = export("lpms.zip", sequence, choice);
 
@@ -92,6 +105,9 @@ public class ZipLPMImporterTest {
             Assert.assertEquals(tokens(original), tokens(lpm));
             Assert.assertEquals(score(original, FITTING_WINDOWS), score(lpm, FITTING_WINDOWS), 1e-9);
             Assert.assertEquals(score(original, TRACE_SUPPORT), score(lpm, TRACE_SUPPORT), 1e-9);
+            Assert.assertEquals(normalizedScore(original, FITTING_WINDOWS), normalizedScore(lpm, FITTING_WINDOWS),
+                    1e-9);
+            Assert.assertEquals(normalizedScore(original, TRACE_SUPPORT), normalizedScore(lpm, TRACE_SUPPORT), 1e-9);
         }
         Assert.assertTrue(importer.getWarnings().isEmpty());
     }
@@ -99,7 +115,7 @@ public class ZipLPMImporterTest {
     @Test
     public void givenZipWithoutCsv_whenRead_thenLPMsHaveNoScoresAndCanBeExportedAgain() throws Exception {
         // given
-        LocalProcessModel lpm = withScores(MockLPMs.getSequenceLPM_abc(), 0.25, 0.75);
+        LocalProcessModel lpm = withScores(MockLPMs.getSequenceLPM_abc(), 0.25, 0.0, 0.75);
         File zip = replaceCsv(export("lpms.zip", lpm), null);
 
         // when
@@ -125,12 +141,12 @@ public class ZipLPMImporterTest {
         LocalProcessModel withRow = MockLPMs.getSequenceLPM_abc();
         LocalProcessModel withoutRow = new LocalProcessModel(MockPlaces.getChoiceInPlace());
         LocalProcessModel withInvalidValue = new LocalProcessModel(MockPlaces.getDoubleChoicePlace());
-        File zip = export("lpms.zip", withScores(withRow, 0, 0), withScores(withoutRow, 0, 0),
-                withScores(withInvalidValue, 0, 0));
-        String csv = "Trace Support Score,Name\n" +
-                "0.4,lpms." + withRow.getId() + ".pnml\n" +
-                "abc,lpms." + withInvalidValue.getId() + ".pnml\n" +
-                "0.9,lpms.does-not-exist.pnml\n";
+        File zip = export("lpms.zip", withScores(withRow, 0, 0, 0), withScores(withoutRow, 0, 0, 0),
+                withScores(withInvalidValue, 0, 0, 0));
+        String csv = "Trace Support Score (normalized),Trace Support Score,Name\n" +
+                "0.4,0.4,lpms." + withRow.getId() + ".pnml\n" +
+                "0.5,abc,lpms." + withInvalidValue.getId() + ".pnml\n" +
+                "0.9,0.9,lpms.does-not-exist.pnml\n";
         zip = replaceCsv(zip, csv);
 
         // when
@@ -209,22 +225,69 @@ public class ZipLPMImporterTest {
     }
 
     @Test
-    public void givenImportedScores_whenJsonRoundTrip_thenScoresArePreserved() throws Exception {
-        // given
-        LocalProcessModel lpm = withScores(MockLPMs.getSequenceLPM_abc(), 0.25, 0.75);
-        File zip = export("lpms.zip", lpm);
-        LPMResult imported = new ZipLPMImporter().read(Files.newInputStream(zip.toPath()), zip.getName());
+    public void givenCsvWithScoreButNoNormalizedColumn_whenRead_thenScoreIsNotImported() throws Exception {
+        // given: e.g. exported before the normalized values were written
+        LocalProcessModel lpm = MockLPMs.getSequenceLPM_abc();
+        File zip = export("lpms.zip", withScores(lpm, 0, 0, 0));
+        String csv = "Name,Fitting Windows Score,Trace Support Score,Trace Support Score (normalized)\n" +
+                "lpms." + lpm.getId() + ".pnml,0.25,0.4,0.4\n";
+        zip = replaceCsv(zip, csv);
 
         // when
-        ByteArrayOutputStream json = new ByteArrayOutputStream();
-        imported.export(ExporterFactory.createLPMDiscoveryResultExporter(), json);
-        LPMDiscoveryResult reloaded = ImporterFactory.createLPMDiscoveryResultJsonImporter()
-                .read(LPMDiscoveryResult.class, new ByteArrayInputStream(json.toByteArray()));
+        ZipLPMImporter importer = new ZipLPMImporter();
+        LocalProcessModel imported = importer.read(Files.newInputStream(zip.toPath()), zip.getName()).getElement(0);
 
         // then
-        LocalProcessModel reloadedLPM = reloaded.getAllLPMs().iterator().next();
+        Assert.assertNull(imported.getAdditionalInfo().getEvaluationResult(FITTING_WINDOWS, LPMEvaluationResult.class));
+        Assert.assertEquals(0.4, score(imported, TRACE_SUPPORT), 1e-9);
+        // one warning for the column, not one per row
+        Assert.assertEquals(importer.getWarnings().toString(), 1, importer.getWarnings().size());
+        Assert.assertTrue(importer.getWarnings().get(0), importer.getWarnings().get(0).contains("Fitting Windows " +
+                "Score"));
+    }
+
+    @Test
+    public void givenImportedScores_whenJsonRoundTrip_thenScoresArePreserved() throws Exception {
+        // given
+        LocalProcessModel lpm = withScores(MockLPMs.getSequenceLPM_abc(), 0.25, 1.0, 0.75);
+
+        // when
+        LocalProcessModel reloadedLPM = reloadFromJson(importedJson(lpm));
+
+        // then
         Assert.assertEquals(0.25, score(reloadedLPM, FITTING_WINDOWS), 1e-9);
+        Assert.assertEquals(1.0, normalizedScore(reloadedLPM, FITTING_WINDOWS), 1e-9);
         Assert.assertEquals(0.75, score(reloadedLPM, TRACE_SUPPORT), 1e-9);
+        Assert.assertEquals(0.75, normalizedScore(reloadedLPM, TRACE_SUPPORT), 1e-9);
+    }
+
+    @Test
+    public void givenJsonWithImportedScoresWithoutNormalizedValue_whenRead_thenScoresAreDroppedAndLPMIsKept()
+            throws Exception {
+        // given: json saved by an older version, which did not store the normalized value
+        LocalProcessModel lpm = withScores(MockLPMs.getSequenceLPM_abc(), 0.25, 1.0, 0.75);
+        String json = importedJson(lpm);
+        String oldJson = json.replaceAll(",\\s*\"" + ImportedEvaluationResult.NORMALIZED_RESULT_FIELD_NAME +
+                "\"\\s*:\\s*[-0-9.Ee]+", "");
+        Assert.assertNotEquals("the normalized value should be removed from the json", json, oldJson);
+
+        // when
+        LocalProcessModel reloadedLPM = reloadFromJson(oldJson);
+
+        // then
+        Assert.assertEquals(lpm.getId(), reloadedLPM.getId());
+        Assert.assertTrue(reloadedLPM.getAdditionalInfo().getEvaluationResults().isEmpty());
+    }
+
+    /**
+     * Exports the LPM to a zip, imports it again and saves the imported LPMs as json.
+     */
+    private String importedJson(LocalProcessModel lpm) throws Exception {
+        File zip = export("lpms.zip", lpm);
+        LPMResult imported = new ZipLPMImporter().read(Files.newInputStream(zip.toPath()), zip.getName());
+        ByteArrayOutputStream json = new ByteArrayOutputStream();
+        imported.export(ExporterFactory.createLPMDiscoveryResultExporter(), json);
+        return new String(json.toByteArray(), StandardCharsets.UTF_8);
     }
 
     private File export(String fileName, LocalProcessModel... lpms) throws IOException {

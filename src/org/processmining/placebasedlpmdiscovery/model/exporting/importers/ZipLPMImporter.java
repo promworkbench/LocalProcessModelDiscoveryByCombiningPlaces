@@ -5,6 +5,7 @@ import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete.ImportedEvaluationResult;
 import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.model.exporting.exporters.ZipLPMExporter;
 import org.processmining.placebasedlpmdiscovery.model.serializable.LPMResult;
 import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
@@ -49,6 +50,10 @@ public class ZipLPMImporter {
         if (fileName.isEmpty() || fileName.startsWith("._"))
             return null;
         return fileName;
+    }
+
+    private static String normalizedColumn(String scoreColumn) {
+        return scoreColumn + ZipLPMExporter.NORMALIZED_COLUMN_SUFFIX;
     }
 
     private static byte[] readEntry(ZipInputStream zip) throws IOException {
@@ -165,6 +170,20 @@ public class ZipLPMImporter {
                 return;
             }
 
+            // the normalized value can not always be derived from the score (e.g. it depends on the other LPMs),
+            // so scores without their normalized column are not imported
+            Map<String, StandardLPMEvaluationResultId> scoreColumns = new LinkedHashMap<>();
+            for (Map.Entry<String, StandardLPMEvaluationResultId> column : SCORE_COLUMNS.entrySet()) {
+                if (reader.getIndex(column.getKey()) < 0)
+                    continue;
+                if (reader.getIndex(normalizedColumn(column.getKey())) < 0) {
+                    warnings.add("The csv file has a '" + column.getKey() + "' column but no '" +
+                            normalizedColumn(column.getKey()) + "' column; the score is not imported.");
+                    continue;
+                }
+                scoreColumns.put(column.getKey(), column.getValue());
+            }
+
             Set<String> scoredLPMs = new HashSet<>();
             while (reader.readRecord()) {
                 String name = reader.get(NAME_COLUMN).trim();
@@ -175,18 +194,19 @@ public class ZipLPMImporter {
                     continue;
                 }
 
-                for (Map.Entry<String, StandardLPMEvaluationResultId> column : SCORE_COLUMNS.entrySet()) {
-                    if (reader.getIndex(column.getKey()) < 0)
-                        continue;
+                for (Map.Entry<String, StandardLPMEvaluationResultId> column : scoreColumns.entrySet()) {
                     String value = reader.get(column.getKey()).trim();
-                    if (value.isEmpty())
+                    String normalizedValue = reader.get(normalizedColumn(column.getKey())).trim();
+                    if (value.isEmpty() && normalizedValue.isEmpty())
                         continue;
                     try {
                         double score = Double.parseDouble(value);
+                        double normalizedScore = Double.parseDouble(normalizedValue);
                         lpm.getAdditionalInfo().addCollectorResult(column.getValue().name(),
-                                new ImportedEvaluationResult(column.getValue(), score));
+                                new ImportedEvaluationResult(column.getValue(), score, normalizedScore));
                     } catch (NumberFormatException e) {
-                        warnings.add("Invalid " + column.getKey() + " '" + value + "' for " + name + ".");
+                        warnings.add("Invalid " + column.getKey() + " '" + value + "' (normalized '" +
+                                normalizedValue + "') for " + name + ".");
                     }
                 }
                 if (!lpm.getAdditionalInfo().getEvaluationResults().isEmpty())

@@ -29,12 +29,15 @@ public class ZipLPMExporterTest {
     @Rule
     public TemporaryFolder tmp = new TemporaryFolder();
 
-    private static LocalProcessModel withScores(LocalProcessModel lpm, double fittingWindows, double traceSupport) {
+    // the normalized fitting windows score differs from the score, as it does when computed (min-max over the LPMs)
+    private static LocalProcessModel withScores(LocalProcessModel lpm, double fittingWindows,
+                                                double normalizedFittingWindows, double traceSupport) {
         lpm.getAdditionalInfo().addCollectorResult(StandardLPMEvaluationResultId.FittingWindowsEvaluationResult.name(),
                 new ImportedEvaluationResult(StandardLPMEvaluationResultId.FittingWindowsEvaluationResult,
-                        fittingWindows));
+                        fittingWindows, normalizedFittingWindows));
         lpm.getAdditionalInfo().addCollectorResult(StandardLPMEvaluationResultId.TraceSupportEvaluationResult.name(),
-                new ImportedEvaluationResult(StandardLPMEvaluationResultId.TraceSupportEvaluationResult, traceSupport));
+                new ImportedEvaluationResult(StandardLPMEvaluationResultId.TraceSupportEvaluationResult,
+                        traceSupport, traceSupport));
         return lpm;
     }
 
@@ -69,7 +72,7 @@ public class ZipLPMExporterTest {
     @Test
     public void givenResultWithoutCoverage_whenExport_thenNetsAndScoresCsvAreWritten() throws Exception {
         // given
-        LocalProcessModel lpm = withScores(MockLPMs.getSequenceLPM_abc(), 0.25, 0.75);
+        LocalProcessModel lpm = withScores(MockLPMs.getSequenceLPM_abc(), 0.25, 1.0, 0.75);
         LPMResult result = new LPMResult();
         result.add(lpm);
         File zip = new File(tmp.getRoot(), "lpms.zip");
@@ -82,17 +85,21 @@ public class ZipLPMExporterTest {
         String pnmlName = "lpms." + lpm.getId() + ".pnml";
         Assert.assertEquals(Arrays.asList(pnmlName, "lpms.csv"), new ArrayList<>(entries.keySet()));
         List<String> csv = lines(entries.get("lpms.csv"));
-        Assert.assertEquals("Name,Short String,Fitting Windows Score,Trace Support Score,Lift Score,Aggregated Score",
+        Assert.assertEquals("Name,Short String," +
+                        "Fitting Windows Score,Fitting Windows Score (normalized)," +
+                        "Trace Support Score,Trace Support Score (normalized)," +
+                        "Lift Score,Lift Score (normalized),Aggregated Score",
                 csv.get(0));
         Assert.assertTrue(csv.get(1), csv.get(1).startsWith(pnmlName + ","));
-        Assert.assertTrue(csv.get(1), csv.get(1).contains(",0.25,0.75,"));
+        // no lift result, so its columns are empty; the aggregate is the mean of the normalized values
+        Assert.assertTrue(csv.get(1), csv.get(1).endsWith(",0.25,1.0,0.75,0.75,,,0.875"));
     }
 
     @Test
     public void givenResultWithCoverage_whenExport_thenCoverageRowsAreNamedByPnmlFile() throws Exception {
         // given
-        LocalProcessModel covering = withScores(MockLPMs.getSequenceLPM_abc(), 0.25, 0.75);
-        LocalProcessModel uncovered = withScores(new LocalProcessModel(MockPlaces.getChoiceInPlace()), 0.5, 0.5);
+        LocalProcessModel covering = withScores(MockLPMs.getSequenceLPM_abc(), 0.25, 0.0, 0.75);
+        LocalProcessModel uncovered = withScores(new LocalProcessModel(MockPlaces.getChoiceInPlace()), 0.5, 1.0, 0.5);
         LocalProcessModel notExported = new LocalProcessModel(MockPlaces.getDoubleChoicePlace());
         LPMEvaluationController.EventCoverageSetLevel coverage =
                 new LPMEvaluationController().getEventCoverageSetLevel();

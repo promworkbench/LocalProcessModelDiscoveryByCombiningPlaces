@@ -3,7 +3,6 @@ package org.processmining.placebasedlpmdiscovery.lpmevaluation.results.concrete;
 import org.junit.Assert;
 import org.junit.Test;
 import org.processmining.mockobjects.MockLPMs;
-import org.processmining.placebasedlpmdiscovery.lpmevaluation.results.StandardLPMEvaluationResultId;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -97,14 +96,5 @@ public class LiftEvaluationResultTest {
         clone.updateCount(1);
         Assert.assertNotEquals(result, clone);
         Assert.assertEquals(6.25, result.getResult(), DELTA);
-    }
-
-    @Test
-    public void givenImportedLift_whenGetNormalizedResult_thenSameMappingAsComputed() {
-        ImportedEvaluationResult imported = new ImportedEvaluationResult(
-                StandardLPMEvaluationResultId.LiftEvaluationResult, 3.0);
-
-        Assert.assertEquals(3.0, imported.getResult(), DELTA);
-        Assert.assertEquals(0.75, imported.getNormalizedResult(), DELTA);
     }
 }

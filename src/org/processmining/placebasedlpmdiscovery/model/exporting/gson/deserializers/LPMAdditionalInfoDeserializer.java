@@ -7,15 +7,21 @@ import org.processmining.placebasedlpmdiscovery.model.additionalinfo.GroupsInfo;
 import org.processmining.placebasedlpmdiscovery.model.additionalinfo.LPMAdditionalInfo;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class LPMAdditionalInfoDeserializer implements JsonDeserializer<LPMAdditionalInfo> {
     private static LPMCollectorResult deserializeSingleCollectorResult(JsonDeserializationContext context,
                                                                        String key,
                                                                        JsonElement evalRes) {
-        // imported results are stored under the standard keys but only hold the final score
-        if (evalRes.isJsonObject() && evalRes.getAsJsonObject().has(ImportedEvaluationResult.RESULT_FIELD_NAME))
+        // imported results are stored under the standard keys but only hold the final score and its normalized value
+        if (evalRes.isJsonObject() && evalRes.getAsJsonObject().has(ImportedEvaluationResult.RESULT_FIELD_NAME)) {
+            // saved by an older version without the normalized value, which can not be recovered, so it is dropped
+            if (!evalRes.getAsJsonObject().has(ImportedEvaluationResult.NORMALIZED_RESULT_FIELD_NAME))
+                return null;
             return context.deserialize(evalRes, ImportedEvaluationResult.class);
+        }
 
         LPMCollectorResult lpmCollectorResult;
         switch (key) {
@@ -61,10 +67,16 @@ public class LPMAdditionalInfoDeserializer implements JsonDeserializer<LPMAdditi
         JsonObject jsonObject = json.getAsJsonObject();
         JsonObject collectorResultsJson = jsonObject.get("collectorResults").getAsJsonObject();
 
+        List<String> dropped = new ArrayList<>();
         for (Map.Entry<String, JsonElement> collRes : collectorResultsJson.entrySet()) {
-            lpmAdditionalInfo.addCollectorResult(collRes.getKey(),
-                    deserializeSingleCollectorResult(context, collRes.getKey(), collRes.getValue()));
+            LPMCollectorResult result = deserializeSingleCollectorResult(context, collRes.getKey(), collRes.getValue());
+            if (result == null)
+                dropped.add(collRes.getKey());
+            else
+                lpmAdditionalInfo.addCollectorResult(collRes.getKey(), result);
         }
+        if (!dropped.isEmpty())
+            System.err.println("Imported scores without a normalized value are dropped: " + dropped);
         lpmAdditionalInfo.setGroupsInfo(context.deserialize(jsonObject.get("groupsInfo"), GroupsInfo.class));
         return lpmAdditionalInfo;
     }

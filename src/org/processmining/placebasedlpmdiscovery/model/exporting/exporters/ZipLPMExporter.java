@@ -26,7 +26,8 @@ import java.util.zip.ZipOutputStream;
  * Exports LPMs to a zip file named {@code <prefix>.<...>}, containing:
  * <ul>
  *     <li>{@code <prefix>.<lpmId>.pnml}: one accepting Petri net per LPM,</li>
- *     <li>{@code <prefix>.csv}: one row per LPM with the pnml file name, short string and scores,</li>
+ *     <li>{@code <prefix>.csv}: one row per LPM with the pnml file name, short string and scores, each score
+ *     followed by its normalized value,</li>
  *     <li>{@code <prefix>-coverage.csv}: which LPM covers which event, only if the result contains the event
  *     coverage computed during the discovery.</li>
  * </ul>
@@ -36,6 +37,8 @@ import java.util.zip.ZipOutputStream;
 public class ZipLPMExporter {
 
     public static final String EVENT_COVERAGE_KEY = "eventCoverageSetLevel";
+    // each score column is followed by a column with its normalized value, named <score column><suffix>
+    public static final String NORMALIZED_COLUMN_SUFFIX = " (normalized)";
     private static final Map<String, StandardLPMEvaluationResultId> SCORE_COLUMNS = new LinkedHashMap<>();
 
     static {
@@ -92,8 +95,10 @@ public class ZipLPMExporter {
         CsvWriter csvWriter = new CsvWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8), ',');
         csvWriter.write("Name");
         csvWriter.write("Short String");
-        for (String column : SCORE_COLUMNS.keySet())
+        for (String column : SCORE_COLUMNS.keySet()) {
             csvWriter.write(column);
+            csvWriter.write(column + NORMALIZED_COLUMN_SUFFIX);
+        }
         csvWriter.write("Aggregated Score");
         csvWriter.endRecord();
 
@@ -105,6 +110,7 @@ public class ZipLPMExporter {
                 LPMEvaluationResult result = lpm.getAdditionalInfo()
                         .getEvaluationResult(id.name(), LPMEvaluationResult.class);
                 csvWriter.write(result == null ? "" : String.valueOf(result.getResult()));
+                csvWriter.write(result == null ? "" : String.valueOf(result.getNormalizedResult()));
             }
             csvWriter.write(String.valueOf(
                     aggregateOperation.aggregate(lpm.getAdditionalInfo().getEvaluationResults().values())));
