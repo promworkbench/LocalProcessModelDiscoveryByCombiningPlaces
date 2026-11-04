@@ -23,7 +23,7 @@ import java.util.zip.ZipInputStream;
  * LPMs that have no row in it) the LPMs are imported without evaluation results.
  */
 public class ZipLPMImporter {
-
+    // TODO: How to handle scores by import gracefully also in JsonImporter
     private static final String PNML_EXTENSION = ".pnml";
     private static final String CSV_EXTENSION = ".csv";
     // the event coverage written by the export is not imported

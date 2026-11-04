@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-
+// TODO: LPM model should be able to exist without additional information
 /**
  * The LocalProcessModel class is used to represent the logic for local process models. It contains places,
  * transitions and arcs between them.

@@ -51,6 +51,9 @@ public class LPMResultPluginVisualizerTableFactory extends AbstractPluginVisuali
 
     @Override
     protected CustomObjectTableModel<LocalProcessModel> createTableModel(Map<Integer, LocalProcessModel> indexObjectMap) {
+        // TODO: The table should be independent of the evaluation results, and the evaluation results should be
+        //  added as columns dynamically based on the available results in the LPMs. This will allow for more
+        //  flexibility and adaptability to different evaluation scenarios.
         DecimalFormat df = new DecimalFormat("#.###");
         return new CustomObjectTableModel<>(
                 indexObjectMap,
