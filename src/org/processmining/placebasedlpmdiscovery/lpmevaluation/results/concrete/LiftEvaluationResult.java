@@ -79,6 +79,7 @@ public class LiftEvaluationResult extends SimpleEvaluationResult {
         return activities;
     }
 
+    // obtains the log-level window counts of the LPM's activities, missing activities count as 0
     public void setWindowsContainingActivity(Map<String, Integer> windowsContainingActivity) {
         this.windowsContainingActivity = new HashMap<>();
         for (String activity : this.activities)
@@ -86,29 +87,21 @@ public class LiftEvaluationResult extends SimpleEvaluationResult {
     }
 
     /**
-     * @return the natural logarithm of the lift, or NaN if it can not be computed
+     * @return the lift, or -1 if it can not be computed
      */
-    public double getLogLift() {
+    @Override
+    public double getResult() {
         if (this.total == 0 || this.count == 0 || this.activities.isEmpty())
-            return Double.NaN;
+            return -1;
 
-        double logTotal = Math.log(this.total);
-        double logLift = Math.log(this.count) - logTotal;
+        double lift = (double) this.count / this.total;
         for (String activity : this.activities) {
             int activityCount = this.windowsContainingActivity.getOrDefault(activity, 0);
             if (activityCount == 0)
-                return Double.NaN;
-            logLift -= Math.log(activityCount) - logTotal;
+                return -1;
+            lift /= (double) activityCount / this.total;
         }
-        return logLift;
-    }
-
-    @Override
-    public double getResult() {
-        double logLift = getLogLift();
-        if (Double.isNaN(logLift))
-            return -1;
-        return Math.exp(logLift);
+        return lift;
     }
 
     @Override

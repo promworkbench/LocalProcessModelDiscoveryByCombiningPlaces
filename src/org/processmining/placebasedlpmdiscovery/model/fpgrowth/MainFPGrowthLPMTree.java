@@ -115,7 +115,8 @@ public class MainFPGrowthLPMTree extends FPGrowthLPMTree<MainFPGrowthLPMTreeNode
         return sorted;
     }
 
-    // TODO: Should this be in this class?
+    // TODO: Should this be in this class and can it be resolved more elegantly instead of going through all the
+    //  possible evaluation results?
     public void updateAllTotalCount(WindowTotalCounter windowTotalCounter, Integer totalTraceCount, XLog log) {
         for (MainFPGrowthLPMTreeNode node : this.nodes) {
             for (LPMCollectorResult res : node.getAdditionalInfo().getCollectorResults().values()) {

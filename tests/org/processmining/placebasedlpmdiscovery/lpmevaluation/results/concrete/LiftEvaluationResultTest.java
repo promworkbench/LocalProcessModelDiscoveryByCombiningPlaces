@@ -41,7 +41,6 @@ public class LiftEvaluationResultTest {
         LiftEvaluationResult result = liftForAbc(5, 100, counts("a", 20, "b", 20, "c", 20, "x", 90));
 
         Assert.assertEquals(6.25, result.getResult(), DELTA);
-        Assert.assertEquals(Math.log(6.25), result.getLogLift(), DELTA);
         Assert.assertEquals(6.25 / 7.25, result.getNormalizedResult(), DELTA);
     }
 
@@ -55,7 +54,7 @@ public class LiftEvaluationResultTest {
     }
 
     @Test
-    public void givenManyRareActivities_whenGetResult_thenNoUnderflow() {
+    public void givenRareActivitiesInLargeLog_whenGetResult_thenLargeLiftIsExact() {
         LiftEvaluationResult result = liftForAbc(1, 1_000_000_000,
                 counts("a", 1, "b", 1, "c", 1));
 
