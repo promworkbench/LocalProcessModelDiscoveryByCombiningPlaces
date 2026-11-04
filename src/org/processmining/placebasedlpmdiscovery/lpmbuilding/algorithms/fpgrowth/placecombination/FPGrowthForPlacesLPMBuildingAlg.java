@@ -91,8 +91,7 @@ public class FPGrowthForPlacesLPMBuildingAlg implements LPMBuildingAlg {
         WindowBasedEventLog windowBasedEventLog = WindowBasedEventLog.getInstance(log, maxWindowSize);
         WindowLPMTree localTree = new WindowLPMTree(maxWindowSize); // window tree
         for (SlidingWindowInfo windowInfo : windowBasedEventLog) {
-            windowTotalCounter.update(windowInfo.getIntWindow(), windowInfo.getWindowCount()); // update window counter
-            windowTotalCounter.updateActivityPresence(windowInfo.getWindow(), windowInfo.getWindowCount());
+            windowTotalCounter.update(windowInfo.getWindow(), windowInfo.getWindowCount()); // update window counter
 
             if (windowInfo.getStartPos() == 0 && windowInfo.getEndPos() == 0) { // new trace variant new WindowLPMTree
                 localTree = new WindowLPMTree(maxWindowSize);

@@ -10,12 +10,10 @@ import java.util.stream.Collectors;
 
 public class WindowTotalCounter {
 
-    private final Map<Integer, Integer> transitionCount;
     private final Map<String, Integer> windowsContainingActivityCount; // each window counted once per activity
     private int windowCount;
 
     public WindowTotalCounter() {
-        transitionCount = new HashMap<>();
         windowsContainingActivityCount = new HashMap<>();
     }
 
@@ -23,23 +21,12 @@ public class WindowTotalCounter {
         return windowCount;
     }
 
-    public Map<Integer, Integer> getTransitionCount() {
-        return transitionCount;
-    }
-
     public Map<String, Integer> getWindowsContainingActivityCount() {
         return windowsContainingActivityCount;
     }
 
-    public void update(List<Integer> window, int count) {
+    public void update(List<Activity> window, int count) {
         this.windowCount += count;
-        for (Integer tr : window) {
-            int trCount = transitionCount.getOrDefault(tr, 0);
-            transitionCount.put(tr, trCount + count);
-        }
-    }
-
-    public void updateActivityPresence(List<Activity> window, int count) {
         Set<String> activities = window.stream().map(Activity::getName).collect(Collectors.toSet());
         for (String activity : activities) {
             windowsContainingActivityCount.merge(activity, count, Integer::sum);

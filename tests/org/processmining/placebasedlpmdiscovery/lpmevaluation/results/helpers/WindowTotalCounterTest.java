@@ -16,25 +16,26 @@ public class WindowTotalCounterTest {
     }
 
     @Test
-    public void givenWindowWithRepeatedActivity_whenUpdateActivityPresence_thenWindowCountedOnce() {
+    public void givenWindowWithRepeatedActivity_whenUpdate_thenWindowCountedOnce() {
         WindowTotalCounter counter = new WindowTotalCounter();
 
-        counter.updateActivityPresence(window("a", "b", "a"), 1);
+        counter.update(window("a", "b", "a"), 1);
 
         Assert.assertEquals(Integer.valueOf(1), counter.getWindowsContainingActivityCount().get("a"));
         Assert.assertEquals(Integer.valueOf(1), counter.getWindowsContainingActivityCount().get("b"));
     }
 
     @Test
-    public void givenMultipleWindows_whenUpdateActivityPresence_thenWindowMultiplicityIsSummed() {
+    public void givenMultipleWindows_whenUpdate_thenWindowMultiplicityIsSummed() {
         WindowTotalCounter counter = new WindowTotalCounter();
 
-        counter.updateActivityPresence(window("a", "b"), 3);
-        counter.updateActivityPresence(window("b", "c"), 2);
+        counter.update(window("a", "b"), 3);
+        counter.update(window("b", "c"), 2);
 
         Assert.assertEquals(Integer.valueOf(3), counter.getWindowsContainingActivityCount().get("a"));
         Assert.assertEquals(Integer.valueOf(5), counter.getWindowsContainingActivityCount().get("b"));
         Assert.assertEquals(Integer.valueOf(2), counter.getWindowsContainingActivityCount().get("c"));
         Assert.assertNull(counter.getWindowsContainingActivityCount().get("d"));
+        Assert.assertEquals(5, counter.getWindowCount());
     }
 }
