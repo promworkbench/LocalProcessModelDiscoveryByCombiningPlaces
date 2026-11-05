@@ -22,4 +22,8 @@ public class PrecomputedFromFileModelDistanceConfig implements ModelDistanceConf
     public String getFilename() {
         return filename;
     }
+
+    public ModelDistanceConfig getOriginalConfig() {
+        return originalConfig;
+    }
 }

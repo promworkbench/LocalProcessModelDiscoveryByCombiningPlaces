@@ -41,7 +41,7 @@ public class ModelDistanceFactory {
                 if (!(distanceConfig instanceof MixedModelDistanceConfig))
                     throw new IllegalStateException("The distance method does not pass on the distance config.");
                 return this.getMixedModelDistance((MixedModelDistanceConfig) distanceConfig);
-            case "Precomputed":
+            case PrecomputedFromFileModelDistanceConfig.METHOD:
                 return new PrecomputedFromFileModelDistance((PrecomputedFromFileModelDistanceConfig) distanceConfig);
         }
         throw new IllegalArgumentException("The Distance Method " + distanceConfig.getDistanceMethod() + " is illegal.");
