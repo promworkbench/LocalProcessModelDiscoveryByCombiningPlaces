@@ -6,6 +6,9 @@ import org.deckfour.xes.model.XLog;
 import org.deckfour.xes.model.XTrace;
 import org.processmining.acceptingpetrinet.models.AcceptingPetriNet;
 import org.processmining.lpms.quality.alignments.PNAlignments;
+import org.processmining.placebasedlpmdiscovery.lpmdiscovery.results.FromFileLPMDiscoveryResult;
+import org.processmining.placebasedlpmdiscovery.model.LocalProcessModel;
+import org.processmining.placebasedlpmdiscovery.utils.LocalProcessModelUtils;
 import org.processmining.placebasedlpmdiscovery.utils.LogUtils;
 import org.processmining.placebasedlpmdiscovery.utils.PlaceUtils;
 import org.processmining.plugins.petrinet.replayresult.PNMatchInstancesRepResult;
@@ -34,7 +37,7 @@ import java.util.stream.Stream;
 final class LpmAlignmentsFixtures {
 
     /**
-     * lpm short-string -> trace index (zero-padded) -> sorted, deduped list of optimal
+     * lpm key -> trace index (zero-padded) -> sorted, deduped list of optimal
      * alignments, each alignment serialized as its step types joined with "-".
      */
     static final Type ALIGNMENTS_TYPE =
@@ -44,8 +47,27 @@ final class LpmAlignmentsFixtures {
     private LpmAlignmentsFixtures() {
     }
 
+    /**
+     * Loads an lpm set as accepting Petri nets, sorted by key. Two input variants are supported:
+     * <ul>
+     *     <li>a <b>directory</b> of {@code .pnml} files: one entry per file, keyed by file name;</li>
+     *     <li>a <b>file</b> readable by {@link FromFileLPMDiscoveryResult} (e.g. an LPM {@code .json}):
+     *     one entry per LPM, keyed by {@link LocalProcessModel#getShortString()}.</li>
+     * </ul>
+     */
     static Map<String, AcceptingPetriNet> loadLpms(String filePath) throws IOException {
-        try (Stream<Path> paths = Files.list(Paths.get(filePath))) {
+        Path path = Paths.get(filePath);
+        if (Files.isDirectory(path)) {
+            return loadLpmsFromPnmlDirectory(path);
+        }
+        if (Files.isRegularFile(path)) {
+            return loadLpmsFromLpmFile(filePath);
+        }
+        throw new IOException("LPM source does not exist: " + path.toAbsolutePath());
+    }
+
+    private static Map<String, AcceptingPetriNet> loadLpmsFromPnmlDirectory(Path directory) throws IOException {
+        try (Stream<Path> paths = Files.list(directory)) {
             List<Path> pnmlFiles = paths
                     .filter(path -> path.toString().endsWith(".pnml"))
                     .sorted()
@@ -57,8 +79,19 @@ final class LpmAlignmentsFixtures {
             }
             return lpms;
         } catch (XmlPullParserException e) {
-            throw new IOException("Failed to parse a PNML file in " + filePath, e);
+            throw new IOException("Failed to parse a PNML file in " + directory, e);
         }
+    }
+
+    private static Map<String, AcceptingPetriNet> loadLpmsFromLpmFile(String filePath) throws IOException {
+        Map<String, AcceptingPetriNet> lpms = new TreeMap<>();
+        for (LocalProcessModel lpm : new FromFileLPMDiscoveryResult(filePath).getAllLPMs()) {
+            String key = lpm.getShortString();
+            if (lpms.put(key, LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm)) != null) {
+                throw new IOException("Duplicate LPM " + key + " in " + filePath);
+            }
+        }
+        return lpms;
     }
 
     static XLog loadLog(String filePath) throws Exception {
@@ -66,9 +99,8 @@ final class LpmAlignmentsFixtures {
     }
 
     /**
-     * Computes, for every (lpm, trace) pair, the set of all tied-optimal alignments using
-     * {@link PNAlignments#tax()}, keyed deterministically so the result can be compared
-     * byte-for-byte across runs.
+     * Computes, for every (lpm, trace) pair, the set of all tied-optimal alignments, keyed
+     * deterministically so the result can be compared byte-for-byte across runs.
      */
     static TreeMap<String, TreeMap<String, List<String>>> computeAllOptimalAlignments(
             Map<String, AcceptingPetriNet> lpms, XLog log) throws AStarException {
@@ -76,17 +108,15 @@ final class LpmAlignmentsFixtures {
     }
 
     /**
-     * Computes, for every (lpm, trace) pair, the set of all tied-optimal alignments produced by
-     * {@code alignments}, keyed deterministically so results from different algorithms can be
-     * compared against each other.
+     * Same as {@link #computeAllOptimalAlignments(Map, XLog)} but using {@code algorithm} instead of
+     * the default {@link PNAlignments#tax()}.
      */
     static TreeMap<String, TreeMap<String, List<String>>> computeAllOptimalAlignments(
             Map<String, AcceptingPetriNet> lpms, XLog log, PNAlignments algorithm) throws AStarException {
         TreeMap<String, TreeMap<String, List<String>>> byLpm = new TreeMap<>();
 
-        for (String lpm : lpms.keySet()) {
-            AcceptingPetriNet apn = lpms.get(lpm);
-            PNMatchInstancesRepResult result = algorithm.compute(apn, log);
+        for (Map.Entry<String, AcceptingPetriNet> lpm : lpms.entrySet()) {
+            PNMatchInstancesRepResult result = algorithm.compute(lpm.getValue(), log);
 
             TreeMap<String, List<String>> byTrace = new TreeMap<>();
             for (AllSyncReplayResult r : result) {
@@ -99,7 +129,7 @@ final class LpmAlignmentsFixtures {
                     byTrace.put(traceKey(traceIndex), alignments);
                 }
             }
-            byLpm.put(lpm, byTrace);
+            byLpm.put(lpm.getKey(), byTrace);
         }
 
         return byLpm;
@@ -107,8 +137,8 @@ final class LpmAlignmentsFixtures {
 
     /**
      * Computes the set of all tied-optimal alignments for a single (lpm, trace) pair using
-     * {@code algorithm}, sorted and deduped the same way as {@link #computeAllOptimalAlignments}
-     * so results from different algorithms can be compared pair-by-pair.
+     * {@code algorithm}, sorted and deduped the same way as {@link #computeAllOptimalAlignments} so
+     * results from different algorithms can be compared pair-by-pair.
      */
     static List<String> computeOptimalAlignments(AcceptingPetriNet apn, XTrace trace, PNAlignments algorithm)
             throws AStarException {
@@ -121,27 +151,27 @@ final class LpmAlignmentsFixtures {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Computes all optimal alignments for the given lpm set / log and writes them to
+     * {@code expectedAlignmentsFilePath}, overwriting whatever fixture is checked in there. Intended
+     * to be run manually to create or intentionally update an expected-alignments fixture, never as
+     * part of the regular test suite. {@code lpmsFilePath} may be either variant accepted by
+     * {@link #loadLpms(String)}.
+     */
+    static void generateExpectedAlignments(String lpmsFilePath, String logFilePath, String expectedAlignmentsFilePath)
+            throws Exception {
+        Map<String, AcceptingPetriNet> lpms = loadLpms(lpmsFilePath);
+        XLog log = loadLog(logFilePath);
+        TreeMap<String, TreeMap<String, List<String>>> alignments = computeAllOptimalAlignments(lpms, log);
+        writeAlignments(alignments, expectedAlignmentsFilePath);
+    }
+
     static String traceKey(int traceIndex) {
         return String.format("%06d", traceIndex);
     }
 
     static String serializeAlignment(List<StepTypes> steps) {
         return steps.stream().map(Enum::name).collect(Collectors.joining("-"));
-    }
-
-    /**
-     * Computes all optimal alignments for the given lpm set / log and writes them to
-     * {@code expectedAlignmentsFilePath}, overwriting whatever fixture is checked in there.
-     * Intended to be run manually (e.g. via {@code GenerateExpectedAlignmentsFixture}) to
-     * create or intentionally update an expected-alignments fixture, never as part of the
-     * regular test suite.
-     */
-    static void generateExpectedAlignments(String lpmsFilePath, String logFilePath,
-                                           String expectedAlignmentsFilePath) throws Exception {
-        Map<String, AcceptingPetriNet> lpms = loadLpms(lpmsFilePath);
-        XLog log = loadLog(logFilePath);
-        TreeMap<String, TreeMap<String, List<String>>> alignments = computeAllOptimalAlignments(lpms, log);
-        writeAlignments(alignments, expectedAlignmentsFilePath);
     }
 
     static void writeAlignments(TreeMap<String, TreeMap<String, List<String>>> alignments, String filePath)

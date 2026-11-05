@@ -17,13 +17,13 @@ import java.util.TreeMap;
 public class TestLPMAlignmentsDeterminism {
 
     // TODO: point these at the actual lpm set / log / expected-fixture files to use for this test.
-    private static final String LPMS_FILE = "./data/test/lpms/tax/artificialBig";
+    private static final String LPMS_FILE = "./data/lpms/artificialBig.json";
     private static final String LOG_FILE = "./data/logs/artificialBig.xes";
     private static final String EXPECTED_ALIGNMENTS_FILE = "./data/test/alignments/artificialBig_expected.json";
 
     // Where the freshly computed result is (re-)written on every run, so it can be inspected or
     // used to regenerate EXPECTED_ALIGNMENTS_FILE when the fixture is intentionally updated.
-    private static final String ACTUAL_ALIGNMENTS_FILE = "./data/test/alignments/artificialBig.actual.json";
+    private static final String ACTUAL_ALIGNMENTS_FILE = "./data/test/alignments/TODO_SET_EXPECTED_FILE.actual.json";
 
     private static final int RUNS = 5;
 
@@ -34,27 +34,6 @@ public class TestLPMAlignmentsDeterminism {
     public static void loadInput() throws Exception {
         lpms = LpmAlignmentsFixtures.loadLpms(LPMS_FILE);
         log = LpmAlignmentsFixtures.loadLog(LOG_FILE);
-
-        generatedExpectedAlignmentsIfMissing();
-    }
-
-    private static void generatedExpectedAlignmentsIfMissing() {
-        // If the expected alignments fixture is missing, generate it from the current LPMs and log.
-        // This is a convenience for first-time setup; in normal test runs, the fixture should exist.
-        if (!java.nio.file.Files.exists(java.nio.file.Paths.get(EXPECTED_ALIGNMENTS_FILE))) {
-            System.out.printf(
-                    "[TestLPMAlignmentsDeterminism] Expected alignments fixture (%s) not found; generating it from " +
-                            "current LPMs and log.%n",
-                    EXPECTED_ALIGNMENTS_FILE);
-            try {
-                LpmAlignmentsFixtures.generateExpectedAlignments(LPMS_FILE, LOG_FILE, EXPECTED_ALIGNMENTS_FILE);
-                System.out.printf(
-                        "[TestLPMAlignmentsDeterminism] Generated expected alignments fixture at %s%n",
-                        EXPECTED_ALIGNMENTS_FILE);
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to generate expected alignments fixture", e);
-            }
-        }
     }
 
     @Test
