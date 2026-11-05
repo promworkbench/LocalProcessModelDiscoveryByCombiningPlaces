@@ -85,7 +85,7 @@ public class FittingWindowsEvaluationResult extends SimpleEvaluationResult {
 
     @Override
     public double getNormalizedResult() {
-        return normalizedResult;
+        return getResult();
     }
 
     @Override
