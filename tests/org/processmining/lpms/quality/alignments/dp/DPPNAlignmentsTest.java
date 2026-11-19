@@ -41,6 +41,17 @@ public class DPPNAlignmentsTest {
         return LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
     }
 
+    // a splits into concurrent branches b and c, which are joined again by d (d needs a token
+    // from both b and c)
+    private static AcceptingPetriNet concurrentWithJoinNet() {
+        LocalProcessModel lpm = new LocalProcessModel();
+        lpm.addPlace(Place.from("a | b"));
+        lpm.addPlace(Place.from("a | c"));
+        lpm.addPlace(Place.from("b | d"));
+        lpm.addPlace(Place.from("c | d"));
+        return LocalProcessModelUtils.getAcceptingPetriNetRepresentation(lpm);
+    }
+
     // a single initial token is shared by a and b (only one can ever fire), but c requires a
     // token from both of their output places at once - so c, and the empty final marking, can
     // never be reached
@@ -266,6 +277,60 @@ public class DPPNAlignmentsTest {
             Assert.assertEquals(1, result.iterator().next().getStepTypesLst().size());
             Assert.assertEquals(expectedSteps, result.iterator().next().getStepTypesLst().get(0));
         }
+    }
+
+    @Test
+    public void givenConcurrentBranchesWithJoin_whenComputeOnEitherEventOrder_thenAllStepsAreSynchronousMoves()
+            throws AStarException {
+        // set input
+        AcceptingPetriNet apn = concurrentWithJoinNet();
+        // b and c run concurrently between a and d, so both interleavings fit the model perfectly
+        XLog log = XLogWrapper.fromListOfTracesAsListStrings(Arrays.asList(
+                Arrays.asList("a", "b", "c", "d"),
+                Arrays.asList("a", "c", "b", "d"))).getOriginalLog();
+
+        List<StepTypes> expectedSteps = Arrays.asList(
+                StepTypes.LMGOOD, StepTypes.LMGOOD, StepTypes.LMGOOD, StepTypes.LMGOOD);
+
+        // act & test
+        for (XTrace trace : log) {
+            PNMatchInstancesRepResult result = ALIGNMENTS.compute(apn, trace);
+            Assert.assertEquals(1, result.iterator().next().getStepTypesLst().size());
+            Assert.assertEquals(expectedSteps, result.iterator().next().getStepTypesLst().get(0));
+        }
+    }
+
+    @Test
+    public void givenTraceWithRepeatedConcurrentPattern_whenCompute_thenAllFiveOptimalAlignmentsAreReturned()
+            throws AStarException {
+        // set input
+        AcceptingPetriNet apn = concurrentWithJoinNet();
+        // trace positions: a0, b1, c2, a3, c4, b5 - the second cycle has b and c in swapped order
+        XLog log = XLogWrapper.fromListOfTracesAsListStrings(
+                Collections.singletonList(Arrays.asList("a", "b", "c", "a", "c", "b", "d"))).getOriginalLog();
+        XTrace trace = log.get(0);
+
+        // act
+        PNMatchInstancesRepResult result = ALIGNMENTS.compute(apn, trace);
+
+        // set expected result: one execution of the model syncs one a, then any later b and any
+        // later c (in either order, since they are concurrent); everything else is a log move.
+        // a0 -> b in {1, 5}, c in {2, 4} gives 4 combinations; a3 -> only b5, c4 gives 1.
+        // As in the sequence tests, the all-log (zero-sync) alignment is filtered out.
+        Set<List<StepTypes>> expectedAlignments = new HashSet<>(Arrays.asList(
+                stepsWithSyncAt(7, 0, 1, 2, 6),
+                stepsWithSyncAt(7, 0, 1, 4, 6),
+                stepsWithSyncAt(7, 0, 2, 5, 6),
+                stepsWithSyncAt(7, 0, 4, 5, 6),
+                stepsWithSyncAt(7, 3, 4, 5, 6)));
+
+        // test
+        Assert.assertEquals(result.first().getStepTypesLst().toString(),
+                expectedAlignments.size(), result.first().getStepTypesLst().size());
+        Set<List<StepTypes>> actualAlignments = result.stream()
+                .flatMap(r -> r.getStepTypesLst().stream())
+                .collect(Collectors.toSet());
+        Assert.assertEquals(expectedAlignments, actualAlignments);
     }
 
     @Test
